@@ -15,7 +15,7 @@
   --red:#c50f1f;--warn:rgba(216,59,1,0.07);--warn-border:rgba(216,59,1,0.3);
   --warn-text:#c23000;--caution:rgba(140,90,0,0.07);
   --caution-border:rgba(140,90,0,0.3);--caution-text:#6e4500;
-  --text:#0d1526;--text2:#2e3d5e;--text3:#5a6a8a;--nav-h:58px;
+  --text:#0d1526;--text2:#2e3d5e;--text3:#5a6a8a;--nav-h:52px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
@@ -31,30 +31,30 @@ body::before{content:'';position:fixed;inset:0;
   background:rgba(245,247,252,0.97);border-bottom:1px solid var(--border2);box-shadow:0 1px 10px rgba(0,0,0,0.07);
   backdrop-filter:blur(12px);z-index:200;
   display:flex;align-items:center;padding:0 32px;gap:0;}
-.nav-brand{display:flex;align-items:center;gap:10px;margin-right:28px;flex-shrink:0;}
-.msft-logo{width:20px;height:20px;display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.nav-brand{display:flex;align-items:center;gap:8px;margin-right:20px;flex-shrink:0;}
+.msft-logo{width:18px;height:18px;display:grid;grid-template-columns:1fr 1fr;gap:2px;}
 .msft-logo div:nth-child(1){background:#f25022;border-radius:1px;}
 .msft-logo div:nth-child(2){background:#7fba00;border-radius:1px;}
 .msft-logo div:nth-child(3){background:#00a4ef;border-radius:1px;}
 .msft-logo div:nth-child(4){background:#ffb900;border-radius:1px;}
-.brand-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;
-  color:#0d1526;letter-spacing:0.01em;white-space:nowrap;}
-.brand-sub{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--text3);
-  letter-spacing:0.08em;}
+.brand-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:700;
+  color:#0d1526;letter-spacing:0.01em;white-space:nowrap;line-height:1.2;}
+.brand-sub{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--text3);
+  letter-spacing:0.06em;}
 .nav-links{display:flex;align-items:stretch;height:100%;flex:1;overflow-x:auto;gap:2px;}
 .nav-links::-webkit-scrollbar{display:none;}
-.nav-links a{display:flex;align-items:center;gap:6px;padding:0 14px;
-  text-decoration:none;color:#3a4a6a;font-size:12px;
+.nav-links a{display:flex;align-items:center;gap:5px;padding:0 10px;
+  text-decoration:none;color:#3a4a6a;font-size:11px;
   border-bottom:2px solid transparent;white-space:nowrap;
   transition:color 0.15s,border-color 0.15s;}
 .nav-links a:hover{color:#0d1526;}
 .nav-links a.active{color:var(--blue);border-bottom-color:var(--blue);}
-.nav-links a .n{font-family:'JetBrains Mono',monospace;font-size:9px;
-  color:var(--text3);letter-spacing:0.06em;}
+.nav-links a .n{font-family:'JetBrains Mono',monospace;font-size:8px;
+  color:var(--text3);letter-spacing:0.04em;}
 .nav-links a.active .n{color:var(--blue);}
-.nav-warn{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:9px;
+.nav-warn{margin-left:12px;font-family:'JetBrains Mono',monospace;font-size:8px;
   color:#c23000;background:rgba(216,59,1,0.07);border:1px solid rgba(216,59,1,0.25);
-  border-radius:4px;padding:3px 8px;white-space:nowrap;flex-shrink:0;}
+  border-radius:4px;padding:3px 7px;white-space:nowrap;flex-shrink:0;}
 
 /* LAYOUT */
 .page{max-width:940px;margin:0 auto;padding:52px 40px 100px;position:relative;z-index:1;}
@@ -291,7 +291,7 @@ code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#eef1f8;
 <a href="frameworks.html" class=""><span class="n">07</span>Frameworks</a>
 <a href="gaps.html" class=" active"><span class="n">08</span>Gaps & Roadmap</a>
 </div>
-  <div class="nav-warn">⚠ AGENT ID: PREVIEW · OBO STILL APPLIES</div>
+  <div class="nav-warn">⚠ AGENT ID: PREVIEW</div>
 </nav>
 <div class="page">
 
