@@ -70,17 +70,17 @@ body::before{content:'';position:fixed;inset:0;
 .section-label::before{content:'';display:inline-block;
   width:6px;height:6px;border-radius:50%;
   background:var(--blue);flex-shrink:0;}
-h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:34px;font-weight:700;
-  line-height:1.08;letter-spacing:-0.02em;color:#0d1526;margin-bottom:16px;}
+h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:44px;font-weight:800;
+  line-height:1.06;letter-spacing:-0.03em;color:#0d1526;margin-bottom:18px;}
 h1 span{background:linear-gradient(135deg,var(--blue),#004fa8);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:21px;font-weight:700;
-  color:#0d1526;letter-spacing:-0.01em;margin:8px 0 12px;line-height:1.25;
+h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:26px;font-weight:700;
+  color:#0d1526;letter-spacing:-0.02em;margin:8px 0 14px;line-height:1.2;
   padding-left:14px;border-left:3px solid var(--blue);}
 h2:first-child{margin-top:0;}
-h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;
-  color:#0d1526;margin:28px 0 10px;
-  padding-bottom:6px;border-bottom:1px solid var(--border2);}
+h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:700;
+  color:#0d1526;margin:32px 0 12px;
+  padding-bottom:8px;border-bottom:1px solid var(--border2);}
 h4{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;
   color:var(--text);margin:20px 0 6px;}
 p{color:#2e3d5e;margin-bottom:14px;font-weight:400;font-size:15px;}
@@ -102,10 +102,10 @@ a:hover{text-decoration:underline;}
 .hero-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;}
 .chip{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.07em;
   padding:4px 10px;border-radius:4px;border:1px solid;}
-.chip-blue{background:rgba(0,120,212,0.08);border-color:rgba(0,120,212,0.3);color:#004a9e;}
-.chip-warn{background:rgba(216,59,1,0.07);border-color:rgba(216,59,1,0.3);color:#b83000;}
-.chip-caution{background:rgba(140,90,0,0.07);border-color:rgba(140,90,0,0.3);color:#6e4500;}
-.chip-green{background:rgba(16,124,16,0.08);border-color:rgba(16,124,16,0.3);color:#0a5a0a;}
+.chip-blue{background:#0a1e38;border-color:#2060aa;color:#90c8ff;}
+.chip-warn{background:#2a0e06;border-color:#882000;color:#ffb090;}
+.chip-caution{background:#221400;border-color:#7a5000;color:#ffcc60;}
+.chip-green{background:#061a06;border-color:#1e6a1e;color:#80e880;}
 
 /* CALLOUTS */
 .callout{border-radius:10px;padding:18px 20px;margin:20px 0;border:1px solid;}
@@ -139,14 +139,14 @@ a:hover{text-decoration:underline;}
   letter-spacing:0.08em;margin-bottom:6px;}
 .card-desc{font-size:13px;color:#2e3d5e;margin:0 0 12px;font-weight:400;line-height:1.6;}
 .tag-row{display:flex;flex-wrap:wrap;gap:5px;}
-.tag{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 7px;border-radius:3px;
-  background:#eef1f8;border:1px solid var(--border2);
-  color:#3a4a6a;letter-spacing:0.04em;}
-.tag.warn{background:rgba(216,59,1,0.07);border-color:rgba(216,59,1,0.3);color:#b83000;}
-.tag.caution{background:rgba(140,90,0,0.07);border-color:rgba(140,90,0,0.3);color:#6e4500;}
-.tag.green{background:rgba(16,124,16,0.08);border-color:rgba(16,124,16,0.3);color:#0a5a0a;}
-.tag.blue{background:rgba(0,120,212,0.08);border-color:rgba(0,120,212,0.3);color:#004a9e;}
-.tag.purple{background:rgba(98,100,167,0.08);border-color:rgba(98,100,167,0.3);color:#4a4c8a;}
+.tag{font-family:'JetBrains Mono',monospace;font-size:9px;padding:3px 8px;border-radius:4px;
+  background:#1a2035;border:1px solid #2d3a55;
+  color:#c8d8f0;letter-spacing:0.04em;}
+.tag.warn{background:#2a0e06;border-color:#882000;color:#ffb090;}
+.tag.caution{background:#221400;border-color:#7a5000;color:#ffcc60;}
+.tag.green{background:#061a06;border-color:#1e6a1e;color:#80e880;}
+.tag.blue{background:#0a1e38;border-color:#2060aa;color:#90c8ff;}
+.tag.purple{background:#10102a;border-color:#4040a0;color:#b0b0ff;}
 
 /* TABLES */
 table{width:100%;border-collapse:collapse;margin:20px 0;font-size:13px;}
@@ -160,12 +160,12 @@ td strong{color:#0d1526;font-weight:600;}
 td code{font-family:'JetBrains Mono',monospace;font-size:10px;
   background:#eef1f8;border:1px solid var(--border2);
   border-radius:3px;padding:1px 5px;color:#004a9e;}
-.warn-inline{color:#b83000;font-family:'JetBrains Mono',monospace;font-size:10px;}
-.caution-inline{color:#6e4500;font-family:'JetBrains Mono',monospace;font-size:10px;}
-.green-inline{color:#0a5a0a;font-family:'JetBrains Mono',monospace;font-size:10px;}
-.severity-critical{color:#b80000;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;}
-.severity-high{color:#b83000;font-family:'JetBrains Mono',monospace;font-size:10px;}
-.severity-medium{color:#6e4500;font-family:'JetBrains Mono',monospace;font-size:10px;}
+.warn-inline{color:#d05030;font-family:'JetBrains Mono',monospace;font-size:10px;}
+.caution-inline{color:#c0820a;font-family:'JetBrains Mono',monospace;font-size:10px;}
+.green-inline{color:#2a9a2a;font-family:'JetBrains Mono',monospace;font-size:10px;}
+.severity-critical{color:#e84040;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;}
+.severity-high{color:#e87050;font-family:'JetBrains Mono',monospace;font-size:10px;}
+.severity-medium{color:#c8902a;font-family:'JetBrains Mono',monospace;font-size:10px;}
 
 /* FLOW */
 .flow{display:flex;align-items:stretch;border:1px solid var(--border2);
@@ -295,7 +295,7 @@ code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#eef1f8;
 <div class="hero">
   <div class="hero-badge"><div class="live-dot"></div>UPDATED · FIELD RESEARCH · MARCH 2026</div>
   <h1>How AI Breaks<br><span>Traditional Security</span></h1>
-  <p style="color:var(--text2);font-size:15px;font-weight:300;max-width:600px;line-height:1.7;">
+  <p style="color:#2e3d5e;font-size:17px;font-weight:400;max-width:640px;line-height:1.7;">
     Traditional security was built for users, endpoints, and applications. AI agents violate all three assumptions. Field research from Microsoft Security MVP Derk van der Woude and Microsoft's own agent misconfiguration research reveals the real-world risks are worse than most organisations realise.
   </p>
 </div>
