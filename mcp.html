@@ -130,8 +130,13 @@ a:hover{text-decoration:underline;}
   gap:14px;margin:20px 0;}
 .card{background:#ffffff;border:1px solid var(--border);
   border-radius:10px;padding:18px;position:relative;overflow:hidden;
-  transition:border-color 0.2s,transform 0.15s;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
-.card:hover{transform:translateY(-2px);}
+  transition:border-color 0.2s,transform 0.15s,box-shadow 0.15s;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
+.card:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,120,212,0.12);border-color:var(--blue2);}
+.card-link{text-decoration:none;color:inherit;display:block;position:relative;}
+.card-link .card{position:relative;}
+.card-link:hover{text-decoration:none;}
+
+.card-link .card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
 .card-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;
   color:#0d1526;margin-bottom:8px;}
@@ -243,7 +248,9 @@ code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#eef1f8;
 .threat-step-text{font-size:13px;color:#2e3d5e;font-weight:400;}
 .nist-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0;}
 .nist-card{background:#ffffff;border:1px solid var(--border);
-  border-radius:10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
+  border-radius:10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.06);
+  transition:transform 0.15s,box-shadow 0.15s,border-color 0.15s;}
+a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,120,212,0.12);border-color:var(--blue2);}
 .nist-header{padding:12px 16px;display:flex;align-items:center;gap:10px;}
 .nist-badge{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;
   padding:4px 10px;border-radius:6px;letter-spacing:0.05em;}
@@ -289,6 +296,9 @@ code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#eef1f8;
 <a href="gaps.html" class=""><span class="n">08</span>Gaps & Roadmap</a>
 </div>
 </nav>
+<div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
+  ⚠ <strong>Author's note:</strong> This site reflects the author's own understanding synthesised from publicly available Microsoft sources. Microsoft updates products and documentation frequently — always verify the latest status directly with Microsoft before making decisions.
+</div>
 <div class="page">
 
 
@@ -353,16 +363,16 @@ code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#eef1f8;
 <h2>Copilot Studio MCP Tools — A Specific Risk Pattern</h2>
 <p>When a Copilot Studio agent is configured with MCP tools, the agent authenticates to those MCP servers using maker credentials by default. This means:</p>
 <div class="card-grid">
-  <div class="card" style="border-color:rgba(216,59,1,0.3);">
+  <a href="https://www.microsoft.com/en-us/security/blog/2026/02/12/copilot-studio-agent-security-top-10-risks-detect-prevent/" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.3);">
     <div class="card-name">⚠ Maker Credentials × MCP Tools</div>
     <div class="card-desc">The maker (developer/admin) connects an Azure MCP server to a Copilot Studio agent. The agent authenticates to Azure as the maker. If the agent is shared org-wide with no authentication, every employee can trigger Azure resource queries or management actions — using the maker's Azure permissions.</div>
     <div class="tag-row"><span class="tag warn">CRITICAL COMBINATION</span><span class="tag">Copilot Studio</span></div>
-  </div>
-  <div class="card" style="border-color:rgba(216,59,1,0.3);">
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://github.com/microsoft/mcp" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.3);">
     <div class="card-name">⚠ Unreviewed MCP Tool Lifecycle</div>
     <div class="card-desc">MCP tools added to a Copilot Studio agent are not subject to the same App Registration review as traditional app permissions. Microsoft recommends using the "MCP Tool Configured" Advanced Hunting query and enforcing lifecycle reviews for every MCP tool configuration in the environment.</div>
     <div class="tag-row"><span class="tag warn">Governance Gap</span><span class="tag">KQL Detectable</span></div>
-  </div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
 </div>
 
 <div class="section-label">Attack Vectors</div>
@@ -388,36 +398,36 @@ code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#eef1f8;
 <div class="section-label">Microsoft Controls</div>
 <h2>How Microsoft Secures the MCP Boundary</h2>
 <div class="card-grid">
-  <div class="card" style="border-color:rgba(0,120,212,0.2);">
+  <a href="https://learn.microsoft.com/en-us/defender-cloud-apps/ai-agent-protection" target="_blank" class="card-link"><div class="card" style="border-color:rgba(0,120,212,0.2);">
     <div class="card-name">Defender for Cloud Apps (CASB)</div>
     <div class="card-desc">Primary control for MCP-to-SaaS boundary. Discovers MCP-connected SaaS apps. Governs OAuth permissions. Detects anomalous access from agent-driven API calls. Can block or alert on risky MCP-to-SaaS connections. For Copilot Studio specifically: provides real-time protection — blocks tool invocations if prompt is suspicious (1-second timeout, then allow if no decision).</div>
     <div class="tag-row"><span class="tag green">GA</span><span class="tag">OAuth Governance</span><span class="tag">RT Protection</span></div>
-  </div>
-  <div class="card" style="border-color:rgba(84,176,84,0.15);">
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://learn.microsoft.com/en-us/security/security-for-ai/security-dashboard-for-ai" target="_blank" class="card-link"><div class="card" style="border-color:rgba(84,176,84,0.15);">
     <div class="card-name">Security Dashboard — AI Inventory</div>
     <div class="card-desc">Includes MCP servers in AI inventory — now GA. Discovery and risk assessment of MCP servers across the environment including those deployed without IT knowledge. Coverage extends to third-party AI including ChatGPT, Gemini, and MCP servers.</div>
     <div class="tag-row"><span class="tag green">✓ Now GA · RSAC 2026</span><span class="tag">MCP Server Discovery</span></div>
-  </div>
-  <div class="card" style="border-color:rgba(252,225,0,0.15);">
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://azure.microsoft.com/en-us/products/ai-foundry" target="_blank" class="card-link"><div class="card" style="border-color:rgba(252,225,0,0.15);">
     <div class="card-name">Foundry Guardrails</div>
     <div class="card-desc">For Foundry-deployed agents — define which MCP tools the agent is allowed to invoke. Whitelist at the orchestration layer. Does not apply to Copilot Studio agents — each platform has its own governance model.</div>
     <div class="tag-row"><span class="tag caution">Preview</span><span class="tag">Tool Whitelist</span><span class="tag warn">⚠ Foundry only — not Copilot Studio</span></div>
-  </div>
-  <div class="card" style="border-color:rgba(216,59,1,0.15);">
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://learn.microsoft.com/en-us/azure/ai-services/content-safety/concepts/jailbreak-detection" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.15);">
     <div class="card-name">Prompt Shields</div>
     <div class="card-desc">Primary defence against indirect prompt injection via MCP tool outputs. Inspects content flowing from MCP responses into agent context before reaching the model.</div>
     <div class="tag-row"><span class="tag green">GA</span><span class="tag">XPIA Defence</span><span class="tag">Tool Output Inspection</span></div>
-  </div>
-  <div class="card" style="border-color:rgba(216,59,1,0.15);">
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://learn.microsoft.com/en-us/entra/global-secure-access/how-to-manage-microsoft-profile" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.15);">
     <div class="card-name">Entra Internet Access — Prompt Injection Protection</div>
     <div class="card-desc">Network-layer enforcement blocking malicious AI prompts across apps and agents. Complements Prompt Shields at the network boundary. GA March 31, 2026.</div>
     <div class="tag-row"><span class="tag green">GA March 31</span><span class="tag">Network Layer</span></div>
-  </div>
-  <div class="card" style="border-color:rgba(84,176,84,0.15);">
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://learn.microsoft.com/en-us/azure/sentinel/overview" target="_blank" class="card-link"><div class="card" style="border-color:rgba(84,176,84,0.15);">
     <div class="card-name">Sentinel MCP Entity Analyzer</div>
     <div class="card-desc">Natural language querying of MCP entity data within Sentinel investigations. GA April 2026. Enables analysts to explore MCP-connected entity relationships without writing KQL from scratch.</div>
     <div class="tag-row"><span class="tag blue">GA April 2026</span><span class="tag">Natural Language</span><span class="tag">Sentinel</span></div>
-  </div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
 </div>
 
 <div class="section-label">Defence Architecture</div>

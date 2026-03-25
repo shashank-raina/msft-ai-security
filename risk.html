@@ -130,8 +130,13 @@ a:hover{text-decoration:underline;}
   gap:14px;margin:20px 0;}
 .card{background:#ffffff;border:1px solid var(--border);
   border-radius:10px;padding:18px;position:relative;overflow:hidden;
-  transition:border-color 0.2s,transform 0.15s;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
-.card:hover{transform:translateY(-2px);}
+  transition:border-color 0.2s,transform 0.15s,box-shadow 0.15s;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
+.card:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,120,212,0.12);border-color:var(--blue2);}
+.card-link{text-decoration:none;color:inherit;display:block;position:relative;}
+.card-link .card{position:relative;}
+.card-link:hover{text-decoration:none;}
+
+.card-link .card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
 .card-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;
   color:#0d1526;margin-bottom:8px;}
@@ -243,7 +248,9 @@ code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#eef1f8;
 .threat-step-text{font-size:13px;color:#2e3d5e;font-weight:400;}
 .nist-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0;}
 .nist-card{background:#ffffff;border:1px solid var(--border);
-  border-radius:10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
+  border-radius:10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.06);
+  transition:transform 0.15s,box-shadow 0.15s,border-color 0.15s;}
+a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,120,212,0.12);border-color:var(--blue2);}
 .nist-header{padding:12px 16px;display:flex;align-items:center;gap:10px;}
 .nist-badge{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;
   padding:4px 10px;border-radius:6px;letter-spacing:0.05em;}
@@ -289,6 +296,9 @@ code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#eef1f8;
 <a href="gaps.html" class=""><span class="n">08</span>Gaps & Roadmap</a>
 </div>
 </nav>
+<div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
+  ⚠ <strong>Author's note:</strong> This site reflects the author's own understanding synthesised from publicly available Microsoft sources. Microsoft updates products and documentation frequently — always verify the latest status directly with Microsoft before making decisions.
+</div>
 <div class="page">
 
 
@@ -325,36 +335,36 @@ code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#eef1f8;
 <p>Microsoft's own security research team identified the top 10 agent misconfigurations observed in customer tenants. The following are the most structurally dangerous:</p>
 
 <div class="card-grid">
-  <div class="card" style="border-color:rgba(216,59,1,0.3);">
+  <a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/configuration-end-user-authentication" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.3);">
     <div class="card-name">🔑 No Authentication Agents</div>
     <div class="card-desc">Copilot Studio agents can be set to <code>UserAuthenticationType = None</code>. Anyone with access to Teams can use the agent — no login required. If the agent has access to internal data via maker credentials, it becomes an unauthenticated endpoint into your data estate. Detectable via KQL: <code>AIAgentsInfo | where UserAuthenticationType == "None"</code></div>
     <div class="tag-row"><span class="tag warn">⚠ CRITICAL MISCONFIGURATION</span><span class="tag">AIAgentsInfo table</span></div>
-  </div>
-  <div class="card" style="border-color:rgba(216,59,1,0.3);">
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/admin-sharing-controls-limits" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.3);">
     <div class="card-name">🌐 Org-Wide Sharing</div>
     <div class="card-desc">A single toggle shares a Copilot Studio agent with the entire organisation. Combined with maker credentials and no authentication, this creates a public endpoint into internal data. Managed Environments in Power Platform admin can restrict sharing to numerical limits or security groups — but this is not the default.</div>
     <div class="tag-row"><span class="tag warn">⚠ Default Risk</span><span class="tag">Power Platform Admin</span></div>
-  </div>
-  <div class="card" style="border-color:rgba(216,59,1,0.3);">
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-agent-id" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.3);">
     <div class="card-name">🏛️ Classic vs Modern Agents</div>
     <div class="card-desc">Copilot Studio agents created before Entra Agent ID was enabled are <strong>Classic Agents</strong> — registered as Service Principals. Classic Agents cannot be protected by any Entra security products: no ID Protection, no Conditional Access, no lifecycle governance. Most existing Copilot Studio agents in production are Classic. Microsoft plans a migration tool — it does not exist yet.</div>
     <div class="tag-row"><span class="tag warn">⚠ Most Agents in Wild Are Classic</span><span class="tag">No Entra Protection</span></div>
-  </div>
-  <div class="card" style="border-color:rgba(252,225,0,0.15);">
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://github.com/microsoft/mcp" target="_blank" class="card-link"><div class="card" style="border-color:rgba(252,225,0,0.15);">
     <div class="card-name">🔌 MCP Tools as Attack Surface</div>
     <div class="card-desc">Copilot Studio now supports MCP servers as tools. Each MCP tool added to an agent extends the agent's action surface to whatever that MCP server can reach. Microsoft now has an official MCP server catalog — many servers provide broad enterprise access (Azure, GitHub, SharePoint, etc.) that becomes part of the agent's blast radius.</div>
     <div class="tag-row"><span class="tag caution">Growing Surface</span><span class="tag">Microsoft MCP Catalog</span></div>
-  </div>
-  <div class="card" style="border-color:rgba(252,225,0,0.15);">
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://learn.microsoft.com/en-us/entra/identity/devices/overview" target="_blank" class="card-link"><div class="card" style="border-color:rgba(252,225,0,0.15);">
     <div class="card-name">🏷️ Agent Name Sync Bug</div>
     <div class="card-desc">When an agent is renamed in Copilot Studio after creation, the name in Entra Agent ID is not updated — it stays as the original <code>Agent #</code>. Security products like ID Protection and Conditional Access reference these names. In practice this makes per-agent policies in Entra nearly impossible to manage at enterprise scale.</div>
     <div class="tag-row"><span class="tag warn">⚠ Active Bug</span><span class="tag">CA Policy Impact</span></div>
-  </div>
-  <div class="card" style="border-color:rgba(252,225,0,0.15);">
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://learn.microsoft.com/en-us/defender-cloud-apps/ai-agent-inventory" target="_blank" class="card-link"><div class="card" style="border-color:rgba(252,225,0,0.15);">
     <div class="card-name">🔐 Ownerless Agents</div>
     <div class="card-desc">Published agents without an accountable owner are a governance blind spot. Power Platform Inventory and the <code>AIAgentsInfo</code> Advanced Hunting table both surface agents with missing owners. KQL: <code>AIAgentsInfo | where isempty(OwnerAccountUpns)</code>. Ownerless agents cannot be governed through the Agent ID sponsor model.</div>
     <div class="tag-row"><span class="tag warn">⚠ Common in Production</span><span class="tag">KQL Detectable</span></div>
-  </div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
 </div>
 
 <div class="section-label">Attack Surface</div>
@@ -399,26 +409,26 @@ code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#eef1f8;
 <div class="section-label">Zero Trust for AI</div>
 <h2>Applying Zero Trust Principles to AI</h2>
 <div class="card-grid">
-  <div class="card" style="border-color:rgba(0,120,212,0.2);">
+  <a href="https://learn.microsoft.com/en-us/security/zero-trust/zero-trust-overview" target="_blank" class="card-link"><div class="card" style="border-color:rgba(0,120,212,0.2);">
     <div class="card-name">🔍 Verify Explicitly</div>
     <div class="card-desc">Continuously evaluate the identity and behaviour of AI agents, not just at auth time. For Copilot Studio, this starts with knowing whether agents are Classic (no Entra coverage) or Modern. Sentinel and AIAgentsInfo Advanced Hunting table surface this.</div>
     <div class="tag-row"><span class="tag blue">Sentinel</span><span class="tag blue">AIAgentsInfo KQL</span></div>
-  </div>
-  <div class="card" style="border-color:rgba(0,120,212,0.2);">
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://learn.microsoft.com/en-us/security/zero-trust/zero-trust-overview" target="_blank" class="card-link"><div class="card" style="border-color:rgba(0,120,212,0.2);">
     <div class="card-name">🔒 Least Privilege</div>
     <div class="card-desc">Restrict access to models, prompts, plugins, and data. For Copilot Studio this means enforcing end-user authentication (not maker credentials), limiting sharing scope, and restricting MCP tools to only what's needed per agent.</div>
     <div class="tag-row"><span class="tag warn">⚠ Maker creds undermine this</span><span class="tag blue">Power Platform Managed Envs</span></div>
-  </div>
-  <div class="card" style="border-color:rgba(0,120,212,0.2);">
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://learn.microsoft.com/en-us/security/zero-trust/zero-trust-overview" target="_blank" class="card-link"><div class="card" style="border-color:rgba(0,120,212,0.2);">
     <div class="card-name">🛡️ Assume Breach</div>
     <div class="card-desc">Design for prompt injection, data poisoning, and lateral movement. Assume any input — including MCP tool responses — may be adversarial. Real-time protection in Defender for Cloud Apps blocks tool invocations during suspicious prompt activity.</div>
     <div class="tag-row"><span class="tag blue">Prompt Shields</span><span class="tag blue">Defender for Cloud Apps RT</span></div>
-  </div>
-  <div class="card" style="border-color:rgba(80,230,255,0.2);">
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://www.microsoft.com/en-us/security/blog/2026/03/19/new-tools-and-guidance-announcing-zero-trust-for-ai/" target="_blank" class="card-link"><div class="card" style="border-color:rgba(80,230,255,0.2);">
     <div class="card-name">🤖 New: AI Pillar</div>
     <div class="card-desc">Microsoft added a dedicated AI pillar to the Zero Trust framework at RSAC 2026. The Zero Trust Workshop tool (microsoft.github.io/zerotrustassessment) provides guided assessment. The formal AI assessment pillar is due summer 2026.</div>
     <div class="tag-row"><span class="tag blue">ZT Workshop</span><span class="tag caution">AI Assessment: Summer 2026</span></div>
-  </div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
 </div>
 
 

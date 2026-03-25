@@ -130,8 +130,13 @@ a:hover{text-decoration:underline;}
   gap:14px;margin:20px 0;}
 .card{background:#ffffff;border:1px solid var(--border);
   border-radius:10px;padding:18px;position:relative;overflow:hidden;
-  transition:border-color 0.2s,transform 0.15s;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
-.card:hover{transform:translateY(-2px);}
+  transition:border-color 0.2s,transform 0.15s,box-shadow 0.15s;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
+.card:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,120,212,0.12);border-color:var(--blue2);}
+.card-link{text-decoration:none;color:inherit;display:block;position:relative;}
+.card-link .card{position:relative;}
+.card-link:hover{text-decoration:none;}
+
+.card-link .card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
 .card-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;
   color:#0d1526;margin-bottom:8px;}
@@ -243,7 +248,9 @@ code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#eef1f8;
 .threat-step-text{font-size:13px;color:#2e3d5e;font-weight:400;}
 .nist-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0;}
 .nist-card{background:#ffffff;border:1px solid var(--border);
-  border-radius:10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
+  border-radius:10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.06);
+  transition:transform 0.15s,box-shadow 0.15s,border-color 0.15s;}
+a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,120,212,0.12);border-color:var(--blue2);}
 .nist-header{padding:12px 16px;display:flex;align-items:center;gap:10px;}
 .nist-badge{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;
   padding:4px 10px;border-radius:6px;letter-spacing:0.05em;}
@@ -289,6 +296,9 @@ code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#eef1f8;
 <a href="gaps.html" class=" active"><span class="n">08</span>Gaps & Roadmap</a>
 </div>
 </nav>
+<div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
+  ⚠ <strong>Author's note:</strong> This site reflects the author's own understanding synthesised from publicly available Microsoft sources. Microsoft updates products and documentation frequently — always verify the latest status directly with Microsoft before making decisions.
+</div>
 <div class="page">
 
 
@@ -370,16 +380,16 @@ code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#eef1f8;
 <h2>🔍 Key Advanced Hunting Queries (AIAgentsInfo table)</h2>
 <p>These queries require the AI Agent Inventory to be enabled in Defender for Cloud Apps (requires Defender admin + Power Platform admin collaboration).</p>
 <div class="card-grid">
-  <div class="card" style="border-color:rgba(216,59,1,0.2);">
+  <a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/configuration-end-user-authentication" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.2);">
     <div class="card-name">No-Auth Agents</div>
     <div class="card-desc">Finds agents accessible without user authentication — highest blast radius risk combined with maker credentials.</div>
     <div style="background:var(--surface3);border-radius:6px;padding:10px 12px;margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--blue2);line-height:1.7;">AIAgentsInfo<br>| summarize arg_max(Timestamp, *) by AIAgentId<br>| where UserAuthenticationType == "None"<br>| project AgentCreationTime, AIAgentName,<br>&nbsp;&nbsp;AIAgentId, AgentStatus, CreatorAccountUpn</div>
-  </div>
-  <div class="card" style="border-color:rgba(216,59,1,0.2);">
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://learn.microsoft.com/en-us/defender-cloud-apps/ai-agent-inventory" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.2);">
     <div class="card-name">Ownerless Published Agents</div>
     <div class="card-desc">Finds published agents with no accountable owner — governance blind spots that can persist indefinitely.</div>
     <div style="background:var(--surface3);border-radius:6px;padding:10px 12px;margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--blue2);line-height:1.7;">AIAgentsInfo<br>| where AgentStatus == "Published"<br>| where isempty(OwnerAccountUpns)<br>| project AgentCreationTime, AIAgentName,<br>&nbsp;&nbsp;AIAgentId, AgentStatus, CreatorAccountUpn</div>
-  </div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
 </div>
 
 <div class="section-label">Roadmap</div>

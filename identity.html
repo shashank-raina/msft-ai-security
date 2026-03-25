@@ -130,8 +130,13 @@ a:hover{text-decoration:underline;}
   gap:14px;margin:20px 0;}
 .card{background:#ffffff;border:1px solid var(--border);
   border-radius:10px;padding:18px;position:relative;overflow:hidden;
-  transition:border-color 0.2s,transform 0.15s;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
-.card:hover{transform:translateY(-2px);}
+  transition:border-color 0.2s,transform 0.15s,box-shadow 0.15s;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
+.card:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,120,212,0.12);border-color:var(--blue2);}
+.card-link{text-decoration:none;color:inherit;display:block;position:relative;}
+.card-link .card{position:relative;}
+.card-link:hover{text-decoration:none;}
+
+.card-link .card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
 .card-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;
   color:#0d1526;margin-bottom:8px;}
@@ -243,7 +248,9 @@ code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#eef1f8;
 .threat-step-text{font-size:13px;color:#2e3d5e;font-weight:400;}
 .nist-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0;}
 .nist-card{background:#ffffff;border:1px solid var(--border);
-  border-radius:10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
+  border-radius:10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.06);
+  transition:transform 0.15s,box-shadow 0.15s,border-color 0.15s;}
+a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,120,212,0.12);border-color:var(--blue2);}
 .nist-header{padding:12px 16px;display:flex;align-items:center;gap:10px;}
 .nist-badge{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;
   padding:4px 10px;border-radius:6px;letter-spacing:0.05em;}
@@ -289,6 +296,9 @@ code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#eef1f8;
 <a href="gaps.html" class=""><span class="n">08</span>Gaps & Roadmap</a>
 </div>
 </nav>
+<div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
+  ⚠ <strong>Author's note:</strong> This site reflects the author's own understanding synthesised from publicly available Microsoft sources. Microsoft updates products and documentation frequently — always verify the latest status directly with Microsoft before making decisions.
+</div>
 <div class="page">
 
 
@@ -403,10 +413,10 @@ code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#eef1f8;
   <p>Entra Agent ID remains in limited preview for frontier/large enterprise programs. Even when it reaches GA, it will only apply to <strong>Modern Agents</strong> — Classic Agents (the majority of existing Copilot Studio deployments) require migration first.</p>
 </div>
 <div class="card-grid">
-  <div class="card"><div class="card-name">Purpose-scoped Agent Identity</div><div class="card-desc">Each Modern Agent registered as a distinct non-human principal — separate from the user who created or invoked it. Enables per-agent audit trails and policy scoping. Does not apply to Classic Agents.</div><div class="tag-row"><span class="tag caution">Modern Agents only · Not yet GA</span></div></div>
-  <div class="card"><div class="card-name">Agent Identity Blueprint</div><div class="card-desc">Parent template for creating Agent Identities (1:N). Acts as a governance container for IT management. Blueprint-level permissions are inherited by all Agent Identities. Max 250 Agent Identities per Blueprint.</div><div class="tag-row"><span class="tag caution">Modern Agents only · Not yet GA</span></div></div>
-  <div class="card"><div class="card-name">Sponsor Requirement</div><div class="card-desc">Every Modern Agent should have a named Sponsor (business accountability role) and Owner (IT management role). These are distinct from the Owner role on Classic Agents — the Sponsor has no ability to add credentials or bypass CA.</div><div class="tag-row"><span class="tag caution">Not yet GA</span><span class="tag warn">⚠ Classic agents use Owner = risk</span></div></div>
-  <div class="card"><div class="card-name">Per-agent Conditional Access</div><div class="card-desc">Once a Modern Agent has its own identity, CA policies can target it specifically. In practice, the name sync bug means policy management requires using object-IDs not names. The CA Optimization Agent adds recommendations but true per-agent scoping still requires Agent ID GA + Modern Agent migration.</div><div class="tag-row"><span class="tag caution">Dependent on Agent ID GA + Modern migration</span></div></div>
+  <a href="https://learn.microsoft.com/en-us/entra/identity/devices/copilot-studio-agent-identity" target="_blank" class="card-link"><div class="card"><div class="card-name">Purpose-scoped Agent Identity</div><div class="card-desc">Each Modern Agent registered as a distinct non-human principal — separate from the user who created or invoked it. Enables per-agent audit trails and policy scoping. Does not apply to Classic Agents.</div><div class="tag-row"><span class="tag caution">Modern Agents only · Not yet GA</span></div><div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://learn.microsoft.com/en-us/entra/identity/devices/agent-identity-blueprint" target="_blank" class="card-link"><div class="card"><div class="card-name">Agent Identity Blueprint</div><div class="card-desc">Parent template for creating Agent Identities (1:N). Acts as a governance container for IT management. Blueprint-level permissions are inherited by all Agent Identities. Max 250 Agent Identities per Blueprint.</div><div class="tag-row"><span class="tag caution">Modern Agents only · Not yet GA</span></div><div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://learn.microsoft.com/en-us/entra/identity/devices/copilot-studio-agent-identity" target="_blank" class="card-link"><div class="card"><div class="card-name">Sponsor Requirement</div><div class="card-desc">Every Modern Agent should have a named Sponsor (business accountability role) and Owner (IT management role). These are distinct from the Owner role on Classic Agents — the Sponsor has no ability to add credentials or bypass CA.</div><div class="tag-row"><span class="tag caution">Not yet GA</span><span class="tag warn">⚠ Classic agents use Owner = risk</span></div><div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://learn.microsoft.com/en-us/entra/identity/conditional-access/agent-id" target="_blank" class="card-link"><div class="card"><div class="card-name">Per-agent Conditional Access</div><div class="card-desc">Once a Modern Agent has its own identity, CA policies can target it specifically. In practice, the name sync bug means policy management requires using object-IDs not names. The CA Optimization Agent adds recommendations but true per-agent scoping still requires Agent ID GA + Modern Agent migration.</div><div class="tag-row"><span class="tag caution">Dependent on Agent ID GA + Modern migration</span></div><div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
 </div>
 
 <div class="section-label">What to Do Today</div>
