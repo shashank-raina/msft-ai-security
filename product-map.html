@@ -303,22 +303,22 @@ code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#eef1f8;
 <h2>Unified Visibility & Agent Governance</h2>
 <div class="card-grid">
   <div class="card" style="border-color:rgba(252,225,0,0.15);">
-    <div class="card-name">Agent 365</div>
+    <div class="card-name"><a href="https://www.microsoft.com/en-us/microsoft-agent-365" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Agent 365 ↗</a></div>
     <div class="card-desc">Unified control plane for all agents. Inventory, governance, and security posture across Microsoft and partner agents. <strong>Licensing is per-user, not per-agent</strong> — governance scope does not scale with agent count. Includes new Defender, Entra, and Purview capabilities to secure agent access and prevent data oversharing.</div>
     <div class="tag-row"><span class="tag blue">GA May 1 2026</span><span class="tag warn">⚠ Per-user only</span><span class="tag">$15/user/mo</span></div>
   </div>
   <div class="card" style="border-color:rgba(84,176,84,0.2);">
-    <div class="card-name">Security Dashboard for AI</div>
+    <div class="card-name"><a href="https://learn.microsoft.com/en-us/security/security-for-ai/security-dashboard-for-ai" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Security Dashboard for AI ↗</a></div>
     <div class="card-desc">Unified CISO-level AI risk aggregation from Defender + Entra + Purview. AI inventory covering agents, MCP servers, models, apps — including third-party AI (ChatGPT, Gemini). Security Copilot NL-driven risk exploration. <strong>Now generally available</strong> — previously preview.</div>
     <div class="tag-row"><span class="tag green">✓ Now GA · RSAC 2026</span><span class="tag green">No extra license</span><span class="tag">AI Risk Scorecard</span></div>
   </div>
   <div class="card" style="border-color:rgba(252,225,0,0.15);">
-    <div class="card-name">Foundry Guardrails</div>
+    <div class="card-name"><a href="https://azure.microsoft.com/en-us/products/ai-foundry" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Foundry Guardrails ↗</a></div>
     <div class="card-desc">Assign control collections to specific models or agents in Azure AI Foundry. Limits tools available to each agent, constrains output behaviour, enforces content safety at the orchestration layer. Only applies to Foundry-deployed agents.</div>
     <div class="tag-row"><span class="tag caution">Preview</span><span class="tag">PaaS</span><span class="tag">Per-agent control sets</span><span class="tag">Foundry only</span></div>
   </div>
   <div class="card" style="border-color:rgba(252,225,0,0.15);">
-    <div class="card-name">Microsoft 365 E7: The Frontier Suite</div>
+    <div class="card-name"><a href="https://www.microsoft.com/en-us/microsoft-365/business/compare-all-plans" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Microsoft 365 E7: The Frontier Suite ↗</a></div>
     <div class="card-desc">Bundles M365 Copilot + Agent 365 + Entra Suite + M365 E5. Agent 365 included but inherits the same per-user licensing model. Best for orgs where agents are tightly coupled to named users.</div>
     <div class="tag-row"><span class="tag blue">GA May 1 2026</span><span class="tag warn">⚠ Per-user licensing</span><span class="tag">$99/user/mo</span></div>
   </div>
@@ -328,42 +328,42 @@ code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#eef1f8;
 <h2>Identity Primitives for AI Agents</h2>
 <div class="card-grid">
   <div class="card" style="border-color:rgba(0,120,212,0.15);">
-    <div class="card-name">Entra Agent ID</div>
+    <div class="card-name"><a href="https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-agent-id" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Entra Agent ID ↗</a></div>
     <div class="card-desc">Register agents as non-human identities. Human sponsor required. Lifecycle automation. <strong>Currently limited preview — frontier/large enterprise only.</strong> Agents still use OBO flow underneath. <strong>Only applies to Modern Agents</strong> — most existing Copilot Studio agents are Classic Agents (Service Principals) and receive no Entra Agent ID protection. Migration tool from Classic to Modern does not yet exist. Agent names do not sync on rename — original "Agent #" name persists in Entra.</div>
     <div class="tag-row"><span class="tag warn">⚠ Preview · Frontier Only</span><span class="tag warn">⚠ Modern Agents only</span><span class="tag warn">⚠ Name sync bug</span><span class="tag warn">⚠ OBO underneath</span></div>
   </div>
   <div class="card" style="border-color:rgba(0,120,212,0.15);">
-    <div class="card-name">Entra Workload Identity</div>
+    <div class="card-name"><a href="https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-workload-id" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Entra Workload Identity ↗</a></div>
     <div class="card-desc">Today's real-world primitive for non-human identities. Designed for apps/services — not purpose-scoped for individual agents. Lacks agent-specific lifecycle governance and sponsor model. The current stopgap while Agent ID matures.</div>
     <div class="tag-row"><span class="tag green">GA · Available Now</span><span class="tag warn">⚠ Not agent-purpose-scoped</span></div>
   </div>
   <div class="card" style="border-color:rgba(0,120,212,0.15);">
-    <div class="card-name">Conditional Access for AI</div>
+    <div class="card-name"><a href="https://learn.microsoft.com/en-us/entra/identity/conditional-access/overview" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Conditional Access for AI ↗</a></div>
     <div class="card-desc">Block risky agents; enforce least-privilege and JIT access. <strong>OBO limitation</strong>: agent permissions cannot be scoped below the invoking user's own scope. New Conditional Access Optimization Agent adds context-aware recommendations and phased rollout.</div>
     <div class="tag-row"><span class="tag warn">⚠ OBO limits true least-priv</span><span class="tag blue">CA Optimization Agent · Preview enhancements</span></div>
   </div>
   <div class="card" style="border-color:rgba(0,120,212,0.15);">
-    <div class="card-name">Entra Internet Access</div>
+    <div class="card-name"><a href="https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-internet-access" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Entra Internet Access ↗</a></div>
     <div class="card-desc">Secure web and AI gateway. Shadow AI Detection now GA on March 31 — uses network layer to identify unknown AI applications. Prompt Injection Protection also GA March 31 — enforces universal network-level policies to block malicious AI prompts across apps and agents.</div>
     <div class="tag-row"><span class="tag green">Shadow AI Detection: GA Mar 31</span><span class="tag green">Prompt Injection: GA Mar 31</span></div>
   </div>
   <div class="card" style="border-color:rgba(0,120,212,0.15);">
-    <div class="card-name">Entra External MFA</div>
+    <div class="card-name"><a href="https://learn.microsoft.com/en-us/entra/identity/authentication/concept-mfa-external-providers" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Entra External MFA ↗</a></div>
     <div class="card-desc">Connect external MFA providers directly with Microsoft Entra — leverage pre-existing MFA investments or use highly specialised MFA methods alongside Entra authentication flows. New at RSAC 2026.</div>
     <div class="tag-row"><span class="tag green">✓ Now GA · RSAC 2026</span><span class="tag">External MFA Providers</span></div>
   </div>
   <div class="card" style="border-color:rgba(0,120,212,0.15);">
-    <div class="card-name">Entra Backup and Recovery</div>
+    <div class="card-name"><a href="https://learn.microsoft.com/en-us/entra/architecture/recover-from-deletions" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Entra Backup and Recovery ↗</a></div>
     <div class="card-desc">Automated backup of Entra directory objects to enable rapid recovery in case of accidental deletion or unauthorised changes. New resilience capability for identity infrastructure.</div>
     <div class="tag-row"><span class="tag caution">Preview · RSAC 2026</span><span class="tag">Directory Backup</span><span class="tag">Rapid Recovery</span></div>
   </div>
   <div class="card" style="border-color:rgba(0,120,212,0.15);">
-    <div class="card-name">Entra Tenant Governance</div>
+    <div class="card-name"><a href="https://learn.microsoft.com/en-us/entra/fundamentals/multi-tenant-organization-overview" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Entra Tenant Governance ↗</a></div>
     <div class="card-desc">Discover unmanaged (shadow) Entra tenants and establish consistent tenant policies and governance in multi-tenant environments. Addresses the risk of unsanctioned AI deployments creating orphaned tenants.</div>
     <div class="tag-row"><span class="tag caution">Preview · RSAC 2026</span><span class="tag">Shadow Tenant Discovery</span><span class="tag">Multi-tenant</span></div>
   </div>
   <div class="card" style="border-color:rgba(0,120,212,0.15);">
-    <div class="card-name">Unified Identity Security Dashboard</div>
+    <div class="card-name"><a href="https://learn.microsoft.com/en-us/defender-xdr/investigate-users" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Unified Identity Security Dashboard ↗</a></div>
     <div class="card-desc">New dashboard in Microsoft Defender highlighting the most impactful insights across human and non-human identities. New identity risk score unifies account-level risk signals for real-time access decisions and SecOps investigations.</div>
     <div class="tag-row"><span class="tag caution">Preview · RSAC 2026</span><span class="tag">Human + NHI Identities</span><span class="tag">Risk Score</span></div>
   </div>
@@ -373,37 +373,37 @@ code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#eef1f8;
 <h2>Runtime Defence & Threat Detection</h2>
 <div class="card-grid">
   <div class="card" style="border-color:rgba(216,59,1,0.15);">
-    <div class="card-name">Prompt Shields</div>
+    <div class="card-name"><a href="https://learn.microsoft.com/en-us/azure/ai-services/content-safety/concepts/jailbreak-detection" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Prompt Shields ↗</a></div>
     <div class="card-desc">Runtime defence against direct and indirect prompt injection at the orchestration layer. Inspects user inputs AND content retrieved by the agent (RAG, tool outputs) before it reaches the model decision loop.</div>
     <div class="tag-row"><span class="tag green">GA</span><span class="tag">Direct + Indirect PI</span><span class="tag">Orchestration Layer</span></div>
   </div>
   <div class="card" style="border-color:rgba(216,59,1,0.15);">
-    <div class="card-name">Azure AI Content Safety</div>
+    <div class="card-name"><a href="https://azure.microsoft.com/en-us/products/ai-services/ai-content-safety" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Azure AI Content Safety ↗</a></div>
     <div class="card-desc">API-level model I/O filters: harmful content, jailbreak attempts, protected material, groundedness violations. Operates at the model boundary — separate from Prompt Shields which operates at the orchestration layer.</div>
     <div class="tag-row"><span class="tag green">GA</span><span class="tag">Model Boundary</span><span class="tag">Jailbreak · Groundedness</span></div>
   </div>
   <div class="card" style="border-color:rgba(216,59,1,0.15);">
-    <div class="card-name">Defender Predictive Shielding</div>
+    <div class="card-name"><a href="https://www.microsoft.com/en-us/security/business/microsoft-defender" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Defender Predictive Shielding ↗</a></div>
     <div class="card-desc">Dynamically adjusts identity and access policies during active attacks — reducing exposure and limiting lateral movement in real time. Applies to both human and agent identities during incidents. New at RSAC 2026.</div>
     <div class="tag-row"><span class="tag caution">Preview · RSAC 2026</span><span class="tag">Dynamic Policy</span><span class="tag">Active Attack Response</span></div>
   </div>
   <div class="card" style="border-color:rgba(216,59,1,0.15);">
-    <div class="card-name">Defender for Cloud (AI Workloads)</div>
+    <div class="card-name"><a href="https://www.microsoft.com/en-us/security/business/cloud-security/microsoft-defender-cloud" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Defender for Cloud (AI Workloads) ↗</a></div>
     <div class="card-desc">CSPM and runtime threat protection for AI infrastructure. Monitors model deployments, API access patterns, and agent behaviour. Expanded container security at RSAC 2026 including binary drift and antimalware prevention.</div>
     <div class="tag-row"><span class="tag green">GA</span><span class="tag caution">Container security: Preview</span><span class="tag">Multi-cloud</span></div>
   </div>
   <div class="card" style="border-color:rgba(216,59,1,0.15);">
-    <div class="card-name">Defender for Cloud Apps (CASB)</div>
+    <div class="card-name"><a href="https://www.microsoft.com/en-us/security/business/siem-and-xdr/microsoft-defender-cloud-apps" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Defender for Cloud Apps (CASB) ↗</a></div>
     <div class="card-desc">Governs how AI agents and MCP tools access SaaS. Discovers shadow AI, governs OAuth permissions, detects over-privileged agent-to-SaaS access. For Copilot Studio specifically: provides real-time protection — blocks tool invocations if a prompt is suspicious. <strong>1-second timeout: if no decision returned in time, tool executes.</strong> Not a guaranteed prevention control.</div>
     <div class="tag-row"><span class="tag green">GA</span><span class="tag">OAuth Governance</span><span class="tag">MCP-SaaS</span><span class="tag caution">RT Protection: Preview · 1s timeout</span></div>
   </div>
   <div class="card" style="border-color:rgba(216,59,1,0.15);">
-    <div class="card-name">AI Agent Inventory (Defender for Cloud Apps)</div>
+    <div class="card-name"><a href="https://learn.microsoft.com/en-us/defender-cloud-apps/ai-agent-inventory" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">AI Agent Inventory (Defender for Cloud Apps) ↗</a></div>
     <div class="card-desc">Detects all Copilot Studio agents in the tenant and surfaces misconfigurations via the <code>AIAgentsInfo</code> Advanced Hunting table. Detects no-auth agents, ownerless agents, and risky configurations. <strong>Setup requires collaboration between Defender admin AND Power Platform admin</strong> — two separate portals. Takes up to 30 minutes for initial connection and longer for full data population. Three Defender preview features must be enabled separately.</div>
     <div class="tag-row"><span class="tag caution">Preview · Copilot Studio only</span><span class="tag warn">⚠ Complex dual-admin setup</span><span class="tag">AIAgentsInfo KQL</span></div>
   </div>
   <div class="card" style="border-color:rgba(216,59,1,0.15);">
-    <div class="card-name">Microsoft Sentinel</div>
+    <div class="card-name"><a href="https://www.microsoft.com/en-us/security/business/siem-and-xdr/microsoft-sentinel" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Microsoft Sentinel ↗</a></div>
     <div class="card-desc">SIEM + SOAR. Ingests AI-specific telemetry: agent behaviour logs, MCP server activity, Copilot interaction signals. New at RSAC 2026: Data Federation via Microsoft Fabric, Playbook Generator with natural language orchestration, MCP Entity Analyzer (GA April), and Sentinel Custom Graphs.</div>
     <div class="tag-row"><span class="tag green">GA</span><span class="tag blue">MCP Entity Analyzer: GA April</span><span class="tag caution">Data Federation: Preview</span><span class="tag caution">Playbook Generator: Preview</span></div>
   </div>
@@ -413,32 +413,32 @@ code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#eef1f8;
 <h2>Purview — Data Governance for AI</h2>
 <div class="card-grid">
   <div class="card" style="border-color:rgba(0,133,117,0.15);">
-    <div class="card-name">DSPM for AI</div>
+    <div class="card-name"><a href="https://learn.microsoft.com/en-us/purview/ai-microsoft-purview" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">DSPM for AI ↗</a></div>
     <div class="card-desc">Discovers where sensitive data exists across AI workloads. Identifies oversharing risks before agents exploit them. Posture assessments and automated remediation for AI data risks.</div>
     <div class="tag-row"><span class="tag caution">Preview</span><span class="tag">Oversharing Risk</span><span class="tag">AI Workloads</span></div>
   </div>
   <div class="card" style="border-color:rgba(0,133,117,0.15);">
-    <div class="card-name">DLP for Microsoft 365 Copilot</div>
+    <div class="card-name"><a href="https://learn.microsoft.com/en-us/purview/dlp-microsoft365-copilot-location-learn-about" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">DLP for Microsoft 365 Copilot ↗</a></div>
     <div class="card-desc">Blocks sensitive information such as PII, credit card numbers, and custom data types in prompts from being processed or used for web grounding. Prevents sensitive data entering the AI context window at the Copilot layer. New at RSAC 2026.</div>
     <div class="tag-row"><span class="tag green">✓ GA March 31 · RSAC 2026</span><span class="tag">PII Protection</span><span class="tag">Prompt Blocking</span></div>
   </div>
   <div class="card" style="border-color:rgba(0,133,117,0.15);">
-    <div class="card-name">Information Protection (AI)</div>
+    <div class="card-name"><a href="https://www.microsoft.com/en-us/security/business/information-protection/microsoft-purview-information-protection" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Information Protection (AI) ↗</a></div>
     <div class="card-desc">Extends sensitivity labels into AI workflows. Prevents agents from accessing, generating, or transmitting content violating classification policies. Integrates with Entra Internet Access for network-layer enforcement.</div>
     <div class="tag-row"><span class="tag green">GA</span><span class="tag">Sensitivity Labels</span><span class="tag">DLP in AI</span></div>
   </div>
   <div class="card" style="border-color:rgba(0,133,117,0.15);">
-    <div class="card-name">Communication Compliance (AI)</div>
+    <div class="card-name"><a href="https://www.microsoft.com/en-us/security/business/risk-management/microsoft-purview-communication-compliance" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Communication Compliance (AI) ↗</a></div>
     <div class="card-desc">Monitors Copilot and agent conversations for policy violations and regulatory issues. <strong>OBO note</strong>: attribution may show user identity rather than agent identity in audit logs.</div>
     <div class="tag-row"><span class="tag green">GA</span><span class="tag warn">⚠ OBO attribution</span><span class="tag">Audit Trail</span></div>
   </div>
   <div class="card" style="border-color:rgba(0,133,117,0.15);">
-    <div class="card-name">Purview in Copilot Control System</div>
+    <div class="card-name"><a href="https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-privacy" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Purview in Copilot Control System ↗</a></div>
     <div class="card-desc">Unified view of AI-related data risk directly in the Microsoft 365 Admin Center. Brings Purview data security insights into the same admin surface where Copilot is configured and governed. New at RSAC 2026.</div>
     <div class="tag-row"><span class="tag blue">GA April · RSAC 2026</span><span class="tag">M365 Admin Center</span><span class="tag">Unified Risk View</span></div>
   </div>
   <div class="card" style="border-color:rgba(0,133,117,0.15);">
-    <div class="card-name">AI Observability (Purview)</div>
+    <div class="card-name"><a href="https://learn.microsoft.com/en-us/purview/ai-microsoft-purview" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">AI Observability (Purview) ↗</a></div>
     <div class="card-desc">Tracks what data agents access, process, and output at runtime. Creates a complete data access audit map for compliance and forensics teams. Feeds into eDiscovery workflows.</div>
     <div class="tag-row"><span class="tag caution">Preview</span><span class="tag">Agent Activity Logs</span><span class="tag">eDiscovery</span></div>
   </div>
@@ -448,37 +448,37 @@ code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#eef1f8;
 <h2>Security Copilot & Autonomous Agents</h2>
 <div class="card-grid">
   <div class="card" style="border-color:rgba(84,176,84,0.15);">
-    <div class="card-name">Security Copilot</div>
+    <div class="card-name"><a href="https://www.microsoft.com/en-us/security/business/ai-machine-learning/microsoft-security-copilot" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Security Copilot ↗</a></div>
     <div class="card-desc">AI assistant embedded in Defender, Entra, Intune, Purview. Automates threat hunting, phishing triage, identity risk remediation. Included for M365 E5 at 400 SCU per 1,000 users/month. Over 15 new partner-built agents available via Security Store.</div>
     <div class="tag-row"><span class="tag green">Included in E5 + E7</span><span class="tag">400 SCU/1K users/mo</span><span class="tag blue">15+ Partner Agents</span></div>
   </div>
   <div class="card" style="border-color:rgba(84,176,84,0.15);">
-    <div class="card-name">Security Analyst Agent</div>
+    <div class="card-name"><a href="https://www.microsoft.com/en-us/security/business/ai-machine-learning/microsoft-security-copilot" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Security Analyst Agent ↗</a></div>
     <div class="card-desc">Helps accelerate threat investigations by providing contextual analysis and guided workflows in Microsoft Defender. Deep multi-step investigation using Defender and Sentinel telemetry. Announced at RSAC 2026.</div>
     <div class="tag-row"><span class="tag caution">Preview Mar 26 · RSAC 2026</span><span class="tag">Contextual Analysis</span><span class="tag">Guided Workflows</span></div>
   </div>
   <div class="card" style="border-color:rgba(84,176,84,0.15);">
-    <div class="card-name">Security Alert Triage Agent</div>
+    <div class="card-name"><a href="https://www.microsoft.com/en-us/security/business/ai-machine-learning/microsoft-security-copilot" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Security Alert Triage Agent ↗</a></div>
     <div class="card-desc">Extends the phishing triage agent to cloud and identity — autonomously analyses, classifies, prioritises, and resolves repetitive low-value alerts at scale. Reduces analyst alert fatigue across identity and cloud signals.</div>
     <div class="tag-row"><span class="tag caution">Preview April · RSAC 2026</span><span class="tag">Cloud + Identity</span><span class="tag">Autonomous Triage</span></div>
   </div>
   <div class="card" style="border-color:rgba(84,176,84,0.15);">
-    <div class="card-name">Conditional Access Optimization Agent</div>
+    <div class="card-name"><a href="https://learn.microsoft.com/en-us/entra/identity/conditional-access/overview" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Conditional Access Optimization Agent ↗</a></div>
     <div class="card-desc">Adds context-aware recommendations, deeper analysis, and phased rollout to strengthen identity security through Conditional Access policies. Agent is GA; RSAC 2026 enhancements are in preview.</div>
     <div class="tag-row"><span class="tag green">Agent: GA</span><span class="tag caution">Enhancements: Preview</span><span class="tag">Entra</span></div>
   </div>
   <div class="card" style="border-color:rgba(84,176,84,0.15);">
-    <div class="card-name">Data Security Posture Agent</div>
+    <div class="card-name"><a href="https://learn.microsoft.com/en-us/purview/ai-microsoft-purview" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Data Security Posture Agent ↗</a></div>
     <div class="card-desc">Purview agent with new credential scanning capability — proactively detects credential exposure in your data estate. Helps surface hidden identity risks embedded in documents, repositories, and data stores.</div>
     <div class="tag-row"><span class="tag caution">Preview · RSAC 2026</span><span class="tag">Credential Scanning</span><span class="tag">Purview</span></div>
   </div>
   <div class="card" style="border-color:rgba(84,176,84,0.15);">
-    <div class="card-name">Data Security Triage Agent</div>
+    <div class="card-name"><a href="https://learn.microsoft.com/en-us/purview/ai-microsoft-purview" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Data Security Triage Agent ↗</a></div>
     <div class="card-desc">Purview alert triage agent with advanced AI reasoning layer and improved interpretation of custom Sensitive Information Types — improves agent outputs during alert review. Agent is GA; RSAC 2026 enhancements in preview from March 31.</div>
     <div class="tag-row"><span class="tag green">Agent: GA</span><span class="tag caution">Enhancements: Preview Mar 31</span><span class="tag">Purview</span></div>
   </div>
   <div class="card" style="border-color:rgba(84,176,84,0.15);">
-    <div class="card-name">Intune Security Copilot Agents</div>
+    <div class="card-name"><a href="https://www.microsoft.com/en-us/security/business/microsoft-intune" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--border2);">Intune Security Copilot Agents ↗</a></div>
     <div class="card-desc">Automate device policy reviews, offboarding, and risk-based remediation within Intune. Policy Configuration Agent lets IT create and validate policies via natural language. Enhanced app inventory for AI-enabled apps GA in May.</div>
     <div class="tag-row"><span class="tag green">GA</span><span class="tag blue">App Inventory: GA May</span><span class="tag">Natural Language Config</span></div>
   </div>
