@@ -1,0 +1,25 @@
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer"
+
+# Block private files from being served even if accidentally pushed
+[[redirects]]
+  from = "/config.js"
+  to = "/404"
+  status = 404
+
+[[redirects]]
+  from = "/update-agent.html"
+  to = "/404"
+  status = 404
+
+[[redirects]]
+  from = "/sources.json"
+  to = "/404"
+  status = 404

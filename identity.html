@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Identity & OBO — Securing AI with Microsoft</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#07090f;--surface:#0d1017;--surface2:#121620;--surface3:#181d28;
+  --border:#1c2333;--border2:#252e42;
+  --blue:#0078d4;--blue2:#50e6ff;--purple:#6264a7;--purple2:#8764b8;
+  --teal:#008575;--teal2:#00b7c3;--green:#107c10;--green2:#54b054;
+  --orange:#d83b01;--orange2:#f7630c;--gold:#c09020;--gold2:#fce100;
+  --red:#c50f1f;--warn:rgba(216,59,1,0.12);--warn-border:rgba(216,59,1,0.3);
+  --warn-text:#f7a570;--caution:rgba(252,225,0,0.08);
+  --caution-border:rgba(252,225,0,0.25);--caution-text:#fce100;
+  --text:#dde4f0;--text2:#8494b8;--text3:#4a5570;--nav-h:58px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;
+  font-size:14px;line-height:1.7;padding-top:var(--nav-h);}
+body::before{content:'';position:fixed;inset:0;
+  background-image:linear-gradient(rgba(0,120,212,0.025) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(0,120,212,0.025) 1px,transparent 1px);
+  background-size:48px 48px;pointer-events:none;z-index:0;}
+
+/* TOP NAV */
+.topnav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);
+  background:rgba(7,9,15,0.95);border-bottom:1px solid var(--border2);
+  backdrop-filter:blur(12px);z-index:200;
+  display:flex;align-items:center;padding:0 32px;gap:0;}
+.nav-brand{display:flex;align-items:center;gap:10px;margin-right:28px;flex-shrink:0;}
+.msft-logo{width:20px;height:20px;display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.msft-logo div:nth-child(1){background:#f25022;border-radius:1px;}
+.msft-logo div:nth-child(2){background:#7fba00;border-radius:1px;}
+.msft-logo div:nth-child(3){background:#00a4ef;border-radius:1px;}
+.msft-logo div:nth-child(4){background:#ffb900;border-radius:1px;}
+.brand-text{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;
+  color:var(--text);letter-spacing:0.01em;white-space:nowrap;}
+.brand-sub{font-family:'DM Mono',monospace;font-size:9px;color:var(--text3);
+  letter-spacing:0.08em;}
+.nav-links{display:flex;align-items:stretch;height:100%;flex:1;overflow-x:auto;gap:2px;}
+.nav-links::-webkit-scrollbar{display:none;}
+.nav-links a{display:flex;align-items:center;gap:6px;padding:0 14px;
+  text-decoration:none;color:var(--text3);font-size:12px;
+  border-bottom:2px solid transparent;white-space:nowrap;
+  transition:color 0.15s,border-color 0.15s;}
+.nav-links a:hover{color:var(--text2);}
+.nav-links a.active{color:var(--blue2);border-bottom-color:var(--blue2);}
+.nav-links a .n{font-family:'DM Mono',monospace;font-size:9px;
+  color:var(--text3);letter-spacing:0.06em;}
+.nav-links a.active .n{color:var(--blue2);}
+.nav-warn{margin-left:auto;font-family:'DM Mono',monospace;font-size:9px;
+  color:var(--warn-text);background:var(--warn);border:1px solid var(--warn-border);
+  border-radius:4px;padding:3px 8px;white-space:nowrap;flex-shrink:0;}
+
+/* LAYOUT */
+.page{max-width:940px;margin:0 auto;padding:52px 40px 100px;position:relative;z-index:1;}
+
+/* TYPOGRAPHY */
+.section-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;
+  color:var(--blue2);text-transform:uppercase;margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;}
+.section-label::after{content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,var(--border2),transparent);}
+h1{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;
+  line-height:1.08;letter-spacing:-0.02em;color:var(--text);margin-bottom:16px;}
+h1 span{background:linear-gradient(135deg,var(--blue2),var(--blue));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+h2{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;
+  color:var(--text);letter-spacing:-0.01em;margin:36px 0 10px;line-height:1.2;}
+h2:first-child{margin-top:0;}
+h3{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;
+  color:var(--text);margin:28px 0 10px;}
+h4{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+  color:var(--text);margin:20px 0 6px;}
+p{color:var(--text2);margin-bottom:14px;font-weight:300;}
+p strong{color:var(--text);font-weight:500;}
+p:last-child{margin-bottom:0;}
+a{color:var(--blue2);text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+/* PAGE HERO */
+.hero{padding:40px 0 36px;border-bottom:1px solid var(--border);margin-bottom:40px;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;
+  background:var(--surface2);border:1px solid var(--border2);
+  border-radius:100px;padding:4px 12px 4px 8px;
+  font-family:'DM Mono',monospace;font-size:10px;
+  color:var(--text3);letter-spacing:0.08em;margin-bottom:16px;}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--blue2);
+  animation:blink 1.5s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;}
+.chip{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.07em;
+  padding:4px 10px;border-radius:4px;border:1px solid;}
+.chip-blue{background:rgba(0,120,212,0.1);border-color:rgba(0,120,212,0.3);color:var(--blue2);}
+.chip-warn{background:var(--warn);border-color:var(--warn-border);color:var(--warn-text);}
+.chip-caution{background:var(--caution);border-color:var(--caution-border);color:var(--caution-text);}
+.chip-green{background:rgba(84,176,84,0.1);border-color:rgba(84,176,84,0.3);color:var(--green2);}
+
+/* CALLOUTS */
+.callout{border-radius:10px;padding:18px 20px;margin:20px 0;border:1px solid;}
+.callout-warn{background:var(--warn);border-color:var(--warn-border);}
+.callout-caution{background:var(--caution);border-color:var(--caution-border);}
+.callout-info{background:rgba(0,120,212,0.06);border-color:rgba(0,120,212,0.2);}
+.callout-green{background:rgba(16,124,16,0.08);border-color:rgba(84,176,84,0.25);}
+.callout-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;
+  margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.callout-warn .callout-title{color:var(--warn-text);}
+.callout-caution .callout-title{color:var(--caution-text);}
+.callout-info .callout-title{color:var(--blue2);}
+.callout-green .callout-title{color:var(--green2);}
+.callout p{font-size:13px;margin-bottom:0;}
+.callout-warn p{color:#c4a090;}
+.callout-caution p{color:#a89a70;}
+.callout-info p{color:#7aa0c8;}
+.callout-green p{color:#78a878;}
+
+/* CARDS */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:14px;margin:20px 0;}
+.card{background:var(--surface2);border:1px solid var(--border);
+  border-radius:10px;padding:18px;position:relative;overflow:hidden;
+  transition:border-color 0.2s,transform 0.15s;}
+.card:hover{transform:translateY(-2px);}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.card-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+  color:var(--text);margin-bottom:8px;}
+.card-sub{font-family:'DM Mono',monospace;font-size:9px;color:var(--text3);
+  letter-spacing:0.08em;margin-bottom:6px;}
+.card-desc{font-size:12px;color:var(--text2);margin:0 0 12px;font-weight:300;line-height:1.6;}
+.tag-row{display:flex;flex-wrap:wrap;gap:5px;}
+.tag{font-family:'DM Mono',monospace;font-size:9px;padding:2px 7px;border-radius:3px;
+  background:rgba(255,255,255,0.04);border:1px solid var(--border2);
+  color:var(--text3);letter-spacing:0.04em;}
+.tag.warn{background:var(--warn);border-color:var(--warn-border);color:var(--warn-text);}
+.tag.caution{background:var(--caution);border-color:var(--caution-border);color:var(--caution-text);}
+.tag.green{background:rgba(84,176,84,0.1);border-color:rgba(84,176,84,0.3);color:var(--green2);}
+.tag.blue{background:rgba(0,120,212,0.1);border-color:rgba(0,120,212,0.3);color:var(--blue2);}
+.tag.purple{background:rgba(98,100,167,0.1);border-color:rgba(98,100,167,0.3);color:#a4a8d8;}
+
+/* TABLES */
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:12px;}
+th{background:var(--surface2);border:1px solid var(--border2);padding:10px 14px;
+  text-align:left;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;
+  color:var(--text2);letter-spacing:0.02em;}
+td{border:1px solid var(--border);padding:9px 14px;color:var(--text2);
+  font-weight:300;vertical-align:top;line-height:1.55;}
+tr:hover td{background:rgba(255,255,255,0.01);}
+td strong{color:var(--text);font-weight:500;}
+td code{font-family:'DM Mono',monospace;font-size:10px;
+  background:var(--surface3);border:1px solid var(--border2);
+  border-radius:3px;padding:1px 5px;color:var(--blue2);}
+.warn-inline{color:var(--warn-text);font-family:'DM Mono',monospace;font-size:10px;}
+.caution-inline{color:var(--caution-text);font-family:'DM Mono',monospace;font-size:10px;}
+.green-inline{color:var(--green2);font-family:'DM Mono',monospace;font-size:10px;}
+.severity-critical{color:#ff4444;font-family:'DM Mono',monospace;font-size:10px;font-weight:600;}
+.severity-high{color:var(--warn-text);font-family:'DM Mono',monospace;font-size:10px;}
+.severity-medium{color:var(--caution-text);font-family:'DM Mono',monospace;font-size:10px;}
+
+/* FLOW */
+.flow{display:flex;align-items:stretch;border:1px solid var(--border2);
+  border-radius:10px;overflow:hidden;margin:20px 0;}
+.flow-step{flex:1;padding:14px 16px;border-right:1px solid var(--border2);
+  position:relative;background:var(--surface2);transition:background 0.2s;}
+.flow-step:last-child{border-right:none;}
+.flow-step:hover{background:var(--surface3);}
+.flow-num{font-family:'DM Mono',monospace;font-size:9px;color:var(--text3);
+  letter-spacing:0.1em;margin-bottom:6px;}
+.flow-name{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;
+  color:var(--text);margin-bottom:4px;}
+.flow-desc{font-size:11px;color:var(--text2);font-weight:300;line-height:1.4;}
+.flow-arrow{position:absolute;right:-10px;top:50%;transform:translateY(-50%);
+  color:var(--text3);font-size:14px;z-index:2;}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border);margin:32px 0;}
+
+/* PAGE NAV (prev/next) */
+.page-nav{display:flex;justify-content:space-between;align-items:center;
+  margin-top:60px;padding-top:24px;border-top:1px solid var(--border);}
+.page-nav a{display:flex;align-items:center;gap:8px;padding:10px 16px;
+  background:var(--surface2);border:1px solid var(--border2);border-radius:8px;
+  color:var(--text2);text-decoration:none;font-size:12px;transition:all 0.15s;}
+.page-nav a:hover{border-color:var(--blue);color:var(--text);}
+.page-nav-label{font-family:'DM Mono',monospace;font-size:9px;
+  color:var(--text3);letter-spacing:0.08em;display:block;margin-bottom:2px;}
+.page-nav-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;}
+.page-nav-spacer{flex:1;}
+
+/* MISC */
+code{font-family:'DM Mono',monospace;font-size:11px;background:var(--surface3);
+  border:1px solid var(--border2);border-radius:4px;padding:2px 6px;color:var(--blue2);}
+.pill-list{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;}
+.pill{display:flex;align-items:center;gap:6px;background:var(--surface2);
+  border:1px solid var(--border2);border-radius:100px;padding:5px 12px 5px 8px;
+  font-size:12px;color:var(--text2);font-weight:300;}
+.pill-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.obo-flow{display:flex;flex-direction:column;border:1px solid var(--border2);
+  border-radius:10px;overflow:hidden;margin:20px 0;}
+.obo-row{display:flex;align-items:stretch;border-bottom:1px solid var(--border2);}
+.obo-row:last-child{border-bottom:none;}
+.obo-label{width:130px;flex-shrink:0;background:var(--surface2);padding:12px 14px;
+  border-right:1px solid var(--border2);font-family:'DM Mono',monospace;
+  font-size:9px;letter-spacing:0.08em;color:var(--text3);
+  display:flex;align-items:center;text-transform:uppercase;}
+.obo-content{flex:1;padding:12px 16px;font-size:12px;color:var(--text2);font-weight:300;}
+.obo-content strong{color:var(--text);font-weight:500;}
+.mcp-layer{border:1px solid var(--border2);border-radius:8px;margin:8px 0;overflow:hidden;}
+.mcp-layer-header{padding:10px 16px;background:var(--surface2);
+  border-bottom:1px solid var(--border2);display:flex;align-items:center;gap:10px;}
+.mcp-layer-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--text);}
+.mcp-layer-body{padding:12px 16px;display:flex;flex-wrap:wrap;gap:8px;}
+.mcp-item{background:var(--surface3);border:1px solid var(--border2);
+  border-radius:6px;padding:6px 12px;font-size:11px;color:var(--text2);font-weight:300;}
+.mcp-item.risk{background:rgba(216,59,1,0.08);border-color:rgba(216,59,1,0.25);color:var(--warn-text);}
+.mcp-item.control{background:rgba(0,120,212,0.08);border-color:rgba(0,120,212,0.25);color:var(--blue2);}
+.threat-block{background:var(--surface2);border:1px solid var(--border2);
+  border-radius:10px;margin:24px 0;overflow:hidden;}
+.threat-header{padding:14px 20px;border-bottom:1px solid var(--border2);
+  display:flex;align-items:center;gap:12px;}
+.threat-icon{font-size:22px;}
+.threat-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--text);}
+.threat-category{font-family:'DM Mono',monospace;font-size:9px;padding:2px 8px;
+  border-radius:3px;letter-spacing:0.06em;margin-left:auto;}
+.threat-body{padding:20px;}
+.threat-cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.threat-col-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;
+  color:var(--text3);margin-bottom:10px;text-transform:uppercase;}
+.threat-step{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start;}
+.threat-step-num{width:20px;height:20px;border-radius:50%;display:flex;
+  align-items:center;justify-content:center;font-family:'DM Mono',monospace;
+  font-size:9px;font-weight:500;flex-shrink:0;margin-top:1px;}
+.threat-step-text{font-size:12px;color:var(--text2);font-weight:300;}
+.nist-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0;}
+.nist-card{background:var(--surface2);border:1px solid var(--border);
+  border-radius:10px;overflow:hidden;}
+.nist-header{padding:12px 16px;display:flex;align-items:center;gap:10px;}
+.nist-badge{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;
+  padding:4px 10px;border-radius:6px;letter-spacing:0.05em;}
+.nist-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text);}
+.nist-body{padding:0 16px 16px;}
+.nist-item{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.nist-item:last-child{border-bottom:none;}
+.nist-control{color:var(--text);font-weight:400;flex:1;}
+.nist-tool{font-family:'DM Mono',monospace;font-size:10px;color:var(--blue2);white-space:nowrap;}
+.nist-gap{font-family:'DM Mono',monospace;font-size:10px;color:var(--warn-text);white-space:nowrap;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+.footer{text-align:center;margin-top:60px;padding-top:24px;border-top:1px solid var(--border);
+  font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);
+  letter-spacing:0.05em;line-height:1.9;}
+@media(max-width:700px){
+  .topnav{padding:0 16px;}
+  .nav-warn{display:none;}
+  .page{padding:32px 20px 80px;}
+  .threat-cols{grid-template-columns:1fr;}
+  .nist-grid{grid-template-columns:1fr;}
+  .flow{flex-direction:column;}
+  .flow-arrow{display:none;}
+  h1{font-size:26px;}
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-brand">
+    <div class="msft-logo"><div></div><div></div><div></div><div></div></div>
+    <div><div class="brand-text">Securing AI with Microsoft</div>
+    <div class="brand-sub">SECURITY ARCHITECT GUIDE · 2026</div></div>
+  </div>
+  <div class="nav-links"><a href="index.html" class=""><span class="n">01</span>Overview</a>
+<a href="risk.html" class=""><span class="n">02</span>AI Risk</a>
+<a href="product-map.html" class=""><span class="n">03</span>Product Map</a>
+<a href="identity.html" class=" active"><span class="n">04</span>Identity & OBO</a>
+<a href="mcp.html" class=""><span class="n">05</span>MCP Ecosystem</a>
+<a href="threats.html" class=""><span class="n">06</span>Threat Scenarios</a>
+<a href="frameworks.html" class=""><span class="n">07</span>Frameworks</a>
+<a href="gaps.html" class=""><span class="n">08</span>Gaps & Roadmap</a>
+</div>
+  <div class="nav-warn">⚠ AGENT ID: PREVIEW · OBO STILL APPLIES</div>
+</nav>
+<div class="page">
+
+
+<div class="hero">
+  <div class="hero-badge"><div class="live-dot"></div>UPDATED · FIELD RESEARCH · MARCH 2026</div>
+  <h1>The Identity Problem:<br><span>Classic vs Modern, OBO & Maker Credentials</span></h1>
+  <p style="color:var(--text2);font-size:15px;font-weight:300;max-width:620px;line-height:1.7;">
+    The identity layer for AI agents is more fragmented and risky than Microsoft's marketing suggests. Three overlapping problems — Classic vs Modern agents, OBO token delegation, and Copilot Studio maker credentials — each undermine the agent security story independently. All three coexist in most enterprise deployments today.
+  </p>
+  <div class="hero-chips">
+    <div class="chip chip-warn">⚠ MOST COPILOT STUDIO AGENTS ARE CLASSIC — NO ENTRA PROTECTION</div>
+    <div class="chip chip-warn">⚠ MAKER CREDENTIALS WORSE THAN OBO IN COPILOT STUDIO</div>
+    <div class="chip chip-warn">⚠ AGENT ID: PREVIEW · FRONTIER ONLY — UNCHANGED AT RSAC 2026</div>
+  </div>
+</div>
+
+<div class="section-label">Classic vs Modern Agents</div>
+<h2>The Classic Agent Problem — The Gap Nobody Talks About</h2>
+<p>Before Entra Agent ID was introduced, Copilot Studio agents were registered as standard <strong>Service Principals (Enterprise Applications)</strong> in Entra — what are now called <strong>Classic Agents</strong>. Most organisations with existing Copilot Studio deployments have Classic Agents. This is the most underappreciated structural gap in Microsoft's agent security story.</p>
+
+<div class="callout callout-warn">
+  <div class="callout-title">⚠ Classic Agents Cannot Be Protected by Entra Security Products</div>
+  <p>Classic Agents are completely outside the Entra Agent ID security perimeter. They receive <strong>no ID Protection for Agents, no Conditional Access for Agents, no Agent lifecycle governance</strong>. The Entra security products that Microsoft markets for agent protection only work with <strong>Modern Agents</strong>. Microsoft has acknowledged a migration tool is planned — it does not exist yet. The only current workaround is to recreate agents from scratch as Modern Agents, which is impractical at scale.</p>
+</div>
+
+<table>
+<thead><tr><th>Dimension</th><th>Classic Agent</th><th>Modern Agent</th></tr></thead>
+<tbody>
+<tr><td><strong>Entra registration type</strong></td><td>Service Principal (Enterprise App)</td><td>Agent Identity (Agent Blueprint)</td></tr>
+<tr><td><strong>ID Protection for Agents</strong></td><td><span class="severity-critical">❌ Not supported</span></td><td><span class="green-inline">✓ Supported (preview)</span></td></tr>
+<tr><td><strong>Conditional Access for Agents</strong></td><td><span class="severity-critical">❌ Not supported</span></td><td><span class="green-inline">✓ Supported (preview)</span></td></tr>
+<tr><td><strong>Agent lifecycle governance</strong></td><td><span class="severity-critical">❌ Not supported</span></td><td><span class="green-inline">✓ Sponsor model available</span></td></tr>
+<tr><td><strong>Owner model</strong></td><td>Power Virtual Agent Service + creator as Owner — this introduces credential abuse risk (owner can add client secrets)</td><td>Sponsor model — creator in Notes field, not Owner role</td></tr>
+<tr><td><strong>Name sync with Copilot Studio</strong></td><td>Name stays as original <code>Agent #</code> — not updated on rename</td><td>Same bug — name not synced on rename</td></tr>
+<tr><td><strong>Migration path</strong></td><td>Recreate from scratch OR await Microsoft migration tool</td><td>N/A — is the target state</td></tr>
+<tr><td><strong>Where most production agents are today</strong></td><td><span class="severity-critical">Most existing Copilot Studio agents</span></td><td>Only newly created agents with setting enabled</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-caution">
+  <div class="callout-title">⚠ The Owner vs Sponsor Distinction Matters</div>
+  <p>For Classic Agents, the user who created the agent is added as an <strong>Owner</strong> of the Enterprise Application. An Owner can add client secrets, bypassing Conditional Access and MFA, abuse federated credentials for cross-tenant access, and is a high-privilege technical role. For Modern Agents, the creator should be listed as a <strong>Sponsor</strong> in the Notes field — a business accountability role without these technical powers. Using the Owner option on Classic Agents introduces real credential abuse risk. Field research by Derk van der Woude confirms this is the default behaviour in production environments.</p>
+</div>
+
+<div class="section-label">Maker Credentials</div>
+<h2>Maker Credentials — The Copilot Studio–Specific Risk</h2>
+<p>Beyond OBO, Copilot Studio introduces a structurally distinct and in many ways more dangerous authentication pattern: <strong>maker credentials</strong>. When a Copilot Studio agent is connected to tools (SharePoint, Outlook, Teams, etc.), it authenticates to those services as the person who <em>built</em> the agent — not the person <em>using</em> it.</p>
+
+<div class="obo-flow">
+  <div class="obo-row">
+    <div class="obo-label">OBO Flow</div>
+    <div class="obo-content"><strong>Standard agents:</strong> Agent inherits token from the <em>invoking user</em>. If User A asks the agent to send an email, the email is sent with User A's permissions. Audit log shows User A.</div>
+  </div>
+  <div class="obo-row">
+    <div class="obo-label">Maker Creds</div>
+    <div class="obo-content"><strong>Copilot Studio agents:</strong> Agent authenticates as the <em>maker</em> — the person who built it. If User A (developer, admin) built the agent and User B (intern) interacts with it, the agent acts with <strong>User A's admin permissions</strong>. Audit log may show the service, not User A.</div>
+  </div>
+  <div class="obo-row" style="background:rgba(216,59,1,0.04);">
+    <div class="obo-label" style="color:var(--warn-text);">⚠ Blast Radius</div>
+    <div class="obo-content"><strong>Combined with org-wide sharing (one toggle):</strong> A developer with admin rights builds an agent, enables org-wide sharing, and sets no authentication. Every employee in the organisation can now interact with the agent using the developer's admin-level permissions. This is the single most dangerous default configuration pattern in Copilot Studio deployments.</div>
+  </div>
+</div>
+
+<h3>Comparing the Three Authentication Patterns</h3>
+<table>
+<thead><tr><th>Pattern</th><th>Who Is Authenticated</th><th>Audit Trail</th><th>Blast Radius</th><th>Mitigation</th></tr></thead>
+<tbody>
+<tr><td><strong>OBO (standard)</strong></td><td>Invoking user</td><td>Shows user UPN (not agent)</td><td>User's own permissions</td><td>User PAM hygiene</td></tr>
+<tr><td><strong>Maker credentials (Copilot Studio)</strong></td><td>Agent builder</td><td>May show service, not maker</td><td>Maker's full permissions × all users of agent</td><td>Enforce end-user auth; restrict sharing scope</td></tr>
+<tr><td><strong>No authentication</strong></td><td>Anyone in Teams</td><td>None</td><td>Maker's permissions × entire org, no login required</td><td>Power Platform admin enforcement; KQL detection</td></tr>
+</tbody>
+</table>
+
+<div class="section-label">OBO Token Flow</div>
+<h2>OAuth 2.0 On-Behalf-Of — The Standard Agent Pattern</h2>
+<p>For agents outside Copilot Studio (Azure AI Foundry, custom agents), OBO remains the primary token mechanism. The agent receives a token derived from the invoking user's access token — it acts on behalf of the user, not as an independent identity.</p>
+<div class="obo-flow">
+  <div class="obo-row">
+    <div class="obo-label">Step 1</div>
+    <div class="obo-content"><strong>User authenticates.</strong> Entra ID issues access token AT₁ scoped to the user's permissions.</div>
+  </div>
+  <div class="obo-row">
+    <div class="obo-label">Step 2</div>
+    <div class="obo-content"><strong>Agent host presents AT₁</strong> with an OBO grant. Entra issues AT₂ for the downstream resource — still representing the user's identity.</div>
+  </div>
+  <div class="obo-row">
+    <div class="obo-label">Step 3</div>
+    <div class="obo-content"><strong>Agent uses AT₂</strong> to access resources. The resource sees the original user's identity — not the agent's identity.</div>
+  </div>
+  <div class="obo-row">
+    <div class="obo-label">Step 4 (A2A)</div>
+    <div class="obo-content"><strong>Multi-agent chains</strong> multiply delegation hops: AT₁ → AT₂ → AT₃. Every downstream service sees a derivative of the original user identity. Each hop risks scope escalation.</div>
+  </div>
+  <div class="obo-row" style="background:rgba(216,59,1,0.04);">
+    <div class="obo-label" style="color:var(--warn-text);">⚠ Result</div>
+    <div class="obo-content"><strong>Audit logs attribute actions to the user, not the agent.</strong> Agent scope cannot be narrowed below the user's own permissions. If the user is overprivileged, so is every agent they invoke.</div>
+  </div>
+</div>
+
+<div class="section-label">The Name Sync Bug</div>
+<h2>Agent Name Sync — An Operational Gap</h2>
+<p>Both Classic and Modern agents share a documented bug: when an agent is renamed in Copilot Studio after initial creation, the name stored in Entra Agent ID is <strong>not updated</strong>. The Entra portal continues to show the original name assigned at creation — typically <code>Agent #</code> (a number).</p>
+<div class="callout callout-warn">
+  <div class="callout-title">⚠ Impact on Security Operations</div>
+  <p>Entra security products — ID Protection for Agents, Conditional Access, and the Agent ID portal — all reference the original names. In any enterprise with more than a handful of agents, this makes per-agent policy management in Entra nearly unworkable. You cannot create a meaningful Conditional Access policy for <code>Agent #47</code>. Microsoft has confirmed this inconsistency and states work is in progress — no fix timeline confirmed. Field workaround: use the Agent ID object-ID (not name) as the primary key for agent identification, cross-referenced via script against the Power Platform Admin Environment URL.</p>
+</div>
+
+<div class="section-label">Entra Agent ID</div>
+<h2>Entra Agent ID — Status & What It Delivers for Modern Agents</h2>
+<div class="callout callout-caution">
+  <div class="callout-title">⚠ Still Preview — Not Announced as GA at RSAC 2026 — Modern Agents Only</div>
+  <p>Entra Agent ID remains in limited preview for frontier/large enterprise programs. Even when it reaches GA, it will only apply to <strong>Modern Agents</strong> — Classic Agents (the majority of existing Copilot Studio deployments) require migration first.</p>
+</div>
+<div class="card-grid">
+  <div class="card"><div class="card-name">Purpose-scoped Agent Identity</div><div class="card-desc">Each Modern Agent registered as a distinct non-human principal — separate from the user who created or invoked it. Enables per-agent audit trails and policy scoping. Does not apply to Classic Agents.</div><div class="tag-row"><span class="tag caution">Modern Agents only · Not yet GA</span></div></div>
+  <div class="card"><div class="card-name">Agent Identity Blueprint</div><div class="card-desc">Parent template for creating Agent Identities (1:N). Acts as a governance container for IT management. Blueprint-level permissions are inherited by all Agent Identities. Max 250 Agent Identities per Blueprint.</div><div class="tag-row"><span class="tag caution">Modern Agents only · Not yet GA</span></div></div>
+  <div class="card"><div class="card-name">Sponsor Requirement</div><div class="card-desc">Every Modern Agent should have a named Sponsor (business accountability role) and Owner (IT management role). These are distinct from the Owner role on Classic Agents — the Sponsor has no ability to add credentials or bypass CA.</div><div class="tag-row"><span class="tag caution">Not yet GA</span><span class="tag warn">⚠ Classic agents use Owner = risk</span></div></div>
+  <div class="card"><div class="card-name">Per-agent Conditional Access</div><div class="card-desc">Once a Modern Agent has its own identity, CA policies can target it specifically. In practice, the name sync bug means policy management requires using object-IDs not names. The CA Optimization Agent adds recommendations but true per-agent scoping still requires Agent ID GA + Modern Agent migration.</div><div class="tag-row"><span class="tag caution">Dependent on Agent ID GA + Modern migration</span></div></div>
+</div>
+
+<div class="section-label">What to Do Today</div>
+<h2>Practical Controls — Ranked by Availability</h2>
+<table>
+<thead><tr><th>Control</th><th>What It Does</th><th>Status</th><th>Limitation</th></tr></thead>
+<tbody>
+<tr><td><strong>Enforce end-user authentication per agent</strong></td><td>Require users to authenticate with their own credentials — prevents maker credential blast radius</td><td><span class="green-inline">Available now (Power Platform admin)</span></td><td>Must be set per agent; not default</td></tr>
+<tr><td><strong>Restrict org-wide sharing</strong></td><td>Use Managed Environments to set numerical sharing limits or restrict to security groups</td><td><span class="green-inline">Available now (Managed Environments)</span></td><td>Requires Power Platform admin</td></tr>
+<tr><td><strong>Detect no-auth agents via KQL</strong></td><td><code>AIAgentsInfo | where UserAuthenticationType == "None"</code></td><td><span class="green-inline">Available (requires AI Agent Inventory enabled)</span></td><td>AI Agent Inventory requires Defender + Power Platform admin collaboration</td></tr>
+<tr><td><strong>Detect ownerless agents via KQL</strong></td><td><code>AIAgentsInfo | where isempty(OwnerAccountUpns)</code></td><td><span class="green-inline">Available (requires AI Agent Inventory enabled)</span></td><td>Same setup requirement</td></tr>
+<tr><td><strong>Migrate Classic → Modern Agents</strong></td><td>Enables Entra security product coverage; requires recreating agents from scratch</td><td><span class="caution-inline">Manual only — migration tool not yet available</span></td><td>Impractical at scale; migration tool planned</td></tr>
+<tr><td><strong>User PAM hygiene</strong></td><td>Least-privileged makers → least-privileged agent credentials</td><td><span class="green-inline">Available via PAM tooling</span></td><td>Indirect; does not change the structural authentication problem</td></tr>
+<tr><td><strong>Entra Workload Identity</strong></td><td>App-level service principal scoping for non-Copilot-Studio agents</td><td><span class="green-inline">GA</span></td><td>Not purpose-scoped per agent-instance</td></tr>
+<tr><td><strong>Defender for Cloud Apps real-time protection</strong></td><td>Blocks tool invocations during suspicious prompt activity (XPIA, UPIA) for Copilot Studio agents</td><td><span class="caution-inline">Preview · requires both Defender + Power Platform admin setup</span></td><td>Complex 3-step setup; if no decision in 1 second, tool executes anyway</td></tr>
+</tbody>
+</table>
+
+
+<div class="page-nav"><a href="product-map.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Product Map</span></a><a href="mcp.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">MCP Ecosystem</span></a></div>
+<div class="footer">
+  SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
+  Last updated: March 24, 2026 · Analysis covers publicly announced Microsoft security capabilities only
+</div>
+</div>
+</body>
+</html>

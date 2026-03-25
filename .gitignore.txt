@@ -1,0 +1,10 @@
+# ── Private — never commit these ──────────────
+config.js
+update-agent.html
+sources.json
+
+# ── OS / editor junk ──────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+*.swp

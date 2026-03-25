@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Frameworks — Securing AI with Microsoft</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#07090f;--surface:#0d1017;--surface2:#121620;--surface3:#181d28;
+  --border:#1c2333;--border2:#252e42;
+  --blue:#0078d4;--blue2:#50e6ff;--purple:#6264a7;--purple2:#8764b8;
+  --teal:#008575;--teal2:#00b7c3;--green:#107c10;--green2:#54b054;
+  --orange:#d83b01;--orange2:#f7630c;--gold:#c09020;--gold2:#fce100;
+  --red:#c50f1f;--warn:rgba(216,59,1,0.12);--warn-border:rgba(216,59,1,0.3);
+  --warn-text:#f7a570;--caution:rgba(252,225,0,0.08);
+  --caution-border:rgba(252,225,0,0.25);--caution-text:#fce100;
+  --text:#dde4f0;--text2:#8494b8;--text3:#4a5570;--nav-h:58px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;
+  font-size:14px;line-height:1.7;padding-top:var(--nav-h);}
+body::before{content:'';position:fixed;inset:0;
+  background-image:linear-gradient(rgba(0,120,212,0.025) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(0,120,212,0.025) 1px,transparent 1px);
+  background-size:48px 48px;pointer-events:none;z-index:0;}
+
+/* TOP NAV */
+.topnav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);
+  background:rgba(7,9,15,0.95);border-bottom:1px solid var(--border2);
+  backdrop-filter:blur(12px);z-index:200;
+  display:flex;align-items:center;padding:0 32px;gap:0;}
+.nav-brand{display:flex;align-items:center;gap:10px;margin-right:28px;flex-shrink:0;}
+.msft-logo{width:20px;height:20px;display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.msft-logo div:nth-child(1){background:#f25022;border-radius:1px;}
+.msft-logo div:nth-child(2){background:#7fba00;border-radius:1px;}
+.msft-logo div:nth-child(3){background:#00a4ef;border-radius:1px;}
+.msft-logo div:nth-child(4){background:#ffb900;border-radius:1px;}
+.brand-text{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;
+  color:var(--text);letter-spacing:0.01em;white-space:nowrap;}
+.brand-sub{font-family:'DM Mono',monospace;font-size:9px;color:var(--text3);
+  letter-spacing:0.08em;}
+.nav-links{display:flex;align-items:stretch;height:100%;flex:1;overflow-x:auto;gap:2px;}
+.nav-links::-webkit-scrollbar{display:none;}
+.nav-links a{display:flex;align-items:center;gap:6px;padding:0 14px;
+  text-decoration:none;color:var(--text3);font-size:12px;
+  border-bottom:2px solid transparent;white-space:nowrap;
+  transition:color 0.15s,border-color 0.15s;}
+.nav-links a:hover{color:var(--text2);}
+.nav-links a.active{color:var(--blue2);border-bottom-color:var(--blue2);}
+.nav-links a .n{font-family:'DM Mono',monospace;font-size:9px;
+  color:var(--text3);letter-spacing:0.06em;}
+.nav-links a.active .n{color:var(--blue2);}
+.nav-warn{margin-left:auto;font-family:'DM Mono',monospace;font-size:9px;
+  color:var(--warn-text);background:var(--warn);border:1px solid var(--warn-border);
+  border-radius:4px;padding:3px 8px;white-space:nowrap;flex-shrink:0;}
+
+/* LAYOUT */
+.page{max-width:940px;margin:0 auto;padding:52px 40px 100px;position:relative;z-index:1;}
+
+/* TYPOGRAPHY */
+.section-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;
+  color:var(--blue2);text-transform:uppercase;margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;}
+.section-label::after{content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,var(--border2),transparent);}
+h1{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;
+  line-height:1.08;letter-spacing:-0.02em;color:var(--text);margin-bottom:16px;}
+h1 span{background:linear-gradient(135deg,var(--blue2),var(--blue));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+h2{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;
+  color:var(--text);letter-spacing:-0.01em;margin:36px 0 10px;line-height:1.2;}
+h2:first-child{margin-top:0;}
+h3{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;
+  color:var(--text);margin:28px 0 10px;}
+h4{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+  color:var(--text);margin:20px 0 6px;}
+p{color:var(--text2);margin-bottom:14px;font-weight:300;}
+p strong{color:var(--text);font-weight:500;}
+p:last-child{margin-bottom:0;}
+a{color:var(--blue2);text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+/* PAGE HERO */
+.hero{padding:40px 0 36px;border-bottom:1px solid var(--border);margin-bottom:40px;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;
+  background:var(--surface2);border:1px solid var(--border2);
+  border-radius:100px;padding:4px 12px 4px 8px;
+  font-family:'DM Mono',monospace;font-size:10px;
+  color:var(--text3);letter-spacing:0.08em;margin-bottom:16px;}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--blue2);
+  animation:blink 1.5s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;}
+.chip{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.07em;
+  padding:4px 10px;border-radius:4px;border:1px solid;}
+.chip-blue{background:rgba(0,120,212,0.1);border-color:rgba(0,120,212,0.3);color:var(--blue2);}
+.chip-warn{background:var(--warn);border-color:var(--warn-border);color:var(--warn-text);}
+.chip-caution{background:var(--caution);border-color:var(--caution-border);color:var(--caution-text);}
+.chip-green{background:rgba(84,176,84,0.1);border-color:rgba(84,176,84,0.3);color:var(--green2);}
+
+/* CALLOUTS */
+.callout{border-radius:10px;padding:18px 20px;margin:20px 0;border:1px solid;}
+.callout-warn{background:var(--warn);border-color:var(--warn-border);}
+.callout-caution{background:var(--caution);border-color:var(--caution-border);}
+.callout-info{background:rgba(0,120,212,0.06);border-color:rgba(0,120,212,0.2);}
+.callout-green{background:rgba(16,124,16,0.08);border-color:rgba(84,176,84,0.25);}
+.callout-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;
+  margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.callout-warn .callout-title{color:var(--warn-text);}
+.callout-caution .callout-title{color:var(--caution-text);}
+.callout-info .callout-title{color:var(--blue2);}
+.callout-green .callout-title{color:var(--green2);}
+.callout p{font-size:13px;margin-bottom:0;}
+.callout-warn p{color:#c4a090;}
+.callout-caution p{color:#a89a70;}
+.callout-info p{color:#7aa0c8;}
+.callout-green p{color:#78a878;}
+
+/* CARDS */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:14px;margin:20px 0;}
+.card{background:var(--surface2);border:1px solid var(--border);
+  border-radius:10px;padding:18px;position:relative;overflow:hidden;
+  transition:border-color 0.2s,transform 0.15s;}
+.card:hover{transform:translateY(-2px);}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.card-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+  color:var(--text);margin-bottom:8px;}
+.card-sub{font-family:'DM Mono',monospace;font-size:9px;color:var(--text3);
+  letter-spacing:0.08em;margin-bottom:6px;}
+.card-desc{font-size:12px;color:var(--text2);margin:0 0 12px;font-weight:300;line-height:1.6;}
+.tag-row{display:flex;flex-wrap:wrap;gap:5px;}
+.tag{font-family:'DM Mono',monospace;font-size:9px;padding:2px 7px;border-radius:3px;
+  background:rgba(255,255,255,0.04);border:1px solid var(--border2);
+  color:var(--text3);letter-spacing:0.04em;}
+.tag.warn{background:var(--warn);border-color:var(--warn-border);color:var(--warn-text);}
+.tag.caution{background:var(--caution);border-color:var(--caution-border);color:var(--caution-text);}
+.tag.green{background:rgba(84,176,84,0.1);border-color:rgba(84,176,84,0.3);color:var(--green2);}
+.tag.blue{background:rgba(0,120,212,0.1);border-color:rgba(0,120,212,0.3);color:var(--blue2);}
+.tag.purple{background:rgba(98,100,167,0.1);border-color:rgba(98,100,167,0.3);color:#a4a8d8;}
+
+/* TABLES */
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:12px;}
+th{background:var(--surface2);border:1px solid var(--border2);padding:10px 14px;
+  text-align:left;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;
+  color:var(--text2);letter-spacing:0.02em;}
+td{border:1px solid var(--border);padding:9px 14px;color:var(--text2);
+  font-weight:300;vertical-align:top;line-height:1.55;}
+tr:hover td{background:rgba(255,255,255,0.01);}
+td strong{color:var(--text);font-weight:500;}
+td code{font-family:'DM Mono',monospace;font-size:10px;
+  background:var(--surface3);border:1px solid var(--border2);
+  border-radius:3px;padding:1px 5px;color:var(--blue2);}
+.warn-inline{color:var(--warn-text);font-family:'DM Mono',monospace;font-size:10px;}
+.caution-inline{color:var(--caution-text);font-family:'DM Mono',monospace;font-size:10px;}
+.green-inline{color:var(--green2);font-family:'DM Mono',monospace;font-size:10px;}
+.severity-critical{color:#ff4444;font-family:'DM Mono',monospace;font-size:10px;font-weight:600;}
+.severity-high{color:var(--warn-text);font-family:'DM Mono',monospace;font-size:10px;}
+.severity-medium{color:var(--caution-text);font-family:'DM Mono',monospace;font-size:10px;}
+
+/* FLOW */
+.flow{display:flex;align-items:stretch;border:1px solid var(--border2);
+  border-radius:10px;overflow:hidden;margin:20px 0;}
+.flow-step{flex:1;padding:14px 16px;border-right:1px solid var(--border2);
+  position:relative;background:var(--surface2);transition:background 0.2s;}
+.flow-step:last-child{border-right:none;}
+.flow-step:hover{background:var(--surface3);}
+.flow-num{font-family:'DM Mono',monospace;font-size:9px;color:var(--text3);
+  letter-spacing:0.1em;margin-bottom:6px;}
+.flow-name{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;
+  color:var(--text);margin-bottom:4px;}
+.flow-desc{font-size:11px;color:var(--text2);font-weight:300;line-height:1.4;}
+.flow-arrow{position:absolute;right:-10px;top:50%;transform:translateY(-50%);
+  color:var(--text3);font-size:14px;z-index:2;}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border);margin:32px 0;}
+
+/* PAGE NAV (prev/next) */
+.page-nav{display:flex;justify-content:space-between;align-items:center;
+  margin-top:60px;padding-top:24px;border-top:1px solid var(--border);}
+.page-nav a{display:flex;align-items:center;gap:8px;padding:10px 16px;
+  background:var(--surface2);border:1px solid var(--border2);border-radius:8px;
+  color:var(--text2);text-decoration:none;font-size:12px;transition:all 0.15s;}
+.page-nav a:hover{border-color:var(--blue);color:var(--text);}
+.page-nav-label{font-family:'DM Mono',monospace;font-size:9px;
+  color:var(--text3);letter-spacing:0.08em;display:block;margin-bottom:2px;}
+.page-nav-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;}
+.page-nav-spacer{flex:1;}
+
+/* MISC */
+code{font-family:'DM Mono',monospace;font-size:11px;background:var(--surface3);
+  border:1px solid var(--border2);border-radius:4px;padding:2px 6px;color:var(--blue2);}
+.pill-list{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;}
+.pill{display:flex;align-items:center;gap:6px;background:var(--surface2);
+  border:1px solid var(--border2);border-radius:100px;padding:5px 12px 5px 8px;
+  font-size:12px;color:var(--text2);font-weight:300;}
+.pill-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.obo-flow{display:flex;flex-direction:column;border:1px solid var(--border2);
+  border-radius:10px;overflow:hidden;margin:20px 0;}
+.obo-row{display:flex;align-items:stretch;border-bottom:1px solid var(--border2);}
+.obo-row:last-child{border-bottom:none;}
+.obo-label{width:130px;flex-shrink:0;background:var(--surface2);padding:12px 14px;
+  border-right:1px solid var(--border2);font-family:'DM Mono',monospace;
+  font-size:9px;letter-spacing:0.08em;color:var(--text3);
+  display:flex;align-items:center;text-transform:uppercase;}
+.obo-content{flex:1;padding:12px 16px;font-size:12px;color:var(--text2);font-weight:300;}
+.obo-content strong{color:var(--text);font-weight:500;}
+.mcp-layer{border:1px solid var(--border2);border-radius:8px;margin:8px 0;overflow:hidden;}
+.mcp-layer-header{padding:10px 16px;background:var(--surface2);
+  border-bottom:1px solid var(--border2);display:flex;align-items:center;gap:10px;}
+.mcp-layer-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--text);}
+.mcp-layer-body{padding:12px 16px;display:flex;flex-wrap:wrap;gap:8px;}
+.mcp-item{background:var(--surface3);border:1px solid var(--border2);
+  border-radius:6px;padding:6px 12px;font-size:11px;color:var(--text2);font-weight:300;}
+.mcp-item.risk{background:rgba(216,59,1,0.08);border-color:rgba(216,59,1,0.25);color:var(--warn-text);}
+.mcp-item.control{background:rgba(0,120,212,0.08);border-color:rgba(0,120,212,0.25);color:var(--blue2);}
+.threat-block{background:var(--surface2);border:1px solid var(--border2);
+  border-radius:10px;margin:24px 0;overflow:hidden;}
+.threat-header{padding:14px 20px;border-bottom:1px solid var(--border2);
+  display:flex;align-items:center;gap:12px;}
+.threat-icon{font-size:22px;}
+.threat-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--text);}
+.threat-category{font-family:'DM Mono',monospace;font-size:9px;padding:2px 8px;
+  border-radius:3px;letter-spacing:0.06em;margin-left:auto;}
+.threat-body{padding:20px;}
+.threat-cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.threat-col-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;
+  color:var(--text3);margin-bottom:10px;text-transform:uppercase;}
+.threat-step{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start;}
+.threat-step-num{width:20px;height:20px;border-radius:50%;display:flex;
+  align-items:center;justify-content:center;font-family:'DM Mono',monospace;
+  font-size:9px;font-weight:500;flex-shrink:0;margin-top:1px;}
+.threat-step-text{font-size:12px;color:var(--text2);font-weight:300;}
+.nist-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0;}
+.nist-card{background:var(--surface2);border:1px solid var(--border);
+  border-radius:10px;overflow:hidden;}
+.nist-header{padding:12px 16px;display:flex;align-items:center;gap:10px;}
+.nist-badge{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;
+  padding:4px 10px;border-radius:6px;letter-spacing:0.05em;}
+.nist-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text);}
+.nist-body{padding:0 16px 16px;}
+.nist-item{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.nist-item:last-child{border-bottom:none;}
+.nist-control{color:var(--text);font-weight:400;flex:1;}
+.nist-tool{font-family:'DM Mono',monospace;font-size:10px;color:var(--blue2);white-space:nowrap;}
+.nist-gap{font-family:'DM Mono',monospace;font-size:10px;color:var(--warn-text);white-space:nowrap;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+.footer{text-align:center;margin-top:60px;padding-top:24px;border-top:1px solid var(--border);
+  font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);
+  letter-spacing:0.05em;line-height:1.9;}
+@media(max-width:700px){
+  .topnav{padding:0 16px;}
+  .nav-warn{display:none;}
+  .page{padding:32px 20px 80px;}
+  .threat-cols{grid-template-columns:1fr;}
+  .nist-grid{grid-template-columns:1fr;}
+  .flow{flex-direction:column;}
+  .flow-arrow{display:none;}
+  h1{font-size:26px;}
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-brand">
+    <div class="msft-logo"><div></div><div></div><div></div><div></div></div>
+    <div><div class="brand-text">Securing AI with Microsoft</div>
+    <div class="brand-sub">SECURITY ARCHITECT GUIDE · 2026</div></div>
+  </div>
+  <div class="nav-links"><a href="index.html" class=""><span class="n">01</span>Overview</a>
+<a href="risk.html" class=""><span class="n">02</span>AI Risk</a>
+<a href="product-map.html" class=""><span class="n">03</span>Product Map</a>
+<a href="identity.html" class=""><span class="n">04</span>Identity & OBO</a>
+<a href="mcp.html" class=""><span class="n">05</span>MCP Ecosystem</a>
+<a href="threats.html" class=""><span class="n">06</span>Threat Scenarios</a>
+<a href="frameworks.html" class=" active"><span class="n">07</span>Frameworks</a>
+<a href="gaps.html" class=""><span class="n">08</span>Gaps & Roadmap</a>
+</div>
+  <div class="nav-warn">⚠ AGENT ID: PREVIEW · OBO STILL APPLIES</div>
+</nav>
+<div class="page">
+
+
+<div class="hero">
+  <div class="hero-badge"><div class="live-dot"></div>UPDATED · RSAC 2026 + FIELD RESEARCH · MARCH 2026</div>
+  <h1>NIST AI RMF &<br><span>ISO 42001 Alignment</span></h1>
+  <p style="color:var(--text2);font-size:15px;font-weight:300;max-width:600px;line-height:1.7;">
+    How Microsoft's AI security controls map to NIST AI RMF and ISO 42001 — with gap analysis per clause. Updated with RSAC 2026 GA announcements and the Zero Trust Workshop tool reference.
+  </p>
+</div>
+
+<div class="callout callout-info">
+  <div class="callout-title">🛠️ Zero Trust Workshop & Assessment Tool</div>
+  <p>Microsoft's <a href="https://microsoft.github.io/zerotrustassessment/" target="_blank">Zero Trust Workshop</a> (microsoft.github.io/zerotrustassessment) is a free, open-source guided assessment framework built by the Microsoft Security CxE team. It provides pillar-specific assessment checks, a step-by-step deployment guide using a first-then-next structure, app permissions analysis, and workshop documentation. It is built from learnings across thousands of customer deployments. A formal <strong>AI pillar</strong> for the assessment tool is in development — expected summer 2026. Until then, architects should use the existing Identity, Data, and Networking pillar assessments alongside the new Zero Trust for AI reference architecture published at RSAC 2026.</p>
+</div>
+
+<div class="section-label">NIST AI RMF</div>
+<h2>NIST AI Risk Management Framework — Four Functions</h2>
+<div class="nist-grid">
+  <div class="nist-card">
+    <div class="nist-header" style="background:rgba(0,120,212,0.1);">
+      <div class="nist-badge" style="background:rgba(0,120,212,0.2);color:var(--blue2);">GOVERN</div>
+      <div class="nist-title">Policies, roles, accountability</div>
+    </div>
+    <div class="nist-body">
+      <div class="nist-item"><div class="nist-control">Establish AI risk governance structure</div><div class="nist-tool">Agent 365 · Purview</div></div>
+      <div class="nist-item"><div class="nist-control">Define roles and accountabilities for AI</div><div class="nist-tool">Entra Agent ID</div><div class="nist-gap">⚠ preview · Modern Agents only</div></div>
+      <div class="nist-item"><div class="nist-control">Establish AI lifecycle policies</div><div class="nist-tool">SDL for AI · ZT4AI</div></div>
+      <div class="nist-item"><div class="nist-control">Govern Classic vs Modern agent estate</div><div class="nist-tool">Power Platform Admin + AIAgentsInfo KQL</div></div>
+      <div class="nist-item"><div class="nist-control">Govern multi-tenant AI environments</div><div class="nist-tool">Entra Tenant Governance</div><div class="nist-gap">Preview · RSAC 2026</div></div>
+      <div class="nist-item"><div class="nist-control">Manage third-party AI and MCP risk</div><div class="nist-tool">Defender for Cloud Apps</div></div>
+      <div class="nist-item"><div class="nist-control">Workforce AI literacy and training</div><div class="nist-gap">⚠ Not a product control</div></div>
+    </div>
+  </div>
+  <div class="nist-card">
+    <div class="nist-header" style="background:rgba(0,133,117,0.1);">
+      <div class="nist-badge" style="background:rgba(0,133,117,0.2);color:var(--teal2);">MAP</div>
+      <div class="nist-title">Context, risks, and impacts</div>
+    </div>
+    <div class="nist-body">
+      <div class="nist-item"><div class="nist-control">Inventory all AI systems in use</div><div class="nist-tool">Security Dashboard for AI</div><div class="nist-gap" style="color:var(--green2);">✓ Now GA</div></div>
+      <div class="nist-item"><div class="nist-control">Inventory agent authentication posture</div><div class="nist-tool">AIAgentsInfo Advanced Hunting (Defender)</div></div>
+      <div class="nist-item"><div class="nist-control">Identify Classic vs Modern agents</div><div class="nist-tool">Entra Agent ID portal · AIAgentsInfo KQL</div><div class="nist-gap">⚠ Name sync bug complicates this</div></div>
+      <div class="nist-item"><div class="nist-control">Identify sensitive data exposure</div><div class="nist-tool">Purview DSPM for AI</div></div>
+      <div class="nist-item"><div class="nist-control">Identify shadow AI deployment</div><div class="nist-tool">Entra Internet Access Shadow AI</div><div class="nist-gap" style="color:var(--green2);">GA Mar 31</div></div>
+      <div class="nist-item"><div class="nist-control">Identify threat actors and attack vectors</div><div class="nist-tool">Defender · Sentinel · ZT4AI</div></div>
+      <div class="nist-item"><div class="nist-control">AI bias and fairness assessment</div><div class="nist-gap">⚠ Responsible AI tools (separate)</div></div>
+    </div>
+  </div>
+  <div class="nist-card">
+    <div class="nist-header" style="background:rgba(192,144,32,0.1);">
+      <div class="nist-badge" style="background:rgba(192,144,32,0.2);color:var(--gold2);">MEASURE</div>
+      <div class="nist-title">Analyse, assess, benchmark</div>
+    </div>
+    <div class="nist-body">
+      <div class="nist-item"><div class="nist-control">Continuous AI risk monitoring</div><div class="nist-tool">Security Dashboard · Defender</div><div class="nist-gap" style="color:var(--green2);">Dashboard Now GA</div></div>
+      <div class="nist-item"><div class="nist-control">Measure no-auth and ownerless agents</div><div class="nist-tool">AIAgentsInfo KQL queries</div></div>
+      <div class="nist-item"><div class="nist-control">Evaluate model safety pre-deployment</div><div class="nist-tool">Foundry Red Teaming + Evals</div></div>
+      <div class="nist-item"><div class="nist-control">Detect credential exposure in data</div><div class="nist-tool">Data Security Posture Agent</div><div class="nist-gap">Preview · RSAC 2026</div></div>
+      <div class="nist-item"><div class="nist-control">Benchmark AI security posture</div><div class="nist-tool">ZT Workshop + ZT Assessment Tool</div><div class="nist-gap">⚠ AI pillar: summer 2026</div></div>
+      <div class="nist-item"><div class="nist-control">Runtime anomaly detection</div><div class="nist-tool">Sentinel · Defender for AI</div></div>
+    </div>
+  </div>
+  <div class="nist-card">
+    <div class="nist-header" style="background:rgba(16,124,16,0.1);">
+      <div class="nist-badge" style="background:rgba(16,124,16,0.2);color:var(--green2);">MANAGE</div>
+      <div class="nist-title">Treat, respond, recover</div>
+    </div>
+    <div class="nist-body">
+      <div class="nist-item"><div class="nist-control">Respond to AI security incidents</div><div class="nist-tool">Sentinel SOAR · Security Copilot</div></div>
+      <div class="nist-item"><div class="nist-control">Enforce access controls on AI systems</div><div class="nist-tool">Entra CA · Foundry Guardrails</div><div class="nist-gap">⚠ Modern Agents only for CA</div></div>
+      <div class="nist-item"><div class="nist-control">Block unauthenticated agent access</div><div class="nist-tool">Power Platform Managed Environments</div><div class="nist-gap" style="color:var(--green2);">Available now</div></div>
+      <div class="nist-item"><div class="nist-control">Manage agent lifecycle (onboard/retire)</div><div class="nist-tool">Entra Agent ID</div><div class="nist-gap">⚠ preview · Modern only</div></div>
+      <div class="nist-item"><div class="nist-control">Enforce data governance in AI workflows</div><div class="nist-tool">Purview · DLP for Copilot</div><div class="nist-gap" style="color:var(--green2);">DLP: GA Mar 31</div></div>
+      <div class="nist-item"><div class="nist-control">Limit blast radius during active attack</div><div class="nist-tool">Defender Predictive Shielding</div><div class="nist-gap">Preview · RSAC 2026</div></div>
+      <div class="nist-item"><div class="nist-control">Recover identity infrastructure</div><div class="nist-tool">Entra Backup and Recovery</div><div class="nist-gap">Preview · RSAC 2026</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label">ISO 42001</div>
+<h2>ISO/IEC 42001:2023 — AI Management System</h2>
+<table>
+<thead><tr><th>Clause</th><th>Requirement</th><th>Microsoft Controls</th><th>Gap / Caveat</th></tr></thead>
+<tbody>
+<tr><td><strong>4.2 — Interested Parties</strong></td><td>Identify stakeholders and AI-related requirements</td><td>Agent 365 governance; Purview compliance; Entra Tenant Governance (preview)</td><td>Organisational process — not a product control</td></tr>
+<tr><td><strong>5.2 — AI Policy</strong></td><td>Establish and maintain an AI policy</td><td>SDL for AI; ZT for AI framework; Zero Trust Workshop (microsoft.github.io/zerotrustassessment)</td><td>Policy content is customer-defined; Microsoft provides scaffolding and guided workshop</td></tr>
+<tr><td><strong>6.1 — Risk Assessment</strong></td><td>AI-specific risk identification and assessment process</td><td>Security Dashboard for AI (now GA); Purview DSPM; AIAgentsInfo Advanced Hunting; Foundry Red Teaming</td><td>Quantitative risk scoring still limited; qualitative posture now available via GA dashboard. Classic Agent estate requires separate inventory.</td></tr>
+<tr><td><strong>6.1.3 — AI Impact Assessment</strong></td><td>Assess impacts on individuals and society</td><td>Microsoft Responsible AI Impact Assessment tools (separate from Security)</td><td>Outside security product scope; separate RAI tooling required</td></tr>
+<tr><td><strong>8.4 — AI System Development</strong></td><td>Security in AI development lifecycle</td><td>SDL for AI; GitHub Advanced Security; Foundry Red Teaming; Classic→Modern Agent migration</td><td>Classic Agent legacy complicates this — agents built before Agent ID may have no secure development baseline</td></tr>
+<tr><td><strong>8.6 — Data for AI Systems</strong></td><td>Data quality, provenance, and governance</td><td>Purview Information Protection; DSPM for AI; DLP for Copilot (GA March 31)</td><td>Training data provenance still limited; inference-time data controls now stronger. Maker credentials can bypass data governance if not configured correctly.</td></tr>
+<tr><td><strong>9.1 — Monitoring & Measurement</strong></td><td>Continuous monitoring of AI system performance and risks</td><td>Security Dashboard (GA); Sentinel + MCP Entity Analyzer; Defender for AI; AIAgentsInfo KQL; Purview AI Observability</td><td>Good coverage when fully deployed. AI Agent Inventory requires Defender + Power Platform admin collaboration — complex setup.</td></tr>
+<tr><td><strong>10.2 — Continual Improvement</strong></td><td>Improve AIMS based on incidents and audit findings</td><td>Sentinel incident management; SDL feedback loops; ZT Workshop; ZT Assessment (AI pillar summer 2026)</td><td>ZT Assessment AI pillar not until summer 2026. Classic Agent name sync bug makes agent-level policy improvement tracking difficult.</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info">
+  <div class="callout-title">📌 Framework Coverage — Updated Post-RSAC 2026 + Field Research</div>
+  <p>The GA of Security Dashboard for AI strengthens MAP and MEASURE function coverage. The discovery of the Classic vs Modern agent distinction reveals a gap across <strong>all four functions</strong> — most organisations cannot claim complete GOVERN, MAP, MEASURE, or MANAGE coverage until their Classic Agent estate is migrated to Modern Agents. This is the most significant framework compliance gap identified from field research and is not visible from Microsoft's product documentation alone.</p>
+</div>
+
+
+<div class="page-nav"><a href="threats.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Threat Scenarios</span></a><a href="gaps.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Gaps & Roadmap</span></a></div>
+<div class="footer">
+  SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
+  Last updated: March 24, 2026 · Analysis covers publicly announced Microsoft security capabilities only
+</div>
+</div>
+</body>
+</html>
