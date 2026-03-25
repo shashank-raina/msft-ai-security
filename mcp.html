@@ -60,20 +60,29 @@ body::before{content:'';position:fixed;inset:0;
 .page{max-width:940px;margin:0 auto;padding:52px 40px 100px;position:relative;z-index:1;}
 
 /* TYPOGRAPHY */
-.section-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;
-  color:var(--blue);text-transform:uppercase;margin-bottom:12px;
-  display:flex;align-items:center;gap:8px;}
-.section-label::after{content:'';flex:1;height:1px;
-  background:linear-gradient(90deg,var(--border2),transparent);}
+.section-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;
+  color:#004a9e;text-transform:uppercase;
+  margin:48px 0 16px;
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,120,212,0.07);
+  border:1px solid rgba(0,120,212,0.2);
+  border-radius:6px;
+  padding:5px 12px;
+  font-weight:500;}
+.section-label::before{content:'';display:inline-block;
+  width:6px;height:6px;border-radius:50%;
+  background:var(--blue);flex-shrink:0;}
 h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:34px;font-weight:700;
   line-height:1.08;letter-spacing:-0.02em;color:#0d1526;margin-bottom:16px;}
 h1 span{background:linear-gradient(135deg,var(--blue),#004fa8);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:700;
-  color:#0d1526;letter-spacing:-0.01em;margin:36px 0 10px;line-height:1.2;}
+h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:21px;font-weight:700;
+  color:#0d1526;letter-spacing:-0.01em;margin:8px 0 12px;line-height:1.25;
+  padding-left:14px;border-left:3px solid var(--blue);}
 h2:first-child{margin-top:0;}
-h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:700;
-  color:#0d1526;margin:28px 0 10px;}
+h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;
+  color:#0d1526;margin:28px 0 10px;
+  padding-bottom:6px;border-bottom:1px solid var(--border2);}
 h4{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;
   color:var(--text);margin:20px 0 6px;}
 p{color:#2e3d5e;margin-bottom:14px;font-weight:400;}
