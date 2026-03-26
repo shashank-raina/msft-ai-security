@@ -286,7 +286,8 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
     <div><div class="brand-text">Securing AI with Microsoft</div>
     <div class="brand-sub">SECURITY ARCHITECT GUIDE · 2026</div></div>
   </div>
-  <div class="nav-links"><a href="index.html" class=""><span class="n">01</span>Overview</a>
+  <div class="nav-links"><a href="index.html" class=""><span class="n">00</span>Start Here</a>
+<a href="overview.html" class=""><span class="n">01</span>Overview</a>
 <a href="risk.html" class=""><span class="n">02</span>AI Risk</a>
 <a href="product-map.html" class=""><span class="n">03</span>Product Map</a>
 <a href="identity.html" class=""><span class="n">04</span>Identity & OBO</a>
@@ -294,6 +295,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="threats.html" class=" active"><span class="n">06</span>Threat Scenarios</a>
 <a href="frameworks.html" class=""><span class="n">07</span>Frameworks</a>
 <a href="gaps.html" class=""><span class="n">08</span>Gaps & Roadmap</a>
+<a href="changelog.html" class=""><span class="n">✦</span>Changelog</a>
 </div>
 </nav>
 <div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
@@ -361,7 +363,27 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
         <div class="threat-step"><div class="threat-step-num" style="background:rgba(252,225,0,0.2);color:var(--caution-text);">⚠</div><div class="threat-step-text"><strong>Gap</strong>: Prompt Shields must be enabled per agent. No native control prevents malicious document upload to SharePoint (the attack origin) — requires conventional DLP + Defender for Office 365.</div></div>
       </div>
     </div>
-  </div>
+  
+    <div class="divider"></div>
+    <h3>XPIA Variant: Image & URL-Based Injection</h3>
+    <p>A distinct and underappreciated XPIA variant — attackers embed malicious instructions inside <strong>images or URLs</strong> that the agent retrieves and processes. The agent interprets visual or linked content as instruction, bypassing text-based injection filters entirely.</p>
+    <div class="threat-cols">
+      <div>
+        <div class="threat-col-title">How It Works</div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(192,0,0,0.2);color:#ff6666;">1</div><div class="threat-step-text">Attacker sends a message containing a URL or image to an agent that can retrieve web content or process images</div></div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(192,0,0,0.2);color:#ff6666;">2</div><div class="threat-step-text">The image or linked page contains hidden text, steganographic instructions, or adversarial content invisible to the user</div></div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(192,0,0,0.2);color:#ff6666;">3</div><div class="threat-step-text">Agent processes the content and treats embedded instructions as legitimate orchestration input — triggering tool invocations or data exfiltration</div></div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(192,0,0,0.2);color:#ff6666;">4</div><div class="threat-step-text">Standard text-based Prompt Shields may not catch this — the injection is in binary/visual content, not plain text</div></div>
+      </div>
+      <div>
+        <div class="threat-col-title">Controls</div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>Block Images and URLs (Copilot Studio)</strong> — Defender for Cloud Apps integration blocks image and URL content before the agent processes it. Requires external threat detection to be configured. Works for Classic & Modern Agents.</div></div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>Defender RT protection</strong> — inspects tool invocations triggered by any content, including image-derived instructions</div></div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(252,225,0,0.2);color:var(--caution-text);">⚠</div><div class="threat-step-text"><strong>Prompt Shields</strong> — primarily text-based; image injection may bypass orchestration-layer inspection. Layered controls required.</div></div>
+      </div>
+    </div>
+
+</div>
 </div>
 
 <div class="threat-block">
@@ -449,7 +471,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 
 
-<div class="page-nav"><a href="mcp.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">MCP Ecosystem</span></a><a href="frameworks.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Frameworks</span></a></div>
+<div class="page-nav"><a href="identity.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Identity & OBO</span></a><a href="threats.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Threat Scenarios</span></a></div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
   Last updated: March 24, 2026 · Analysis covers publicly announced Microsoft security capabilities only

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>MCP Ecosystem — Securing AI with Microsoft</title>
+<title>Changelog — Securing AI with Microsoft</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -291,11 +291,11 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="risk.html" class=""><span class="n">02</span>AI Risk</a>
 <a href="product-map.html" class=""><span class="n">03</span>Product Map</a>
 <a href="identity.html" class=""><span class="n">04</span>Identity & OBO</a>
-<a href="mcp.html" class=" active"><span class="n">05</span>MCP Ecosystem</a>
+<a href="mcp.html" class=""><span class="n">05</span>MCP Ecosystem</a>
 <a href="threats.html" class=""><span class="n">06</span>Threat Scenarios</a>
 <a href="frameworks.html" class=""><span class="n">07</span>Frameworks</a>
 <a href="gaps.html" class=""><span class="n">08</span>Gaps & Roadmap</a>
-<a href="changelog.html" class=""><span class="n">✦</span>Changelog</a>
+<a href="changelog.html" class=" active"><span class="n">✦</span>Changelog</a>
 </div>
 </nav>
 <div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
@@ -303,154 +303,112 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 <div class="page">
 
-
 <div class="hero">
-  <div class="hero-badge"><div class="live-dot"></div>UPDATED · FIELD RESEARCH · MARCH 2026</div>
-  <h1>Model Context Protocol:<br><span>Architecture, Catalog & Attack Surface</span></h1>
+  <div class="hero-badge"><div class="live-dot"></div>SITE CHANGELOG · LAST UPDATED MARCH 26, 2026</div>
+  <h1>What's Changed<br><span>& When</span></h1>
   <p style="color:#2e3d5e;font-size:17px;font-weight:400;max-width:640px;line-height:1.7;">
-    MCP is no longer experimental. Microsoft has published an official MCP server catalog and Copilot Studio now supports MCP tools natively. This significantly expands both the capability and the attack surface of enterprise agents.
+    This site is a living document. Microsoft updates products and capabilities frequently — this log tracks meaningful content changes, corrections, and additions. Minor fixes (typos, link corrections) are not listed.
   </p>
 </div>
 
 <div class="callout callout-info">
-  <div class="callout-title">📌 Microsoft Official MCP Catalog</div>
-  <p>Microsoft publishes a formal catalog of official MCP server implementations at <a href="https://github.com/microsoft/mcp" target="_blank">github.com/microsoft/mcp</a>. These include servers for Azure, GitHub, SharePoint, Teams, Outlook, SQL Server, and more. Copilot Studio agents can now use MCP tools directly — each tool added extends the agent's action surface to everything that MCP server can reach. The security implications scale with the permissions of the MCP server's connected services.</p>
+  <div class="callout-title">📌 How to read this</div>
+  <p>Entries marked <strong>🆕 New</strong> are net-new content additions. Entries marked <strong>✏️ Updated</strong> are corrections or refinements to existing content. Entries marked <strong>⚠️ Correction</strong> are cases where earlier content was wrong or misleading and has been fixed.</p>
 </div>
 
-<div class="section-label">MCP Architecture</div>
-<h2>The Three-Layer MCP Model</h2>
-<p>MCP defines how AI agents discover, connect to, and invoke tools, data sources, and services across a standard protocol. With Microsoft's official server catalog, MCP is now enterprise infrastructure — not a prototype technology.</p>
-<div class="mcp-layer">
-  <div class="mcp-layer-header" style="background:rgba(0,120,212,0.1);">
-    <div class="mcp-layer-title" style="color:var(--blue2);">Layer 1 — MCP Host (the AI agent / client)</div>
-  </div>
-  <div class="mcp-layer-body">
-    <div class="mcp-item control">Copilot Studio agent (MCP tools natively supported)</div>
-    <div class="mcp-item control">Azure AI Foundry agent</div>
-    <div class="mcp-item control">GitHub Copilot (VS Code / Visual Studio)</div>
-    <div class="mcp-item control">Custom LLM application</div>
-    <div class="mcp-item risk">Shadow / unsanctioned agents with unreviewed MCP tools</div>
-  </div>
-</div>
-<div class="mcp-layer">
-  <div class="mcp-layer-header" style="background:rgba(98,100,167,0.1);">
-    <div class="mcp-layer-title" style="color:#a4a8d8;">Layer 2 — MCP Server (the tool/connector layer)</div>
-  </div>
-  <div class="mcp-layer-body">
-    <div class="mcp-item control">Microsoft Azure MCP Server</div>
-    <div class="mcp-item control">GitHub MCP Server</div>
-    <div class="mcp-item control">SharePoint / M365 MCP Server</div>
-    <div class="mcp-item control">Azure DevOps MCP Server</div>
-    <div class="mcp-item control">SQL Server MCP Server</div>
-    <div class="mcp-item risk">Third-party / community MCP servers (unvetted)</div>
-    <div class="mcp-item risk">Often lacks authentication in OSS implementations</div>
-    <div class="mcp-item risk">Tool descriptions (used by agent for routing) can be poisoned</div>
-  </div>
-</div>
-<div class="mcp-layer">
-  <div class="mcp-layer-header" style="background:rgba(0,133,117,0.1);">
-    <div class="mcp-layer-title" style="color:var(--teal2);">Layer 3 — Backend Resources</div>
-  </div>
-  <div class="mcp-layer-body">
-    <div class="mcp-item">Azure subscriptions / resource groups</div>
-    <div class="mcp-item">GitHub repositories / issues / PRs</div>
-    <div class="mcp-item">SharePoint / OneDrive / Exchange</div>
-    <div class="mcp-item">SQL databases</div>
-    <div class="mcp-item">Salesforce, ServiceNow, Jira (via third-party servers)</div>
-    <div class="mcp-item risk">All accessed using the agent's credentials — in Copilot Studio, this is maker credentials by default</div>
-  </div>
-</div>
+<!-- ─── MARCH 26 2026 ─────────────────────────────── -->
+<div class="section-label" style="margin-top:40px;">MARCH 26, 2026</div>
+<h2>Initial Public Release + Major Content Update</h2>
 
-<div class="section-label">Copilot Studio + MCP</div>
-<h2>Copilot Studio MCP Tools — A Specific Risk Pattern</h2>
-<p>When a Copilot Studio agent is configured with MCP tools, the agent authenticates to those MCP servers using maker credentials by default. This means:</p>
-<div class="card-grid">
-  <a href="https://www.microsoft.com/en-us/security/blog/2026/02/12/copilot-studio-agent-security-top-10-risks-detect-prevent/" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.3);">
-    <div class="card-name">⚠ Maker Credentials × MCP Tools</div>
-    <div class="card-desc">The maker (developer/admin) connects an Azure MCP server to a Copilot Studio agent. The agent authenticates to Azure as the maker. If the agent is shared org-wide with no authentication, every employee can trigger Azure resource queries or management actions — using the maker's Azure permissions.</div>
-    <div class="tag-row"><span class="tag warn">CRITICAL COMBINATION</span><span class="tag">Copilot Studio</span></div>
-  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
-  <a href="https://github.com/microsoft/mcp" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.3);">
-    <div class="card-name">⚠ Unreviewed MCP Tool Lifecycle</div>
-    <div class="card-desc">MCP tools added to a Copilot Studio agent are not subject to the same App Registration review as traditional app permissions. Microsoft recommends using the "MCP Tool Configured" Advanced Hunting query and enforcing lifecycle reviews for every MCP tool configuration in the environment.</div>
-    <div class="tag-row"><span class="tag warn">Governance Gap</span><span class="tag">KQL Detectable</span></div>
-  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
-</div>
-
-<div class="section-label">Attack Vectors</div>
-<h2>MCP-Specific Attack Vectors</h2>
 <table>
-<thead><tr><th>Attack</th><th>How It Works</th><th>Impact</th><th>Primary Control</th></tr></thead>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
 <tbody>
-<tr><td><strong>Tool Poisoning</strong></td><td>Malicious MCP server returns poisoned tool descriptions. Agent reads descriptions to decide which tool to invoke — poisoned descriptions redirect agent to attacker-controlled tools.</td><td><span class="severity-critical">CRITICAL</span> Full agent hijack</td><td>Foundry Guardrails (whitelist); Defender for Cloud Apps (MCP server governance)</td></tr>
-<tr><td><strong>MCP Server Impersonation</strong></td><td>Attacker substitutes a malicious MCP server (DNS hijack, supply chain, local server swap). Agent connects to attacker's server and receives malicious tool outputs.</td><td><span class="severity-critical">CRITICAL</span> Data exfiltration, action hijack</td><td>Defender for Cloud Apps (MCP server registry); no cryptographic binding standard in MCP spec</td></tr>
-<tr><td><strong>Indirect Prompt Injection via MCP</strong></td><td>Malicious instructions embedded in data returned by an MCP tool. Agent treats the embedded text as legitimate instruction and acts on it using maker credentials.</td><td><span class="severity-critical">CRITICAL</span> Data exfiltration, lateral movement</td><td>Prompt Shields (XPIA detection); Entra Internet Access Prompt Injection Protection (GA Mar 31)</td></tr>
-<tr><td><strong>OAuth Scope Abuse</strong></td><td>Agent inherits overly broad OAuth scopes from maker credentials when connecting to MCP-backed SaaS. Broad token enables lateral movement across multiple services.</td><td><span class="severity-high">HIGH</span> Lateral movement across SaaS</td><td>Defender for Cloud Apps OAuth governance; enforce end-user auth per agent</td></tr>
-<tr><td><strong>Unauthenticated MCP Server</strong></td><td>Many community MCP servers have no authentication. Any agent or attacker on the network can call them without credentials.</td><td><span class="severity-high">HIGH</span> Unauthorised tool execution</td><td>Network segmentation; Entra Internet Access; security review of MCP server implementations</td></tr>
-<tr><td><strong>MCP Supply Chain Attack</strong></td><td>Malicious package in MCP server registry. Enterprise deploys a compromised MCP server — attacker gains persistent access to the agent's tool layer.</td><td><span class="severity-high">HIGH</span> Persistent backdoor in agent tooling</td><td>Defender for Cloud (supply chain scanning); Security Dashboard AI Inventory; GitHub Advanced Security</td></tr>
-<tr><td><strong>Unreviewed MCP Tool in Copilot Studio</strong></td><td>Developer adds a community MCP server to a Copilot Studio agent without security review. Agent runs with maker credentials against unvetted tool surface.</td><td><span class="severity-high">HIGH</span> Uncontrolled action surface</td><td>"MCP Tool Configured" Advanced Hunting query; enforce MCP tool lifecycle reviews</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Start Here landing page</strong> — persona-based reading guide with interactive path diagrams for CISO, Security Engineer, Copilot Admin, Power Platform Maker, and Compliance/GRC roles. Start Here is now the homepage.</td>
+<td>index.html (new)</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>10,000ft stack visualisation</strong> — interactive 5-layer diagram on the Overview page showing the full AI security stack with GA/Preview/Gap status at a glance. Each layer is clickable.</td>
+<td>overview.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Image & URL-based XPIA variant</strong> — new sub-scenario added to the XPIA threat chain covering how attackers embed malicious instructions in images or URLs to bypass text-based injection filters. Includes the Block Images and URLs control.</td>
+<td>threats.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Classic vs Modern agent security product coverage table</strong> — 10-row table showing exactly which Defender and Entra security products apply to Classic agents vs Modern agents. The most important table on the site for Copilot Studio architects.</td>
+<td>identity.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Field research callout on Identity page</strong> — two-column reference section linking to official Microsoft Learn docs (Defender for Cloud Apps, Classic & Modern) and Derk van der Woude's field research series (Entra Agent ID, Modern only).</td>
+<td>identity.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Portal inventory count inconsistency gap</strong> — Agent 365, Security Dashboard, and Entra Agent ID portal show different agent counts. Microsoft confirmed this is a known issue. Added to Significant Gaps.</td>
+<td>gaps.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Purview triage agent 90-day re-auth gap</strong> — Purview Security Copilot triage agents stop running after 90 days without a manual config re-save. No automatic renewal. Added to Significant Gaps.</td>
+<td>gaps.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>All product map tiles now fully clickable</strong> — all 32 product cards link to official Microsoft documentation, opening in a new tab. All concept tiles on Risk, Identity, MCP, Frameworks, and Gaps pages are also clickable with ↗ Learn More badge.</td>
+<td>product-map.html, risk.html, identity.html, mcp.html, frameworks.html, gaps.html</td></tr>
+
+<tr><td><span class="tag green">✏️ Updated</span></td>
+<td><strong>RSAC 2026 announcements incorporated</strong> — Security Dashboard for AI now GA, Entra Internet Access Shadow AI Detection and Prompt Injection Protection GA March 31, Purview DLP for M365 Copilot GA March 31, Entra External MFA now GA, Security Analyst Agent preview March 26, Sentinel MCP Entity Analyzer GA April 2026.</td>
+<td>All pages</td></tr>
+
+<tr><td><span class="tag green">✏️ Updated</span></td>
+<td><strong>Field research from Microsoft Security professionals incorporated</strong> — Classic vs Modern agent distinction, maker credentials blast radius, no-auth agents (KQL detectable), agent name sync bug, org-wide sharing blast radius, ownerless agents.</td>
+<td>risk.html, identity.html, threats.html, gaps.html</td></tr>
+
+<tr><td><span class="tag green">✏️ Updated</span></td>
+<td><strong>Light theme applied</strong> — site migrated from dark to light theme. Plus Jakarta Sans and JetBrains Mono font stack. Dark-themed tags and chips for contrast. Section label pills redesigned.</td>
+<td>All pages</td></tr>
+
+<tr><td><span class="tag warn">⚠️ Correction</span></td>
+<td><strong>Entra External MFA link fixed</strong> — was pointing to a generic MFA concepts page. Now correctly points to the how-to-manage External MFA Learn doc. External MFA confirmed GA March 25, 2026.</td>
+<td>product-map.html</td></tr>
+
+<tr><td><span class="tag warn">⚠️ Correction</span></td>
+<td><strong>Unified Identity Security Dashboard link fixed</strong> — was pointing to a generic Defender investigate-users page. Now correctly points to the RSAC 2026 announcement blog post on Tech Community.</td>
+<td>product-map.html</td></tr>
+
+<tr><td><span class="tag warn">⚠️ Correction</span></td>
+<td><strong>Defender Predictive Shielding link fixed</strong> — was pointing to generic Defender page. Now points to the specific learn.microsoft.com Predictive Shielding doc.</td>
+<td>product-map.html</td></tr>
+
+<tr><td><span class="tag warn">⚠️ Correction</span></td>
+<td><strong>Defender for Cloud (AI Workloads) link fixed</strong> — now points to the AI threat protection overview page specifically.</td>
+<td>product-map.html</td></tr>
+
+<tr><td><span class="tag warn">⚠️ Correction</span></td>
+<td><strong>Defender for Cloud Apps link fixed</strong> — now points to the AI agent protection page specifically, not the generic CASB product page.</td>
+<td>product-map.html</td></tr>
+
+<tr><td><span class="tag warn">⚠️ Correction</span></td>
+<td><strong>All Security Copilot agent links fixed</strong> — Security Analyst Agent, Security Alert Triage Agent, CA Optimization Agent, Data Security Posture Agent, Data Security Triage Agent, and Intune agents all now point to their correct Learn docs or announcement pages.</td>
+<td>product-map.html</td></tr>
+
+<tr><td><span class="tag warn">⚠️ Correction</span></td>
+<td><strong>Microsoft 365 E7 link updated</strong> — now points to the official Microsoft Partners blog announcement for the Frontier Suite.</td>
+<td>product-map.html</td></tr>
+
+<tr><td><span class="tag warn">⚠️ Correction</span></td>
+<td><strong>Field research attribution updated</strong> — removed individual name from attribution. Now reads "Microsoft Security professionals".</td>
+<td>risk.html</td></tr>
+
 </tbody>
 </table>
 
-<div class="callout callout-warn">
-  <div class="callout-title">⚠ Critical Gap: No Strong MCP Server Authentication Standard</div>
-  <p>The MCP specification (as of early 2026) does not mandate strong cryptographic authentication for MCP server-to-client binding. Microsoft's official MCP catalog servers use standard OAuth where supported, but third-party and community servers vary widely. There is no platform-enforced way to guarantee the MCP server an agent connects to is the legitimate, unmodified server it expects. This requires defence-in-depth at the network, CASB, and orchestration layers — no single product closes it.</p>
+<div class="callout callout-info" style="margin-top:32px;">
+  <div class="callout-title">📌 Sources for this release</div>
+  <p>Microsoft Security Blog (RSAC 2026, March 20 2026) · Microsoft Tech Community · learn.microsoft.com · Microsoft Copilot Studio agent security field research · NIST AI RMF 1.0 · ISO/IEC 42001:2023 · Derk van der Woude Medium blog series (Microsoft Security MVP)</p>
 </div>
 
-<div class="section-label">Microsoft Controls</div>
-<h2>How Microsoft Secures the MCP Boundary</h2>
-<div class="card-grid">
-  <a href="https://learn.microsoft.com/en-us/defender-cloud-apps/ai-agent-protection" target="_blank" class="card-link"><div class="card" style="border-color:rgba(0,120,212,0.2);">
-    <div class="card-name">Defender for Cloud Apps (CASB)</div>
-    <div class="card-desc">Primary control for MCP-to-SaaS boundary. Discovers MCP-connected SaaS apps. Governs OAuth permissions. Detects anomalous access from agent-driven API calls. Can block or alert on risky MCP-to-SaaS connections. For Copilot Studio specifically: provides real-time protection — blocks tool invocations if prompt is suspicious (1-second timeout, then allow if no decision).</div>
-    <div class="tag-row"><span class="tag green">GA</span><span class="tag">OAuth Governance</span><span class="tag">RT Protection</span></div>
-  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
-  <a href="https://learn.microsoft.com/en-us/security/security-for-ai/security-dashboard-for-ai" target="_blank" class="card-link"><div class="card" style="border-color:rgba(84,176,84,0.15);">
-    <div class="card-name">Security Dashboard — AI Inventory</div>
-    <div class="card-desc">Includes MCP servers in AI inventory — now GA. Discovery and risk assessment of MCP servers across the environment including those deployed without IT knowledge. Coverage extends to third-party AI including ChatGPT, Gemini, and MCP servers.</div>
-    <div class="tag-row"><span class="tag green">✓ Now GA · RSAC 2026</span><span class="tag">MCP Server Discovery</span></div>
-  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
-  <a href="https://azure.microsoft.com/en-us/products/ai-foundry" target="_blank" class="card-link"><div class="card" style="border-color:rgba(252,225,0,0.15);">
-    <div class="card-name">Foundry Guardrails</div>
-    <div class="card-desc">For Foundry-deployed agents — define which MCP tools the agent is allowed to invoke. Whitelist at the orchestration layer. Does not apply to Copilot Studio agents — each platform has its own governance model.</div>
-    <div class="tag-row"><span class="tag caution">Preview</span><span class="tag">Tool Whitelist</span><span class="tag warn">⚠ Foundry only — not Copilot Studio</span></div>
-  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
-  <a href="https://learn.microsoft.com/en-us/azure/ai-services/content-safety/concepts/jailbreak-detection" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.15);">
-    <div class="card-name">Prompt Shields</div>
-    <div class="card-desc">Primary defence against indirect prompt injection via MCP tool outputs. Inspects content flowing from MCP responses into agent context before reaching the model.</div>
-    <div class="tag-row"><span class="tag green">GA</span><span class="tag">XPIA Defence</span><span class="tag">Tool Output Inspection</span></div>
-  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
-  <a href="https://learn.microsoft.com/en-us/entra/global-secure-access/how-to-manage-microsoft-profile" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.15);">
-    <div class="card-name">Entra Internet Access — Prompt Injection Protection</div>
-    <div class="card-desc">Network-layer enforcement blocking malicious AI prompts across apps and agents. Complements Prompt Shields at the network boundary. GA March 31, 2026.</div>
-    <div class="tag-row"><span class="tag green">GA March 31</span><span class="tag">Network Layer</span></div>
-  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
-  <a href="https://learn.microsoft.com/en-us/azure/sentinel/overview" target="_blank" class="card-link"><div class="card" style="border-color:rgba(84,176,84,0.15);">
-    <div class="card-name">Sentinel MCP Entity Analyzer</div>
-    <div class="card-desc">Natural language querying of MCP entity data within Sentinel investigations. GA April 2026. Enables analysts to explore MCP-connected entity relationships without writing KQL from scratch.</div>
-    <div class="tag-row"><span class="tag blue">GA April 2026</span><span class="tag">Natural Language</span><span class="tag">Sentinel</span></div>
-  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
-</div>
-
-<div class="section-label">Defence Architecture</div>
-<h2>Layered MCP Defence-in-Depth</h2>
-<table>
-<thead><tr><th>Layer</th><th>What It Covers</th><th>Microsoft Control</th><th>Status</th></tr></thead>
-<tbody>
-<tr><td><strong>Catalog governance</strong></td><td>Vetting which MCP servers are approved for use; lifecycle reviews</td><td>Internal policy + "MCP Tool Configured" Advanced Hunting query</td><td><span class="caution-inline">Process control — no product enforcement</span></td></tr>
-<tr><td><strong>Network</strong></td><td>Control which MCP servers agents can reach; block malicious prompts</td><td>Entra Internet Access</td><td><span class="green-inline">GA Mar 31</span></td></tr>
-<tr><td><strong>Identity</strong></td><td>Authenticate which agents can invoke which MCP tools; prevent maker credential blast radius</td><td>Enforce end-user auth (Power Platform admin)</td><td><span class="green-inline">Available now</span></td></tr>
-<tr><td><strong>Orchestration</strong></td><td>Whitelist allowed tools per agent (Foundry only)</td><td>Foundry Guardrails</td><td><span class="caution-inline">Preview · Foundry only</span></td></tr>
-<tr><td><strong>Content Inspection</strong></td><td>Detect adversarial instructions in MCP tool outputs</td><td>Prompt Shields</td><td><span class="green-inline">GA</span></td></tr>
-<tr><td><strong>Runtime Protection</strong></td><td>Block tool invocations during suspicious Copilot Studio agent activity</td><td>Defender for Cloud Apps real-time protection</td><td><span class="caution-inline">Preview · Copilot Studio only</span></td></tr>
-<tr><td><strong>SaaS Governance</strong></td><td>OAuth scope governance; anomalous API usage detection</td><td>Defender for Cloud Apps</td><td><span class="green-inline">GA</span></td></tr>
-<tr><td><strong>Inventory & Posture</strong></td><td>Discover all MCP servers; assess risk</td><td>Security Dashboard for AI</td><td><span class="green-inline">Now GA</span></td></tr>
-<tr><td><strong>Investigation</strong></td><td>NL querying of MCP entity relationships in Sentinel</td><td>Sentinel MCP Entity Analyzer</td><td><span class="green-inline">GA April</span></td></tr>
-</tbody>
-</table>
-
-
-<div class="page-nav"><a href="product-map.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Product Map</span></a><a href="mcp.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">MCP Ecosystem</span></a></div>
+<div class="page-nav"><a href="gaps.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Gaps & Roadmap</span></a><span></span></div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
   Last updated: March 24, 2026 · Analysis covers publicly announced Microsoft security capabilities only
