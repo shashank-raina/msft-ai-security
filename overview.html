@@ -39,8 +39,7 @@ body::before{content:'';position:fixed;inset:0;
 .msft-logo div:nth-child(4){background:#ffb900;border-radius:1px;}
 .brand-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;
   color:#0d1526;letter-spacing:0.01em;white-space:nowrap;line-height:1.2;}
-.brand-sub{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--text3);
-  letter-spacing:0.06em;}
+
 .nav-links{display:flex;align-items:stretch;height:100%;flex:1;overflow-x:auto;gap:2px;}
 .nav-links::-webkit-scrollbar{display:none;}
 .nav-links a{display:flex;align-items:center;gap:5px;padding:0 12px;
@@ -283,23 +282,22 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <nav class="topnav">
   <div class="nav-brand">
     <div class="msft-logo"><div></div><div></div><div></div><div></div></div>
-    <div><div class="brand-text">Securing AI with Microsoft</div>
-    <div class="brand-sub">SECURITY ARCHITECT GUIDE · 2026</div></div>
+    <div><div class="brand-text">Securing AI with Microsoft</div></div>
   </div>
-  <div class="nav-links"><a href="index.html" class=""><span class="n">00</span>Start Here</a>
-<a href="overview.html" class=" active"><span class="n">01</span>Overview</a>
-<a href="risk.html" class=""><span class="n">02</span>AI Risk</a>
-<a href="product-map.html" class=""><span class="n">03</span>Product Map</a>
-<a href="identity.html" class=""><span class="n">04</span>Identity & OBO</a>
-<a href="mcp.html" class=""><span class="n">05</span>MCP Ecosystem</a>
-<a href="threats.html" class=""><span class="n">06</span>Threat Scenarios</a>
-<a href="frameworks.html" class=""><span class="n">07</span>Frameworks</a>
-<a href="gaps.html" class=""><span class="n">08</span>Gaps & Roadmap</a>
-<a href="changelog.html" class=""><span class="n">✦</span>Changelog</a>
+  <div class="nav-links"><a href="index.html" class="">Start Here</a>
+<a href="overview.html" class=" active">Overview</a>
+<a href="risk.html" class="">AI Risk</a>
+<a href="product-map.html" class="">Product Map</a>
+<a href="identity.html" class="">Identity & OBO</a>
+<a href="mcp.html" class="">MCP Ecosystem</a>
+<a href="threats.html" class="">Threat Scenarios</a>
+<a href="frameworks.html" class="">Frameworks</a>
+<a href="gaps.html" class="">Gaps & Roadmap</a>
+<a href="changelog.html" class="">Changelog</a>
 </div>
 </nav>
 <div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
-  ⚠ <strong>Author's note:</strong> This site reflects the author's own understanding synthesised from publicly available Microsoft sources. Microsoft updates products and documentation frequently — always verify the latest status directly with Microsoft before making decisions.
+  📌 <strong>Author's note:</strong> This site synthesises the author's own understanding from publicly available Microsoft documentation, official Microsoft Security blog posts, RSAC 2026 announcements, and insights from Microsoft Security professionals and MVPs. It is independent and not affiliated with or endorsed by Microsoft. Microsoft updates products and documentation frequently — always verify current status directly with Microsoft before making architecture or purchasing decisions.
 </div>
 <div class="page">
 
@@ -309,62 +307,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <p style="color:#2e3d5e;font-size:17px;font-weight:400;max-width:680px;line-height:1.7;">
     A technical deep-dive into Microsoft's AI security architecture — covering the full stack from identity primitives and MCP attack surfaces to runtime threat detection and regulatory framework alignment. Caveats on current limitations are shown throughout.
   </p>
-  <div class="hero-chips">
-    <div class="chip chip-blue">AUDIENCE: SECURITY ARCHITECTS & ENGINEERS</div>
-    <div class="chip chip-green">✓ SECURITY DASHBOARD FOR AI: NOW GA</div>
-    <div class="chip chip-warn">⚠ AGENT ID: PREVIEW · FRONTIER ONLY</div>
-    <div class="chip chip-warn">⚠ AGENTS STILL USE OBO TOKEN FLOW</div>
-    <div class="chip chip-warn">⚠ AGENT 365: PER-USER, NOT PER-AGENT</div>
-  </div>
 </div>
-
-
-<div class="section-label">START HERE</div>
-<h2>Find Your Path Through This Guide</h2>
-<p>This guide covers 8 sections. Where you start depends on your role — pick below or visit the <a href="index.html">personalised Start Here page</a> for a detailed reading path and diagram.</p>
-<div class="card-grid" style="grid-template-columns:repeat(auto-fill,minmax(170px,1fr));">
-  <a href="index.html#panel-ciso" class="card-link">
-  <div class="card" style="border-color:rgba(0,120,212,0.2);text-align:center;padding:20px 16px;">
-    <div style="font-size:28px;margin-bottom:8px;">🏛️</div>
-    <div class="card-name" style="text-align:center;">CISO / Security Leader</div>
-    <div class="card-desc" style="text-align:center;">Risk posture, gaps, frameworks & board narrative</div>
-    <div style="margin-top:10px;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;font-weight:500;">↗ Learn More</span></div>
-  </div>
-  </a>
-  <a href="index.html#panel-engineer" class="card-link">
-  <div class="card" style="border-color:rgba(216,59,1,0.2);text-align:center;padding:20px 16px;">
-    <div style="font-size:28px;margin-bottom:8px;">⚙️</div>
-    <div class="card-name" style="text-align:center;">Security Engineer</div>
-    <div class="card-desc" style="text-align:center;">Attack vectors, OBO deep-dive, KQL queries, MCP risks</div>
-    <div style="margin-top:10px;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;font-weight:500;">↗ Learn More</span></div>
-  </div>
-  </a>
-  <a href="index.html#panel-admin" class="card-link">
-  <div class="card" style="border-color:rgba(0,133,117,0.2);text-align:center;padding:20px 16px;">
-    <div style="font-size:28px;margin-bottom:8px;">🤖</div>
-    <div class="card-name" style="text-align:center;">Copilot / M365 Admin</div>
-    <div class="card-desc" style="text-align:center;">Copilot Studio misconfigs, KQL detection, Defender setup</div>
-    <div style="margin-top:10px;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;font-weight:500;">↗ Learn More</span></div>
-  </div>
-  </a>
-  <a href="index.html#panel-maker" class="card-link">
-  <div class="card" style="border-color:rgba(252,225,0,0.2);text-align:center;padding:20px 16px;">
-    <div style="font-size:28px;margin-bottom:8px;">🏗️</div>
-    <div class="card-name" style="text-align:center;">Power Platform Maker</div>
-    <div class="card-desc" style="text-align:center;">Build-time risks, maker credentials, MCP tools</div>
-    <div style="margin-top:10px;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;font-weight:500;">↗ Learn More</span></div>
-  </div>
-  </a>
-  <a href="index.html#panel-grc" class="card-link">
-  <div class="card" style="border-color:rgba(98,100,167,0.2);text-align:center;padding:20px 16px;">
-    <div style="font-size:28px;margin-bottom:8px;">📋</div>
-    <div class="card-name" style="text-align:center;">Compliance / GRC</div>
-    <div class="card-desc" style="text-align:center;">NIST AI RMF, ISO 42001, gaps register, audit evidence</div>
-    <div style="margin-top:10px;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;font-weight:500;">↗ Learn More</span></div>
-  </div>
-  </a>
-</div>
-<div class="divider"></div>
 
 <div class="callout callout-green">
   <div class="callout-title">✅ RSAC 2026 Updates — March 20, 2026</div>
@@ -374,7 +317,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 <div class="section-label" style="margin-top:48px;">10,000 FT VIEW</div>
 <h2>The AI Security Stack at a Glance</h2>
-<p style="color:#2e3d5e;font-size:15px;margin-bottom:28px;">How Microsoft's security controls layer across the AI lifecycle — from agent identity to runtime protection to SOC response. Click any layer to navigate to the relevant section.</p>
+<p style="color:#2e3d5e;font-size:15px;margin-bottom:28px;">How Microsoft's security controls layer across the full AI lifecycle — from model supply chain through to SOC response. Click any layer to navigate to the relevant section.</p>
 
 <div class="viz-wrap" id="secViz">
   <style>
@@ -389,6 +332,8 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
       letter-spacing:0.1em;margin-bottom:4px;opacity:0.7;}
     .viz-label-name{font-size:13px;font-weight:700;line-height:1.2;}
     .viz-label-sub{font-size:10px;font-weight:400;margin-top:3px;opacity:0.75;line-height:1.4;}
+    .viz-label-badge{margin-top:5px;font-family:'JetBrains Mono',monospace;font-size:8px;
+      border-radius:3px;padding:2px 6px;display:inline-block;}
     .viz-pills{flex:1;padding:12px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;}
     .viz-pill{font-family:'JetBrains Mono',monospace;font-size:9px;padding:3px 9px;border-radius:4px;
       letter-spacing:0.04em;font-weight:500;white-space:nowrap;}
@@ -412,6 +357,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
     .viz-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
   </style>
 
+  <!-- What we're securing -->
   <div class="viz-top">
     <div>
       <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5070a0;letter-spacing:0.1em;margin-bottom:6px;">WHAT WE ARE SECURING</div>
@@ -427,15 +373,41 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
     </div>
   </div>
 
-  <div class="viz-arrow">↓ attack surface ↓</div>
+  <div class="viz-arrow">↓ full lifecycle ↓</div>
 
+  <!-- LAYER 00: Supply Chain -->
+  <a href="threats.html" style="text-decoration:none;color:inherit;display:block;">
+  <div class="viz-layer">
+    <div class="viz-layer-inner" style="background:#fdf0ff;border-color:#c8a0e0;">
+      <div class="viz-label" style="background:#f0d8ff;border-color:#c8a0e0;">
+        <div class="viz-label-num" style="color:#6a0090;">LAYER 00</div>
+        <div class="viz-label-name" style="color:#0d1526;">Supply Chain & Model Security</div>
+        <div class="viz-label-sub" style="color:#2e3d5e;">Before deployment — secure the model itself</div>
+        <div class="viz-label-badge" style="color:#6a0090;background:rgba(106,0,144,0.08);">Pre-deployment</div>
+      </div>
+      <div class="viz-pills">
+        <span class="viz-pill ga">AI Model Scanning · GA</span>
+        <span class="viz-pill ga">CLI + CI/CD Gating · GA</span>
+        <span class="viz-pill ga">GitHub Advanced Security · GA</span>
+        <span class="viz-pill ga">Defender for Cloud CSPM · GA</span>
+        <span class="viz-pill gap">⚠ Training data provenance: limited</span>
+        <span class="viz-pill gap">⚠ Hugging Face / OSS model risks</span>
+      </div>
+    </div>
+  </div>
+  </a>
+
+  <div class="viz-arrow">↓</div>
+
+  <!-- LAYER 01: Visibility -->
   <a href="product-map.html" style="text-decoration:none;color:inherit;display:block;">
   <div class="viz-layer">
     <div class="viz-layer-inner" style="background:#f0f6ff;border-color:#b0cce8;">
       <div class="viz-label" style="background:#ddeeff;border-color:#b0cce8;">
         <div class="viz-label-num" style="color:#0063b1;">LAYER 01</div>
         <div class="viz-label-name" style="color:#0d1526;">Visibility & Governance</div>
-        <div class="viz-label-sub" style="color:#2e3d5e;">Know what you have before you can protect it</div><div style="margin-top:5px;font-family:'JetBrains Mono',monospace;font-size:8px;color:#2a7a40;background:rgba(16,124,16,0.1);border-radius:3px;padding:2px 6px;display:inline-block;">✓ Works for Classic & Modern</div>
+        <div class="viz-label-sub" style="color:#2e3d5e;">Know what you have before you can protect it</div>
+        <div class="viz-label-badge" style="color:#2a7a40;background:rgba(16,124,16,0.1);">✓ Classic & Modern</div>
       </div>
       <div class="viz-pills">
         <span class="viz-pill ga">Security Dashboard for AI ✓ GA</span>
@@ -444,6 +416,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
         <span class="viz-pill preview">Foundry Guardrails · Preview</span>
         <span class="viz-pill gap">⚠ Classic Agents invisible to Entra</span>
         <span class="viz-pill gap">⚠ Dual-admin setup required</span>
+        <span class="viz-pill gap">⚠ Portal count inconsistency</span>
       </div>
     </div>
   </div>
@@ -451,13 +424,15 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
   <div class="viz-arrow">↓</div>
 
+  <!-- LAYER 02: Identity -->
   <a href="identity.html" style="text-decoration:none;color:inherit;display:block;">
   <div class="viz-layer">
     <div class="viz-layer-inner" style="background:#fff8f0;border-color:#e8c090;">
       <div class="viz-label" style="background:#ffeedd;border-color:#e8c090;">
         <div class="viz-label-num" style="color:#8a5000;">LAYER 02</div>
         <div class="viz-label-name" style="color:#0d1526;">Identity & Access</div>
-        <div class="viz-label-sub" style="color:#2e3d5e;">Who is the agent? What can it access?</div><div style="margin-top:5px;font-family:'JetBrains Mono',monospace;font-size:8px;color:#8a5000;background:rgba(216,59,1,0.08);border-radius:3px;padding:2px 6px;display:inline-block;">⚠ Entra Agent ID: Modern only</div>
+        <div class="viz-label-sub" style="color:#2e3d5e;">Who is the agent? What can it access?</div>
+        <div class="viz-label-badge" style="color:#8a5000;background:rgba(216,59,1,0.08);">⚠ Entra ID: Modern only</div>
       </div>
       <div class="viz-pills">
         <span class="viz-pill gap">⚠ OBO — agents inherit user identity</span>
@@ -474,6 +449,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
   <div class="viz-arrow">↓</div>
 
+  <!-- LAYER 03: Data Security -->
   <a href="product-map.html" style="text-decoration:none;color:inherit;display:block;">
   <div class="viz-layer">
     <div class="viz-layer-inner" style="background:#f0fbf4;border-color:#90c8a0;">
@@ -488,7 +464,8 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
         <span class="viz-pill preview">DSPM for AI · Preview</span>
         <span class="viz-pill preview">AI Observability · Preview</span>
         <span class="viz-pill ga">Communication Compliance · GA</span>
-        <span class="viz-pill gap">⚠ Training data provenance: limited</span>
+        <span class="viz-pill ga">Copilot Data Connector · Preview</span>
+        <span class="viz-pill gap">⚠ Prompt data sensitivity in Sentinel</span>
       </div>
     </div>
   </div>
@@ -496,11 +473,36 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
   <div class="viz-arrow">↓</div>
 
+  <!-- LAYER 04: MCP & Tool Governance -->
+  <a href="mcp.html" style="text-decoration:none;color:inherit;display:block;">
+  <div class="viz-layer">
+    <div class="viz-layer-inner" style="background:#f0f8ff;border-color:#80b8e0;">
+      <div class="viz-label" style="background:#d8eeff;border-color:#80b8e0;">
+        <div class="viz-label-num" style="color:#004880;">LAYER 04</div>
+        <div class="viz-label-name" style="color:#0d1526;">MCP & Tool Governance</div>
+        <div class="viz-label-sub" style="color:#2e3d5e;">What can the agent invoke? What tools can it reach?</div>
+      </div>
+      <div class="viz-pills">
+        <span class="viz-pill ga">Defender for Cloud Apps · GA</span>
+        <span class="viz-pill ga">OAuth Governance · GA</span>
+        <span class="viz-pill ga">Shadow AI Detection · GA Mar 31</span>
+        <span class="viz-pill preview">Foundry Guardrails (tool whitelist) · Preview</span>
+        <span class="viz-pill gap">⚠ No MCP server auth standard</span>
+        <span class="viz-pill gap">⚠ Maker creds × MCP tools risk</span>
+        <span class="viz-pill gap">⚠ No Copilot Studio tool whitelist</span>
+      </div>
+    </div>
+  </div>
+  </a>
+
+  <div class="viz-arrow">↓</div>
+
+  <!-- LAYER 05: Runtime Protection -->
   <a href="threats.html" style="text-decoration:none;color:inherit;display:block;">
   <div class="viz-layer">
     <div class="viz-layer-inner" style="background:#fff4f0;border-color:#e8a090;">
       <div class="viz-label" style="background:#ffe4dd;border-color:#e8a090;">
-        <div class="viz-label-num" style="color:#8a2000;">LAYER 04</div>
+        <div class="viz-label-num" style="color:#8a2000;">LAYER 05</div>
         <div class="viz-label-name" style="color:#0d1526;">Runtime Protection</div>
         <div class="viz-label-sub" style="color:#2e3d5e;">Block attacks as they happen</div>
       </div>
@@ -511,6 +513,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
         <span class="viz-pill ga">Defender for Cloud Apps RT · GA</span>
         <span class="viz-pill preview">Defender Predictive Shielding · Preview</span>
         <span class="viz-pill gap">⚠ 1s timeout on RT protection</span>
+        <span class="viz-pill gap">⚠ Image/URL injection bypasses text filters</span>
       </div>
     </div>
   </div>
@@ -518,11 +521,12 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
   <div class="viz-arrow">↓</div>
 
+  <!-- LAYER 06: Detect & Respond -->
   <a href="product-map.html" style="text-decoration:none;color:inherit;display:block;">
   <div class="viz-layer">
     <div class="viz-layer-inner" style="background:#f5f0ff;border-color:#b0a0e0;">
       <div class="viz-label" style="background:#ece0ff;border-color:#b0a0e0;">
-        <div class="viz-label-num" style="color:#4a0090;">LAYER 05</div>
+        <div class="viz-label-num" style="color:#4a0090;">LAYER 06</div>
         <div class="viz-label-name" style="color:#0d1526;">Detect & Respond</div>
         <div class="viz-label-sub" style="color:#2e3d5e;">SOC visibility into AI threats</div>
       </div>
@@ -530,6 +534,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
         <span class="viz-pill ga">Microsoft Sentinel · GA</span>
         <span class="viz-pill ga">Defender for Cloud · GA</span>
         <span class="viz-pill ga">Security Copilot · GA (E5)</span>
+        <span class="viz-pill ga">Copilot Data Connector · Preview</span>
         <span class="viz-pill neutral">Security Analyst Agent · Preview Mar 26</span>
         <span class="viz-pill neutral">Alert Triage Agent · Preview Apr</span>
         <span class="viz-pill ga">MCP Entity Analyzer · GA Apr</span>
@@ -548,6 +553,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   </div>
 </div>
 
+
 <div class="section-label">Executive Summary</div>
 <h2>Why Securing AI Is a First-Class Security Problem</h2>
 <p>Organisations are deploying AI copilots and autonomous agents at scale to automate decision-making and access enterprise data. Standards like Model Context Protocol (MCP) now let AI systems invoke real enterprise tools — email, file systems, APIs, SaaS platforms — not just generate text. This transforms the AI agent from a productivity interface into a <strong>privileged digital actor</strong> operating inside the enterprise perimeter.</p>
@@ -562,43 +568,43 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <h2>How to Use This Guide</h2>
 <div class="card-grid">
   <div class="card" style="border-color:rgba(216,59,1,0.2);">
-    <div class="card-sub">PAGE 02</div>
+    <div class="card-sub">AI RISK</div>
     <div class="card-name"><a href="risk.html">AI Risk Reality</a></div>
     <div class="card-desc">How AI agents break traditional security assumptions. Severity-rated risk taxonomy and the full attack surface model.</div>
     <div class="tag-row"><span class="tag">Risk Framework</span><span class="tag">Attack Surface</span></div>
   </div>
   <div class="card" style="border-color:rgba(252,225,0,0.15);">
-    <div class="card-sub">PAGE 03</div>
+    <div class="card-sub">PRODUCT MAP</div>
     <div class="card-name"><a href="product-map.html">Product Map</a></div>
     <div class="card-desc">Every Microsoft security product mapped to the AI stack — updated with RSAC 2026 announcements and current availability status.</div>
     <div class="tag-row"><span class="tag">Product Reference</span><span class="tag green">RSAC Updated</span></div>
   </div>
   <div class="card" style="border-color:rgba(0,120,212,0.2);">
-    <div class="card-sub">PAGE 04</div>
+    <div class="card-sub">IDENTITY & OBO</div>
     <div class="card-name"><a href="identity.html">Agent Identity & OBO</a></div>
     <div class="card-desc">The OBO token flow in detail. What Agent ID is vs. what's actually available. What architects should do today.</div>
     <div class="tag-row"><span class="tag warn">⚠ Critical Gap</span><span class="tag">OBO · Agent ID</span></div>
   </div>
   <div class="card" style="border-color:rgba(98,100,167,0.2);">
-    <div class="card-sub">PAGE 05</div>
+    <div class="card-sub">MCP ECOSYSTEM</div>
     <div class="card-name"><a href="mcp.html">MCP Ecosystem</a></div>
     <div class="card-desc">MCP architecture, six specific attack vectors, and how Microsoft controls the MCP-to-SaaS boundary — including the new Sentinel MCP Entity Analyzer.</div>
     <div class="tag-row"><span class="tag">MCP</span><span class="tag">Tool Poisoning</span><span class="tag">XPIA</span></div>
   </div>
   <div class="card" style="border-color:rgba(216,59,1,0.2);">
-    <div class="card-sub">PAGE 06</div>
+    <div class="card-sub">THREAT SCENARIOS</div>
     <div class="card-name"><a href="threats.html">Threat Scenarios</a></div>
     <div class="card-desc">Four detailed attack chains — DPI, XPIA, data leakage, privilege escalation — with full control mappings and gap assessments.</div>
     <div class="tag-row"><span class="tag">DPI</span><span class="tag">XPIA</span><span class="tag">Data Leakage</span></div>
   </div>
   <div class="card" style="border-color:rgba(0,133,117,0.2);">
-    <div class="card-sub">PAGE 07</div>
+    <div class="card-sub">FRAMEWORKS</div>
     <div class="card-name"><a href="frameworks.html">Frameworks</a></div>
     <div class="card-desc">NIST AI RMF and ISO 42001 control mappings — with gap analysis per clause and function.</div>
     <div class="tag-row"><span class="tag">NIST AI RMF</span><span class="tag">ISO 42001</span></div>
   </div>
   <div class="card" style="border-color:rgba(252,225,0,0.15);">
-    <div class="card-sub">PAGE 08</div>
+    <div class="card-sub">GAPS & ROADMAP</div>
     <div class="card-name"><a href="gaps.html">Gaps & Roadmap</a></div>
     <div class="card-desc">Consolidated gap register with interim mitigations and updated availability matrix reflecting RSAC 2026 GA announcements.</div>
     <div class="tag-row"><span class="tag warn">Critical Gaps</span><span class="tag green">RSAC Updated</span></div>

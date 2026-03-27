@@ -97,7 +97,7 @@ body::before{content:'';position:fixed;inset:0;
   font-weight:600;margin-bottom:5px;}
 .path-label.primary{color:var(--blue);}
 .path-label.secondary{color:var(--text3);}
-.path-num{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);float:right;}
+.path-num{display:none;}
 .path-name{font-size:13px;font-weight:700;color:#0d1526;margin-bottom:4px;}
 .path-why{font-size:11px;color:#2e3d5e;line-height:1.4;}
 .path-arrow{display:flex;align-items:center;justify-content:center;
@@ -149,24 +149,24 @@ body::before{content:'';position:fixed;inset:0;
   <div class="nav-brand">
     <div class="msft-logo"><div></div><div></div><div></div><div></div></div>
     <div><div class="brand-text">Securing AI with Microsoft</div>
-    <div class="brand-sub">SECURITY ARCHITECT GUIDE · 2026</div></div>
+    </div>
   </div>
   <div class="nav-links">
-    <a href="index.html" class="active"><span class="n">00</span>Start Here</a>
-    <a href="overview.html"><span class="n">01</span>Overview</a>
-    <a href="risk.html"><span class="n">02</span>AI Risk</a>
-    <a href="product-map.html"><span class="n">03</span>Product Map</a>
-    <a href="identity.html"><span class="n">04</span>Identity & OBO</a>
-    <a href="mcp.html"><span class="n">05</span>MCP Ecosystem</a>
-    <a href="threats.html"><span class="n">06</span>Threat Scenarios</a>
-    <a href="frameworks.html"><span class="n">07</span>Frameworks</a>
-    <a href="gaps.html"><span class="n">08</span>Gaps & Roadmap</a>
-    <a href="changelog.html"><span class="n">✦</span>Changelog</a>
+    <a href="index.html" class="active">Start Here</a>
+    <a href="overview.html">Overview</a>
+    <a href="risk.html">AI Risk</a>
+    <a href="product-map.html">Product Map</a>
+    <a href="identity.html">Identity & OBO</a>
+    <a href="mcp.html">MCP Ecosystem</a>
+    <a href="threats.html">Threat Scenarios</a>
+    <a href="frameworks.html">Frameworks</a>
+    <a href="gaps.html">Gaps & Roadmap</a>
+    <a href="changelog.html">Changelog</a>
   </div>
 </nav>
 
 <div class="disclaimer">
-  ⚠ <strong>Author's note:</strong> This site reflects the author's own understanding synthesised from publicly available Microsoft sources. Microsoft updates products and documentation frequently — always verify the latest status directly with Microsoft before making decisions.
+  📌 <strong>Author's note:</strong> This site synthesises the author's own understanding from publicly available Microsoft documentation, official Microsoft Security blog posts, RSAC 2026 announcements, and insights from Microsoft Security professionals and MVPs. It is independent and not affiliated with or endorsed by Microsoft. Microsoft updates products and documentation frequently — always verify current status directly with Microsoft before making architecture or purchasing decisions.
 </div>
 
 <div class="page">
@@ -225,13 +225,13 @@ body::before{content:'';position:fixed;inset:0;
     <div class="path-wrap">
       <div class="path-row">
         <a href="overview.html" class="path-node primary">
-          <div class="path-label primary">START HERE · ESSENTIAL</div><span class="path-num">01</span>
+          <div class="path-label primary">START HERE · ESSENTIAL</div>
           <div class="path-name">Overview</div>
           <div class="path-why">10,000ft view of the entire stack. The visualisation alone gives you the briefing you need.</div>
         </a>
         <div class="path-arrow">→</div>
         <a href="gaps.html" class="path-node primary">
-          <div class="path-label primary">CRITICAL · READ NEXT</div><span class="path-num">08</span>
+          <div class="path-label primary">CRITICAL · READ NEXT</div>
           <div class="path-name">Gaps & Roadmap</div>
           <div class="path-why">What's not solved yet. The availability matrix is your executive summary of control coverage.</div>
         </a>
@@ -239,13 +239,13 @@ body::before{content:'';position:fixed;inset:0;
       <div class="path-connector">↓</div>
       <div class="path-row">
         <a href="frameworks.html" class="path-node secondary">
-          <div class="path-label secondary">RECOMMENDED</div><span class="path-num">07</span>
+          <div class="path-label secondary">RECOMMENDED</div>
           <div class="path-name">Frameworks</div>
           <div class="path-why">NIST AI RMF and ISO 42001 mapping — directly answers board and audit questions.</div>
         </a>
         <div class="path-arrow">→</div>
         <a href="risk.html" class="path-node secondary">
-          <div class="path-label secondary">RECOMMENDED</div><span class="path-num">02</span>
+          <div class="path-label secondary">RECOMMENDED</div>
           <div class="path-name">AI Risk Reality</div>
           <div class="path-why">The risk taxonomy and Classic vs Modern agent distinction are critical for board conversations.</div>
         </a>
@@ -253,13 +253,13 @@ body::before{content:'';position:fixed;inset:0;
       <div class="path-connector">↓ optional deep-dive</div>
       <div class="path-row">
         <a href="identity.html" class="path-node secondary" style="opacity:0.7;">
-          <div class="path-label secondary">IF NEEDED</div><span class="path-num">04</span>
+          <div class="path-label secondary">IF NEEDED</div>
           <div class="path-name">Identity & OBO</div>
           <div class="path-why">Delegate to your security architect. The Classic vs Modern table is worth scanning.</div>
         </a>
         <div class="path-arrow" style="opacity:0.4;">→</div>
         <a href="product-map.html" class="path-node secondary" style="opacity:0.7;">
-          <div class="path-label secondary">REFERENCE</div><span class="path-num">03</span>
+          <div class="path-label secondary">REFERENCE</div>
           <div class="path-name">Product Map</div>
           <div class="path-why">Full product inventory. Useful for licensing conversations.</div>
         </a>
@@ -270,12 +270,12 @@ body::before{content:'';position:fixed;inset:0;
   <div class="reading-path">
     <div class="rp-card">
       <span class="rp-priority must">MUST READ</span>
-      <div class="rp-page">01 · Overview</div>
+      <div class="rp-page">Overview</div>
       <div class="rp-why">The 10,000ft stack diagram gives you an instant briefing. The RSAC 2026 callout tells you what's changed this month.</div>
     </div>
     <div class="rp-card">
       <span class="rp-priority must">MUST READ</span>
-      <div class="rp-page">08 · Gaps & Roadmap</div>
+      <div class="rp-page">Gaps & Roadmap</div>
       <div class="rp-why">The critical gaps register and availability matrix. Know what your team can't control yet and what's coming.</div>
       <div class="rp-sections">
         <div class="rp-section-label">KEY SECTIONS</div>
@@ -286,7 +286,7 @@ body::before{content:'';position:fixed;inset:0;
     </div>
     <div class="rp-card">
       <span class="rp-priority should">SHOULD READ</span>
-      <div class="rp-page">07 · Frameworks</div>
+      <div class="rp-page">Frameworks</div>
       <div class="rp-why">NIST AI RMF and ISO 42001 alignment — directly maps to your compliance and audit obligations.</div>
     </div>
   </div>
@@ -307,13 +307,13 @@ body::before{content:'';position:fixed;inset:0;
     <div class="path-wrap">
       <div class="path-row">
         <a href="identity.html" class="path-node primary">
-          <div class="path-label primary">START HERE · ESSENTIAL</div><span class="path-num">04</span>
+          <div class="path-label primary">START HERE · ESSENTIAL</div>
           <div class="path-name">Identity & OBO</div>
           <div class="path-why">The Classic vs Modern table and maker credentials section are the most technically dense and important pages on the site.</div>
         </a>
         <div class="path-arrow">→</div>
         <a href="threats.html" class="path-node primary">
-          <div class="path-label primary">CRITICAL · READ NEXT</div><span class="path-num">06</span>
+          <div class="path-label primary">CRITICAL · READ NEXT</div>
           <div class="path-name">Threat Scenarios</div>
           <div class="path-why">Five detailed attack chains with full control mappings and gap assessments. Image/URL injection is new.</div>
         </a>
@@ -321,13 +321,13 @@ body::before{content:'';position:fixed;inset:0;
       <div class="path-connector">↓</div>
       <div class="path-row">
         <a href="mcp.html" class="path-node primary">
-          <div class="path-label primary">ESSENTIAL</div><span class="path-num">05</span>
+          <div class="path-label primary">ESSENTIAL</div>
           <div class="path-name">MCP Ecosystem</div>
           <div class="path-why">Attack vectors, Microsoft MCP catalog implications, and the Copilot Studio MCP tool risk pattern.</div>
         </a>
         <div class="path-arrow">→</div>
         <a href="gaps.html" class="path-node secondary">
-          <div class="path-label secondary">RECOMMENDED</div><span class="path-num">08</span>
+          <div class="path-label secondary">RECOMMENDED</div>
           <div class="path-name">Gaps & Roadmap</div>
           <div class="path-why">KQL detection queries and the full control availability matrix for your architecture review.</div>
         </a>
@@ -335,13 +335,13 @@ body::before{content:'';position:fixed;inset:0;
       <div class="path-connector">↓ reference</div>
       <div class="path-row">
         <a href="risk.html" class="path-node secondary" style="opacity:0.7;">
-          <div class="path-label secondary">REFERENCE</div><span class="path-num">02</span>
+          <div class="path-label secondary">REFERENCE</div>
           <div class="path-name">AI Risk</div>
           <div class="path-why">Risk taxonomy and attack surface model.</div>
         </a>
         <div class="path-arrow" style="opacity:0.4;">→</div>
         <a href="product-map.html" class="path-node secondary" style="opacity:0.7;">
-          <div class="path-label secondary">REFERENCE</div><span class="path-num">03</span>
+          <div class="path-label secondary">REFERENCE</div>
           <div class="path-name">Product Map</div>
           <div class="path-why">All 32 products with GA/Preview status and links to docs.</div>
         </a>
@@ -352,7 +352,7 @@ body::before{content:'';position:fixed;inset:0;
   <div class="reading-path">
     <div class="rp-card">
       <span class="rp-priority must">MUST READ</span>
-      <div class="rp-page">04 · Identity & OBO</div>
+      <div class="rp-page">Identity & OBO</div>
       <div class="rp-why">OBO flow, maker credentials, Classic vs Modern security product coverage table, name sync bug, interim mitigations ranked by availability.</div>
       <div class="rp-sections">
         <div class="rp-section-label">KEY SECTIONS</div>
@@ -363,12 +363,12 @@ body::before{content:'';position:fixed;inset:0;
     </div>
     <div class="rp-card">
       <span class="rp-priority must">MUST READ</span>
-      <div class="rp-page">06 · Threat Scenarios</div>
+      <div class="rp-page">Threat Scenarios</div>
       <div class="rp-why">DPI, XPIA (including image/URL variant), maker credential blast radius, data leakage, privilege escalation — with full control mappings.</div>
     </div>
     <div class="rp-card">
       <span class="rp-priority must">MUST READ</span>
-      <div class="rp-page">05 · MCP Ecosystem</div>
+      <div class="rp-page">MCP Ecosystem</div>
       <div class="rp-why">Microsoft official MCP catalog risk, Copilot Studio MCP tools + maker credentials combination, seven attack vectors with controls.</div>
     </div>
   </div>
@@ -389,13 +389,13 @@ body::before{content:'';position:fixed;inset:0;
     <div class="path-wrap">
       <div class="path-row">
         <a href="risk.html" class="path-node primary">
-          <div class="path-label primary">START HERE · ESSENTIAL</div><span class="path-num">02</span>
+          <div class="path-label primary">START HERE · ESSENTIAL</div>
           <div class="path-name">AI Risk Reality</div>
           <div class="path-why">The Copilot Studio Specific Risks section — no-auth agents, org-wide sharing, maker credentials, Classic vs Modern — is written for you.</div>
         </a>
         <div class="path-arrow">→</div>
         <a href="identity.html" class="path-node primary">
-          <div class="path-label primary">CRITICAL · READ NEXT</div><span class="path-num">04</span>
+          <div class="path-label primary">CRITICAL · READ NEXT</div>
           <div class="path-name">Identity & OBO</div>
           <div class="path-why">Maker credentials section and the Classic vs Modern product coverage table tell you exactly what controls you have today.</div>
         </a>
@@ -403,13 +403,13 @@ body::before{content:'';position:fixed;inset:0;
       <div class="path-connector">↓</div>
       <div class="path-row">
         <a href="gaps.html" class="path-node primary">
-          <div class="path-label primary">ESSENTIAL</div><span class="path-num">08</span>
+          <div class="path-label primary">ESSENTIAL</div>
           <div class="path-name">Gaps & Roadmap</div>
           <div class="path-why">KQL detection queries for no-auth agents and ownerless agents. Use these in Advanced Hunting today.</div>
         </a>
         <div class="path-arrow">→</div>
         <a href="product-map.html" class="path-node secondary">
-          <div class="path-label secondary">RECOMMENDED</div><span class="path-num">03</span>
+          <div class="path-label secondary">RECOMMENDED</div>
           <div class="path-name">Product Map</div>
           <div class="path-why">AI Agent Inventory and Defender for Cloud Apps cards — click through to the setup docs.</div>
         </a>
@@ -420,7 +420,7 @@ body::before{content:'';position:fixed;inset:0;
   <div class="reading-path">
     <div class="rp-card">
       <span class="rp-priority must">MUST READ</span>
-      <div class="rp-page">02 · AI Risk Reality</div>
+      <div class="rp-page">AI Risk Reality</div>
       <div class="rp-why">The Copilot Studio Specific Risks section with the six risk cards — no-auth, org-wide sharing, Classic vs Modern, MCP tools, name sync, ownerless agents.</div>
       <div class="rp-sections">
         <div class="rp-section-label">KEY SECTIONS</div>
@@ -430,12 +430,12 @@ body::before{content:'';position:fixed;inset:0;
     </div>
     <div class="rp-card">
       <span class="rp-priority must">MUST READ</span>
-      <div class="rp-page">08 · Gaps & Roadmap</div>
+      <div class="rp-page">Gaps & Roadmap</div>
       <div class="rp-why">The KQL detection queries section — copy-paste ready queries to find no-auth and ownerless agents in your tenant right now.</div>
     </div>
     <div class="rp-card">
       <span class="rp-priority should">SHOULD READ</span>
-      <div class="rp-page">04 · Identity & OBO</div>
+      <div class="rp-page">Identity & OBO</div>
       <div class="rp-why">Security product coverage table — understand exactly what Defender vs Entra controls you have, and what requires Modern Agents.</div>
     </div>
   </div>
@@ -456,13 +456,13 @@ body::before{content:'';position:fixed;inset:0;
     <div class="path-wrap">
       <div class="path-row">
         <a href="risk.html" class="path-node primary">
-          <div class="path-label primary">START HERE · ESSENTIAL</div><span class="path-num">02</span>
+          <div class="path-label primary">START HERE · ESSENTIAL</div>
           <div class="path-name">AI Risk Reality</div>
           <div class="path-why">Maker credentials, no-auth, org-wide sharing — these are risks you create at build time. Read this first.</div>
         </a>
         <div class="path-arrow">→</div>
         <a href="mcp.html" class="path-node primary">
-          <div class="path-label primary">ESSENTIAL</div><span class="path-num">05</span>
+          <div class="path-label primary">ESSENTIAL</div>
           <div class="path-name">MCP Ecosystem</div>
           <div class="path-why">Adding MCP tools dramatically expands your agent's attack surface. Understand the risk before connecting tools.</div>
         </a>
@@ -470,13 +470,13 @@ body::before{content:'';position:fixed;inset:0;
       <div class="path-connector">↓</div>
       <div class="path-row">
         <a href="threats.html" class="path-node secondary">
-          <div class="path-label secondary">RECOMMENDED</div><span class="path-num">06</span>
+          <div class="path-label secondary">RECOMMENDED</div>
           <div class="path-name">Threat Scenarios</div>
           <div class="path-why">The Maker Credential Blast Radius scenario is specifically about what happens when you build an agent insecurely.</div>
         </a>
         <div class="path-arrow" style="opacity:0.4;">→</div>
         <a href="identity.html" class="path-node secondary" style="opacity:0.7;">
-          <div class="path-label secondary">REFERENCE</div><span class="path-num">04</span>
+          <div class="path-label secondary">REFERENCE</div>
           <div class="path-name">Identity & OBO</div>
           <div class="path-why">Understand why your credentials matter to the security team.</div>
         </a>
@@ -487,17 +487,17 @@ body::before{content:'';position:fixed;inset:0;
   <div class="reading-path">
     <div class="rp-card">
       <span class="rp-priority must">MUST READ</span>
-      <div class="rp-page">02 · AI Risk Reality</div>
+      <div class="rp-page">AI Risk Reality</div>
       <div class="rp-why">Everything in the "Copilot Studio Specific Risks" section applies directly to what you build. Maker credentials and org-wide sharing are configuration choices you make.</div>
     </div>
     <div class="rp-card">
       <span class="rp-priority must">MUST READ</span>
-      <div class="rp-page">06 · Threat Scenarios</div>
+      <div class="rp-page">Threat Scenarios</div>
       <div class="rp-why">Scenario 3 — Maker Credential Blast Radius — walks through exactly what an attacker does with an insecurely built agent. Read it. Then check your agents.</div>
     </div>
     <div class="rp-card">
       <span class="rp-priority should">SHOULD READ</span>
-      <div class="rp-page">05 · MCP Ecosystem</div>
+      <div class="rp-page">MCP Ecosystem</div>
       <div class="rp-why">If you're adding MCP tools to your agent, read the "Maker Credentials × MCP Tools" section. The blast radius compounds with each tool you add.</div>
     </div>
   </div>
@@ -518,13 +518,13 @@ body::before{content:'';position:fixed;inset:0;
     <div class="path-wrap">
       <div class="path-row">
         <a href="frameworks.html" class="path-node primary">
-          <div class="path-label primary">START HERE · ESSENTIAL</div><span class="path-num">07</span>
+          <div class="path-label primary">START HERE · ESSENTIAL</div>
           <div class="path-name">Frameworks</div>
           <div class="path-why">NIST AI RMF four functions and ISO 42001 clause-by-clause mapping — with gap analysis per control.</div>
         </a>
         <div class="path-arrow">→</div>
         <a href="gaps.html" class="path-node primary">
-          <div class="path-label primary">CRITICAL · READ NEXT</div><span class="path-num">08</span>
+          <div class="path-label primary">CRITICAL · READ NEXT</div>
           <div class="path-name">Gaps & Roadmap</div>
           <div class="path-why">Critical and significant gaps register — feeds directly into your risk register and remediation plan.</div>
         </a>
@@ -532,13 +532,13 @@ body::before{content:'';position:fixed;inset:0;
       <div class="path-connector">↓</div>
       <div class="path-row">
         <a href="product-map.html" class="path-node secondary">
-          <div class="path-label secondary">RECOMMENDED</div><span class="path-num">03</span>
+          <div class="path-label secondary">RECOMMENDED</div>
           <div class="path-name">Product Map</div>
           <div class="path-why">GA vs Preview status for every control — evidences what's production-ready vs in-flight.</div>
         </a>
         <div class="path-arrow">→</div>
         <a href="risk.html" class="path-node secondary">
-          <div class="path-label secondary">RECOMMENDED</div><span class="path-num">02</span>
+          <div class="path-label secondary">RECOMMENDED</div>
           <div class="path-name">AI Risk Reality</div>
           <div class="path-why">Risk taxonomy maps to GOVERN and MAP functions. Classic agent gap is a key compliance exposure.</div>
         </a>
@@ -549,7 +549,7 @@ body::before{content:'';position:fixed;inset:0;
   <div class="reading-path">
     <div class="rp-card">
       <span class="rp-priority must">MUST READ</span>
-      <div class="rp-page">07 · Frameworks</div>
+      <div class="rp-page">Frameworks</div>
       <div class="rp-why">NIST AI RMF GOVERN/MAP/MEASURE/MANAGE and ISO 42001 clause-by-clause with Microsoft control mappings and gap notes per clause.</div>
       <div class="rp-sections">
         <div class="rp-section-label">KEY SECTIONS</div>
@@ -560,12 +560,12 @@ body::before{content:'';position:fixed;inset:0;
     </div>
     <div class="rp-card">
       <span class="rp-priority must">MUST READ</span>
-      <div class="rp-page">08 · Gaps & Roadmap</div>
+      <div class="rp-page">Gaps & Roadmap</div>
       <div class="rp-why">Critical and significant gaps register with interim mitigations. Classic Agent estate gap affects all four NIST functions.</div>
     </div>
     <div class="rp-card">
       <span class="rp-priority should">SHOULD READ</span>
-      <div class="rp-page">03 · Product Map</div>
+      <div class="rp-page">Product Map</div>
       <div class="rp-why">Full availability matrix — GA vs Preview vs Coming Soon for every control. Use for gap evidence in audit documentation.</div>
     </div>
   </div>

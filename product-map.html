@@ -39,8 +39,7 @@ body::before{content:'';position:fixed;inset:0;
 .msft-logo div:nth-child(4){background:#ffb900;border-radius:1px;}
 .brand-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;
   color:#0d1526;letter-spacing:0.01em;white-space:nowrap;line-height:1.2;}
-.brand-sub{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--text3);
-  letter-spacing:0.06em;}
+
 .nav-links{display:flex;align-items:stretch;height:100%;flex:1;overflow-x:auto;gap:2px;}
 .nav-links::-webkit-scrollbar{display:none;}
 .nav-links a{display:flex;align-items:center;gap:5px;padding:0 12px;
@@ -283,23 +282,22 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <nav class="topnav">
   <div class="nav-brand">
     <div class="msft-logo"><div></div><div></div><div></div><div></div></div>
-    <div><div class="brand-text">Securing AI with Microsoft</div>
-    <div class="brand-sub">SECURITY ARCHITECT GUIDE · 2026</div></div>
+    <div><div class="brand-text">Securing AI with Microsoft</div></div>
   </div>
-  <div class="nav-links"><a href="index.html" class=""><span class="n">00</span>Start Here</a>
-<a href="overview.html" class=""><span class="n">01</span>Overview</a>
-<a href="risk.html" class=""><span class="n">02</span>AI Risk</a>
-<a href="product-map.html" class=" active"><span class="n">03</span>Product Map</a>
-<a href="identity.html" class=""><span class="n">04</span>Identity & OBO</a>
-<a href="mcp.html" class=""><span class="n">05</span>MCP Ecosystem</a>
-<a href="threats.html" class=""><span class="n">06</span>Threat Scenarios</a>
-<a href="frameworks.html" class=""><span class="n">07</span>Frameworks</a>
-<a href="gaps.html" class=""><span class="n">08</span>Gaps & Roadmap</a>
-<a href="changelog.html" class=""><span class="n">✦</span>Changelog</a>
+  <div class="nav-links"><a href="index.html" class="">Start Here</a>
+<a href="overview.html" class="">Overview</a>
+<a href="risk.html" class="">AI Risk</a>
+<a href="product-map.html" class=" active">Product Map</a>
+<a href="identity.html" class="">Identity & OBO</a>
+<a href="mcp.html" class="">MCP Ecosystem</a>
+<a href="threats.html" class="">Threat Scenarios</a>
+<a href="frameworks.html" class="">Frameworks</a>
+<a href="gaps.html" class="">Gaps & Roadmap</a>
+<a href="changelog.html" class="">Changelog</a>
 </div>
 </nav>
 <div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
-  ⚠ <strong>Author's note:</strong> This site reflects the author's own understanding synthesised from publicly available Microsoft sources. Microsoft updates products and documentation frequently — always verify the latest status directly with Microsoft before making decisions.
+  📌 <strong>Author's note:</strong> This site synthesises the author's own understanding from publicly available Microsoft documentation, official Microsoft Security blog posts, RSAC 2026 announcements, and insights from Microsoft Security professionals and MVPs. It is independent and not affiliated with or endorsed by Microsoft. Microsoft updates products and documentation frequently — always verify current status directly with Microsoft before making architecture or purchasing decisions.
 </div>
 <div class="page">
 
@@ -407,6 +405,16 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
     <div class="card-desc">CSPM and runtime threat protection for AI infrastructure. Monitors model deployments, API access patterns, and agent behaviour. Expanded container security at RSAC 2026 including binary drift and antimalware prevention.</div>
     <div class="tag-row"><span class="tag green">GA</span><span class="tag caution">Container security: Preview</span><span class="tag">Multi-cloud</span></div>
   <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://techcommunity.microsoft.com/blog/microsoftsentinelblog/the-microsoft-copilot-data-connector-for-microsoft-sentinel-is-now-in-public-pre/4491986" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.15);">
+    <div class="card-name">Copilot Data Connector (Sentinel) <span style="color:var(--blue);font-size:11px;">↗</span></div>
+    <div class="card-desc">Ingests Copilot audit logs and activity telemetry into a new <code>CopilotActivity</code> table in Sentinel. Enables analytic rules, workbooks, hunting queries, and automation specifically targeting AI/agent interactions. Record types include: CopilotInteraction, plugin lifecycle (create/update/delete), CopilotPromptBook operations, CopilotForSecurityTrigger, CopilotAgentManagement. Also supports Sentinel data lake for low-cost long-term retention and MCP server integration. <strong>Note: data ingestion costs apply. Prompt content ingested becomes a sensitive artifact — apply field-level masking and access controls on CopilotActivity table.</strong></div>
+    <div class="tag-row"><span class="tag caution">Preview · Feb 2026</span><span class="tag">CopilotActivity table</span><span class="tag warn">⚠ Ingestion costs apply</span><span class="tag warn">⚠ Prompt data sensitivity</span></div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://learn.microsoft.com/en-us/azure/defender-for-cloud/ai-security-posture" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.15);">
+    <div class="card-name">AI Model Scanning (Defender for Cloud) <span style="color:var(--blue);font-size:11px;">↗</span></div>
+    <div class="card-desc">Scans AI models in Azure ML registries and workspaces for malware, unsafe operators, and backdoors across common model formats. Recurring scans surface as security recommendations per model. High-confidence detections generate Defender XDR SOC alerts. CLI integration enables in-pipeline scanning during CI/CD build. Gating capability blocks unsafe models from reaching a registry. New at RSAC 2026.</div>
+    <div class="tag-row"><span class="tag green">GA · RSAC 2026</span><span class="tag">Azure ML</span><span class="tag">Supply Chain</span><span class="tag">CI/CD Gating</span></div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
   <a href="https://learn.microsoft.com/en-us/defender-cloud-apps/ai-agent-protection" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.15);">
     <div class="card-name">Defender for Cloud Apps (CASB) <span style="color:var(--blue);font-size:11px;">↗</span></div>
     <div class="card-desc">Governs how AI agents and MCP tools access SaaS. Discovers shadow AI, governs OAuth permissions, detects over-privileged agent-to-SaaS access. For Copilot Studio specifically: provides real-time protection — blocks tool invocations if a prompt is suspicious. <strong>1-second timeout: if no decision returned in time, tool executes.</strong> Not a guaranteed prevention control.</div>
@@ -419,8 +427,8 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
   <a href="https://www.microsoft.com/en-us/security/business/siem-and-xdr/microsoft-sentinel" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.15);">
     <div class="card-name">Microsoft Sentinel <span style="color:var(--blue);font-size:11px;">↗</span></div>
-    <div class="card-desc">SIEM + SOAR. Ingests AI-specific telemetry: agent behaviour logs, MCP server activity, Copilot interaction signals. New at RSAC 2026: Data Federation via Microsoft Fabric, Playbook Generator with natural language orchestration, MCP Entity Analyzer (GA April), and Sentinel Custom Graphs.</div>
-    <div class="tag-row"><span class="tag green">GA</span><span class="tag blue">MCP Entity Analyzer: GA April</span><span class="tag caution">Data Federation: Preview</span><span class="tag caution">Playbook Generator: Preview</span></div>
+    <div class="card-desc">SIEM + SOAR. Ingests AI-specific telemetry: agent behaviour logs, MCP server activity, Copilot interaction signals. RSAC 2026 updates: Data Federation via Microsoft Fabric, Playbook Generator with natural language orchestration, MCP Entity Analyzer (GA April), Sentinel Custom Graphs, and Connector Builder Agent (Preview March 31). UEBA Behaviors layer now GA. Custom Guidebooks for Copilot Guided Response now GA.</div>
+    <div class="tag-row"><span class="tag green">GA</span><span class="tag blue">MCP Entity Analyzer: GA April</span><span class="tag green">UEBA Behaviors: GA</span><span class="tag green">Custom Guidebooks: GA</span><span class="tag caution">Data Federation: Preview</span><span class="tag caution">Playbook Generator: Preview</span><span class="tag caution">Connector Builder: Preview Mar 31</span></div>
   <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
 </div>
 

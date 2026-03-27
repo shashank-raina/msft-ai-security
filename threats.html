@@ -39,8 +39,7 @@ body::before{content:'';position:fixed;inset:0;
 .msft-logo div:nth-child(4){background:#ffb900;border-radius:1px;}
 .brand-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;
   color:#0d1526;letter-spacing:0.01em;white-space:nowrap;line-height:1.2;}
-.brand-sub{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--text3);
-  letter-spacing:0.06em;}
+
 .nav-links{display:flex;align-items:stretch;height:100%;flex:1;overflow-x:auto;gap:2px;}
 .nav-links::-webkit-scrollbar{display:none;}
 .nav-links a{display:flex;align-items:center;gap:5px;padding:0 12px;
@@ -283,23 +282,22 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <nav class="topnav">
   <div class="nav-brand">
     <div class="msft-logo"><div></div><div></div><div></div><div></div></div>
-    <div><div class="brand-text">Securing AI with Microsoft</div>
-    <div class="brand-sub">SECURITY ARCHITECT GUIDE · 2026</div></div>
+    <div><div class="brand-text">Securing AI with Microsoft</div></div>
   </div>
-  <div class="nav-links"><a href="index.html" class=""><span class="n">00</span>Start Here</a>
-<a href="overview.html" class=""><span class="n">01</span>Overview</a>
-<a href="risk.html" class=""><span class="n">02</span>AI Risk</a>
-<a href="product-map.html" class=""><span class="n">03</span>Product Map</a>
-<a href="identity.html" class=""><span class="n">04</span>Identity & OBO</a>
-<a href="mcp.html" class=""><span class="n">05</span>MCP Ecosystem</a>
-<a href="threats.html" class=" active"><span class="n">06</span>Threat Scenarios</a>
-<a href="frameworks.html" class=""><span class="n">07</span>Frameworks</a>
-<a href="gaps.html" class=""><span class="n">08</span>Gaps & Roadmap</a>
-<a href="changelog.html" class=""><span class="n">✦</span>Changelog</a>
+  <div class="nav-links"><a href="index.html" class="">Start Here</a>
+<a href="overview.html" class="">Overview</a>
+<a href="risk.html" class="">AI Risk</a>
+<a href="product-map.html" class="">Product Map</a>
+<a href="identity.html" class="">Identity & OBO</a>
+<a href="mcp.html" class="">MCP Ecosystem</a>
+<a href="threats.html" class=" active">Threat Scenarios</a>
+<a href="frameworks.html" class="">Frameworks</a>
+<a href="gaps.html" class="">Gaps & Roadmap</a>
+<a href="changelog.html" class="">Changelog</a>
 </div>
 </nav>
 <div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
-  ⚠ <strong>Author's note:</strong> This site reflects the author's own understanding synthesised from publicly available Microsoft sources. Microsoft updates products and documentation frequently — always verify the latest status directly with Microsoft before making decisions.
+  📌 <strong>Author's note:</strong> This site synthesises the author's own understanding from publicly available Microsoft documentation, official Microsoft Security blog posts, RSAC 2026 announcements, and insights from Microsoft Security professionals and MVPs. It is independent and not affiliated with or endorsed by Microsoft. Microsoft updates products and documentation frequently — always verify current status directly with Microsoft before making architecture or purchasing decisions.
 </div>
 <div class="page">
 
@@ -469,6 +467,34 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
     </div>
   </div>
 </div>
+
+<div class="threat-block">
+  <div class="threat-header">
+    <div class="threat-icon">🧬</div>
+    <div><div class="threat-name">6 — AI Model Supply Chain Attack</div></div>
+    <div class="threat-category" style="background:rgba(98,100,167,0.15);color:#a4a8d8;border:1px solid rgba(98,100,167,0.3);">HIGH · PRE-DEPLOYMENT · HARD TO DETECT AT RUNTIME</div>
+  </div>
+  <div class="threat-body">
+    <p>Unlike prompt injection or data leakage which happen at runtime, supply chain attacks happen <strong>before deployment</strong> — in the model sourcing, training, and packaging stages. A compromised model can carry embedded malware or backdoors that activate only under specific conditions, long after the model has passed initial review. Microsoft Defender for Cloud now includes AI Model Scanning to address this.</p>
+    <div class="threat-cols">
+      <div>
+        <div class="threat-col-title">Attack Vectors</div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(98,100,167,0.2);color:#a4a8d8;">A</div><div class="threat-step-text"><strong>Poisoned pretrained model</strong> — attacker publishes a malicious model to Hugging Face or another public registry. Organisation downloads and deploys without scanning. Backdoor activates when specific input conditions are met.</div></div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(98,100,167,0.2);color:#a4a8d8;">B</div><div class="threat-step-text"><strong>Training data poisoning</strong> — adversarial examples injected into training datasets before ingestion. Model learns to behave maliciously for specific inputs while appearing normal in general evaluation.</div></div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(98,100,167,0.2);color:#a4a8d8;">C</div><div class="threat-step-text"><strong>CI/CD pipeline injection</strong> — malicious model artifact injected into the build pipeline before it reaches the Azure ML registry. Bypasses manual review if no automated scanning gate exists.</div></div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(98,100,167,0.2);color:#a4a8d8;">D</div><div class="threat-step-text"><strong>Unsafe ML operators</strong> — models using unsafe serialisation operators (e.g. pickle-based formats) that can execute arbitrary code on deserialization. Common in community models.</div></div>
+      </div>
+      <div>
+        <div class="threat-col-title">Controls</div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>AI Model Scanning (Defender for Cloud)</strong> — scans Azure ML registries and workspaces for malware, unsafe operators, and backdoors. Security recommendations per model resource. Malware detections flow into Defender XDR SOC alerts. GA at RSAC 2026.</div></div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>CLI integration + CI/CD gating</strong> — in-pipeline scanning of model artifacts during build. Gating capability blocks unsafe models from reaching a registry if scan fails.</div></div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>GitHub Advanced Security</strong> — supply chain scanning for ML dependencies (TensorFlow, PyTorch, Langchain) via Defender for Cloud DevOps security integration.</div></div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(252,225,0,0.2);color:var(--caution-text);">⚠</div><div class="threat-step-text"><strong>Gap</strong>: Training data provenance and poisoning detection remain limited in current tooling. Model scanning covers the artifact — not the quality or integrity of training data before it enters the pipeline.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 <div class="page-nav"><a href="identity.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Identity & OBO</span></a><a href="threats.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Threat Scenarios</span></a></div>

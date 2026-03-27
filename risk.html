@@ -39,8 +39,7 @@ body::before{content:'';position:fixed;inset:0;
 .msft-logo div:nth-child(4){background:#ffb900;border-radius:1px;}
 .brand-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;
   color:#0d1526;letter-spacing:0.01em;white-space:nowrap;line-height:1.2;}
-.brand-sub{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--text3);
-  letter-spacing:0.06em;}
+
 .nav-links{display:flex;align-items:stretch;height:100%;flex:1;overflow-x:auto;gap:2px;}
 .nav-links::-webkit-scrollbar{display:none;}
 .nav-links a{display:flex;align-items:center;gap:5px;padding:0 12px;
@@ -283,23 +282,22 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <nav class="topnav">
   <div class="nav-brand">
     <div class="msft-logo"><div></div><div></div><div></div><div></div></div>
-    <div><div class="brand-text">Securing AI with Microsoft</div>
-    <div class="brand-sub">SECURITY ARCHITECT GUIDE · 2026</div></div>
+    <div><div class="brand-text">Securing AI with Microsoft</div></div>
   </div>
-  <div class="nav-links"><a href="index.html" class=""><span class="n">00</span>Start Here</a>
-<a href="overview.html" class=""><span class="n">01</span>Overview</a>
-<a href="risk.html" class=" active"><span class="n">02</span>AI Risk</a>
-<a href="product-map.html" class=""><span class="n">03</span>Product Map</a>
-<a href="identity.html" class=""><span class="n">04</span>Identity & OBO</a>
-<a href="mcp.html" class=""><span class="n">05</span>MCP Ecosystem</a>
-<a href="threats.html" class=""><span class="n">06</span>Threat Scenarios</a>
-<a href="frameworks.html" class=""><span class="n">07</span>Frameworks</a>
-<a href="gaps.html" class=""><span class="n">08</span>Gaps & Roadmap</a>
-<a href="changelog.html" class=""><span class="n">✦</span>Changelog</a>
+  <div class="nav-links"><a href="index.html" class="">Start Here</a>
+<a href="overview.html" class="">Overview</a>
+<a href="risk.html" class=" active">AI Risk</a>
+<a href="product-map.html" class="">Product Map</a>
+<a href="identity.html" class="">Identity & OBO</a>
+<a href="mcp.html" class="">MCP Ecosystem</a>
+<a href="threats.html" class="">Threat Scenarios</a>
+<a href="frameworks.html" class="">Frameworks</a>
+<a href="gaps.html" class="">Gaps & Roadmap</a>
+<a href="changelog.html" class="">Changelog</a>
 </div>
 </nav>
 <div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
-  ⚠ <strong>Author's note:</strong> This site reflects the author's own understanding synthesised from publicly available Microsoft sources. Microsoft updates products and documentation frequently — always verify the latest status directly with Microsoft before making decisions.
+  📌 <strong>Author's note:</strong> This site synthesises the author's own understanding from publicly available Microsoft documentation, official Microsoft Security blog posts, RSAC 2026 announcements, and insights from Microsoft Security professionals and MVPs. It is independent and not affiliated with or endorsed by Microsoft. Microsoft updates products and documentation frequently — always verify current status directly with Microsoft before making architecture or purchasing decisions.
 </div>
 <div class="page">
 
@@ -402,6 +400,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <tr><td><strong>Over-permissioned access</strong></td><td>Agents granted broad access; OBO inherits user's full rights</td><td>IAM / Security</td><td>Entra Agent ID <span class="warn-inline">⚠ preview, Modern Agents only</span></td></tr>
 <tr><td><strong>Shadow AI / plugins</strong></td><td>Business users deploy unsanctioned AI tools and MCP servers outside IT oversight</td><td>IT / CASB</td><td>Defender for Cloud Apps + Entra Internet Access <span class="green-inline">GA Mar 31</span></td></tr>
 <tr><td><strong>MCP tool misuse</strong></td><td>Agents invoke real enterprise tools via MCP — now via official Microsoft MCP server catalog</td><td>AppSec / Security</td><td>Foundry Guardrails <span class="caution-inline">⚠ preview</span> + Defender for Cloud Apps</td></tr>
+<tr><td><strong>AI model supply chain</strong></td><td>Pretrained models from registries (Hugging Face, Azure ML) may carry embedded malware or backdoors. Training data can be poisoned before it reaches the pipeline. Build-time risks that traditional AppSec doesn't cover.</td><td>AppSec / ML Eng</td><td>AI Model Scanning in Defender for Cloud <span class="green-inline">GA · RSAC 2026</span></td></tr>
 <tr><td><strong>Prompt injection / XPIA</strong></td><td>Malicious inputs hijack agent behaviour mid-task</td><td>AppSec / SOC</td><td>Prompt Shields + Entra Internet Access Prompt Injection Protection <span class="green-inline">GA Mar 31</span></td></tr>
 <tr><td><strong>Data leakage</strong></td><td>Sensitive data enters AI context; exfiltrated via outputs or prompts</td><td>DLP / Compliance</td><td>Purview DSPM + Purview DLP for Copilot <span class="green-inline">GA Mar 31</span></td></tr>
 <tr><td><strong>Ownerless agents</strong></td><td>No accountable owner — agents persist indefinitely with no governance review</td><td>IT / IAM</td><td>Power Platform Inventory; AIAgentsInfo Advanced Hunting</td></tr>
