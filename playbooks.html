@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Overview — Securing AI with Microsoft</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f5f7fc;--surface:#ffffff;--surface2:#eef1f8;--surface3:#e4e9f4;
+  --border:#d0d8ec;--border2:#b8c4de;
+  --blue:#0078d4;--blue2:#0063b1;--purple:#6264a7;--purple2:#5a5c9a;
+  --teal:#008575;--teal2:#007a6e;--green:#107c10;--green2:#0e6e0e;
+  --orange:#d83b01;--orange2:#b83200;--gold:#c09020;--gold2:#8a6800;
+  --red:#c50f1f;--warn:rgba(216,59,1,0.07);--warn-border:rgba(216,59,1,0.3);
+  --warn-text:#c23000;--caution:rgba(140,90,0,0.07);
+  --caution-border:rgba(140,90,0,0.3);--caution-text:#6e4500;
+  --text:#0d1526;--text2:#2e3d5e;--text3:#5a6a8a;--nav-h:52px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:15.5px;line-height:1.8;padding-top:var(--nav-h);color:var(--text);}
+body::before{content:'';position:fixed;inset:0;
+  background-image:linear-gradient(rgba(0,80,180,0.05) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(0,80,180,0.05) 1px,transparent 1px);
+  background-size:48px 48px;pointer-events:none;z-index:0;}
+
+/* TOP NAV */
+.topnav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);
+  background:rgba(245,247,252,0.97);border-bottom:1px solid var(--border2);box-shadow:0 1px 10px rgba(0,0,0,0.07);
+  backdrop-filter:blur(12px);z-index:200;
+  display:flex;align-items:center;padding:0 32px;gap:0;}
+.nav-brand{display:flex;align-items:center;gap:8px;margin-right:20px;flex-shrink:0;}
+.msft-logo{width:18px;height:18px;display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.msft-logo div:nth-child(1){background:#f25022;border-radius:1px;}
+.msft-logo div:nth-child(2){background:#7fba00;border-radius:1px;}
+.msft-logo div:nth-child(3){background:#00a4ef;border-radius:1px;}
+.msft-logo div:nth-child(4){background:#ffb900;border-radius:1px;}
+.brand-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;
+  color:#0d1526;letter-spacing:0.01em;white-space:nowrap;line-height:1.2;}
+
+.nav-links{display:flex;align-items:stretch;height:100%;flex:1;overflow-x:auto;gap:2px;}
+.nav-links::-webkit-scrollbar{display:none;}
+.nav-links a{display:flex;align-items:center;gap:5px;padding:0 12px;
+  text-decoration:none;color:#1a2a4a;font-size:13px;font-weight:600;
+  border-bottom:2px solid transparent;white-space:nowrap;
+  transition:color 0.15s,border-color 0.15s;}
+.nav-links a:hover{color:#0d1526;}
+.nav-links a.active{color:var(--blue);border-bottom-color:var(--blue);}
+.nav-links a .n{font-family:'JetBrains Mono',monospace;font-size:11px;
+  color:#4a6a9a;letter-spacing:0.02em;font-weight:700;}
+.nav-links a.active .n{color:var(--blue);}
+
+
+/* LAYOUT */
+.page{max-width:940px;margin:0 auto;padding:52px 40px 100px;position:relative;z-index:1;}
+
+/* TYPOGRAPHY */
+.section-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;
+  color:#004a9e;text-transform:uppercase;
+  margin:48px 0 16px;
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,120,212,0.07);
+  border:1px solid rgba(0,120,212,0.2);
+  border-radius:6px;
+  padding:5px 12px;
+  font-weight:500;}
+.section-label::before{content:'';display:inline-block;
+  width:6px;height:6px;border-radius:50%;
+  background:var(--blue);flex-shrink:0;}
+h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:44px;font-weight:800;
+  line-height:1.06;letter-spacing:-0.03em;color:#0d1526;margin-bottom:18px;}
+h1 span{background:linear-gradient(135deg,var(--blue),#004fa8);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:26px;font-weight:700;
+  color:#0d1526;letter-spacing:-0.02em;margin:8px 0 14px;line-height:1.2;
+  padding-left:14px;border-left:3px solid var(--blue);}
+h2:first-child{margin-top:0;}
+h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:700;
+  color:#0d1526;margin:32px 0 12px;
+  padding-bottom:8px;border-bottom:1px solid var(--border2);}
+h4{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;
+  color:var(--text);margin:20px 0 6px;}
+p{color:#2e3d5e;margin-bottom:14px;font-weight:400;font-size:15px;}
+p strong{color:#0d1526;font-weight:600;}
+p:last-child{margin-bottom:0;}
+a{color:var(--blue);text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+/* PAGE HERO */
+.hero{padding:40px 0 36px;border-bottom:1px solid var(--border);margin-bottom:40px;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;
+  background:#ffffff;border:1px solid var(--border2);
+  border-radius:100px;padding:4px 12px 4px 8px;
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  color:#3a4a6a;letter-spacing:0.08em;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--blue);
+  animation:blink 1.5s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;}
+.chip{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.07em;
+  padding:4px 10px;border-radius:4px;border:1px solid;}
+.chip-blue{background:#0a1e38;border-color:#2060aa;color:#90c8ff;}
+.chip-warn{background:#2a0e06;border-color:#882000;color:#ffb090;}
+.chip-caution{background:#221400;border-color:#7a5000;color:#ffcc60;}
+.chip-green{background:#061a06;border-color:#1e6a1e;color:#80e880;}
+
+/* CALLOUTS */
+.callout{border-radius:10px;padding:18px 20px;margin:20px 0;border:1px solid;}
+.callout-warn{background:#fff4f0;border-color:rgba(216,59,1,0.3);}
+.callout-caution{background:#fffbf0;border-color:rgba(140,90,0,0.3);}
+.callout-info{background:#f0f6ff;border-color:rgba(0,120,212,0.25);}
+.callout-green{background:#f0fbf0;border-color:rgba(16,124,16,0.25);}
+.callout-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;
+  margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.callout-warn .callout-title{color:#b83000;}
+.callout-caution .callout-title{color:#6e4500;}
+.callout-info .callout-title{color:var(--blue);}
+.callout-green .callout-title{color:#0a5a0a;}
+.callout p{font-size:14px;margin-bottom:0;}
+.callout-warn p{color:#6a2000;}
+.callout-caution p{color:#5a3800;}
+.callout-info p{color:#003a80;}
+.callout-green p{color:#0a4a0a;}
+
+/* CARDS */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:14px;margin:20px 0;}
+.card{background:#ffffff;border:1px solid var(--border);
+  border-radius:10px;padding:18px;position:relative;overflow:hidden;
+  transition:border-color 0.2s,transform 0.15s,box-shadow 0.15s;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
+.card:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,120,212,0.12);border-color:var(--blue2);}
+.card-link{text-decoration:none;color:inherit;display:block;position:relative;}
+.card-link .card{position:relative;}
+.card-link:hover{text-decoration:none;}
+
+.card-link .card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.card-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;
+  color:#0d1526;margin-bottom:8px;}
+.card-sub{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--text3);
+  letter-spacing:0.08em;margin-bottom:6px;}
+.card-desc{font-size:13px;color:#2e3d5e;margin:0 0 12px;font-weight:400;line-height:1.6;}
+.tag-row{display:flex;flex-wrap:wrap;gap:5px;}
+.tag{font-family:'JetBrains Mono',monospace;font-size:9px;padding:3px 8px;border-radius:4px;
+  background:#1a2035;border:1px solid #2d3a55;
+  color:#c8d8f0;letter-spacing:0.04em;}
+.tag.warn{background:#2a0e06;border-color:#882000;color:#ffb090;}
+.tag.caution{background:#221400;border-color:#7a5000;color:#ffcc60;}
+.tag.green{background:#061a06;border-color:#1e6a1e;color:#80e880;}
+.tag.blue{background:#0a1e38;border-color:#2060aa;color:#90c8ff;}
+.tag.purple{background:#10102a;border-color:#4040a0;color:#b0b0ff;}
+
+/* TABLES */
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:13px;}
+th{background:#e8edf8;border:1px solid var(--border2);padding:10px 14px;
+  text-align:left;font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:700;
+  color:#0d1526;letter-spacing:0.02em;}
+td{border:1px solid var(--border);padding:9px 14px;color:#2e3d5e;
+  font-weight:400;vertical-align:top;line-height:1.55;background:#ffffff;}
+tr:hover td{background:#f5f8ff;}
+td strong{color:#0d1526;font-weight:600;}
+td code{font-family:'JetBrains Mono',monospace;font-size:10px;
+  background:#eef1f8;border:1px solid var(--border2);
+  border-radius:3px;padding:1px 5px;color:#004a9e;}
+.warn-inline{color:#d05030;font-family:'JetBrains Mono',monospace;font-size:10px;}
+.caution-inline{color:#c0820a;font-family:'JetBrains Mono',monospace;font-size:10px;}
+.green-inline{color:#2a9a2a;font-family:'JetBrains Mono',monospace;font-size:10px;}
+.severity-critical{color:#e84040;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;}
+.severity-high{color:#e87050;font-family:'JetBrains Mono',monospace;font-size:10px;}
+.severity-medium{color:#c8902a;font-family:'JetBrains Mono',monospace;font-size:10px;}
+
+/* FLOW */
+.flow{display:flex;align-items:stretch;border:1px solid var(--border2);
+  border-radius:10px;overflow:hidden;margin:20px 0;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
+.flow-step{flex:1;padding:14px 16px;border-right:1px solid var(--border2);
+  position:relative;background:#ffffff;transition:background 0.2s;}
+.flow-step:last-child{border-right:none;}
+.flow-step:hover{background:#eef1f8;}
+.flow-num{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--text3);
+  letter-spacing:0.1em;margin-bottom:6px;}
+.flow-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;
+  color:#0d1526;margin-bottom:4px;}
+.flow-desc{font-size:12px;color:#3a4a6a;font-weight:400;line-height:1.4;}
+.flow-arrow{position:absolute;right:-10px;top:50%;transform:translateY(-50%);
+  color:var(--text3);font-size:14px;z-index:2;}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border);margin:32px 0;}
+
+/* PAGE NAV (prev/next) */
+.page-nav{display:flex;justify-content:space-between;align-items:center;
+  margin-top:60px;padding-top:24px;border-top:1px solid var(--border);}
+.page-nav a{display:flex;align-items:center;gap:8px;padding:10px 16px;
+  background:#ffffff;border:1px solid var(--border2);border-radius:8px;
+  color:#3a4a6a;text-decoration:none;font-size:12px;transition:all 0.15s;box-shadow:0 1px 4px rgba(0,0,0,0.05);}
+.page-nav a:hover{border-color:var(--blue);color:var(--blue);}
+.page-nav-label{font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:var(--text2);letter-spacing:0.08em;display:block;margin-bottom:2px;}
+.page-nav-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;color:#0d1526;}
+.page-nav-spacer{flex:1;}
+
+/* MISC */
+code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#eef1f8;
+  border:1px solid var(--border2);border-radius:4px;padding:2px 6px;color:#004a9e;}
+.pill-list{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;}
+.pill{display:flex;align-items:center;gap:6px;background:#ffffff;
+  border:1px solid var(--border2);border-radius:100px;padding:5px 12px 5px 8px;
+  font-size:12px;color:#2e3d5e;font-weight:400;box-shadow:0 1px 3px rgba(0,0,0,0.05);}
+.pill-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.obo-flow{display:flex;flex-direction:column;border:1px solid var(--border2);
+  border-radius:10px;overflow:hidden;margin:20px 0;}
+.obo-row{display:flex;align-items:stretch;border-bottom:1px solid var(--border2);}
+.obo-row:last-child{border-bottom:none;}
+.obo-label{width:130px;flex-shrink:0;background:#eef1f8;padding:12px 14px;
+  border-right:1px solid var(--border2);font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:0.08em;color:#3a4a6a;
+  display:flex;align-items:center;text-transform:uppercase;}
+.obo-content{flex:1;padding:12px 16px;font-size:13px;color:#2e3d5e;font-weight:400;}
+.obo-content strong{color:#0d1526;font-weight:600;}
+.mcp-layer{border:1px solid var(--border2);border-radius:8px;margin:8px 0;overflow:hidden;}
+.mcp-layer-header{padding:10px 16px;background:#eef1f8;
+  border-bottom:1px solid var(--border2);display:flex;align-items:center;gap:10px;}
+.mcp-layer-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;color:#0d1526;}
+.mcp-layer-body{padding:12px 16px;display:flex;flex-wrap:wrap;gap:8px;}
+.mcp-item{background:#ffffff;border:1px solid var(--border2);
+  border-radius:6px;padding:6px 12px;font-size:12px;color:#2e3d5e;font-weight:400;}
+.mcp-item.risk{background:rgba(216,59,1,0.08);border-color:rgba(216,59,1,0.25);color:var(--warn-text);}
+.mcp-item.control{background:rgba(0,120,212,0.07);border-color:rgba(0,120,212,0.25);color:#004a9e;}
+.threat-block{background:#ffffff;border:1px solid var(--border2);
+  border-radius:10px;margin:24px 0;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
+.threat-header{padding:14px 20px;border-bottom:1px solid var(--border2);
+  background:#f5f7fc;display:flex;align-items:center;gap:12px;}
+.threat-icon{font-size:22px;}
+.threat-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;color:#0d1526;}
+.threat-category{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 8px;
+  border-radius:3px;letter-spacing:0.06em;margin-left:auto;}
+.threat-body{padding:20px;}
+.threat-cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.threat-col-title{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;
+  color:var(--text2);margin-bottom:10px;text-transform:uppercase;}
+.threat-step{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start;}
+.threat-step-num{width:20px;height:20px;border-radius:50%;display:flex;
+  align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;
+  font-size:9px;font-weight:500;flex-shrink:0;margin-top:1px;}
+.threat-step-text{font-size:13px;color:#2e3d5e;font-weight:400;}
+.nist-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0;}
+.nist-card{background:#ffffff;border:1px solid var(--border);
+  border-radius:10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.06);
+  transition:transform 0.15s,box-shadow 0.15s,border-color 0.15s;}
+a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,120,212,0.12);border-color:var(--blue2);}
+.nist-header{padding:12px 16px;display:flex;align-items:center;gap:10px;}
+.nist-badge{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;
+  padding:4px 10px;border-radius:6px;letter-spacing:0.05em;}
+.nist-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;color:#0d1526;}
+.nist-body{padding:0 16px 16px;}
+.nist-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border2);font-size:13px;}
+.nist-item:last-child{border-bottom:none;}
+.nist-control{color:#2e3d5e;font-weight:400;flex:1;}
+.nist-tool{font-family:'JetBrains Mono',monospace;font-size:10px;color:#004a9e;white-space:nowrap;}
+.nist-gap{font-family:'JetBrains Mono',monospace;font-size:10px;color:#b83000;white-space:nowrap;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:#e8edf8;}
+::-webkit-scrollbar-thumb{background:#b0bcce;border-radius:3px;}
+.footer{text-align:center;margin-top:60px;padding-top:24px;border-top:1px solid var(--border2);
+  font-family:'JetBrains Mono',monospace;font-size:10px;color:#5a6a8a;
+  letter-spacing:0.05em;line-height:1.9;}
+@media(max-width:700px){
+  .topnav{padding:0 16px;}
+  .page{padding:32px 20px 80px;}
+  .threat-cols{grid-template-columns:1fr;}
+  .nist-grid{grid-template-columns:1fr;}
+  .flow{flex-direction:column;}
+  .flow-arrow{display:none;}
+  h1{font-size:26px;}
+}
+
+/* HAMBURGER */
+.hamburger{display:none;background:none;border:none;cursor:pointer;
+  padding:6px;flex-direction:column;gap:5px;margin-left:auto;flex-shrink:0;}
+.hamburger span{display:block;width:22px;height:2px;background:#0d1526;
+  border-radius:2px;transition:all 0.2s;}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.mobile-drawer{display:none;position:fixed;top:var(--nav-h);left:0;right:0;
+  background:rgba(245,247,252,0.98);border-bottom:1px solid var(--border2);
+  backdrop-filter:blur(16px);z-index:199;padding:12px 20px 20px;
+  flex-direction:column;gap:2px;box-shadow:0 8px 32px rgba(0,0,0,0.1);}
+.mobile-drawer.open{display:flex;}
+.mobile-drawer a{display:block;padding:10px 12px;border-radius:8px;
+  font-size:14px;font-weight:600;color:#1a2a4a;text-decoration:none;
+  transition:background 0.12s;}
+.mobile-drawer a:hover,.mobile-drawer a.active{background:#f0f6ff;color:var(--blue);}
+.mobile-drawer-overlay{display:none;position:fixed;inset:0;z-index:198;
+  background:rgba(0,0,0,0.2);}
+.mobile-drawer-overlay.open{display:block;}
+@media(max-width:900px){
+  .nav-links{display:none !important;}
+  .hamburger{display:flex;}
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-brand">
+    <div class="msft-logo"><div></div><div></div><div></div><div></div></div>
+    <div><div class="brand-text">Securing AI with Microsoft</div></div>
+  </div>
+  <div class="nav-links">
+    <a href="index.html" class="">Start Here</a>
+    <a href="overview.html" class="">Overview</a>
+    <a href="risk.html" class="">AI Risk</a>
+    <a href="product-map.html" class="">Products</a>
+    <a href="identity.html" class="">Identity</a>
+    <a href="mcp.html" class="">MCP</a>
+    <a href="threats.html" class="">Threats</a>
+    <a href="frameworks.html" class="">Frameworks</a>
+    <a href="gaps.html" class="">Gaps</a>
+    <a href="changelog.html" class="">Changelog</a>
+    <a href="<a href="contact.html" class="">Contact</a>
+    <a href="playbooks.html"" class=" active">Playbooks</a>
+  </div>
+  <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+
+<div class="mobile-drawer-overlay" id="drawerOverlay"></div>
+<div class="mobile-drawer" id="mobileDrawer">
+<a href="index.html" class="">Start Here</a>
+    <a href="overview.html" class="">Overview</a>
+    <a href="risk.html" class="">AI Risk</a>
+    <a href="product-map.html" class="">Products</a>
+    <a href="identity.html" class="">Identity</a>
+    <a href="mcp.html" class="">MCP</a>
+    <a href="threats.html" class="">Threats</a>
+    <a href="frameworks.html" class="">Frameworks</a>
+    <a href="gaps.html" class="">Gaps</a>
+    <a href="changelog.html" class="">Changelog</a>
+    <a href="<a href="contact.html" class="">Contact</a>
+    <a href="playbooks.html"" class="active">Playbooks</a>
+</div>
+</nav>
+<div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
+  📌 <strong>Author's note:</strong> This site synthesises the author's own understanding from publicly available Microsoft documentation, official Microsoft Security blog posts, RSAC 2026 announcements, and insights from Microsoft Security professionals and MVPs. It is independent and not affiliated with or endorsed by Microsoft. Microsoft updates products and documentation frequently — always verify current status directly with Microsoft before making architecture or purchasing decisions.
+</div>
+
+<div class="page">
+
+<div class="hero">
+  <div class="hero-badge"><div class="live-dot"></div>PRACTICAL PLAYBOOKS · MARCH 2026</div>
+  <h1>From architecture<br><span>to action</span></h1>
+  <p style="color:#2e3d5e;font-size:17px;font-weight:400;max-width:640px;line-height:1.7;">
+    Step-by-step security checklists for the most common AI security tasks. Each playbook distils field experience into the minimum viable set of controls — what to do, in what order, and what to watch for.
+  </p>
+  <div class="hero-chips">
+    <div class="chip chip-blue">4 PLAYBOOKS</div>
+    <div class="chip chip-green">Based on field research</div>
+    <div class="chip chip-warn">⚠ Verify steps with Microsoft docs — UIs change</div>
+  </div>
+</div>
+
+<style>
+.pb-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:32px;}
+.pb-nav-card{background:#ffffff;border:1.5px solid var(--border);border-radius:10px;
+  padding:16px 18px;cursor:pointer;transition:all 0.15s;text-align:left;}
+.pb-nav-card:hover,.pb-nav-card.active{border-color:var(--blue);background:#f0f6ff;
+  box-shadow:0 4px 16px rgba(0,120,212,0.1);}
+.pb-nav-num{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--blue);
+  letter-spacing:0.08em;margin-bottom:6px;}
+.pb-nav-title{font-size:13px;font-weight:700;color:#0d1526;margin-bottom:4px;}
+.pb-nav-meta{font-size:11px;color:var(--text3);}
+.pb-panel{display:none;}
+.pb-panel.active{display:block;}
+.pb-header{background:#0d1526;border-radius:12px;padding:24px 28px;margin-bottom:24px;}
+.pb-header-eyebrow{font-family:'JetBrains Mono',monospace;font-size:9px;color:#5070a0;
+  letter-spacing:0.1em;margin-bottom:10px;}
+.pb-header-title{font-size:22px;font-weight:800;color:#ffffff;margin-bottom:8px;line-height:1.2;}
+.pb-header-sub{font-size:13px;color:#8090b8;line-height:1.6;max-width:580px;}
+.pb-meta-row{display:flex;gap:16px;margin-top:14px;flex-wrap:wrap;}
+.pb-meta-item{font-family:'JetBrains Mono',monospace;font-size:9px;
+  padding:3px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);color:#8090b8;}
+.pb-meta-item.green{border-color:rgba(96,208,96,0.3);color:#60d080;}
+.pb-meta-item.warn{border-color:rgba(247,165,112,0.3);color:#f0a060;}
+
+/* STEPS */
+.pb-section{margin-bottom:28px;}
+.pb-section-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;
+  color:var(--blue);background:rgba(0,120,212,0.07);border:1px solid rgba(0,120,212,0.15);
+  border-radius:4px;padding:3px 10px;display:inline-block;margin-bottom:14px;}
+.step{display:flex;gap:14px;margin-bottom:10px;align-items:flex-start;}
+.step-num{width:28px;height:28px;border-radius:50%;background:#0d1526;color:#ffffff;
+  font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.step-num.warn{background:rgba(216,59,1,0.15);color:var(--warn-text);}
+.step-num.ok{background:rgba(16,124,16,0.12);color:var(--green2);}
+.step-body{flex:1;}
+.step-title{font-size:13px;font-weight:700;color:#0d1526;margin-bottom:3px;}
+.step-desc{font-size:12px;color:#2e3d5e;line-height:1.6;}
+.step-code{font-family:'JetBrains Mono',monospace;font-size:10px;background:#f0f4fb;
+  border:1px solid var(--border);border-radius:5px;padding:8px 12px;margin-top:8px;
+  color:#0d1526;line-height:1.8;overflow-x:auto;white-space:pre;
+  max-width:100%;display:block;-webkit-overflow-scrolling:touch;}
+.step-warn{background:rgba(252,225,0,0.08);border:1px solid rgba(252,225,0,0.25);
+  border-radius:6px;padding:8px 12px;margin-top:8px;font-size:11px;color:#6a4a00;line-height:1.5;}
+.step-tip{background:rgba(0,120,212,0.05);border:1px solid rgba(0,120,212,0.15);
+  border-radius:6px;padding:8px 12px;margin-top:8px;font-size:11px;color:#00417a;line-height:1.5;}
+
+/* CHECKLIST */
+.checklist{background:#f8faff;border:1.5px solid var(--border);border-radius:10px;padding:16px 18px;margin-top:20px;}
+.checklist-title{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--blue);
+  letter-spacing:0.08em;margin-bottom:12px;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:6px 0;
+  border-bottom:1px solid var(--border);font-size:12px;color:#2e3d5e;line-height:1.5;}
+.check-item:last-child{border-bottom:none;}
+.check-item input{margin-top:3px;accent-color:var(--blue);width:14px;height:14px;flex-shrink:0;}
+.check-label{flex:1;}
+.check-caveat{font-size:10px;color:var(--text3);display:block;margin-top:2px;
+  font-family:'JetBrains Mono',monospace;}
+</style>
+
+<!-- PLAYBOOK NAV -->
+<div class="pb-grid">
+  <div class="pb-nav-card active" onclick="showPlaybook('pb1',this)">
+    <div class="pb-nav-num">PLAYBOOK 01</div>
+    <div class="pb-nav-title">Audit Your Copilot Studio Estate</div>
+    <div class="pb-nav-meta">~30 min · Copilot Admin · No extra licensing</div>
+  </div>
+  <div class="pb-nav-card" onclick="showPlaybook('pb2',this)">
+    <div class="pb-nav-num">PLAYBOOK 02</div>
+    <div class="pb-nav-title">Secure a New Copilot Studio Agent</div>
+    <div class="pb-nav-meta">~45 min · Power Platform Maker + Admin · Managed Environments required</div>
+  </div>
+  <div class="pb-nav-card" onclick="showPlaybook('pb3',this)">
+    <div class="pb-nav-num">PLAYBOOK 03</div>
+    <div class="pb-nav-title">Set Up the Security Dashboard for AI</div>
+    <div class="pb-nav-meta">~2 hrs · Defender Admin + Power Platform Admin · Agent 365 or E7 required</div>
+  </div>
+  <div class="pb-nav-card" onclick="showPlaybook('pb4',this)">
+    <div class="pb-nav-num">PLAYBOOK 04</div>
+    <div class="pb-nav-title">Respond to a Suspected Agent Compromise</div>
+    <div class="pb-nav-meta">~1 hr · Security Engineer · Sentinel + Defender required</div>
+  </div>
+</div>
+
+<!-- ═══════════════ PLAYBOOK 1 ═══════════════ -->
+<div class="pb-panel active" id="pb1">
+  <div class="pb-header">
+    <div class="pb-header-eyebrow">PLAYBOOK 01</div>
+    <div class="pb-header-title">Audit Your Copilot Studio Estate in 30 Minutes</div>
+    <div class="pb-header-sub">Find no-auth agents, overly shared agents, ownerless agents, and maker credential risks — using only KQL in Microsoft Defender Advanced Hunting. No extra licensing required beyond Defender.</div>
+    <div class="pb-meta-row">
+      <span class="pb-meta-item green">✓ Works for Classic & Modern Agents</span>
+      <span class="pb-meta-item green">✓ No extra licensing</span>
+      <span class="pb-meta-item warn">⚠ Requires AI Agent Inventory enabled</span>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">PREREQUISITE</div>
+    <div class="step">
+      <div class="step-num">P</div>
+      <div class="step-body">
+        <div class="step-title">Enable AI Agent Inventory</div>
+        <div class="step-desc">In Microsoft Defender portal → Settings → Cloud Apps → Copilot Studio AI Agents → enable. Then in Power Platform Admin Center → Security → Threat Detection → enable Microsoft Defender — Copilot Studio AI Agents. This is a dual-admin setup requiring both Defender admin and Power Platform admin.</div>
+        <div class="step-warn">⚠ Takes up to 2 hours for initial data population in the AIAgentsInfo table.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STEP 1 — FIND NO-AUTH AGENTS</div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Run this KQL in Defender Advanced Hunting</div>
+        <div class="step-desc">Finds published agents with no authentication configured — anyone with the link can chat with them.</div>
+        <div class="step-code">AIAgentsInfo
+| summarize arg_max(Timestamp, *) by AIAgentId
+| where AgentStatus == "Published"
+| where UserAuthenticationType == "None"
+| project AIAgentName, CreatorAccountUpn, OwnerAccountUpns,
+    AgentCreationTime, UserAuthenticationType</div>
+        <div class="step-warn">⚠ Any result here is a critical finding. A no-auth published agent is accessible to anyone with the link — including external users if the agent is published to a website.</div>
+        <div class="step-desc" style="margin-top:12px;font-weight:600;">Also run this change-detection query — use as a Sentinel Analytics Rule to alert the moment any agent is switched to no-auth:</div>
+        <div class="step-code">// Alert when UserAuthenticationType changes to "None"
+AIAgentsInfo
+| summarize arg_max(Timestamp, *) by AIAgentId
+| where AgentStatus == "Published"
+| order by AIAgentName
+| extend PreviousAuthType = prev(UserAuthenticationType, 1)
+| where UserAuthenticationType == "None"
+    and PreviousAuthType != "None"
+| project AIAgentName, PreviousAuthType,
+    UserAuthenticationType,
+    ReportId = tostring(AIAgentId), Timestamp</div>
+        <div class="step-tip">💡 Save this as a Sentinel Analytics Rule to get an incident the moment a published agent is downgraded to no-auth — even if the change was made by someone who isn't the agent owner.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STEP 2 — FIND OWNERLESS AGENTS</div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Find agents with no accountable owner</div>
+        <div class="step-desc">Agents without an owner lack accountability — no one is responsible for reviewing or decommissioning them.</div>
+        <div class="step-code">AIAgentsInfo
+| summarize arg_max(Timestamp, *) by AIAgentId
+| where AgentStatus == "Published"
+| where isempty(OwnerAccountUpns)
+| project AIAgentName, CreatorAccountUpn,
+    AgentCreationTime, AgentStatus</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STEP 3 — FIND ORG-WIDE SHARED AGENTS</div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Identify agents shared with the entire organisation</div>
+        <div class="step-desc">Org-wide sharing means every employee can interact with the agent. When combined with maker credentials this is critical — the maker's privileges are extended to everyone.</div>
+        <div class="step-code">AIAgentsInfo
+| summarize arg_max(Timestamp, *) by AIAgentId
+| where AgentStatus == "Published"
+| where SharedWithOrganization == true
+| project AIAgentName, CreatorAccountUpn,
+    OwnerAccountUpns, UserAuthenticationType</div>
+        <div class="step-warn">⚠ Cross-reference this list with Step 4 (maker credentials). Any agent that is both org-wide shared AND uses maker credentials is your highest blast-radius risk.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STEP 4 — IDENTIFY MAKER CREDENTIAL RISK</div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">Find agents using maker credentials (Classic agents with connected services)</div>
+        <div class="step-desc">Classic Copilot Studio agents authenticate connected services (SharePoint, Outlook etc) using the builder's credentials — not the end user's. Review the creator of each published agent to assess blast radius.</div>
+        <div class="step-code">let base = AIAgentsInfo
+| summarize arg_max(Timestamp, *) by AIAgentId
+| where AgentStatus == "Published";
+let directActions = base
+| mv-expand detail = AgentToolsDetails
+| where detail.action.connectionProperties.mode == "Maker"
+| extend ActionType = "FromTools", Action = detail.action
+| project-reorder AgentCreationTime, AIAgentId, AIAgentName,
+    UserAuthenticationType, CreatorAccountUpn;
+let topicActions = base
+| mv-expand topic = AgentTopicsDetails
+| extend topicActionsArray = topic.beginDialog.actions
+| mv-expand Action = topicActionsArray
+| where Action.connectionProperties.mode == "Maker"
+| extend ActionType = "FromTopic"
+| project-reorder AgentCreationTime, AIAgentId, AIAgentName,
+    AgentStatus, CreatorAccountUpn, OwnerAccountUpns, Action;
+directActions
+| union topicActions
+| sort by AIAgentId, Timestamp desc</div>
+        <div class="step-tip">💡 This query checks both AgentToolsDetails and AgentTopicsDetails — more precise than checking only UserAuthenticationType. Prioritise agents created by high-privilege users (Global Admins, SharePoint Admins).</div>
+      </div>
+    </div>
+  </div>
+
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STEP 4b — FIND APP REGISTRATION AGENTS CALLING GRAPH API</div>
+    <div class="step">
+      <div class="step-num warn">4b</div>
+      <div class="step-body">
+        <div class="step-title">Detect agents using Entra App Registrations to call Microsoft Graph</div>
+        <div class="step-desc">Finds agents with HTTP Request actions calling graph.microsoft.com or management.azure.com. Delegated permissions = low risk. Application permissions (no user context, tenant-wide access, admin consent required) = very high risk. Check each result to determine which pattern is in use.</div>
+        <div class="step-code">AIAgentsInfo
+| summarize arg_max(Timestamp, *) by AIAgentId
+| where AgentStatus != "Deleted"
+| mvexpand Topic = AgentTopicsDetails
+| where Topic has "HttpRequestAction"
+| extend TopicActions = Topic.beginDialog.actions
+| mvexpand action = TopicActions
+| where action['$kind'] == "HttpRequestAction"
+| extend Url = tostring(action.url.literalValue)
+| extend ParsedUrl = parse_url(Url)
+| extend Host = tostring(ParsedUrl["Host"])
+| where Host has_any("graph.microsoft.com", "management.azure.com")
+| project-reorder AgentCreationTime, AIAgentId, AIAgentName,
+    ParsedUrl, Url, Host, AgentStatus,
+    CreatorAccountUpn, OwnerAccountUpns</div>
+        <div class="step-warn">⚠ Application permissions agents have no user context and can access data across the entire tenant. If you find any, verify admin consent was intentional and review the granted scopes immediately.</div>
+      </div>
+    </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STEP 5 — PORTAL COUNT RECONCILIATION</div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <div class="step-title">Cross-check inventory counts</div>
+        <div class="step-desc">Compare agent counts across three portals — they will likely differ. Use the AIAgentsInfo table as your most reliable source.</div>
+        <div class="step-code">// Total agents in AIAgentsInfo
+AIAgentsInfo
+| summarize arg_max(Timestamp, *) by AIAgentId
+| summarize
+    Total = count(),
+    Published = countif(AgentStatus == "Published"),
+    Classic = countif(AgentType == "Classic"),
+    Modern = countif(AgentType == "Modern")</div>
+        <div class="step-warn">⚠ Known issue: Agent 365 portal, Security Dashboard for AI, and Entra Agent ID portal show different counts. Microsoft has confirmed this is in progress. Trust the KQL table for detailed audit work.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="checklist">
+    <div class="checklist-title">AUDIT CHECKLIST</div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">AI Agent Inventory enabled and data populated<span class="check-caveat">Both Defender admin and Power Platform admin steps completed</span></div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">No-auth agents identified and remediated<span class="check-caveat">Each should have Entra ID auth or be unpublished</span></div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Ownerless agents reviewed and assigned<span class="check-caveat">Every published agent should have an accountable owner</span></div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Org-wide shared agents reviewed<span class="check-caveat">Confirm each has legitimate business justification</span></div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">High-privilege maker credentials identified<span class="check-caveat">Agents built by admins with org-wide sharing = critical priority</span></div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Findings documented for remediation tracking</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Change-detection KQL saved as Sentinel Analytics Rule<span class="check-caveat">Alerts on any agent being switched to no-auth, even by non-owners</span></div></div>
+  </div>
+
+  <div class="step-tip" style="margin-top:16px;">💡 <strong>Community Queries tip:</strong> In Defender Advanced Hunting → Community queries, there is a dedicated <strong>AI Agents</strong> section containing multiple queries created by the Microsoft Product Group. Check this section for the latest detection queries beyond what's listed here.</div>
+</div>
+
+<!-- ═══════════════ PLAYBOOK 2 ═══════════════ -->
+<div class="pb-panel" id="pb2">
+  <div class="pb-header">
+    <div class="pb-header-eyebrow">PLAYBOOK 02</div>
+    <div class="pb-header-title">Secure a New Copilot Studio Agent Before Publishing</div>
+    <div class="pb-header-sub">Minimum security configuration for any new Copilot Studio agent — before it goes live. Covers authentication, sharing controls, MCP tool risk, and what to tell the maker.</div>
+    <div class="pb-meta-row">
+      <span class="pb-meta-item warn">⚠ Classic Agents: limited controls</span>
+      <span class="pb-meta-item green">✓ Modern Agents: full Entra stack</span>
+      <span class="pb-meta-item">Managed Environments required</span>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">BEFORE THE MAKER STARTS BUILDING</div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Enable Managed Environments in Power Platform</div>
+        <div class="step-desc">Power Platform Admin Center → Environments → select environment → Enable Managed Environments. This is the prerequisite for all governance controls including sharing limits and DLP policies.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Set sharing limits before agents are built</div>
+        <div class="step-desc">In Power Platform Admin Center → Managed Environments → Sharing limits → configure who makers can share agents with. Setting this before building prevents org-wide sharing by default.</div>
+        <div class="step-tip">💡 Recommend: restrict to specific security groups by default. Require explicit approval for org-wide sharing.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Brief the maker on maker credentials risk</div>
+        <div class="step-desc">When a maker adds a connector (SharePoint, Outlook, Teams) to a Classic agent, that connector authenticates as the maker — not the end user. Every user who interacts with the agent effectively acts with the maker's privileges. High-privilege makers (Global Admins, SharePoint Admins) should not build agents that access corporate data.</div>
+        <div class="step-warn">⚠ This is a build-time decision that cannot be fully mitigated after deployment. The right person needs to build the agent.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">DURING BUILD</div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">Configure authentication — never leave as "No authentication"</div>
+        <div class="step-desc">In Copilot Studio → Settings → Security → Authentication → select "Authenticate with Microsoft" for internal agents. Enable "Require users to sign in". Classic agents: this is the primary identity control available. Modern agents: this plus Entra Agent ID controls.</div>
+        <div class="step-warn">⚠ Copilot Studio shows a warning at publish time if authentication is set to None — but makers can bypass it. Administrators can enforce this at the environment level via data policies.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <div class="step-title">Review MCP tools carefully before adding</div>
+        <div class="step-desc">Every MCP tool added to a Classic agent uses maker credentials. Each tool expands the blast radius. For each tool ask: (a) does this tool need to authenticate as the maker? (b) could a malicious prompt abuse this tool to exfiltrate data? (c) is there a safer connector alternative?</div>
+        <div class="step-tip">💡 Use built-in connectors instead of HTTP request nodes or direct MCP connections where possible — connectors have OAuth governance via Defender for Cloud Apps.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <div class="step-title">Enable Block Images and URLs (external threat detection)</div>
+        <div class="step-desc">In Copilot Studio → Settings → Security → enable external threat detection and configure Microsoft Defender as the provider. This blocks image-based and URL-based prompt injection before the agent processes the content.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">BEFORE PUBLISHING</div>
+    <div class="step">
+      <div class="step-num">7</div>
+      <div class="step-body">
+        <div class="step-title">Scope sharing to the minimum required audience</div>
+        <div class="step-desc">In Copilot Studio → Share → add only the specific security groups who need access. Avoid "Everyone in [Org]" unless there is a documented business justification and security review.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">8</div>
+      <div class="step-body">
+        <div class="step-title">Assign an owner and document the agent</div>
+        <div class="step-desc">Every published agent should have a named owner accountable for reviewing it quarterly. Document: what connectors it uses, what data it can access, who can interact with it, and who built it.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num ok">✓</div>
+      <div class="step-body">
+        <div class="step-title">If Modern Agent: configure Entra Agent ID controls</div>
+        <div class="step-desc">Enable Modern Agent mode in Power Platform Admin Center → Copilot → Settings → Copilot Studio. Once enabled, the agent gets an Entra Agent Identity and you can apply Conditional Access policies, Access Reviews, and ID Protection via Entra. Note: Entra Agent ID is still in preview as of March 2026.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="checklist">
+    <div class="checklist-title">PRE-PUBLISH CHECKLIST</div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Managed Environments enabled<span class="check-caveat">Required for all governance controls</span></div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Authentication set to "Authenticate with Microsoft" + Require sign-in<span class="check-caveat">Never publish with No authentication</span></div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Maker is not a high-privilege account (Global Admin, SharePoint Admin etc)<span class="check-caveat">Maker credentials = agent credentials for Classic agents</span></div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">All MCP tools and connectors reviewed and justified</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Block Images and URLs enabled via Defender external threat detection</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Sharing scoped to minimum required audience</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Named owner assigned and agent documented</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Agent visible in AI Agent Inventory after publishing<span class="check-caveat">Verify it appears in Defender Advanced Hunting AIAgentsInfo table</span></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ PLAYBOOK 3 ═══════════════ -->
+<div class="pb-panel" id="pb3">
+  <div class="pb-header">
+    <div class="pb-header-eyebrow">PLAYBOOK 03</div>
+    <div class="pb-header-title">Set Up the Security Dashboard for AI</div>
+    <div class="pb-header-sub">Configure the unified AI security posture view in Microsoft Defender. Requires collaboration between Defender admin and Power Platform admin. Allow up to 2 hours for data population.</div>
+    <div class="pb-meta-row">
+      <span class="pb-meta-item warn">⚠ Requires Agent 365 or M365 E7</span>
+      <span class="pb-meta-item warn">⚠ Dual-admin setup</span>
+      <span class="pb-meta-item green">✓ Works for Classic & Modern Agents</span>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STEP 1 — DEFENDER ADMIN SIDE</div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Enable preview features in Defender XDR</div>
+        <div class="step-desc">Microsoft Defender portal → Settings → Microsoft Defender XDR → Preview features → turn on. The AI Agent Inventory and Security Dashboard for AI features require preview mode enabled.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Connect the Microsoft 365 app connector</div>
+        <div class="step-desc">Defender portal → Settings → Cloud Apps → Connected Apps → Microsoft 365 → connect. This is required for Copilot agent telemetry to flow into Defender.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Enable Copilot Studio AI Agents</div>
+        <div class="step-desc">Defender portal → Settings → Cloud Apps → Copilot Studio AI Agents → enable. Copy the URL shown — you will need to share this with your Power Platform admin to complete the next step.</div>
+        <div class="step-tip">💡 Save this URL carefully — it encodes your tenant ID and is required for the Power Platform side of setup.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STEP 2 — POWER PLATFORM ADMIN SIDE</div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">Enable external threat detection in Power Platform</div>
+        <div class="step-desc">Power Platform Admin Center → Security → Threat Detection → Additional threat detection → enable "Allow Copilot Studio to share data with a threat detection partner" → paste the URL from Step 3 → enter the Entra App ID.</div>
+        <div class="step-warn">⚠ The App ID must match exactly. Mismatch causes a silent failure — status will show "pending" indefinitely.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <div class="step-title">Verify connection status</div>
+        <div class="step-desc">Back in Defender portal → Settings → Cloud Apps → Copilot Studio AI Agents → check that the Power Platform action status shows "Connected". If it shows "Pending" after 30 minutes, re-check the App ID and URL entered in Step 4.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STEP 3 — VERIFY DATA IS FLOWING</div>
+    <div class="step">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <div class="step-title">Confirm AIAgentsInfo table is populating</div>
+        <div class="step-desc">Run this query in Defender Advanced Hunting. If it returns rows, setup is complete. If it returns nothing after 2 hours, check the connection status in Step 5.</div>
+        <div class="step-code">AIAgentsInfo
+| summarize arg_max(Timestamp, *) by AIAgentId
+| summarize count() by AgentStatus</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">7</div>
+      <div class="step-body">
+        <div class="step-title">Open the Security Dashboard for AI</div>
+        <div class="step-desc">Defender portal → left nav → expand Microsoft Sentinel → AI → Security Dashboard for AI. You should see agent inventory, posture findings, and risk signals from Entra, Defender, and Purview.</div>
+        <div class="step-warn">⚠ The dashboard shows different agent counts than Entra Agent ID portal or Agent 365. This is a known inconsistency. Use Advanced Hunting for precise counts.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STEP 4 — ENABLE REAL-TIME PROTECTION</div>
+    <div class="step">
+      <div class="step-num">8</div>
+      <div class="step-body">
+        <div class="step-title">Enable RT protection for Copilot Studio agents</div>
+        <div class="step-desc">This step enables the webhook-based runtime inspection of tool invocations. Defender evaluates each tool call before execution and can block suspicious actions. Defender portal → Settings → Cloud Apps → Copilot Studio AI Agents → enable Real-time protection.</div>
+        <div class="step-warn">⚠ 1-second timeout applies. If Defender doesn't respond within 1 second, the tool invocation is allowed through. This is a deliberate tradeoff for reliability but means high-speed tool calls may not always be evaluated.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="checklist">
+    <div class="checklist-title">SETUP CHECKLIST</div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Preview features enabled in Defender XDR</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Microsoft 365 app connector connected</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Copilot Studio AI Agents enabled — URL copied</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Power Platform external threat detection configured with correct App ID and URL</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Connection status shows "Connected" in Defender portal</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">AIAgentsInfo table returning data in Advanced Hunting</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Security Dashboard for AI accessible in Defender portal</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Real-time protection enabled</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ PLAYBOOK 4 ═══════════════ -->
+<div class="pb-panel" id="pb4">
+  <div class="pb-header">
+    <div class="pb-header-eyebrow">PLAYBOOK 04</div>
+    <div class="pb-header-title">Respond to a Suspected Agent Compromise</div>
+    <div class="pb-header-sub">Triage and contain a suspected agent abuse incident — prompt injection, data exfiltration via agent, or suspicious agent behaviour. Requires Sentinel and Defender for Cloud Apps.</div>
+    <div class="pb-meta-row">
+      <span class="pb-meta-item warn">⚠ Time-sensitive — act within 1 hour of detection</span>
+      <span class="pb-meta-item">Sentinel + Defender required</span>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">DETECT</div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Check Defender portal for RT protection alerts</div>
+        <div class="step-desc">Defender portal → Incidents & Alerts → filter by "Copilot Studio". RT protection generates SOC-ready alerts that explain what was stopped, why it was considered risky, and which agent, user, and tool were involved.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Query for suspicious agent activity in Advanced Hunting</div>
+        <div class="step-desc">Run these queries to surface anomalous agent behaviour in the last 24 hours.</div>
+        <div class="step-code">// Agents with sudden auth type changes
+AIAgentsInfo
+| summarize arg_max(Timestamp, *) by AIAgentId
+| where AgentStatus == "Published"
+| extend PreviousAuthType = prev(UserAuthenticationType, 1)
+| where UserAuthenticationType == "None"
+    and PreviousAuthType != "None"
+| project AIAgentName, PreviousAuthType,
+    UserAuthenticationType, Timestamp
+
+// High-volume tool invocations in last 24h
+// (use CopilotActivity table if connector enabled)
+CopilotActivity
+| where TimeGenerated > ago(24h)
+| where Operation contains "Tool"
+| summarize Count = count() by AgentName, UserId
+| where Count > 50
+| order by Count desc</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">CONTAIN</div>
+    <div class="step">
+      <div class="step-num warn">3</div>
+      <div class="step-body">
+        <div class="step-title">Unpublish the agent immediately</div>
+        <div class="step-desc">In Copilot Studio → open the suspect agent → Settings → Channels → unpublish all channels. This immediately stops all user interactions with the agent while investigation continues.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num warn">4</div>
+      <div class="step-body">
+        <div class="step-title">Revoke the maker's sessions if maker credentials are involved</div>
+        <div class="step-desc">If the agent uses Classic maker credentials and you suspect the maker account is compromised: Entra portal → Users → select maker → Revoke all sessions. Also check for new credentials on the associated Enterprise Application in Entra.</div>
+        <div class="step-warn">⚠ For Classic agents, the Enterprise Application owner is "Power Virtual Agent Service" — check if the maker's account has been added as an owner (a known risk pattern that enables credential abuse and bypasses CA/MFA).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">INVESTIGATE</div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <div class="step-title">Review Copilot Data Connector logs in Sentinel</div>
+        <div class="step-desc">If the Copilot Data Connector is enabled, query the CopilotActivity table in Sentinel for the time window of the suspected incident. Look for CopilotAgentManagement events (config changes), unusual CopilotInteraction volumes, and CopilotPlugin lifecycle events.</div>
+        <div class="step-code">CopilotActivity
+| where TimeGenerated between (ago(48h) .. now())
+| where AgentName == "<<suspect agent name>>"
+| project TimeGenerated, UserId, Operation,
+    AgentName, PromptContent, ResponseContent
+| order by TimeGenerated desc</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <div class="step-title">Use Security Copilot or Security Analyst Agent for triage</div>
+        <div class="step-desc">In Defender portal, open the Security Copilot pane and ask it to summarise the incident, identify the affected users, and recommend next steps. The Security Analyst Agent (Preview, March 2026) can autonomously triage the incident against your Sentinel data.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">RECOVER</div>
+    <div class="step">
+      <div class="step-num ok">7</div>
+      <div class="step-body">
+        <div class="step-title">Remediate and rebuild with security controls</div>
+        <div class="step-desc">Before republishing: apply all controls from Playbook 02. If the agent is Classic, evaluate whether it should be migrated to Modern (requires enabling Modern Agent mode in Power Platform). Update your DLP policies if data exfiltration occurred via prompts.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num ok">8</div>
+      <div class="step-body">
+        <div class="step-title">Document and update your agent security policy</div>
+        <div class="step-desc">Record the incident in your risk register. Update your agent security checklist with any gaps this incident revealed. Consider running Playbook 01 across your entire estate as a follow-up audit.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="checklist">
+    <div class="checklist-title">INCIDENT RESPONSE CHECKLIST</div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Defender RT protection alerts reviewed</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Advanced Hunting queries run for anomalous activity</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Suspect agent unpublished from all channels</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Maker sessions revoked if account compromised</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Enterprise Application checked for rogue credentials or owners</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">CopilotActivity logs reviewed in Sentinel</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Incident documented in risk register</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Agent rebuilt with Playbook 02 controls before republishing</div></div>
+  </div>
+</div>
+
+<script>
+function showPlaybook(id, btn) {
+  document.querySelectorAll('.pb-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.pb-nav-card').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  document.getElementById(id).scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+</script>
+
+<div class="page-nav">
+  <a href="gaps.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Gaps</span></a>
+  <a href="changelog.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Changelog</span></a>
+</div>
+<div class="footer">
+  SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Learn · Field research from Microsoft Security professionals<br>
+  Last updated: March 2026 · Playbooks reflect publicly announced Microsoft capabilities only
+</div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var btn = document.getElementById('hamburgerBtn');
+  var drawer = document.getElementById('mobileDrawer');
+  var overlay = document.getElementById('drawerOverlay');
+  if(!btn || !drawer || !overlay) return;
+  function closeMenu(){
+    btn.classList.remove('open');
+    drawer.classList.remove('open');
+    overlay.classList.remove('open');
+  }
+  btn.addEventListener('click', function(){
+    var isOpen = drawer.classList.contains('open');
+    if(isOpen){ closeMenu(); } else {
+      btn.classList.add('open');
+      drawer.classList.add('open');
+      overlay.classList.add('open');
+    }
+  });
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', closeMenu);
+  });
+});
+</script>
+
+</body></html>

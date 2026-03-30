@@ -275,6 +275,31 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   .flow-arrow{display:none;}
   h1{font-size:26px;}
 }
+
+/* HAMBURGER */
+.hamburger{display:none;background:none;border:none;cursor:pointer;
+  padding:6px;flex-direction:column;gap:5px;margin-left:auto;flex-shrink:0;}
+.hamburger span{display:block;width:22px;height:2px;background:#0d1526;
+  border-radius:2px;transition:all 0.2s;}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.mobile-drawer{display:none;position:fixed;top:var(--nav-h);left:0;right:0;
+  background:rgba(245,247,252,0.98);border-bottom:1px solid var(--border2);
+  backdrop-filter:blur(16px);z-index:199;padding:12px 20px 20px;
+  flex-direction:column;gap:2px;box-shadow:0 8px 32px rgba(0,0,0,0.1);}
+.mobile-drawer.open{display:flex;}
+.mobile-drawer a{display:block;padding:10px 12px;border-radius:8px;
+  font-size:14px;font-weight:600;color:#1a2a4a;text-decoration:none;
+  transition:background 0.12s;}
+.mobile-drawer a:hover,.mobile-drawer a.active{background:#f0f6ff;color:var(--blue);}
+.mobile-drawer-overlay{display:none;position:fixed;inset:0;z-index:198;
+  background:rgba(0,0,0,0.2);}
+.mobile-drawer-overlay.open{display:block;}
+@media(max-width:900px){
+  .nav-links{display:none !important;}
+  .hamburger{display:flex;}
+}
 </style>
 </head>
 <body>
@@ -287,13 +312,32 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <div class="nav-links"><a href="index.html" class="">Start Here</a>
 <a href="overview.html" class="">Overview</a>
 <a href="risk.html" class="">AI Risk</a>
-<a href="product-map.html" class="">Product Map</a>
-<a href="identity.html" class="">Identity & OBO</a>
-<a href="mcp.html" class="">MCP Ecosystem</a>
-<a href="threats.html" class="">Threat Scenarios</a>
+<a href="product-map.html" class="">Products</a>
+<a href="identity.html" class="">Identity</a>
+<a href="mcp.html" class="">MCP</a>
+<a href="threats.html" class="">Threats</a>
 <a href="frameworks.html" class="">Frameworks</a>
-<a href="gaps.html" class=" active">Gaps & Roadmap</a>
+<a href="gaps.html" class=" active">Gaps</a>
 <a href="changelog.html" class="">Changelog</a>
+<a href="contact.html" class="">Contact</a>
+<a href="playbooks.html" class="">Playbooks</a>
+</div>
+  <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+
+<div class="mobile-drawer-overlay" id="drawerOverlay"></div>
+<div class="mobile-drawer" id="mobileDrawer">
+<a href="index.html" class="">Start Here</a>
+<a href="overview.html" class="">Overview</a>
+<a href="risk.html" class="">AI Risk</a>
+<a href="product-map.html" class="">Products</a>
+<a href="identity.html" class="">Identity</a>
+<a href="mcp.html" class="">MCP</a>
+<a href="threats.html" class="">Threats</a>
+<a href="frameworks.html" class="">Frameworks</a>
+<a href="gaps.html" class="active">Gaps</a>
+<a href="changelog.html" class="">Changelog</a>
+<a href="contact.html" class="">Contact</a>
+<a href="playbooks.html" class="">Playbooks</a>
 </div>
 </nav>
 <div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
@@ -365,7 +409,10 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <thead><tr><th>Gap</th><th>Interim Mitigation</th></tr></thead>
 <tbody>
 <tr>
-  <td><strong>Portal inventory count inconsistency — no single source of truth</strong><br><span style="font-size:11px;color:var(--text3);">Agent 365, Security Dashboard for AI, and Entra Agent ID portal show different agent counts. Microsoft has confirmed this is a known issue. Security teams cannot rely on any single portal for a definitive agent inventory.</span></td>
+  <td><strong>Any user can change another agent's authentication type</strong><br>
+  <span style="font-size:11px;color:var(--text3);">By design in Copilot Studio, any tenant user can change the authentication settings of an agent they did not create and do not own — including downgrading a published agent from authenticated to No Authentication. A single non-admin user can silently expose any published agent to anonymous access without the owner's knowledge. There is currently no platform-enforced owner-only restriction on auth type changes.</span></td>
+  <td>Deploy the change-detection Sentinel Analytics Rule (see Playbooks) to alert immediately when any agent is switched to No Authentication. Audit auth type changes regularly via the AIAgentsInfo table. Restrict who can access Copilot Studio environments via Managed Environments in Power Platform Admin Center.</td>
+</tr><br><span style="font-size:11px;color:var(--text3);">Agent 365, Security Dashboard for AI, and Entra Agent ID portal show different agent counts. Microsoft has confirmed this is a known issue. Security teams cannot rely on any single portal for a definitive agent inventory.</span></td>
   <td>Cross-reference all three portals; use AIAgentsInfo Advanced Hunting table as the most granular source; treat any portal count as approximate until Microsoft resolves the consistency issue</td>
 </tr>
 <tr>
@@ -451,6 +498,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <tr><td><strong>Microsoft Sentinel</strong></td><td>Sentinel</td><td><span class="green-inline">GA</span></td><td>All</td><td>MCP Entity Analyzer GA April; Data Federation preview</td></tr>
 <tr><td><strong>Purview DSPM for AI</strong></td><td>Purview</td><td><span class="caution-inline">Preview</span></td><td>AI workloads</td><td>—</td></tr>
 <tr><td><strong>Purview DLP for M365 Copilot</strong></td><td>Purview</td><td><span class="green-inline">GA March 31</span></td><td>M365 Copilot prompts</td><td>New at RSAC 2026</td></tr>
+<tr><td><strong>Purview DLP — SIT Prompt Blocking</strong></td><td>Purview</td><td><span class="caution-inline">Preview · GA June/July 2026</span></td><td>M365 Copilot, Copilot Chat, Word/Excel/PPT</td><td>No response when triggered (does not fall back to Graph). Files uploaded to prompts not scanned. Two conditions can't be in same rule.</td></tr>
 <tr><td><strong>Purview Information Protection</strong></td><td>Purview</td><td><span class="green-inline">GA</span></td><td>All AI workflows</td><td>—</td></tr>
 <tr><td><strong>Security Copilot</strong></td><td>Security Copilot</td><td><span class="green-inline">GA · Included E5 + E7</span></td><td>SOC workflows</td><td>400 SCU/1K users/mo (E5); 15+ partner agents</td></tr>
 <tr><td><strong>Security Analyst Agent</strong></td><td>Defender / Security Copilot</td><td><span class="caution-inline">Preview March 26</span></td><td>Defender investigations</td><td>New at RSAC 2026</td></tr>
@@ -459,11 +507,38 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </table>
 
 
-<div class="page-nav"><a href="threats.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Threat Scenarios</span></a><a href="gaps.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Gaps & Roadmap</span></a></div>
+<div class="page-nav"><a href="threats.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Threats</span></a><a href="gaps.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Gaps</span></a></div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
   Last updated: March 24, 2026 · Analysis covers publicly announced Microsoft security capabilities only
 </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var btn = document.getElementById('hamburgerBtn');
+  var drawer = document.getElementById('mobileDrawer');
+  var overlay = document.getElementById('drawerOverlay');
+  if(!btn || !drawer || !overlay) return;
+  function closeMenu(){
+    btn.classList.remove('open');
+    drawer.classList.remove('open');
+    overlay.classList.remove('open');
+  }
+  btn.addEventListener('click', function(){
+    var isOpen = drawer.classList.contains('open');
+    if(isOpen){ closeMenu(); } else {
+      btn.classList.add('open');
+      drawer.classList.add('open');
+      overlay.classList.add('open');
+    }
+  });
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', closeMenu);
+  });
+});
+</script>
+
 </body>
 </html>

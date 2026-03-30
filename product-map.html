@@ -275,6 +275,31 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   .flow-arrow{display:none;}
   h1{font-size:26px;}
 }
+
+/* HAMBURGER */
+.hamburger{display:none;background:none;border:none;cursor:pointer;
+  padding:6px;flex-direction:column;gap:5px;margin-left:auto;flex-shrink:0;}
+.hamburger span{display:block;width:22px;height:2px;background:#0d1526;
+  border-radius:2px;transition:all 0.2s;}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.mobile-drawer{display:none;position:fixed;top:var(--nav-h);left:0;right:0;
+  background:rgba(245,247,252,0.98);border-bottom:1px solid var(--border2);
+  backdrop-filter:blur(16px);z-index:199;padding:12px 20px 20px;
+  flex-direction:column;gap:2px;box-shadow:0 8px 32px rgba(0,0,0,0.1);}
+.mobile-drawer.open{display:flex;}
+.mobile-drawer a{display:block;padding:10px 12px;border-radius:8px;
+  font-size:14px;font-weight:600;color:#1a2a4a;text-decoration:none;
+  transition:background 0.12s;}
+.mobile-drawer a:hover,.mobile-drawer a.active{background:#f0f6ff;color:var(--blue);}
+.mobile-drawer-overlay{display:none;position:fixed;inset:0;z-index:198;
+  background:rgba(0,0,0,0.2);}
+.mobile-drawer-overlay.open{display:block;}
+@media(max-width:900px){
+  .nav-links{display:none !important;}
+  .hamburger{display:flex;}
+}
 </style>
 </head>
 <body>
@@ -287,13 +312,32 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <div class="nav-links"><a href="index.html" class="">Start Here</a>
 <a href="overview.html" class="">Overview</a>
 <a href="risk.html" class="">AI Risk</a>
-<a href="product-map.html" class=" active">Product Map</a>
-<a href="identity.html" class="">Identity & OBO</a>
-<a href="mcp.html" class="">MCP Ecosystem</a>
-<a href="threats.html" class="">Threat Scenarios</a>
+<a href="product-map.html" class=" active">Products</a>
+<a href="identity.html" class="">Identity</a>
+<a href="mcp.html" class="">MCP</a>
+<a href="threats.html" class="">Threats</a>
 <a href="frameworks.html" class="">Frameworks</a>
-<a href="gaps.html" class="">Gaps & Roadmap</a>
+<a href="gaps.html" class="">Gaps</a>
 <a href="changelog.html" class="">Changelog</a>
+<a href="contact.html" class="">Contact</a>
+<a href="playbooks.html" class="">Playbooks</a>
+</div>
+  <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+
+<div class="mobile-drawer-overlay" id="drawerOverlay"></div>
+<div class="mobile-drawer" id="mobileDrawer">
+<a href="index.html" class="">Start Here</a>
+<a href="overview.html" class="">Overview</a>
+<a href="risk.html" class="">AI Risk</a>
+<a href="product-map.html" class="active">Products</a>
+<a href="identity.html" class="">Identity</a>
+<a href="mcp.html" class="">MCP</a>
+<a href="threats.html" class="">Threats</a>
+<a href="frameworks.html" class="">Frameworks</a>
+<a href="gaps.html" class="">Gaps</a>
+<a href="changelog.html" class="">Changelog</a>
+<a href="contact.html" class="">Contact</a>
+<a href="playbooks.html" class="">Playbooks</a>
 </div>
 </nav>
 <div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
@@ -351,8 +395,8 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
   <a href="https://learn.microsoft.com/en-us/entra/identity/conditional-access/agent-id?tabs=custom-security-attributes" target="_blank" class="card-link"><div class="card" style="border-color:rgba(0,120,212,0.15);">
     <div class="card-name">Conditional Access for AI Agents <span style="color:var(--blue);font-size:11px;">↗</span></div>
-    <div class="card-desc">Block risky agents; enforce least-privilege and JIT access. <strong>OBO limitation</strong>: agent permissions cannot be scoped below the invoking user's own scope. New Conditional Access Optimization Agent adds context-aware recommendations and phased rollout.</div>
-    <div class="tag-row"><span class="tag warn">⚠ OBO limits true least-priv</span><span class="tag blue">CA Optimization Agent · Preview enhancements</span></div>
+    <div class="card-desc">Block risky agents; enforce least-privilege and JIT access. <strong>Critical caveat (field-validated March 2026):</strong> CA for Agents does <em>not</em> apply to Copilot Studio agents — they authenticate via OBO or service principal, not modern Agent ID. CA for Agents is only active for Security Copilot and AI Foundry agents using OAuth 2.0 Agent ID authentication. For Copilot Studio, use Conditional Access policies targeting the <em>user</em> or <em>workload identity</em> instead.</div>
+    <div class="tag-row"><span class="tag warn">⚠ Does NOT apply to Copilot Studio</span><span class="tag green">Applies: Security Copilot · AI Foundry</span><span class="tag blue">CA Optimization Agent · Preview</span></div>
   <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
   <a href="https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-internet-access" target="_blank" class="card-link"><div class="card" style="border-color:rgba(0,120,212,0.15);">
     <div class="card-name">Entra Internet Access <span style="color:var(--blue);font-size:11px;">↗</span></div>
@@ -443,8 +487,8 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
   <a href="https://learn.microsoft.com/en-us/purview/dlp-microsoft365-copilot-location-learn-about" target="_blank" class="card-link"><div class="card" style="border-color:rgba(0,133,117,0.15);">
     <div class="card-name">DLP for Microsoft 365 Copilot <span style="color:var(--blue);font-size:11px;">↗</span></div>
-    <div class="card-desc">Blocks sensitive information such as PII, credit card numbers, and custom data types in prompts from being processed or used for web grounding. Prevents sensitive data entering the AI context window at the Copilot layer. New at RSAC 2026.</div>
-    <div class="tag-row"><span class="tag green">✓ GA March 31 · RSAC 2026</span><span class="tag">PII Protection</span><span class="tag">Prompt Blocking</span></div>
+    <div class="card-desc">Two distinct DLP capabilities for M365 Copilot and Copilot Chat. <strong>① Block files/emails with sensitivity labels (GA):</strong> prevents labelled files and emails from being used in Copilot response summaries. Items still appear in citations but content is excluded. <strong>② Block SITs in prompts (Preview — GA planned June/July 2026):</strong> when a typed prompt contains a selected Sensitive Information Type (credit card numbers, passport numbers etc), Copilot returns no response at all — it does not fall back to internal Graph sources. Blocks both internal and external web searches. Available in M365 Copilot, Copilot Chat, Word/Excel/PowerPoint, and prebuilt agents. <strong>Key caveats:</strong> The two conditions cannot be combined in the same rule. DLP cannot scan files uploaded directly into prompts — only typed text is evaluated. Policy changes take up to 4 hours to apply. Admin Units not supported.</div>
+    <div class="tag-row"><span class="tag green">Label Blocking: GA</span><span class="tag caution">SIT Prompt Blocking: Preview · GA June/July 2026</span><span class="tag warn">⚠ No response when triggered</span><span class="tag warn">⚠ Uploaded files not scanned</span></div>
   <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
   <a href="https://www.microsoft.com/en-us/security/business/information-protection/microsoft-purview-information-protection" target="_blank" class="card-link"><div class="card" style="border-color:rgba(0,133,117,0.15);">
     <div class="card-name">Information Protection (AI) <span style="color:var(--blue);font-size:11px;">↗</span></div>
@@ -509,11 +553,38 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
 </div>
 
-<div class="page-nav"><a href="overview.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Overview</span></a><a href="product-map.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Product Map</span></a></div>
+<div class="page-nav"><a href="overview.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Overview</span></a><a href="product-map.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Products</span></a></div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
   Last updated: March 24, 2026 · Analysis covers publicly announced Microsoft security capabilities only
 </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var btn = document.getElementById('hamburgerBtn');
+  var drawer = document.getElementById('mobileDrawer');
+  var overlay = document.getElementById('drawerOverlay');
+  if(!btn || !drawer || !overlay) return;
+  function closeMenu(){
+    btn.classList.remove('open');
+    drawer.classList.remove('open');
+    overlay.classList.remove('open');
+  }
+  btn.addEventListener('click', function(){
+    var isOpen = drawer.classList.contains('open');
+    if(isOpen){ closeMenu(); } else {
+      btn.classList.add('open');
+      drawer.classList.add('open');
+      overlay.classList.add('open');
+    }
+  });
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', closeMenu);
+  });
+});
+</script>
+
 </body>
 </html>

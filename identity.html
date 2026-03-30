@@ -275,6 +275,31 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   .flow-arrow{display:none;}
   h1{font-size:26px;}
 }
+
+/* HAMBURGER */
+.hamburger{display:none;background:none;border:none;cursor:pointer;
+  padding:6px;flex-direction:column;gap:5px;margin-left:auto;flex-shrink:0;}
+.hamburger span{display:block;width:22px;height:2px;background:#0d1526;
+  border-radius:2px;transition:all 0.2s;}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.mobile-drawer{display:none;position:fixed;top:var(--nav-h);left:0;right:0;
+  background:rgba(245,247,252,0.98);border-bottom:1px solid var(--border2);
+  backdrop-filter:blur(16px);z-index:199;padding:12px 20px 20px;
+  flex-direction:column;gap:2px;box-shadow:0 8px 32px rgba(0,0,0,0.1);}
+.mobile-drawer.open{display:flex;}
+.mobile-drawer a{display:block;padding:10px 12px;border-radius:8px;
+  font-size:14px;font-weight:600;color:#1a2a4a;text-decoration:none;
+  transition:background 0.12s;}
+.mobile-drawer a:hover,.mobile-drawer a.active{background:#f0f6ff;color:var(--blue);}
+.mobile-drawer-overlay{display:none;position:fixed;inset:0;z-index:198;
+  background:rgba(0,0,0,0.2);}
+.mobile-drawer-overlay.open{display:block;}
+@media(max-width:900px){
+  .nav-links{display:none !important;}
+  .hamburger{display:flex;}
+}
 </style>
 </head>
 <body>
@@ -287,13 +312,32 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <div class="nav-links"><a href="index.html" class="">Start Here</a>
 <a href="overview.html" class="">Overview</a>
 <a href="risk.html" class="">AI Risk</a>
-<a href="product-map.html" class="">Product Map</a>
-<a href="identity.html" class=" active">Identity & OBO</a>
-<a href="mcp.html" class="">MCP Ecosystem</a>
-<a href="threats.html" class="">Threat Scenarios</a>
+<a href="product-map.html" class="">Products</a>
+<a href="identity.html" class=" active">Identity</a>
+<a href="mcp.html" class="">MCP</a>
+<a href="threats.html" class="">Threats</a>
 <a href="frameworks.html" class="">Frameworks</a>
-<a href="gaps.html" class="">Gaps & Roadmap</a>
+<a href="gaps.html" class="">Gaps</a>
 <a href="changelog.html" class="">Changelog</a>
+<a href="contact.html" class="">Contact</a>
+<a href="playbooks.html" class="">Playbooks</a>
+</div>
+  <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+
+<div class="mobile-drawer-overlay" id="drawerOverlay"></div>
+<div class="mobile-drawer" id="mobileDrawer">
+<a href="index.html" class="">Start Here</a>
+<a href="overview.html" class="">Overview</a>
+<a href="risk.html" class="">AI Risk</a>
+<a href="product-map.html" class="">Products</a>
+<a href="identity.html" class="active">Identity</a>
+<a href="mcp.html" class="">MCP</a>
+<a href="threats.html" class="">Threats</a>
+<a href="frameworks.html" class="">Frameworks</a>
+<a href="gaps.html" class="">Gaps</a>
+<a href="changelog.html" class="">Changelog</a>
+<a href="contact.html" class="">Contact</a>
+<a href="playbooks.html" class="">Playbooks</a>
 </div>
 </nav>
 <div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
@@ -466,6 +510,93 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <p>Defender for Cloud Apps security controls (RT protection, AI Agent Inventory, Block Images/URLs) provide a meaningful security baseline for <strong>all agents — Classic and Modern</strong>. Entra Agent ID security products (ID Protection, Conditional Access, Access Reviews, Lifecycle Workflows) only apply to <strong>Modern Agents</strong>. Most existing Copilot Studio production deployments are Classic. Migrating to Modern Agents is the prerequisite for the full Entra security stack — but the migration tool doesn't exist yet.</p>
 </div>
 
+
+<div class="section-label">The Four Authentication Patterns</div>
+<h2>How Copilot Studio Agents Actually Authenticate</h2>
+<p>Field research by Derk van der Woude (March 2026) identifies four distinct authentication configurations for Copilot Studio agents — each with a very different risk profile. Knowing <em>which pattern your agents use</em> is the first step to securing them.</p>
+
+<table>
+<thead><tr><th>Pattern</th><th>How it authenticates</th><th>Risk</th><th>Detectable via KQL</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>① End User Credentials (OBO)</strong><br><span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5a6a8a;">Auth with Microsoft → End user credentials</span></td>
+  <td>User authenticates once; agent exchanges token OBO the user. Everything runs in the user's own permission context. Sign-in logs available in Entra for the user.</td>
+  <td><span class="green-inline">✓ Low risk</span></td>
+  <td><code>UserAuthenticationType == "Integrated"</code></td>
+</tr>
+<tr>
+  <td><strong>② Maker-Provided Credentials</strong><br><span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5a6a8a;">Auth with Microsoft → Maker-provided credentials</span></td>
+  <td>Agent authenticates at <em>design time</em> using the maker's identity, then reuses that connection for every user at runtime. Silent authentication — stored credentials. No per-user sign-in logs for the agent.</td>
+  <td><span class="severity-critical">⚠️ High risk</span><br><span style="font-size:11px;color:#5a6a8a;">Data oversharing, silent auth</span></td>
+  <td><code>AgentToolsDetails.mode == "Maker"</code><br><span style="font-size:10px;color:#5a6a8a;">See KQL below</span></td>
+</tr>
+<tr>
+  <td><strong>③ App Registration — Delegated Permissions</strong><br><span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5a6a8a;">Authenticate manually → Entra ID V2 (delegated)</span></td>
+  <td>Uses an Entra App Registration but still acts OBO the signed-in user. Effective permissions = intersection of user rights AND app granted scopes. Sign-in logs available in Entra Agent ID portal.</td>
+  <td><span class="green-inline">✓ Low risk</span><br><span style="font-size:11px;color:#5a6a8a;">Verify scopes are minimal</span></td>
+  <td>HTTP Request to Graph + delegated token</td>
+</tr>
+<tr>
+  <td><strong>④ App Registration — Application Permissions</strong><br><span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5a6a8a;">Authenticate manually → Entra ID V2 (application)</span></td>
+  <td>Agent authenticates <em>as the application itself</em> — no user context, no OBO. Access determined by application permissions (e.g. Mail.Read.All, User.Read.All). Can access data <strong>across the entire tenant</strong>. Requires admin consent.</td>
+  <td><span class="severity-critical">⚠️ Very high risk</span><br><span style="font-size:11px;color:#5a6a8a;">Tenant-wide access, admin consent</span></td>
+  <td>HTTP Request to Graph + client credentials flow</td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout callout-warn" style="margin-top:20px;">
+  <div class="callout-title">⚠️ Critical Correction — Conditional Access for Agents does NOT apply to Copilot Studio</div>
+  <p>CA for Agents and ID Protection for Agents are triggered only during <strong>modern Agent ID authentication</strong> (OAuth 2.0) — used by Security Copilot and AI Foundry agents. Copilot Studio agents authenticate via OBO (pattern ①), maker credentials (pattern ②), or service principal (patterns ③ and ④) — <strong>none of which trigger CA for Agents</strong>. For Copilot Studio, apply Conditional Access policies targeting the <em>invoking user</em> or the <em>workload identity (service principal)</em> instead. Use ID Protection for Workload Identities as the equivalent control for App Registration patterns.</p>
+</div>
+
+<div class="section-label" style="margin-top:32px;">Advanced Detection KQL</div>
+<h2>Detecting Maker Credentials with Precision</h2>
+<p>The following KQL (field-validated by Derk van der Woude) detects maker credentials at the connector level — checking both <code>AgentToolsDetails</code> and <code>AgentTopicsDetails</code> for where maker mode is actually configured. This is more precise than checking only the agent-level auth type.</p>
+<div style="background:#f0f4fb;border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-top:8px;overflow-x:auto;">
+<pre style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#0d1526;line-height:1.8;margin:0;white-space:pre;">let base = AIAgentsInfo
+| summarize arg_max(Timestamp, *) by AIAgentId
+| where AgentStatus == "Published";
+let directActions = base
+| mv-expand detail = AgentToolsDetails
+| where detail.action.connectionProperties.mode == "Maker"
+| extend ActionType = "FromTools", Action = detail.action
+| project-reorder AgentCreationTime, AIAgentId, AIAgentName,
+    UserAuthenticationType, CreatorAccountUpn;
+let topicActions = base
+| mv-expand topic = AgentTopicsDetails
+| extend topicActionsArray = topic.beginDialog.actions
+| mv-expand Action = topicActionsArray
+| where Action.connectionProperties.mode == "Maker"
+| extend ActionType = "FromTopic"
+| project-reorder AgentCreationTime, AIAgentId, AIAgentName,
+    AgentStatus, CreatorAccountUpn, OwnerAccountUpns, Action;
+directActions
+| union topicActions
+| sort by AIAgentId, Timestamp desc</pre>
+</div>
+
+<h2 style="margin-top:28px;">Detecting App Registration Agents Calling Microsoft Graph</h2>
+<p>Finds agents using HTTP Request actions to graph.microsoft.com or management.azure.com — indicating App Registration authentication (pattern ③ or ④). Delegated = low risk. Application permissions = very high risk.</p>
+<div style="background:#f0f4fb;border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-top:8px;overflow-x:auto;">
+<pre style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#0d1526;line-height:1.8;margin:0;white-space:pre;">AIAgentsInfo
+| summarize arg_max(Timestamp, *) by AIAgentId
+| where AgentStatus != "Deleted"
+| mvexpand Topic = AgentTopicsDetails
+| where Topic has "HttpRequestAction"
+| extend TopicActions = Topic.beginDialog.actions
+| mvexpand action = TopicActions
+| where action['$kind'] == "HttpRequestAction"
+| extend Url = tostring(action.url.literalValue)
+| extend ParsedUrl = parse_url(Url)
+| extend Host = tostring(ParsedUrl["Host"])
+| where Host has_any("graph.microsoft.com", "management.azure.com")
+| project-reorder AgentCreationTime, AIAgentId, AIAgentName,
+    ParsedUrl, Url, Host, AgentStatus,
+    CreatorAccountUpn, OwnerAccountUpns</pre>
+</div>
+<p style="font-size:12px;color:#5a6a8a;margin-top:8px;">Source: <a href="https://derkvanderwoude.medium.com/your-copilot-studio-agent-is-acting-as-someone-do-you-know-who-f9e5be1116b9" target="_blank" style="color:var(--blue);">Derk van der Woude — Your Copilot Studio agent is acting as someone, do you know who? (March 2026)</a></p>
+
 <div class="section-label">What to Do Today</div>
 <h2>Practical Controls — Ranked by Availability</h2>
 <table>
@@ -483,11 +614,38 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </table>
 
 
-<div class="page-nav"><a href="risk.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">AI Risk</span></a><a href="identity.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Identity & OBO</span></a></div>
+<div class="page-nav"><a href="risk.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">AI Risk</span></a><a href="identity.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Identity</span></a></div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
   Last updated: March 24, 2026 · Analysis covers publicly announced Microsoft security capabilities only
 </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var btn = document.getElementById('hamburgerBtn');
+  var drawer = document.getElementById('mobileDrawer');
+  var overlay = document.getElementById('drawerOverlay');
+  if(!btn || !drawer || !overlay) return;
+  function closeMenu(){
+    btn.classList.remove('open');
+    drawer.classList.remove('open');
+    overlay.classList.remove('open');
+  }
+  btn.addEventListener('click', function(){
+    var isOpen = drawer.classList.contains('open');
+    if(isOpen){ closeMenu(); } else {
+      btn.classList.add('open');
+      drawer.classList.add('open');
+      overlay.classList.add('open');
+    }
+  });
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', closeMenu);
+  });
+});
+</script>
+
 </body>
 </html>

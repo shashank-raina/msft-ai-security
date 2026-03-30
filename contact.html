@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Frameworks — Securing AI with Microsoft</title>
+<title>Overview — Securing AI with Microsoft</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -269,11 +269,8 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 @media(max-width:700px){
   .topnav{padding:0 16px;}
   .page{padding:32px 20px 80px;}
-  .threat-cols{grid-template-columns:1fr;}
-  .nist-grid{grid-template-columns:1fr;}
-  .flow{flex-direction:column;}
-  .flow-arrow{display:none;}
   h1{font-size:26px;}
+  .form-grid{grid-template-columns:1fr !important;}
 }
 
 /* HAMBURGER */
@@ -309,174 +306,243 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
     <div class="msft-logo"><div></div><div></div><div></div><div></div></div>
     <div><div class="brand-text">Securing AI with Microsoft</div></div>
   </div>
-  <div class="nav-links"><a href="index.html" class="">Start Here</a>
-<a href="overview.html" class="">Overview</a>
-<a href="risk.html" class="">AI Risk</a>
-<a href="product-map.html" class="">Products</a>
-<a href="identity.html" class="">Identity</a>
-<a href="mcp.html" class="">MCP</a>
-<a href="threats.html" class="">Threats</a>
-<a href="frameworks.html" class=" active">Frameworks</a>
-<a href="gaps.html" class="">Gaps</a>
-<a href="changelog.html" class="">Changelog</a>
-<a href="contact.html" class="">Contact</a>
-<a href="playbooks.html" class="">Playbooks</a>
-</div>
+  <div class="nav-links">
+    <a href="index.html" class="">Start Here</a>
+    <a href="overview.html" class="">Overview</a>
+    <a href="risk.html" class="">AI Risk</a>
+    <a href="product-map.html" class="">Products</a>
+    <a href="identity.html" class="">Identity</a>
+    <a href="mcp.html" class="">MCP</a>
+    <a href="threats.html" class="">Threats</a>
+    <a href="frameworks.html" class="">Frameworks</a>
+    <a href="gaps.html" class="">Gaps</a>
+    <a href="changelog.html" class="">Changelog</a>
+    <a href="playbooks.html" class="">Playbooks</a>
+    <a href="contact.html" class=" active">Contact</a>
+  </div>
   <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
 
 <div class="mobile-drawer-overlay" id="drawerOverlay"></div>
 <div class="mobile-drawer" id="mobileDrawer">
 <a href="index.html" class="">Start Here</a>
-<a href="overview.html" class="">Overview</a>
-<a href="risk.html" class="">AI Risk</a>
-<a href="product-map.html" class="">Products</a>
-<a href="identity.html" class="">Identity</a>
-<a href="mcp.html" class="">MCP</a>
-<a href="threats.html" class="">Threats</a>
-<a href="frameworks.html" class="active">Frameworks</a>
-<a href="gaps.html" class="">Gaps</a>
-<a href="changelog.html" class="">Changelog</a>
-<a href="contact.html" class="">Contact</a>
-<a href="playbooks.html" class="">Playbooks</a>
+    <a href="overview.html" class="">Overview</a>
+    <a href="risk.html" class="">AI Risk</a>
+    <a href="product-map.html" class="">Products</a>
+    <a href="identity.html" class="">Identity</a>
+    <a href="mcp.html" class="">MCP</a>
+    <a href="threats.html" class="">Threats</a>
+    <a href="frameworks.html" class="">Frameworks</a>
+    <a href="gaps.html" class="">Gaps</a>
+    <a href="changelog.html" class="">Changelog</a>
+    <a href="playbooks.html" class="">Playbooks</a>
+    <a href="contact.html" class="active">Contact</a>
 </div>
 </nav>
 <div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
-  📌 <strong>Author's note:</strong> This site synthesises the author's own understanding from publicly available Microsoft documentation, official Microsoft Security blog posts, RSAC 2026 announcements, and insights from Microsoft Security professionals and MVPs. It is independent and not affiliated with or endorsed by Microsoft. Microsoft updates products and documentation frequently — always verify current status directly with Microsoft before making architecture or purchasing decisions.
+  📌 <strong>Author's note:</strong> This site synthesises the author's own understanding from publicly available Microsoft documentation, official Microsoft Security blog posts, RSAC 2026 announcements, and insights from Microsoft Security professionals and MVPs. It is independent and not affiliated with or endorsed by Microsoft.
 </div>
+
 <div class="page">
 
+<style>
+  /* CONTACT FORM STYLES */
+  .form-wrap{max-width:620px;margin:0 auto;}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+  .field{display:flex;flex-direction:column;gap:6px;}
+  .field.full{grid-column:1/-1;}
+  .field label{font-size:12px;font-weight:700;color:#2e3d5e;
+    font-family:'JetBrains Mono',monospace;letter-spacing:0.04em;}
+  .field label span{color:var(--warn-text);margin-left:2px;}
+  .field input,.field select,.field textarea{
+    background:#f5f7fc;border:1.5px solid var(--border2);border-radius:8px;
+    padding:10px 14px;font-family:'Plus Jakarta Sans',sans-serif;
+    font-size:14px;color:#0d1526;outline:none;
+    transition:border-color 0.15s,box-shadow 0.15s;width:100%;}
+  .field input:focus,.field select:focus,.field textarea:focus{
+    border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,120,212,0.1);}
+  .field textarea{resize:vertical;min-height:120px;line-height:1.6;}
+  .field select{cursor:pointer;appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a6a8a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 14px center;
+    padding-right:36px;}
+  .char-count{font-family:'JetBrains Mono',monospace;font-size:9px;
+    color:var(--text3);text-align:right;margin-top:4px;}
+  .submit-btn{background:linear-gradient(135deg,var(--blue),#0063b1);
+    border:none;border-radius:10px;color:#ffffff;
+    font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;
+    padding:14px 36px;cursor:pointer;transition:all 0.15s;
+    display:inline-flex;align-items:center;gap:10px;margin-top:8px;}
+  .submit-btn:hover{transform:translateY(-2px);
+    box-shadow:0 6px 20px rgba(0,120,212,0.25);}
+  .submit-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+  .success-state{display:none;text-align:center;padding:48px 20px;}
+  .success-icon{font-size:48px;margin-bottom:16px;}
+  .success-title{font-size:22px;font-weight:800;color:#0d1526;margin-bottom:8px;}
+  .success-sub{font-size:14px;color:#2e3d5e;}
+  .privacy-note{font-size:11px;color:var(--text3);margin-top:12px;
+    display:flex;align-items:flex-start;gap:6px;line-height:1.5;}
+  .privacy-note::before{content:"🔒";font-size:12px;flex-shrink:0;}
+  .type-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;}
+  .type-pill{font-family:'JetBrains Mono',monospace;font-size:10px;
+    padding:5px 12px;border-radius:20px;border:1.5px solid var(--border2);
+    cursor:pointer;color:var(--text3);transition:all 0.15s;background:#ffffff;
+    user-select:none;}
+  .type-pill.selected{border-color:var(--blue);background:#f0f6ff;color:var(--blue);font-weight:600;}
+  .hidden-type{display:none;}
+</style>
 
 <div class="hero">
-  <div class="hero-badge"><div class="live-dot"></div>UPDATED · RSAC 2026 + FIELD RESEARCH · MARCH 2026</div>
-  <h1>NIST AI RMF &<br><span>ISO 42001 Alignment</span></h1>
-  <p style="color:#2e3d5e;font-size:17px;font-weight:400;max-width:640px;line-height:1.7;">
-    How Microsoft's AI security controls map to NIST AI RMF and ISO 42001 — with gap analysis per clause. Updated with RSAC 2026 GA announcements and the Zero Trust Workshop tool reference.
+  <div class="hero-badge"><div class="live-dot"></div>FEEDBACK · SUGGESTIONS · CORRECTIONS</div>
+  <h1>Share your<br><span>thoughts</span></h1>
+  <p style="color:#2e3d5e;font-size:17px;font-weight:400;max-width:560px;line-height:1.7;">
+    Found something wrong? Have a suggestion? Know about a Microsoft AI security update we've missed? This goes directly to the author — nothing is published publicly.
   </p>
 </div>
 
-<div class="callout callout-info">
-  <div class="callout-title">🛠️ Zero Trust Workshop & Assessment Tool</div>
-  <p>Microsoft's <a href="https://microsoft.github.io/zerotrustassessment/" target="_blank">Zero Trust Workshop</a> (microsoft.github.io/zerotrustassessment) is a free, open-source guided assessment framework built by the Microsoft Security CxE team. It provides pillar-specific assessment checks, a step-by-step deployment guide using a first-then-next structure, app permissions analysis, and workshop documentation. It is built from learnings across thousands of customer deployments. A formal <strong>AI pillar</strong> for the assessment tool is in development — expected summer 2026. Until then, architects should use the existing Identity, Data, and Networking pillar assessments alongside the new Zero Trust for AI reference architecture published at RSAC 2026.</p>
+<div class="form-wrap">
+
+  <!-- Type selector -->
+  <div class="field" style="margin-bottom:24px;">
+    <label>WHAT KIND OF FEEDBACK IS THIS?</label>
+    <div class="type-pills">
+      <div class="type-pill selected" onclick="selectType(this,'Factual correction')">⚠️ Factual correction</div>
+      <div class="type-pill" onclick="selectType(this,'Missing content')">🆕 Missing content</div>
+      <div class="type-pill" onclick="selectType(this,'Broken link')">🔗 Broken link</div>
+      <div class="type-pill" onclick="selectType(this,'General suggestion')">💡 General suggestion</div>
+      <div class="type-pill" onclick="selectType(this,'Other')">📝 Other</div>
+    </div>
+  </div>
+
+  <form id="contactForm"
+    action="https://formspree.io/f/mojpezea"
+    method="POST"
+    onsubmit="handleSubmit(event)">
+
+    <input type="hidden" name="feedback_type" id="feedbackType" value="Factual correction">
+
+    <div class="form-grid">
+      <div class="field">
+        <label>NAME <span>*</span></label>
+        <input type="text" name="name" placeholder="Your name" required>
+      </div>
+      <div class="field">
+        <label>EMAIL</label>
+        <input type="email" name="email" placeholder="If you'd like a reply">
+      </div>
+      <div class="field full">
+        <label>PAGE THIS RELATES TO</label>
+        <select name="page">
+          <option value="">— Select a page (optional) —</option>
+          <option>Start Here</option>
+          <option>Overview</option>
+          <option>AI Risk Reality</option>
+          <option>Products</option>
+          <option>Identity</option>
+          <option>MCP</option>
+          <option>Threats</option>
+          <option>Frameworks</option>
+          <option>Gaps</option>
+          <option>Playbooks</option>
+          <option>Changelog</option>
+          <option>General / whole site</option>
+        </select>
+      </div>
+      <div class="field full">
+        <label>YOUR FEEDBACK <span>*</span></label>
+        <textarea name="message" id="messageArea"
+          placeholder="Tell us what's wrong, what's missing, or what could be better. For corrections, please include a link to your source if you have one."
+          maxlength="2000" required
+          oninput="updateCharCount(this)"></textarea>
+        <div class="char-count" id="charCount">0 / 2000</div>
+      </div>
+      <div class="field full">
+        <label>SOURCE URL (if applicable)</label>
+        <input type="url" name="source_url"
+          placeholder="https://learn.microsoft.com/...">
+      </div>
+    </div>
+
+    <button type="submit" class="submit-btn" id="submitBtn">
+      <span>Send Feedback</span> →
+    </button>
+
+    <div class="privacy-note">
+      Your feedback is sent directly to the author via Formspree and never published publicly. Email is optional and only used to respond to your submission.
+    </div>
+
+  </form>
+
+  <!-- Success state -->
+  <div class="success-state" id="successState">
+    <div class="success-icon">✅</div>
+    <div class="success-title">Feedback received — thank you!</div>
+    <div class="success-sub">The author reviews all submissions. If you left an email and a response is warranted, you'll hear back within a few days.</div>
+  </div>
+
 </div>
 
-<div class="section-label">NIST AI RMF</div>
-<h2>NIST AI Risk Management Framework — Four Functions</h2>
-<div class="nist-grid">
-  <a href="https://airc.nist.gov/Docs/1" target="_blank" class="card-link" style="text-decoration:none;"><div class="nist-card">
-    <div class="nist-header" style="background:rgba(0,120,212,0.1);">
-      <div class="nist-badge" style="background:rgba(0,120,212,0.2);color:var(--blue2);">GOVERN</div>
-      <div class="nist-title">Policies, roles, accountability</div>
-    </div>
-    <div class="nist-body">
-      <div class="nist-item"><div class="nist-control">Establish AI risk governance structure</div><div class="nist-tool">Agent 365 · Purview</div></div>
-      <div class="nist-item"><div class="nist-control">Define roles and accountabilities for AI</div><div class="nist-tool">Entra Agent ID</div><div class="nist-gap">⚠ preview · Modern Agents only</div></div>
-      <div class="nist-item"><div class="nist-control">Establish AI lifecycle policies</div><div class="nist-tool">SDL for AI · ZT4AI</div></div>
-      <div class="nist-item"><div class="nist-control">Govern Classic vs Modern agent estate</div><div class="nist-tool">Power Platform Admin + AIAgentsInfo KQL</div></div>
-      <div class="nist-item"><div class="nist-control">Govern multi-tenant AI environments</div><div class="nist-tool">Entra Tenant Governance</div><div class="nist-gap">Preview · RSAC 2026</div></div>
-      <div class="nist-item"><div class="nist-control">Manage third-party AI and MCP risk</div><div class="nist-tool">Defender for Cloud Apps</div></div>
-      <div class="nist-item"><div class="nist-control">Workforce AI literacy and training</div><div class="nist-gap">⚠ Not a product control</div></div>
-    </div>
-  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
-  <a href="https://airc.nist.gov/Docs/1" target="_blank" class="card-link" style="text-decoration:none;"><div class="nist-card">
-    <div class="nist-header" style="background:rgba(0,133,117,0.1);">
-      <div class="nist-badge" style="background:rgba(0,133,117,0.2);color:var(--teal2);">MAP</div>
-      <div class="nist-title">Context, risks, and impacts</div>
-    </div>
-    <div class="nist-body">
-      <div class="nist-item"><div class="nist-control">Inventory all AI systems in use</div><div class="nist-tool">Security Dashboard for AI</div><div class="nist-gap" style="color:var(--green2);">✓ Now GA</div></div>
-      <div class="nist-item"><div class="nist-control">Inventory agent authentication posture</div><div class="nist-tool">AIAgentsInfo Advanced Hunting (Defender)</div></div>
-      <div class="nist-item"><div class="nist-control">Identify Classic vs Modern agents</div><div class="nist-tool">Entra Agent ID portal · AIAgentsInfo KQL</div><div class="nist-gap">⚠ Name sync bug complicates this</div></div>
-      <div class="nist-item"><div class="nist-control">Identify sensitive data exposure</div><div class="nist-tool">Purview DSPM for AI</div></div>
-      <div class="nist-item"><div class="nist-control">Identify shadow AI deployment</div><div class="nist-tool">Entra Internet Access Shadow AI</div><div class="nist-gap" style="color:var(--green2);">GA Mar 31</div></div>
-      <div class="nist-item"><div class="nist-control">Identify threat actors and attack vectors</div><div class="nist-tool">Defender · Sentinel · ZT4AI</div></div>
-      <div class="nist-item"><div class="nist-control">AI bias and fairness assessment</div><div class="nist-gap">⚠ Responsible AI tools (separate)</div></div>
-    </div>
-  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
-  <a href="https://airc.nist.gov/Docs/1" target="_blank" class="card-link" style="text-decoration:none;"><div class="nist-card">
-    <div class="nist-header" style="background:rgba(192,144,32,0.1);">
-      <div class="nist-badge" style="background:rgba(192,144,32,0.2);color:var(--gold2);">MEASURE</div>
-      <div class="nist-title">Analyse, assess, benchmark</div>
-    </div>
-    <div class="nist-body">
-      <div class="nist-item"><div class="nist-control">Continuous AI risk monitoring</div><div class="nist-tool">Security Dashboard · Defender</div><div class="nist-gap" style="color:var(--green2);">Dashboard Now GA</div></div>
-      <div class="nist-item"><div class="nist-control">Measure no-auth and ownerless agents</div><div class="nist-tool">AIAgentsInfo KQL queries</div></div>
-      <div class="nist-item"><div class="nist-control">Evaluate model safety pre-deployment</div><div class="nist-tool">Foundry Red Teaming + Evals</div></div>
-      <div class="nist-item"><div class="nist-control">Detect credential exposure in data</div><div class="nist-tool">Data Security Posture Agent</div><div class="nist-gap">Preview · RSAC 2026</div></div>
-      <div class="nist-item"><div class="nist-control">Benchmark AI security posture</div><div class="nist-tool">ZT Workshop + ZT Assessment Tool</div><div class="nist-gap">⚠ AI pillar: summer 2026</div></div>
-      <div class="nist-item"><div class="nist-control">Runtime anomaly detection</div><div class="nist-tool">Sentinel · Defender for AI</div></div>
-    </div>
-  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
-  <a href="https://airc.nist.gov/Docs/1" target="_blank" class="card-link" style="text-decoration:none;"><div class="nist-card">
-    <div class="nist-header" style="background:rgba(16,124,16,0.1);">
-      <div class="nist-badge" style="background:rgba(16,124,16,0.2);color:var(--green2);">MANAGE</div>
-      <div class="nist-title">Treat, respond, recover</div>
-    </div>
-    <div class="nist-body">
-      <div class="nist-item"><div class="nist-control">Respond to AI security incidents</div><div class="nist-tool">Sentinel SOAR · Security Copilot</div></div>
-      <div class="nist-item"><div class="nist-control">Enforce access controls on AI systems</div><div class="nist-tool">Entra CA · Foundry Guardrails</div><div class="nist-gap">⚠ Modern Agents only for CA</div></div>
-      <div class="nist-item"><div class="nist-control">Block unauthenticated agent access</div><div class="nist-tool">Power Platform Managed Environments</div><div class="nist-gap" style="color:var(--green2);">Available now</div></div>
-      <div class="nist-item"><div class="nist-control">Manage agent lifecycle (onboard/retire)</div><div class="nist-tool">Entra Agent ID</div><div class="nist-gap">⚠ preview · Modern only</div></div>
-      <div class="nist-item"><div class="nist-control">Enforce data governance in AI workflows</div><div class="nist-tool">Purview · DLP for Copilot</div><div class="nist-gap" style="color:var(--green2);">DLP: GA Mar 31</div></div>
-      <div class="nist-item"><div class="nist-control">Limit blast radius during active attack</div><div class="nist-tool">Defender Predictive Shielding</div><div class="nist-gap">Preview · RSAC 2026</div></div>
-      <div class="nist-item"><div class="nist-control">Recover identity infrastructure</div><div class="nist-tool">Entra Backup and Recovery</div><div class="nist-gap">Preview · RSAC 2026</div></div>
-    </div>
-  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+<div class="divider" style="margin-top:48px;"></div>
+
+<div class="section-label">ABOUT THIS SITE</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:48px;">
+  <div class="card">
+    <div class="card-name">Who writes this?</div>
+    <div class="card-desc">This site is written and maintained by a security architect synthesising publicly available Microsoft documentation, official blog posts, RSAC announcements, and insights from Microsoft Security professionals and MVPs. It is independent — not affiliated with or endorsed by Microsoft.</div>
+  </div>
+  <div class="card">
+    <div class="card-name">How often is it updated?</div>
+    <div class="card-desc">Significant content changes are tracked in the <a href="changelog.html" style="color:var(--blue);">Changelog</a>. The site is updated when meaningful new announcements, corrections, or field research becomes available — typically within days of major Microsoft security events.</div>
+  </div>
 </div>
 
-<div class="section-label">ISO 42001</div>
-<h2>ISO/IEC 42001:2023 — AI Management System</h2>
-<table>
-<thead><tr><th>Clause</th><th>Requirement</th><th>Microsoft Controls</th><th>Gap / Caveat</th></tr></thead>
-<tbody>
-<tr><td><strong>4.2 — Interested Parties</strong></td><td>Identify stakeholders and AI-related requirements</td><td>Agent 365 governance; Purview compliance; Entra Tenant Governance (preview)</td><td>Organisational process — not a product control</td></tr>
-<tr><td><strong>5.2 — AI Policy</strong></td><td>Establish and maintain an AI policy</td><td>SDL for AI; ZT for AI framework; Zero Trust Workshop (microsoft.github.io/zerotrustassessment)</td><td>Policy content is customer-defined; Microsoft provides scaffolding and guided workshop</td></tr>
-<tr><td><strong>6.1 — Risk Assessment</strong></td><td>AI-specific risk identification and assessment process</td><td>Security Dashboard for AI (now GA); Purview DSPM; AIAgentsInfo Advanced Hunting; Foundry Red Teaming</td><td>Quantitative risk scoring still limited; qualitative posture now available via GA dashboard. Classic Agent estate requires separate inventory.</td></tr>
-<tr><td><strong>6.1.3 — AI Impact Assessment</strong></td><td>Assess impacts on individuals and society</td><td>Microsoft Responsible AI Impact Assessment tools (separate from Security)</td><td>Outside security product scope; separate RAI tooling required</td></tr>
-<tr><td><strong>8.4 — AI System Development</strong></td><td>Security in AI development lifecycle</td><td>SDL for AI; GitHub Advanced Security; Foundry Red Teaming; Classic→Modern Agent migration</td><td>Classic Agent legacy complicates this — agents built before Agent ID may have no secure development baseline</td></tr>
-<tr><td><strong>8.6 — Data for AI Systems</strong></td><td>Data quality, provenance, and governance</td><td>Purview Information Protection; DSPM for AI; DLP for Copilot (GA March 31)</td><td>Training data provenance still limited; inference-time data controls now stronger. Maker credentials can bypass data governance if not configured correctly.</td></tr>
-<tr><td><strong>9.1 — Monitoring & Measurement</strong></td><td>Continuous monitoring of AI system performance and risks</td><td>Security Dashboard (GA); Sentinel + MCP Entity Analyzer; Defender for AI; AIAgentsInfo KQL; Purview AI Observability</td><td>Good coverage when fully deployed. AI Agent Inventory requires Defender + Power Platform admin collaboration — complex setup.</td></tr>
-<tr><td><strong>10.2 — Continual Improvement</strong></td><td>Improve AIMS based on incidents and audit findings</td><td>Sentinel incident management; SDL feedback loops; ZT Workshop; ZT Assessment (AI pillar summer 2026)</td><td>ZT Assessment AI pillar not until summer 2026. Classic Agent name sync bug makes agent-level policy improvement tracking difficult.</td></tr>
-</tbody>
-</table>
-
-<div class="callout callout-info">
-  <div class="callout-title">📌 Framework Coverage — Updated Post-RSAC 2026 + Field Research</div>
-  <p>The GA of Security Dashboard for AI strengthens MAP and MEASURE function coverage. The discovery of the Classic vs Modern agent distinction reveals a gap across <strong>all four functions</strong> — most organisations cannot claim complete GOVERN, MAP, MEASURE, or MANAGE coverage until their Classic Agent estate is migrated to Modern Agents. This is the most significant framework compliance gap identified from field research and is not visible from Microsoft's product documentation alone.</p>
+<div class="page-nav">
+  <a href="playbooks.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Playbooks</span></a>
 </div>
-
-
-<div class="page-nav"><a href="mcp.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">MCP</span></a><a href="frameworks.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Frameworks</span></a></div>
 <div class="footer">
-  SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  Last updated: March 24, 2026 · Analysis covers publicly announced Microsoft security capabilities only
+  SOURCES: Microsoft Security Blog · RSAC 2026 · Microsoft Learn · Field research from Microsoft Security professionals<br>
+  Last updated: March 2026
 </div>
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function(){
-  var btn = document.getElementById('hamburgerBtn');
-  var drawer = document.getElementById('mobileDrawer');
-  var overlay = document.getElementById('drawerOverlay');
-  if(!btn || !drawer || !overlay) return;
-  function closeMenu(){
-    btn.classList.remove('open');
-    drawer.classList.remove('open');
-    overlay.classList.remove('open');
-  }
-  btn.addEventListener('click', function(){
-    var isOpen = drawer.classList.contains('open');
-    if(isOpen){ closeMenu(); } else {
-      btn.classList.add('open');
-      drawer.classList.add('open');
-      overlay.classList.add('open');
-    }
-  });
-  overlay.addEventListener('click', closeMenu);
-  drawer.querySelectorAll('a').forEach(function(a){
-    a.addEventListener('click', closeMenu);
-  });
-});
-</script>
+function selectType(el, value) {
+  document.querySelectorAll('.type-pill').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('feedbackType').value = value;
+}
 
-</body>
-</html>
+function updateCharCount(el) {
+  document.getElementById('charCount').textContent = el.value.length + ' / 2000';
+}
+
+async function handleSubmit(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span>Sending...</span>';
+
+  const form = document.getElementById('contactForm');
+  const data = new FormData(form);
+
+  try {
+    const res = await fetch(form.action, {
+      method: 'POST',
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (res.ok) {
+      form.style.display = 'none';
+      document.getElementById('successState').style.display = 'block';
+    } else {
+      btn.disabled = false;
+      btn.innerHTML = '<span>Send Feedback</span> →';
+      alert('Something went wrong. Please try again or email directly.');
+    }
+  } catch(err) {
+    btn.disabled = false;
+    btn.innerHTML = '<span>Send Feedback</span> →';
+    alert('Network error. Please try again.');
+  }
+}
+</script>

@@ -275,6 +275,31 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   .flow-arrow{display:none;}
   h1{font-size:26px;}
 }
+
+/* HAMBURGER */
+.hamburger{display:none;background:none;border:none;cursor:pointer;
+  padding:6px;flex-direction:column;gap:5px;margin-left:auto;flex-shrink:0;}
+.hamburger span{display:block;width:22px;height:2px;background:#0d1526;
+  border-radius:2px;transition:all 0.2s;}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.mobile-drawer{display:none;position:fixed;top:var(--nav-h);left:0;right:0;
+  background:rgba(245,247,252,0.98);border-bottom:1px solid var(--border2);
+  backdrop-filter:blur(16px);z-index:199;padding:12px 20px 20px;
+  flex-direction:column;gap:2px;box-shadow:0 8px 32px rgba(0,0,0,0.1);}
+.mobile-drawer.open{display:flex;}
+.mobile-drawer a{display:block;padding:10px 12px;border-radius:8px;
+  font-size:14px;font-weight:600;color:#1a2a4a;text-decoration:none;
+  transition:background 0.12s;}
+.mobile-drawer a:hover,.mobile-drawer a.active{background:#f0f6ff;color:var(--blue);}
+.mobile-drawer-overlay{display:none;position:fixed;inset:0;z-index:198;
+  background:rgba(0,0,0,0.2);}
+.mobile-drawer-overlay.open{display:block;}
+@media(max-width:900px){
+  .nav-links{display:none !important;}
+  .hamburger{display:flex;}
+}
 </style>
 </head>
 <body>
@@ -287,13 +312,32 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <div class="nav-links"><a href="index.html" class="">Start Here</a>
 <a href="overview.html" class="">Overview</a>
 <a href="risk.html" class="">AI Risk</a>
-<a href="product-map.html" class="">Product Map</a>
-<a href="identity.html" class="">Identity & OBO</a>
-<a href="mcp.html" class="">MCP Ecosystem</a>
-<a href="threats.html" class="">Threat Scenarios</a>
+<a href="product-map.html" class="">Products</a>
+<a href="identity.html" class="">Identity</a>
+<a href="mcp.html" class="">MCP</a>
+<a href="threats.html" class="">Threats</a>
 <a href="frameworks.html" class="">Frameworks</a>
-<a href="gaps.html" class="">Gaps & Roadmap</a>
+<a href="gaps.html" class="">Gaps</a>
+<a href="playbooks.html" class="">Playbooks</a>
 <a href="changelog.html" class=" active">Changelog</a>
+<a href="contact.html" class="">Contact</a>
+</div>
+  <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+
+<div class="mobile-drawer-overlay" id="drawerOverlay"></div>
+<div class="mobile-drawer" id="mobileDrawer">
+<a href="index.html" class="">Start Here</a>
+<a href="overview.html" class="">Overview</a>
+<a href="risk.html" class="">AI Risk</a>
+<a href="product-map.html" class="">Products</a>
+<a href="identity.html" class="">Identity</a>
+<a href="mcp.html" class="">MCP</a>
+<a href="threats.html" class="">Threats</a>
+<a href="frameworks.html" class="">Frameworks</a>
+<a href="gaps.html" class="">Gaps</a>
+<a href="playbooks.html" class="">Playbooks</a>
+<a href="changelog.html" class="active">Changelog</a>
+<a href="contact.html" class="">Contact</a>
 </div>
 </nav>
 <div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
@@ -314,6 +358,50 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <p>Entries marked <strong>🆕 New</strong> are net-new content additions. Entries marked <strong>✏️ Updated</strong> are corrections or refinements to existing content. Entries marked <strong>⚠️ Correction</strong> are cases where earlier content was wrong or misleading and has been fixed.</p>
 </div>
 
+
+
+<div class="section-label" style="margin-top:40px;">MARCH 30, 2026</div>
+<h2>Agent Authentication Patterns + CA for Agents Correction</h2>
+
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag warn">⚠️ Correction</span></td>
+<td><strong>Conditional Access for Agents does NOT apply to Copilot Studio agents</strong> — corrected on both the identity page and product map card. CA for Agents only triggers during modern Agent ID authentication (OAuth 2.0), used by Security Copilot and AI Foundry. Copilot Studio agents use OBO, maker credentials, or service principal — none of which trigger CA for Agents. Field-validated by Derk van der Woude (March 2026).</td>
+<td>identity.html, product-map.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Four Copilot Studio authentication patterns table</strong> — new section on identity page covering all four patterns: End User Credentials (OBO), Maker-Provided Credentials, App Registration Delegated, App Registration Application Permissions. Includes risk rating and detection method for each.</td>
+<td>identity.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Precise maker credentials KQL</strong> — upgraded Playbook 01 Step 4 with Derk's field-validated query that checks both AgentToolsDetails and AgentTopicsDetails for maker mode connections. More precise than the previous agent-level auth type check.</td>
+<td>playbooks.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>App Registration Graph API detection KQL</strong> — new Playbook 01 Step 4b detects agents using HTTP Request actions to graph.microsoft.com or management.azure.com, identifying potential application permission agents (very high risk — tenant-wide access).</td>
+<td>playbooks.html</td></tr>
+
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Change-detection KQL for auth type downgrade</strong> — added to Playbook 01 Step 1. Detects when a published agent's authentication is changed to None — designed to be saved as a Sentinel Analytics Rule for real-time alerting. Sourced from Derk's AI Agent Inventory blog (November 2025).</td>
+<td>playbooks.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Any user can change another agent's auth type — new significant gap</strong> — by design in Copilot Studio, any tenant user can downgrade another agent's authentication to No Authentication, even without being the owner. Added to Significant Gaps with interim mitigations.</td>
+<td>gaps.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Community Queries tip added to Playbook 01</strong> — Defender Advanced Hunting has a dedicated AI Agents section with queries from the Microsoft Product Group. Callout added to Playbook 01 checklist.</td>
+<td>playbooks.html</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Source</div>
+  <p><a href="https://derkvanderwoude.medium.com/your-copilot-studio-agent-is-acting-as-someone-do-you-know-who-f9e5be1116b9" target="_blank" style="color:var(--blue);">Derk van der Woude — "Your Copilot Studio agent is acting as someone, do you know who?" (March 2026)</a></p>
+</div>
 
 <!-- ─── MARCH 27 2026 ─────────────────────────────── -->
 <div class="section-label" style="margin-top:40px;">MARCH 27, 2026</div>
@@ -345,6 +433,29 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
   <div class="callout-title">📌 Sources for this update</div>
   <p>Microsoft Defender for Cloud Blog — "Defending the AI Era: New Microsoft Capabilities to Protect AI" (March 20, 2026) · Microsoft Security Blog — "Secure Agentic AI End-to-End" (March 20, 2026)</p>
+</div>
+
+
+<div class="section-label" style="margin-top:40px;">MARCH 28, 2026</div>
+<h2>Purview DLP External Web Search Blocking</h2>
+
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Purview DLP external web search blocking (Coming June/July 2026)</strong> — new DLP policy option to prevent Copilot from sending prompts containing selected Sensitive Information Types (SITs) to external web search. When triggered, Copilot continues responding using internal Microsoft Graph data only. Alerts in DLP Alerts and Activity Explorer under DSPM for AI. GA June/July 2026, opt-in required.</td>
+<td>product-map.html, gaps.html</td></tr>
+
+<tr><td><span class="tag warn">⚠️ Correction</span></td>
+<td><strong>Purview DLP SIT blocking description corrected</strong> — initial entry incorrectly stated: (a) the feature was "coming June/July 2026" — it is already in Preview, June/July is the GA target; (b) Copilot "continues responding using internal Graph sources" when triggered — it does not respond at all; (c) only external web search was blocked — both internal and external searches are blocked. Also added: files uploaded directly into prompts are not scanned by DLP (only typed text); the two DLP conditions (SITs and sensitivity labels) cannot be in the same rule.</td>
+<td>product-map.html, gaps.html</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Sources</div>
+  <p>Microsoft Purview product announcement (March 2026) · <a href="https://learn.microsoft.com/en-us/purview/dlp-microsoft365-copilot-location-learn-about" target="_blank">learn.microsoft.com — DLP for M365 Copilot (official docs, updated Feb 2026)</a></p>
 </div>
 
 <!-- ─── MARCH 26 2026 ─────────────────────────────── -->
@@ -400,11 +511,38 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <p>Microsoft Security Blog (RSAC 2026, March 20 2026) · Microsoft Tech Community · learn.microsoft.com · Microsoft Copilot Studio agent security field research · NIST AI RMF 1.0 · ISO/IEC 42001:2023 · Derk van der Woude Medium blog series (Microsoft Security MVP)</p>
 </div>
 
-<div class="page-nav"><a href="gaps.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Gaps & Roadmap</span></a><span></span></div>
+<div class="page-nav"><a href="gaps.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Gaps</span></a><span></span></div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
   Last updated: March 24, 2026 · Analysis covers publicly announced Microsoft security capabilities only
 </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var btn = document.getElementById('hamburgerBtn');
+  var drawer = document.getElementById('mobileDrawer');
+  var overlay = document.getElementById('drawerOverlay');
+  if(!btn || !drawer || !overlay) return;
+  function closeMenu(){
+    btn.classList.remove('open');
+    drawer.classList.remove('open');
+    overlay.classList.remove('open');
+  }
+  btn.addEventListener('click', function(){
+    var isOpen = drawer.classList.contains('open');
+    if(isOpen){ closeMenu(); } else {
+      btn.classList.add('open');
+      drawer.classList.add('open');
+      overlay.classList.add('open');
+    }
+  });
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', closeMenu);
+  });
+});
+</script>
+
 </body>
 </html>

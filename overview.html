@@ -274,6 +274,45 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   .flow{flex-direction:column;}
   .flow-arrow{display:none;}
   h1{font-size:26px;}
+  /* Viz mobile — stack label above pills */
+  .viz-layer-inner{flex-direction:column !important;}
+  .viz-label{width:100% !important;border-right:none !important;
+    border-bottom:1.5px solid;padding:12px 14px !important;}
+  .viz-label-name{font-size:15px !important;}
+  .viz-label-sub{font-size:12px !important;}
+  .viz-label-num{font-size:10px !important;}
+  .viz-label-badge{font-size:9px !important;}
+  .viz-pills{padding:10px 14px !important;gap:7px !important;}
+  .viz-pill{font-size:10px !important;padding:5px 10px !important;white-space:normal !important;}
+  .viz-top{flex-direction:column !important;gap:10px !important;}
+  .viz-top-agents{gap:6px !important;}
+  .viz-agent{font-size:11px !important;padding:6px 10px !important;}
+  .viz-footer{flex-wrap:wrap;gap:10px !important;}
+}
+
+/* HAMBURGER */
+.hamburger{display:none;background:none;border:none;cursor:pointer;
+  padding:6px;flex-direction:column;gap:5px;margin-left:auto;flex-shrink:0;}
+.hamburger span{display:block;width:22px;height:2px;background:#0d1526;
+  border-radius:2px;transition:all 0.2s;}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.mobile-drawer{display:none;position:fixed;top:var(--nav-h);left:0;right:0;
+  background:rgba(245,247,252,0.98);border-bottom:1px solid var(--border2);
+  backdrop-filter:blur(16px);z-index:199;padding:12px 20px 20px;
+  flex-direction:column;gap:2px;box-shadow:0 8px 32px rgba(0,0,0,0.1);}
+.mobile-drawer.open{display:flex;}
+.mobile-drawer a{display:block;padding:10px 12px;border-radius:8px;
+  font-size:14px;font-weight:600;color:#1a2a4a;text-decoration:none;
+  transition:background 0.12s;}
+.mobile-drawer a:hover,.mobile-drawer a.active{background:#f0f6ff;color:var(--blue);}
+.mobile-drawer-overlay{display:none;position:fixed;inset:0;z-index:198;
+  background:rgba(0,0,0,0.2);}
+.mobile-drawer-overlay.open{display:block;}
+@media(max-width:900px){
+  .nav-links{display:none !important;}
+  .hamburger{display:flex;}
 }
 </style>
 </head>
@@ -287,13 +326,32 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <div class="nav-links"><a href="index.html" class="">Start Here</a>
 <a href="overview.html" class=" active">Overview</a>
 <a href="risk.html" class="">AI Risk</a>
-<a href="product-map.html" class="">Product Map</a>
-<a href="identity.html" class="">Identity & OBO</a>
-<a href="mcp.html" class="">MCP Ecosystem</a>
-<a href="threats.html" class="">Threat Scenarios</a>
+<a href="product-map.html" class="">Products</a>
+<a href="identity.html" class="">Identity</a>
+<a href="mcp.html" class="">MCP</a>
+<a href="threats.html" class="">Threats</a>
 <a href="frameworks.html" class="">Frameworks</a>
-<a href="gaps.html" class="">Gaps & Roadmap</a>
+<a href="gaps.html" class="">Gaps</a>
 <a href="changelog.html" class="">Changelog</a>
+<a href="contact.html" class="">Contact</a>
+<a href="playbooks.html" class="">Playbooks</a>
+</div>
+  <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+
+<div class="mobile-drawer-overlay" id="drawerOverlay"></div>
+<div class="mobile-drawer" id="mobileDrawer">
+<a href="index.html" class="">Start Here</a>
+<a href="overview.html" class="active">Overview</a>
+<a href="risk.html" class="">AI Risk</a>
+<a href="product-map.html" class="">Products</a>
+<a href="identity.html" class="">Identity</a>
+<a href="mcp.html" class="">MCP</a>
+<a href="threats.html" class="">Threats</a>
+<a href="frameworks.html" class="">Frameworks</a>
+<a href="gaps.html" class="">Gaps</a>
+<a href="changelog.html" class="">Changelog</a>
+<a href="contact.html" class="">Contact</a>
+<a href="playbooks.html" class="">Playbooks</a>
 </div>
 </nav>
 <div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
@@ -311,7 +369,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 <div class="callout callout-green">
   <div class="callout-title">✅ RSAC 2026 Updates — March 20, 2026</div>
-  <p>Security Dashboard for AI is now <strong>generally available</strong>. Entra Internet Access Shadow AI Detection and Prompt Injection Protection both GA on March 31. New Security Analyst Agent and Security Alert Triage Agent announced. Sentinel MCP Entity Analyzer GA in April. Several new Purview and Entra capabilities added across preview and GA. See the <a href="gaps.html">Gaps & Roadmap</a> page for the updated availability matrix.</p>
+  <p>Security Dashboard for AI is now <strong>generally available</strong>. Entra Internet Access Shadow AI Detection and Prompt Injection Protection both GA on March 31. New Security Analyst Agent and Security Alert Triage Agent announced. Sentinel MCP Entity Analyzer GA in April. Several new Purview and Entra capabilities added across preview and GA. See the <a href="gaps.html">Gaps</a> page for the updated availability matrix.</p>
 </div>
 
 
@@ -567,48 +625,48 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 <h2>How to Use This Guide</h2>
 <div class="card-grid">
-  <div class="card" style="border-color:rgba(216,59,1,0.2);">
+  <a href="risk.html" class="card-link" style="text-decoration:none;color:inherit;display:block;"><div class="card" style="border-color:rgba(216,59,1,0.2);">
     <div class="card-sub">AI RISK</div>
-    <div class="card-name"><a href="risk.html">AI Risk Reality</a></div>
+    <div class="card-name">AI Risk Reality</div>
     <div class="card-desc">How AI agents break traditional security assumptions. Severity-rated risk taxonomy and the full attack surface model.</div>
     <div class="tag-row"><span class="tag">Risk Framework</span><span class="tag">Attack Surface</span></div>
-  </div>
-  <div class="card" style="border-color:rgba(252,225,0,0.15);">
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="product-map.html" class="card-link" style="text-decoration:none;color:inherit;display:block;"><div class="card" style="border-color:rgba(252,225,0,0.15);">
     <div class="card-sub">PRODUCT MAP</div>
-    <div class="card-name"><a href="product-map.html">Product Map</a></div>
+    <div class="card-name">Products</div>
     <div class="card-desc">Every Microsoft security product mapped to the AI stack — updated with RSAC 2026 announcements and current availability status.</div>
     <div class="tag-row"><span class="tag">Product Reference</span><span class="tag green">RSAC Updated</span></div>
-  </div>
-  <div class="card" style="border-color:rgba(0,120,212,0.2);">
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="identity.html" class="card-link" style="text-decoration:none;color:inherit;display:block;"><div class="card" style="border-color:rgba(0,120,212,0.2);">
     <div class="card-sub">IDENTITY & OBO</div>
-    <div class="card-name"><a href="identity.html">Agent Identity & OBO</a></div>
+    <div class="card-name">Agent Identity & OBO</div>
     <div class="card-desc">The OBO token flow in detail. What Agent ID is vs. what's actually available. What architects should do today.</div>
     <div class="tag-row"><span class="tag warn">⚠ Critical Gap</span><span class="tag">OBO · Agent ID</span></div>
-  </div>
-  <div class="card" style="border-color:rgba(98,100,167,0.2);">
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="mcp.html" class="card-link" style="text-decoration:none;color:inherit;display:block;"><div class="card" style="border-color:rgba(98,100,167,0.2);">
     <div class="card-sub">MCP ECOSYSTEM</div>
-    <div class="card-name"><a href="mcp.html">MCP Ecosystem</a></div>
+    <div class="card-name">MCP</div>
     <div class="card-desc">MCP architecture, six specific attack vectors, and how Microsoft controls the MCP-to-SaaS boundary — including the new Sentinel MCP Entity Analyzer.</div>
     <div class="tag-row"><span class="tag">MCP</span><span class="tag">Tool Poisoning</span><span class="tag">XPIA</span></div>
-  </div>
-  <div class="card" style="border-color:rgba(216,59,1,0.2);">
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="threats.html" class="card-link" style="text-decoration:none;color:inherit;display:block;"><div class="card" style="border-color:rgba(216,59,1,0.2);">
     <div class="card-sub">THREAT SCENARIOS</div>
-    <div class="card-name"><a href="threats.html">Threat Scenarios</a></div>
+    <div class="card-name">Threats</div>
     <div class="card-desc">Four detailed attack chains — DPI, XPIA, data leakage, privilege escalation — with full control mappings and gap assessments.</div>
     <div class="tag-row"><span class="tag">DPI</span><span class="tag">XPIA</span><span class="tag">Data Leakage</span></div>
-  </div>
-  <div class="card" style="border-color:rgba(0,133,117,0.2);">
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="frameworks.html" class="card-link" style="text-decoration:none;color:inherit;display:block;"><div class="card" style="border-color:rgba(0,133,117,0.2);">
     <div class="card-sub">FRAMEWORKS</div>
-    <div class="card-name"><a href="frameworks.html">Frameworks</a></div>
+    <div class="card-name">Frameworks</div>
     <div class="card-desc">NIST AI RMF and ISO 42001 control mappings — with gap analysis per clause and function.</div>
     <div class="tag-row"><span class="tag">NIST AI RMF</span><span class="tag">ISO 42001</span></div>
-  </div>
-  <div class="card" style="border-color:rgba(252,225,0,0.15);">
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="gaps.html" class="card-link" style="text-decoration:none;color:inherit;display:block;"><div class="card" style="border-color:rgba(252,225,0,0.15);">
     <div class="card-sub">GAPS & ROADMAP</div>
-    <div class="card-name"><a href="gaps.html">Gaps & Roadmap</a></div>
+    <div class="card-name">Gaps</div>
     <div class="card-desc">Consolidated gap register with interim mitigations and updated availability matrix reflecting RSAC 2026 GA announcements.</div>
     <div class="tag-row"><span class="tag warn">Critical Gaps</span><span class="tag green">RSAC Updated</span></div>
-  </div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
 </div>
 
 <div class="callout callout-info" style="margin-top:28px;">
@@ -622,5 +680,32 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   Last updated: March 24, 2026 · Analysis covers publicly announced Microsoft security capabilities only
 </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var btn = document.getElementById('hamburgerBtn');
+  var drawer = document.getElementById('mobileDrawer');
+  var overlay = document.getElementById('drawerOverlay');
+  if(!btn || !drawer || !overlay) return;
+  function closeMenu(){
+    btn.classList.remove('open');
+    drawer.classList.remove('open');
+    overlay.classList.remove('open');
+  }
+  btn.addEventListener('click', function(){
+    var isOpen = drawer.classList.contains('open');
+    if(isOpen){ closeMenu(); } else {
+      btn.classList.add('open');
+      drawer.classList.add('open');
+      overlay.classList.add('open');
+    }
+  });
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', closeMenu);
+  });
+});
+</script>
+
 </body>
 </html>
