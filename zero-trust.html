@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Overview — Securing AI with Microsoft</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f5f7fc;--surface:#ffffff;--surface2:#eef1f8;--surface3:#e4e9f4;
+  --border:#d0d8ec;--border2:#b8c4de;
+  --blue:#0078d4;--blue2:#0063b1;--purple:#6264a7;--purple2:#5a5c9a;
+  --teal:#008575;--teal2:#007a6e;--green:#107c10;--green2:#0e6e0e;
+  --orange:#d83b01;--orange2:#b83200;--gold:#c09020;--gold2:#8a6800;
+  --red:#c50f1f;--warn:rgba(216,59,1,0.07);--warn-border:rgba(216,59,1,0.3);
+  --warn-text:#c23000;--caution:rgba(140,90,0,0.07);
+  --caution-border:rgba(140,90,0,0.3);--caution-text:#6e4500;
+  --text:#0d1526;--text2:#2e3d5e;--text3:#5a6a8a;--nav-h:52px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:15.5px;line-height:1.8;padding-top:var(--nav-h);color:var(--text);}
+body::before{content:'';position:fixed;inset:0;
+  background-image:linear-gradient(rgba(0,80,180,0.05) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(0,80,180,0.05) 1px,transparent 1px);
+  background-size:48px 48px;pointer-events:none;z-index:0;}
+
+/* TOP NAV */
+.topnav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);
+  background:rgba(245,247,252,0.97);border-bottom:1px solid var(--border2);box-shadow:0 1px 10px rgba(0,0,0,0.07);
+  backdrop-filter:blur(12px);z-index:200;
+  display:flex;align-items:center;padding:0 32px;gap:0;}
+.nav-brand{display:flex;align-items:center;gap:8px;margin-right:20px;flex-shrink:0;}
+.msft-logo{width:18px;height:18px;display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.msft-logo div:nth-child(1){background:#f25022;border-radius:1px;}
+.msft-logo div:nth-child(2){background:#7fba00;border-radius:1px;}
+.msft-logo div:nth-child(3){background:#00a4ef;border-radius:1px;}
+.msft-logo div:nth-child(4){background:#ffb900;border-radius:1px;}
+.brand-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;
+  color:#0d1526;letter-spacing:0.01em;white-space:nowrap;line-height:1.2;}
+
+.nav-links{display:flex;align-items:stretch;height:100%;flex:1;overflow-x:auto;gap:2px;}
+.nav-links::-webkit-scrollbar{display:none;}
+.nav-links a{display:flex;align-items:center;gap:5px;padding:0 12px;
+  text-decoration:none;color:#1a2a4a;font-size:13px;font-weight:600;
+  border-bottom:2px solid transparent;white-space:nowrap;
+  transition:color 0.15s,border-color 0.15s;}
+.nav-links a:hover{color:#0d1526;}
+.nav-links a.active{color:var(--blue);border-bottom-color:var(--blue);}
+.nav-links a .n{font-family:'JetBrains Mono',monospace;font-size:11px;
+  color:#4a6a9a;letter-spacing:0.02em;font-weight:700;}
+.nav-links a.active .n{color:var(--blue);}
+
+
+/* LAYOUT */
+.page{max-width:940px;margin:0 auto;padding:52px 40px 100px;position:relative;z-index:1;}
+
+/* TYPOGRAPHY */
+.section-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;
+  color:#004a9e;text-transform:uppercase;
+  margin:48px 0 16px;
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,120,212,0.07);
+  border:1px solid rgba(0,120,212,0.2);
+  border-radius:6px;
+  padding:5px 12px;
+  font-weight:500;}
+.section-label::before{content:'';display:inline-block;
+  width:6px;height:6px;border-radius:50%;
+  background:var(--blue);flex-shrink:0;}
+h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:44px;font-weight:800;
+  line-height:1.06;letter-spacing:-0.03em;color:#0d1526;margin-bottom:18px;}
+h1 span{background:linear-gradient(135deg,var(--blue),#004fa8);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:26px;font-weight:700;
+  color:#0d1526;letter-spacing:-0.02em;margin:8px 0 14px;line-height:1.2;
+  padding-left:14px;border-left:3px solid var(--blue);}
+h2:first-child{margin-top:0;}
+h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:700;
+  color:#0d1526;margin:32px 0 12px;
+  padding-bottom:8px;border-bottom:1px solid var(--border2);}
+h4{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;
+  color:var(--text);margin:20px 0 6px;}
+p{color:#2e3d5e;margin-bottom:14px;font-weight:400;font-size:15px;}
+p strong{color:#0d1526;font-weight:600;}
+p:last-child{margin-bottom:0;}
+a{color:var(--blue);text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+/* PAGE HERO */
+.hero{padding:40px 0 36px;border-bottom:1px solid var(--border);margin-bottom:40px;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;
+  background:#ffffff;border:1px solid var(--border2);
+  border-radius:100px;padding:4px 12px 4px 8px;
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  color:#3a4a6a;letter-spacing:0.08em;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--blue);
+  animation:blink 1.5s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;}
+.chip{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.07em;
+  padding:4px 10px;border-radius:4px;border:1px solid;}
+.chip-blue{background:#0a1e38;border-color:#2060aa;color:#90c8ff;}
+.chip-warn{background:#2a0e06;border-color:#882000;color:#ffb090;}
+.chip-caution{background:#221400;border-color:#7a5000;color:#ffcc60;}
+.chip-green{background:#061a06;border-color:#1e6a1e;color:#80e880;}
+
+/* CALLOUTS */
+.callout{border-radius:10px;padding:18px 20px;margin:20px 0;border:1px solid;}
+.callout-warn{background:#fff4f0;border-color:rgba(216,59,1,0.3);}
+.callout-caution{background:#fffbf0;border-color:rgba(140,90,0,0.3);}
+.callout-info{background:#f0f6ff;border-color:rgba(0,120,212,0.25);}
+.callout-green{background:#f0fbf0;border-color:rgba(16,124,16,0.25);}
+.callout-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;
+  margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.callout-warn .callout-title{color:#b83000;}
+.callout-caution .callout-title{color:#6e4500;}
+.callout-info .callout-title{color:var(--blue);}
+.callout-green .callout-title{color:#0a5a0a;}
+.callout p{font-size:14px;margin-bottom:0;}
+.callout-warn p{color:#6a2000;}
+.callout-caution p{color:#5a3800;}
+.callout-info p{color:#003a80;}
+.callout-green p{color:#0a4a0a;}
+
+/* CARDS */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:14px;margin:20px 0;}
+.card{background:#ffffff;border:1px solid var(--border);
+  border-radius:10px;padding:18px;position:relative;overflow:hidden;
+  transition:border-color 0.2s,transform 0.15s,box-shadow 0.15s;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
+.card:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,120,212,0.12);border-color:var(--blue2);}
+.card-link{text-decoration:none;color:inherit;display:block;position:relative;}
+.card-link .card{position:relative;}
+.card-link:hover{text-decoration:none;}
+
+.card-link .card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.card-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;
+  color:#0d1526;margin-bottom:8px;}
+.card-sub{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--text3);
+  letter-spacing:0.08em;margin-bottom:6px;}
+.card-desc{font-size:13px;color:#2e3d5e;margin:0 0 12px;font-weight:400;line-height:1.6;}
+.tag-row{display:flex;flex-wrap:wrap;gap:5px;}
+.tag{font-family:'JetBrains Mono',monospace;font-size:9px;padding:3px 8px;border-radius:4px;
+  background:#1a2035;border:1px solid #2d3a55;
+  color:#c8d8f0;letter-spacing:0.04em;}
+.tag.warn{background:#2a0e06;border-color:#882000;color:#ffb090;}
+.tag.caution{background:#221400;border-color:#7a5000;color:#ffcc60;}
+.tag.green{background:#061a06;border-color:#1e6a1e;color:#80e880;}
+.tag.blue{background:#0a1e38;border-color:#2060aa;color:#90c8ff;}
+.tag.purple{background:#10102a;border-color:#4040a0;color:#b0b0ff;}
+
+/* TABLES */
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:13px;}
+th{background:#e8edf8;border:1px solid var(--border2);padding:10px 14px;
+  text-align:left;font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:700;
+  color:#0d1526;letter-spacing:0.02em;}
+td{border:1px solid var(--border);padding:9px 14px;color:#2e3d5e;
+  font-weight:400;vertical-align:top;line-height:1.55;background:#ffffff;}
+tr:hover td{background:#f5f8ff;}
+td strong{color:#0d1526;font-weight:600;}
+td code{font-family:'JetBrains Mono',monospace;font-size:10px;
+  background:#eef1f8;border:1px solid var(--border2);
+  border-radius:3px;padding:1px 5px;color:#004a9e;}
+.warn-inline{color:#d05030;font-family:'JetBrains Mono',monospace;font-size:10px;}
+.caution-inline{color:#c0820a;font-family:'JetBrains Mono',monospace;font-size:10px;}
+.green-inline{color:#2a9a2a;font-family:'JetBrains Mono',monospace;font-size:10px;}
+.severity-critical{color:#e84040;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;}
+.severity-high{color:#e87050;font-family:'JetBrains Mono',monospace;font-size:10px;}
+.severity-medium{color:#c8902a;font-family:'JetBrains Mono',monospace;font-size:10px;}
+
+/* FLOW */
+.flow{display:flex;align-items:stretch;border:1px solid var(--border2);
+  border-radius:10px;overflow:hidden;margin:20px 0;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
+.flow-step{flex:1;padding:14px 16px;border-right:1px solid var(--border2);
+  position:relative;background:#ffffff;transition:background 0.2s;}
+.flow-step:last-child{border-right:none;}
+.flow-step:hover{background:#eef1f8;}
+.flow-num{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--text3);
+  letter-spacing:0.1em;margin-bottom:6px;}
+.flow-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;
+  color:#0d1526;margin-bottom:4px;}
+.flow-desc{font-size:12px;color:#3a4a6a;font-weight:400;line-height:1.4;}
+.flow-arrow{position:absolute;right:-10px;top:50%;transform:translateY(-50%);
+  color:var(--text3);font-size:14px;z-index:2;}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border);margin:32px 0;}
+
+/* PAGE NAV (prev/next) */
+.page-nav{display:flex;justify-content:space-between;align-items:center;
+  margin-top:60px;padding-top:24px;border-top:1px solid var(--border);}
+.page-nav a{display:flex;align-items:center;gap:8px;padding:10px 16px;
+  background:#ffffff;border:1px solid var(--border2);border-radius:8px;
+  color:#3a4a6a;text-decoration:none;font-size:12px;transition:all 0.15s;box-shadow:0 1px 4px rgba(0,0,0,0.05);}
+.page-nav a:hover{border-color:var(--blue);color:var(--blue);}
+.page-nav-label{font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:var(--text2);letter-spacing:0.08em;display:block;margin-bottom:2px;}
+.page-nav-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;color:#0d1526;}
+.page-nav-spacer{flex:1;}
+
+/* MISC */
+code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#eef1f8;
+  border:1px solid var(--border2);border-radius:4px;padding:2px 6px;color:#004a9e;}
+.pill-list{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;}
+.pill{display:flex;align-items:center;gap:6px;background:#ffffff;
+  border:1px solid var(--border2);border-radius:100px;padding:5px 12px 5px 8px;
+  font-size:12px;color:#2e3d5e;font-weight:400;box-shadow:0 1px 3px rgba(0,0,0,0.05);}
+.pill-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.obo-flow{display:flex;flex-direction:column;border:1px solid var(--border2);
+  border-radius:10px;overflow:hidden;margin:20px 0;}
+.obo-row{display:flex;align-items:stretch;border-bottom:1px solid var(--border2);}
+.obo-row:last-child{border-bottom:none;}
+.obo-label{width:130px;flex-shrink:0;background:#eef1f8;padding:12px 14px;
+  border-right:1px solid var(--border2);font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:0.08em;color:#3a4a6a;
+  display:flex;align-items:center;text-transform:uppercase;}
+.obo-content{flex:1;padding:12px 16px;font-size:13px;color:#2e3d5e;font-weight:400;}
+.obo-content strong{color:#0d1526;font-weight:600;}
+.mcp-layer{border:1px solid var(--border2);border-radius:8px;margin:8px 0;overflow:hidden;}
+.mcp-layer-header{padding:10px 16px;background:#eef1f8;
+  border-bottom:1px solid var(--border2);display:flex;align-items:center;gap:10px;}
+.mcp-layer-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;color:#0d1526;}
+.mcp-layer-body{padding:12px 16px;display:flex;flex-wrap:wrap;gap:8px;}
+.mcp-item{background:#ffffff;border:1px solid var(--border2);
+  border-radius:6px;padding:6px 12px;font-size:12px;color:#2e3d5e;font-weight:400;}
+.mcp-item.risk{background:rgba(216,59,1,0.08);border-color:rgba(216,59,1,0.25);color:var(--warn-text);}
+.mcp-item.control{background:rgba(0,120,212,0.07);border-color:rgba(0,120,212,0.25);color:#004a9e;}
+.threat-block{background:#ffffff;border:1px solid var(--border2);
+  border-radius:10px;margin:24px 0;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
+.threat-header{padding:14px 20px;border-bottom:1px solid var(--border2);
+  background:#f5f7fc;display:flex;align-items:center;gap:12px;}
+.threat-icon{font-size:22px;}
+.threat-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;color:#0d1526;}
+.threat-category{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 8px;
+  border-radius:3px;letter-spacing:0.06em;margin-left:auto;}
+.threat-body{padding:20px;}
+.threat-cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.threat-col-title{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;
+  color:var(--text2);margin-bottom:10px;text-transform:uppercase;}
+.threat-step{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start;}
+.threat-step-num{width:20px;height:20px;border-radius:50%;display:flex;
+  align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;
+  font-size:9px;font-weight:500;flex-shrink:0;margin-top:1px;}
+.threat-step-text{font-size:13px;color:#2e3d5e;font-weight:400;}
+.nist-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0;}
+.nist-card{background:#ffffff;border:1px solid var(--border);
+  border-radius:10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.06);
+  transition:transform 0.15s,box-shadow 0.15s,border-color 0.15s;}
+a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,120,212,0.12);border-color:var(--blue2);}
+.nist-header{padding:12px 16px;display:flex;align-items:center;gap:10px;}
+.nist-badge{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;
+  padding:4px 10px;border-radius:6px;letter-spacing:0.05em;}
+.nist-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;color:#0d1526;}
+.nist-body{padding:0 16px 16px;}
+.nist-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border2);font-size:13px;}
+.nist-item:last-child{border-bottom:none;}
+.nist-control{color:#2e3d5e;font-weight:400;flex:1;}
+.nist-tool{font-family:'JetBrains Mono',monospace;font-size:10px;color:#004a9e;white-space:nowrap;}
+.nist-gap{font-family:'JetBrains Mono',monospace;font-size:10px;color:#b83000;white-space:nowrap;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:#e8edf8;}
+::-webkit-scrollbar-thumb{background:#b0bcce;border-radius:3px;}
+.footer{text-align:center;margin-top:60px;padding-top:24px;border-top:1px solid var(--border2);
+  font-family:'JetBrains Mono',monospace;font-size:10px;color:#5a6a8a;
+  letter-spacing:0.05em;line-height:1.9;}
+@media(max-width:700px){
+  .topnav{padding:0 16px;}
+  .page{padding:32px 20px 80px;}
+  .threat-cols{grid-template-columns:1fr;}
+  .nist-grid{grid-template-columns:1fr;}
+  .flow{flex-direction:column;}
+  .flow-arrow{display:none;}
+  h1{font-size:26px;}
+  /* Viz mobile — stack label above pills */
+  .viz-layer-inner{flex-direction:column !important;}
+
+  .viz-label-name{font-size:15px !important;}
+  .viz-label-sub{font-size:12px !important;}
+  .viz-label-num{font-size:10px !important;}
+  .viz-label-badge{font-size:9px !important;}
+  .viz-pills{padding:10px 14px !important;gap:7px !important;}
+  .viz-pill{font-size:10px !important;padding:5px 10px !important;white-space:normal !important;}
+  .viz-top{flex-direction:column !important;gap:10px !important;}
+  .viz-top-agents{gap:6px !important;}
+  .viz-agent{font-size:11px !important;padding:6px 10px !important;}
+  .viz-footer{flex-wrap:wrap;gap:10px !important;}
+}
+
+/* HAMBURGER */
+.hamburger{display:none;background:none;border:none;cursor:pointer;
+  padding:6px;flex-direction:column;gap:5px;margin-left:auto;flex-shrink:0;}
+.hamburger span{display:block;width:22px;height:2px;background:#0d1526;
+  border-radius:2px;transition:all 0.2s;}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.mobile-drawer{display:none;position:fixed;top:var(--nav-h);left:0;right:0;
+  background:rgba(245,247,252,0.98);border-bottom:1px solid var(--border2);
+  backdrop-filter:blur(16px);z-index:199;padding:12px 20px 20px;
+  flex-direction:column;gap:2px;box-shadow:0 8px 32px rgba(0,0,0,0.1);}
+.mobile-drawer.open{display:flex;}
+.mobile-drawer a{display:block;padding:10px 12px;border-radius:8px;
+  font-size:14px;font-weight:600;color:#1a2a4a;text-decoration:none;
+  transition:background 0.12s;}
+.mobile-drawer a:hover,.mobile-drawer a.active{background:#f0f6ff;color:var(--blue);}
+.mobile-drawer-overlay{display:none;position:fixed;inset:0;z-index:198;
+  background:rgba(0,0,0,0.2);}
+.mobile-drawer-overlay.open{display:block;}
+@media(max-width:900px){
+  .nav-links{display:none !important;}
+  .hamburger{display:flex;}
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-brand">
+    <div class="msft-logo"><div></div><div></div><div></div><div></div></div>
+    <div><div class="brand-text">Securing AI with Microsoft</div></div>
+  </div>
+  <div class="nav-links">
+    <a href="index.html" class="">Start Here</a>
+    <a href="overview.html" class="">Overview</a>
+    <a href="risk.html" class="">AI Risk</a>
+    <a href="product-map.html" class="">Products</a>
+    <a href="identity.html" class="">Identity</a>
+    <a href="mcp.html" class="">MCP</a>
+    <a href="threats.html" class="">Threats</a>
+    <a href="frameworks.html" class="">Frameworks</a>
+    <a href="zero-trust.html" class=" active">Zero Trust</a>
+    <a href="gaps.html" class="">Gaps</a>
+    <a href="playbooks.html" class="">Playbooks</a>
+    <a href="changelog.html" class="">Changelog</a>
+    <a href="contact.html" class="">Contact</a>
+  </div>
+  <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+<div class="mobile-drawer-overlay" id="drawerOverlay"></div>
+<div class="mobile-drawer" id="mobileDrawer">
+  <a href="index.html" class="">Start Here</a>
+  <a href="overview.html" class="">Overview</a>
+  <a href="risk.html" class="">AI Risk</a>
+  <a href="product-map.html" class="">Products</a>
+  <a href="identity.html" class="">Identity</a>
+  <a href="mcp.html" class="">MCP</a>
+  <a href="threats.html" class="">Threats</a>
+  <a href="frameworks.html" class="">Frameworks</a>
+  <a href="zero-trust.html" class="active">Zero Trust</a>
+  <a href="gaps.html" class="">Gaps</a>
+  <a href="playbooks.html" class="">Playbooks</a>
+  <a href="changelog.html" class="">Changelog</a>
+  <a href="contact.html" class="">Contact</a>
+</div>
+<div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
+  📌 <strong>Author's note:</strong> This site synthesises the author's own understanding from publicly available Microsoft documentation, official Microsoft Security blog posts, RSAC 2026 announcements, and insights from Microsoft Security professionals and MVPs. It is independent and not affiliated with or endorsed by Microsoft.
+</div>
+
+<div class="page">
+<style>
+.zt-principle{background:#ffffff;border:1.5px solid var(--border);border-radius:12px;padding:24px;margin-bottom:12px;}
+.zt-principle-header{display:flex;align-items:center;gap:14px;margin-bottom:12px;}
+.zt-principle-icon{font-size:28px;flex-shrink:0;}
+.zt-principle-title{font-size:18px;font-weight:800;color:#0d1526;}
+.zt-principle-sub{font-size:12px;font-family:"JetBrains Mono",monospace;color:var(--blue);letter-spacing:0.04em;margin-top:2px;}
+.zt-principle-body{font-size:14px;color:#2e3d5e;line-height:1.7;}
+.zt-maturity{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:24px 0;}
+.zt-stage{border-radius:12px;padding:20px;border:1.5px solid;}
+.zt-stage-num{font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:700;letter-spacing:0.08em;margin-bottom:6px;}
+.zt-stage-name{font-size:16px;font-weight:800;margin-bottom:8px;}
+.zt-stage-desc{font-size:12px;line-height:1.6;}
+.zt-stage-items{margin-top:10px;display:flex;flex-direction:column;gap:4px;}
+.zt-stage-item{font-size:11px;font-family:"JetBrains Mono",monospace;padding:3px 8px;border-radius:4px;background:rgba(255,255,255,0.6);}
+.zt-controls-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;}
+.zt-control{background:#ffffff;border:1.5px solid var(--border);border-radius:10px;padding:16px;}
+.zt-control-id{font-family:"JetBrains Mono",monospace;font-size:9px;color:var(--blue);letter-spacing:0.06em;margin-bottom:4px;}
+.zt-control-name{font-size:13px;font-weight:700;color:#0d1526;margin-bottom:6px;line-height:1.3;}
+.zt-control-desc{font-size:12px;color:#2e3d5e;line-height:1.5;}
+.zt-effort{display:inline-block;font-family:"JetBrains Mono",monospace;font-size:9px;padding:2px 8px;border-radius:3px;margin-top:8px;}
+.effort-low{background:rgba(16,124,16,0.1);color:#0a5a20;border:1px solid rgba(16,124,16,0.2);}
+.effort-med{background:rgba(255,170,0,0.1);color:#7a5000;border:1px solid rgba(255,170,0,0.2);}
+.effort-high{background:rgba(192,0,0,0.1);color:#8a2000;border:1px solid rgba(192,0,0,0.2);}
+@media(max-width:700px){
+  .zt-maturity{grid-template-columns:1fr;}
+  .zt-controls-grid{grid-template-columns:1fr;}
+}
+</style>
+
+<div class="hero">
+  <div class="hero-badge"><div class="live-dot"></div>ZERO TRUST · AI · MICROSOFT</div>
+  <h1>Zero Trust<br><span>for AI</span></h1>
+  <p style="color:#2e3d5e;font-size:17px;font-weight:400;max-width:580px;line-height:1.7;">
+    Microsoft's Zero Trust framework extends to AI workloads — but the controls are different from traditional Zero Trust. Here's what it means in practice, how to stage your implementation, and which controls matter most.
+  </p>
+</div>
+
+<div class="section-label">The Three Principles — Applied to AI</div>
+<h2>Zero Trust isn't just for users and devices</h2>
+<p>The three Zero Trust principles — Verify Explicitly, Use Least Privilege, Assume Breach — apply directly to AI agents, but the implementation looks very different from user-centric Zero Trust.</p>
+
+<div class="zt-principle">
+  <div class="zt-principle-header">
+    <div class="zt-principle-icon">🔍</div>
+    <div><div class="zt-principle-title">Verify Explicitly</div><div class="zt-principle-sub">PRINCIPLE 01 · IDENTITY & AUTHENTICATION</div></div>
+  </div>
+  <div class="zt-principle-body">For users, this means MFA and Conditional Access. For AI agents, it means ensuring every agent has a verified identity — not just a name — before it can access resources or communicate with other agents. In practice: require Entra ID authentication for all agent interactions, register agents in the Agent 365 Registry, and use modern Agent ID authentication (OAuth 2.0) where available. For Copilot Studio agents, this means enforcing one of the four authentication patterns rather than allowing No Authentication. <strong>The hardest part:</strong> Classic Copilot Studio agents authenticate as service principals or OBO — they don't use modern Agent ID and therefore can't be verified by CA for Agents or ID Protection. This is the single biggest gap in Microsoft's current Zero Trust for AI story.</div>
+</div>
+
+<div class="zt-principle">
+  <div class="zt-principle-header">
+    <div class="zt-principle-icon">🔒</div>
+    <div><div class="zt-principle-title">Use Least Privilege</div><div class="zt-principle-sub">PRINCIPLE 02 · ACCESS & PERMISSIONS</div></div>
+  </div>
+  <div class="zt-principle-body">For users, this means JIT/JEA and PIM. For AI agents, it means scoping each agent's permissions to exactly what it needs for its specific task — no broader. In practice: avoid Application permissions (tenant-wide) in favour of Delegated permissions (user-scoped), avoid maker credentials (which grant the maker's full permission set to every user), use access packages for time-bound agent resource assignments, and configure Custom Security Attributes to classify agent access levels for attribute-based CA policies. <strong>The hardest part:</strong> agents are often provisioned broadly "to make sure they work" and permissions are rarely reviewed. Agent lifecycle workflows and access reviews are the operational controls that enforce this principle over time.</div>
+</div>
+
+<div class="zt-principle">
+  <div class="zt-principle-header">
+    <div class="zt-principle-icon">🛡️</div>
+    <div><div class="zt-principle-title">Assume Breach</div><div class="zt-principle-sub">PRINCIPLE 03 · DETECTION & RESPONSE</div></div>
+  </div>
+  <div class="zt-principle-body">For users, this means SIEM, SOAR, and EDR. For AI agents, it means assuming any agent could be compromised via prompt injection, malicious tool output, or credential theft — and building detection and containment accordingly. In practice: deploy Sentinel AI analytics rules, configure Defender real-time agent protection, build AI incident response playbooks, and set up automated response rules for high-risk AI activity. <strong>The hardest part:</strong> agent compromise often looks like normal agent behaviour — the agent is doing what it was told, just by an attacker rather than a legitimate user. Detection requires behavioural baselines, not just signature matching.</div>
+</div>
+
+<div class="section-label" style="margin-top:48px;">Maturity Model</div>
+<h2>Where to start — a staged approach</h2>
+<p>Don't try to implement all 80+ ZT Workshop AI controls at once. This three-stage model gives organisations a practical sequence from zero visibility to full automation.</p>
+
+<div class="zt-maturity">
+  <div class="zt-stage" style="border-color:rgba(0,120,212,0.3);background:rgba(0,120,212,0.04);">
+    <div class="zt-stage-num" style="color:var(--blue);">STAGE 01</div>
+    <div class="zt-stage-name" style="color:#0d1526;">Visibility</div>
+    <div class="zt-stage-desc" style="color:#2e3d5e;">Know what you have before you try to control it. Most organisations skip this and jump to controls — then discover the controls don't apply to most of their agents.</div>
+    <div class="zt-stage-items">
+      <div class="zt-stage-item" style="color:#0d1526;">Discover agents in Agent 365 Registry</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Enable AI Agent Inventory (Defender)</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Run Playbook 01 KQL audit queries</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Identify Classic vs Modern agents</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Triage no-auth and maker-cred agents</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Assign owners to all published agents</div>
+    </div>
+  </div>
+  <div class="zt-stage" style="border-color:rgba(255,140,0,0.3);background:rgba(255,140,0,0.04);">
+    <div class="zt-stage-num" style="color:#8a5000;">STAGE 02</div>
+    <div class="zt-stage-name" style="color:#0d1526;">Control</div>
+    <div class="zt-stage-desc" style="color:#2e3d5e;">Apply identity and access controls to the agents you've inventoried. Focus on the highest-risk patterns first — no-auth, maker credentials, org-wide sharing.</div>
+    <div class="zt-stage-items">
+      <div class="zt-stage-item" style="color:#0d1526;">Enforce Entra ID auth on all agents</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Deploy CA posture for Modern Agents</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Enable ID Protection for Agents</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Configure Global Secure Access for agents</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Deploy DSPM for AI + DLP policies</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Enable Defender real-time protection</div>
+    </div>
+  </div>
+  <div class="zt-stage" style="border-color:rgba(16,124,16,0.3);background:rgba(16,124,16,0.04);">
+    <div class="zt-stage-num" style="color:#0a5a20;">STAGE 03</div>
+    <div class="zt-stage-name" style="color:#0d1526;">Automation</div>
+    <div class="zt-stage-desc" style="color:#2e3d5e;">Operationalise your controls so they scale without manual effort. Governance that requires manual review of every agent will break down as agent count grows.</div>
+    <div class="zt-stage-items">
+      <div class="zt-stage-item" style="color:#0d1526;">Lifecycle workflows for mover/leaver</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Access reviews for agent permissions</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Automated response rules in Sentinel</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Graph API agent registry management</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Recurring AI threat review cadence</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Red teaming cadence for all agents</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label" style="margin-top:48px;">Priority Controls</div>
+<h2>The highest-impact ZT Workshop AI controls</h2>
+<p>From the 80+ controls in the <a href="https://microsoft.github.io/zerotrustassessment/docs/category/ai" target="_blank" style="color:var(--blue);">Microsoft Zero Trust Assessment Workshop AI section</a>, these are the ones security architects should prioritise first.</p>
+
+<div class="zt-controls-grid">
+  <div class="zt-control">
+    <div class="zt-control-id">AI_000 · IDENTITY</div>
+    <div class="zt-control-name">Require Entra ID Auth for All Agent Interactions</div>
+    <div class="zt-control-desc">Ensure every agent that interacts with users or data authenticates via Entra ID. No anonymous or no-auth agents in production. Foundation for everything else.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_001–002 · VISIBILITY</div>
+    <div class="zt-control-name">Discover, Inventory and Assign Ownership</div>
+    <div class="zt-control-desc">Use Agent 365 Registry to discover all agents. Triage each one and assign an accountable owner. Unowned agents are your highest sprawl risk.</div>
+    <span class="zt-effort effort-low">LOW EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_005 · IDENTITY</div>
+    <div class="zt-control-name">Custom Security Attributes for Agent Classification</div>
+    <div class="zt-control-desc">Tag agents with custom attributes (risk level, data sensitivity, environment). Enables attribute-based CA policies that scale to hundreds of agents without per-agent rules — directly addresses the agent name sync gap.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_006 · IDENTITY</div>
+    <div class="zt-control-name">ID Protection + Risk-Based CA for Agents</div>
+    <div class="zt-control-desc">Enable Identity Protection risk signals for Modern Agents and deploy risk-based CA policies. Automatically blocks high-risk agents without manual intervention.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_014 · GOVERNANCE</div>
+    <div class="zt-control-name">Lifecycle Workflows for Sponsor Mover/Leaver</div>
+    <div class="zt-control-desc">When the person who sponsors an agent leaves the organisation, a workflow must reassign sponsorship or decommission the agent. Without this, agents become orphaned and unmanaged over time.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_072 · RUNTIME</div>
+    <div class="zt-control-name">Content Safety SDK for All Agent Inputs</div>
+    <div class="zt-control-desc">Require all agents to pass inputs through Azure AI Content Safety before processing. Detects prompt injection, harmful content, and jailbreak attempts at the input layer before the model sees them.</div>
+    <span class="zt-effort effort-high">HIGH EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_077 · MCP</div>
+    <div class="zt-control-name">APIM Gateway for All MCP Server Deployments</div>
+    <div class="zt-control-desc">Require Azure API Management as a governance layer in front of all custom MCP servers. Provides authentication, rate limiting, logging, and policy enforcement at the tool layer.</div>
+    <span class="zt-effort effort-high">HIGH EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_080 · DATA</div>
+    <div class="zt-control-name">Sensitivity Label Inheritance for AI Outputs</div>
+    <div class="zt-control-desc">AI-generated content should inherit the highest sensitivity label of its source data. Without this, a Confidential document summarised by an agent produces an Unclassified output — bypassing your data protection controls.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_090–091 · DETECT</div>
+    <div class="zt-control-name">Sentinel AI Analytics Rules</div>
+    <div class="zt-control-desc">Enable AI-specific analytics rules for prompt injection detection and create custom rules for agent anomaly detection. Also configure AI threat detection workbooks for ongoing visibility.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_094 · RESPOND</div>
+    <div class="zt-control-name">Automated Response Rules for High-Risk AI Activity</div>
+    <div class="zt-control-desc">Configure SOAR-style automated containment for high-risk AI activity — automatic agent suspension, access revocation, or alert escalation without waiting for manual triage.</div>
+    <span class="zt-effort effort-high">HIGH EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_081–083 · RUNTIME</div>
+    <div class="zt-control-name">AI Red Teaming Cadence</div>
+    <div class="zt-control-desc">Configure AI Red Teaming Agent in Azure AI Foundry. Establish red teaming as a requirement for all new agent deployments and a recurring validation cadence (quarterly recommended) for existing agents.</div>
+    <span class="zt-effort effort-high">HIGH EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_128 · MCP</div>
+    <div class="zt-control-name">MCP Management Server</div>
+    <div class="zt-control-desc">Deploy a dedicated MCP Management Server as the control plane for all custom MCP server deployments. Provides centralised approval, discovery, and governance of the tool layer — the MCP equivalent of an app catalogue.</div>
+    <span class="zt-effort effort-high">HIGH EFFORT</span>
+  </div>
+</div>
+
+<div class="callout callout-info" style="margin-top:32px;">
+  <div class="callout-title">📌 Full control list</div>
+  <p>This page covers the highest-priority controls. The complete Microsoft Zero Trust Workshop AI section contains 80+ controls across identity, governance, data, runtime, MCP, and detection. Access it at <a href="https://microsoft.github.io/zerotrustassessment/docs/category/ai" target="_blank" style="color:var(--blue);">microsoft.github.io/zerotrustassessment/docs/category/ai</a></p>
+</div>
+
+<div class="divider" style="margin-top:48px;"></div>
+
+<div class="section-label">Related Pages</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:48px;">
+  <a href="identity.html" class="card-link"><div class="card"><div class="card-name">Identity & OBO ↗</div><div class="card-desc">Five auth patterns, Classic vs Modern, Entra Agent ID, KQL detection</div></div></a>
+  <a href="gaps.html" class="card-link"><div class="card"><div class="card-name">Gaps & Roadmap ↗</div><div class="card-desc">What Zero Trust controls don't yet cover and when Microsoft plans to close them</div></div></a>
+  <a href="playbooks.html" class="card-link"><div class="card"><div class="card-name">Playbooks ↗</div><div class="card-desc">Runnable Stage 1 audit — KQL queries to get visibility in 30 minutes</div></div></a>
+</div>
+
+<div class="page-nav"><a href="frameworks.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Frameworks</span></a><a href="gaps.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Gaps</span></a></div>
+<div class="footer">
+  SOURCES: Microsoft Zero Trust Assessment Workshop (AI section) · Microsoft Entra security for AI overview · RSAC 2026<br>
+  Last updated: April 2026
+</div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var btn = document.getElementById('hamburgerBtn');
+  var drawer = document.getElementById('mobileDrawer');
+  var overlay = document.getElementById('drawerOverlay');
+  if(!btn || !drawer || !overlay) return;
+  function closeMenu(){
+    btn.classList.remove('open');
+    drawer.classList.remove('open');
+    overlay.classList.remove('open');
+  }
+  btn.addEventListener('click', function(){
+    var isOpen = drawer.classList.contains('open');
+    if(isOpen){ closeMenu(); } else {
+      btn.classList.add('open');
+      drawer.classList.add('open');
+      overlay.classList.add('open');
+    }
+  });
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', closeMenu);
+  });
+});
+</script>
+
+</body>
+</html>
