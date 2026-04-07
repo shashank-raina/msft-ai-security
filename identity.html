@@ -512,7 +512,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 
 
-<div class="section-label">The Four Authentication Patterns</div>
+<div class="section-label">The Five Authentication Patterns</div>
 <h2>How Copilot Studio Agents Actually Authenticate</h2>
 <p>Field research by Derk van der Woude (March 2026) identifies four distinct authentication configurations for Copilot Studio agents — each with a very different risk profile. Knowing <em>which pattern your agents use</em> is the first step to securing them.</p>
 
@@ -542,6 +542,12 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <td>Agent authenticates <em>as the application itself</em> — no user context, no OBO. Access determined by application permissions (e.g. Mail.Read.All, User.Read.All). Can access data <strong>across the entire tenant</strong>. Requires admin consent.</td>
   <td><span class="severity-critical">⚠️ Very high risk</span><br><span style="font-size:11px;color:#5a6a8a;">Tenant-wide access, admin consent</span></td>
   <td>HTTP Request to Graph + client credentials flow</td>
+</tr>
+<tr>
+  <td><strong>⑤ Agent's User Account</strong><br><span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5a6a8a;">Agent provisioned with a full human user account</span></td>
+  <td>Agent is assigned a real user account with persistent identity — mailbox, calendar, Teams membership, SharePoint access, ability to join meetings and send communications. Agent acts <em>as a human user</em>, not on behalf of one. Can participate in Teams channels, access documents, attend meetings under false pretences if compromised.</td>
+  <td><span class="severity-critical">⚠️ Very high risk</span><br><span style="font-size:11px;color:#5a6a8a;">Full human identity — hardest to detect as non-human</span></td>
+  <td>Entra Identity Governance lifecycle management; Access Reviews; assign a human sponsor accountable for the agent account</td>
 </tr>
 </tbody>
 </table>
@@ -597,6 +603,28 @@ directActions
     CreatorAccountUpn, OwnerAccountUpns</pre>
 </div>
 <p style="font-size:12px;color:#5a6a8a;margin-top:8px;">Source: <a href="https://derkvanderwoude.medium.com/your-copilot-studio-agent-is-acting-as-someone-do-you-know-who-f9e5be1116b9" target="_blank" style="color:var(--blue);">Derk van der Woude — Your Copilot Studio agent is acting as someone, do you know who? (March 2026)</a></p>
+
+
+<div class="section-label" style="margin-top:32px;">Agent Sprawl & Lifecycle Risk</div>
+<h2>The Agent Sprawl Problem</h2>
+<p>Microsoft formally defines <strong>agent sprawl</strong> as the uncontrolled expansion of agents across an organisation without adequate visibility, management, or lifecycle controls. It emerges when business units create agents without formal IT oversight (shadow AI), when agents created for temporary purposes remain in production indefinitely, and when agent permissions exceed actual requirements and are never reviewed.</p>
+<div class="callout callout-warn">
+  <div class="callout-title">⚠️ Agent Sprawl Consequences</div>
+  <p><strong>Increased security risk</strong> from over-privileged agents with unclear ownership. <strong>Compliance challenges</strong> when auditors expect governance over AI systems. <strong>Incident response difficulty</strong> when organisations can't quickly identify or isolate compromised agents. The Agent's User Account pattern (⑤) is especially prone to sprawl — user accounts created for agents are indistinguishable from human accounts in most tooling.</p>
+</div>
+
+<div class="section-label" style="margin-top:32px;">Agent-to-Agent (A2A) Protocol</div>
+<h2>Beyond MCP — The A2A Standard</h2>
+<p>Microsoft's Entra Agent ID platform now supports agent-to-agent (A2A) discovery and authorisation alongside MCP. A2A is an emerging standard protocol for authenticated communication between agents — enabling orchestration agents to delegate tasks to sub-agents with proper identity verification. Without A2A controls, an adversary can inject a malicious agent into an orchestration chain or intercept inter-agent communications.</p>
+<table>
+<thead><tr><th>Risk</th><th>Description</th><th>Control</th></tr></thead>
+<tbody>
+<tr><td><strong>Agent-to-agent propagation</strong></td><td>Compromised orchestration agent delegates to sub-agents, spreading compromise across the agent chain</td><td>Entra Agent ID A2A authentication; audit trails of inter-agent interactions</td></tr>
+<tr><td><strong>Malicious agent injection</strong></td><td>Adversary introduces a rogue agent into an orchestration workflow that impersonates a legitimate sub-agent</td><td>A2A identity verification; Entra Agent ID — agent-to-agent discovery based on verified identities</td></tr>
+<tr><td><strong>Unauthenticated delegation</strong></td><td>Orchestrator delegates tasks to agents without verifying their identity — attacker intercepts or substitutes</td><td>Require authenticated A2A channels; log all inter-agent calls in Entra audit logs</td></tr>
+</tbody>
+</table>
+<p style="font-size:12px;color:#5a6a8a;margin-top:8px;">Source: <a href="https://learn.microsoft.com/en-gb/entra/agent-id/security-for-ai-overview" target="_blank" style="color:var(--blue);">Microsoft Entra security for AI overview (April 2026)</a></p>
 
 <div class="section-label">What to Do Today</div>
 <h2>Practical Controls — Ranked by Availability</h2>

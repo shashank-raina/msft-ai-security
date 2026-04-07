@@ -410,6 +410,16 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <thead><tr><th>Gap</th><th>Interim Mitigation</th></tr></thead>
 <tbody>
 <tr>
+  <td><strong>Agent sprawl — no lifecycle enforcement by default</strong><br>
+  <span style="font-size:11px;color:var(--text3);">Microsoft formally defines agent sprawl as the uncontrolled expansion of agents without adequate visibility, management, or lifecycle controls. It manifests as shadow AI (agents created without IT oversight), abandoned agents (created for temporary purposes and never decommissioned), and over-privileged agents (permissions granted and never reviewed). Agent sprawl leads to increased security risk, compliance challenges, and incident response difficulty.</span></td>
+  <td>Implement Entra ID Governance lifecycle management for Modern Agents — assign sponsors, configure Access Reviews, use access packages for time-bound permissions. For Classic Agents, use AIAgentsInfo KQL to audit and track all published agents quarterly. Run Playbook 01 to detect ownerless and abandoned agents.</td>
+</tr>
+<tr>
+  <td><strong>Microsoft Managed Policies not widely known or deployed</strong><br>
+  <span style="font-size:11px;color:var(--text3);">Microsoft Managed Policies for agents provide automatic baseline CA policies that block high-risk agents — available through Conditional Access. Many organisations are unaware these exist or have not deployed them. Without them, high-risk agent identities have no automatic blocking controls.</span></td>
+  <td>Review Microsoft Managed Policies in Entra → Conditional Access → Microsoft-managed policies. Enable the agent risk baseline policy to automatically block agents flagged as high-risk by Identity Protection. Applies to Modern Agents only.</td>
+</tr>
+<tr>
   <td><strong>Any user can change another agent's authentication type</strong><br>
   <span style="font-size:11px;color:var(--text3);">By design in Copilot Studio, any tenant user can change the authentication settings of an agent they did not create and do not own — including downgrading a published agent from authenticated to No Authentication. A single non-admin user can silently expose any published agent to anonymous access without the owner's knowledge. There is currently no platform-enforced owner-only restriction on auth type changes.</span></td>
   <td>Deploy the change-detection Sentinel Analytics Rule (see Playbooks) to alert immediately when any agent is switched to No Authentication. Audit auth type changes regularly via the AIAgentsInfo table. Restrict who can access Copilot Studio environments via Managed Environments in Power Platform Admin Center.</td>

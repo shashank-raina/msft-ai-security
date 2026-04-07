@@ -493,6 +493,27 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </table>
 
 
+
+<div class="section-label" style="margin-top:32px;">Agent-to-Agent (A2A) Protocol</div>
+<h2>Beyond MCP — A2A for Inter-Agent Communication</h2>
+<p>While MCP governs how agents connect to external tools and data sources, <strong>A2A (Agent-to-Agent)</strong> is an emerging protocol for authenticated communication between agents themselves. Microsoft's Entra Agent ID platform now supports A2A for agent-to-agent discovery and authorisation — enabling orchestration agents to delegate tasks to sub-agents with verified identities. This is separate from MCP and addresses a different attack surface: the communication channels between agents in multi-agent architectures.</p>
+<div class="card-grid" style="grid-template-columns:1fr 1fr;margin-top:16px;">
+  <div class="card">
+    <div class="card-name">MCP (Model Context Protocol)</div>
+    <div class="card-desc">Governs agent-to-tool and agent-to-data-source connections. An agent calls an external tool (file system, API, database) via MCP. Standardised by Anthropic, adopted by Microsoft.</div>
+    <div class="tag-row"><span class="tag green">Widely adopted</span><span class="tag">Agent → Tool</span></div>
+  </div>
+  <div class="card">
+    <div class="card-name">A2A (Agent-to-Agent Protocol)</div>
+    <div class="card-desc">Governs agent-to-agent communication and delegation. An orchestration agent delegates tasks to sub-agents via A2A with identity verification. Emerging standard supported by Entra Agent ID.</div>
+    <div class="tag-row"><span class="tag caution">Emerging</span><span class="tag">Agent → Agent</span><span class="tag">Entra Agent ID</span></div>
+  </div>
+</div>
+<div class="callout callout-warn" style="margin-top:16px;">
+  <div class="callout-title">⚠️ Most multi-agent architectures today have no A2A verification</div>
+  <p>Copilot Studio agent chains, Power Automate flows that call agents, and custom orchestration built on Azure AI Foundry typically have no formal A2A authentication. This means a compromised orchestrator can issue malicious delegations to sub-agents without any identity check. Until A2A becomes standard, treat every inter-agent boundary as an untrusted boundary and apply least-privilege scoping per agent.</p>
+</div>
+
 <div class="page-nav"><a href="identity.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Identity</span></a><a href="threats.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Threats</span></a></div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>

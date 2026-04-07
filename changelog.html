@@ -361,6 +361,42 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 
 
+
+<div class="section-label" style="margin-top:40px;">APRIL 7, 2026</div>
+<h2>Agent Identity Architecture — Five Patterns, A2A Protocol, Agent Sprawl</h2>
+
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Agent's User Account — fifth authentication pattern</strong> — an agent provisioned with a full human user account (mailbox, calendar, Teams membership). Highest risk pattern: compromised agent is indistinguishable from a human user. Added to the authentication patterns table.</td>
+<td>identity.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Agent sprawl — named concept and lifecycle risk section</strong> — Microsoft formally defines agent sprawl as uncontrolled expansion of agents without visibility, management, or lifecycle controls. Added to identity page and gaps page with consequences and mitigations.</td>
+<td>identity.html, gaps.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>A2A (Agent-to-Agent) protocol</strong> — emerging standard for authenticated inter-agent communication, supported by Entra Agent ID alongside MCP. Added to identity page and MCP page with comparison table and risk callout.</td>
+<td>identity.html, mcp.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Agent-to-agent propagation — new threat scenario (Scenario 7)</strong> — compromised orchestration agent propagates compromise to sub-agents across the entire agent chain. Full attack chain with controls and A2A gap note.</td>
+<td>threats.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Microsoft Managed Policies for agents — new significant gap</strong> — automatic baseline CA policies that block high-risk agents. Many organisations unaware of or not using these. Added to gaps page.</td>
+<td>gaps.html</td></tr>
+
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Source</div>
+  <p><a href="https://learn.microsoft.com/en-gb/entra/agent-id/security-for-ai-overview" target="_blank" style="color:var(--blue);">Microsoft Entra security for AI overview (learn.microsoft.com, updated April 3 2026)</a></p>
+</div>
+
 <div class="section-label" style="margin-top:40px;">MARCH 30, 2026</div>
 <h2>Agent Authentication Patterns + CA for Agents Correction</h2>
 

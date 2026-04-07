@@ -540,7 +540,32 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   </div>
 </div>
 
-
+<div class="threat-block">
+  <div class="threat-header">
+    <div class="threat-icon">🕸️</div>
+    <div><div class="threat-name">7 — Agent-to-Agent Propagation</div></div>
+    <div class="threat-category" style="background:rgba(216,59,1,0.15);color:#ff9060;border:1px solid rgba(216,59,1,0.3);">CRITICAL · MULTI-AGENT · HARD TO CONTAIN</div>
+  </div>
+  <div class="threat-body">
+    <p>In multi-agent architectures, an orchestration agent delegates tasks to specialised sub-agents. If the orchestrator is compromised — via prompt injection, malicious tool output, or credential theft — it can propagate that compromise to every agent it coordinates. Unlike a single-agent compromise, this attack can cascade silently across an entire agent ecosystem before detection.</p>
+    <div class="threat-cols">
+      <div>
+        <div class="threat-col-title">Attack Chain</div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(192,0,0,0.2);color:#ff6666;">1</div><div class="threat-step-text">Attacker compromises orchestration agent via prompt injection or malicious MCP tool output</div></div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(192,0,0,0.2);color:#ff6666;">2</div><div class="threat-step-text">Compromised orchestrator begins issuing malicious delegations to sub-agents — data exfiltration, unauthorised actions, or further propagation</div></div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(192,0,0,0.2);color:#ff6666;">3</div><div class="threat-step-text">Sub-agents execute tasks within their own permission scopes — attacker effectively gains access to all resources reachable by any agent in the chain</div></div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(192,0,0,0.2);color:#ff6666;">4</div><div class="threat-step-text">If any sub-agent also acts as an orchestrator, propagation continues — attacker gains lateral movement across the entire agent mesh</div></div>
+      </div>
+      <div>
+        <div class="threat-col-title">Controls</div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>Entra Agent ID — A2A authentication</strong> — agents verify each other's identity before accepting delegations. Prevents rogue agent injection into orchestration chains.</div></div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>Entra audit logs</strong> — all inter-agent authentication and delegation events logged. Enables detection of anomalous orchestration patterns.</div></div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>Least privilege per agent</strong> — each sub-agent should hold only the minimum permissions for its specific task. Limits blast radius if any single agent is compromised.</div></div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(252,225,0,0.2);color:var(--caution-text);">⚠</div><div class="threat-step-text"><strong>Gap</strong>: A2A protocol is emerging — not all multi-agent architectures use authenticated inter-agent communication. Many Copilot Studio agent chains have no formal A2A verification today.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="page-nav"><a href="mcp.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">MCP</span></a><a href="frameworks.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Frameworks</span></a></div>
 <div class="footer">
