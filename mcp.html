@@ -310,7 +310,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
     <div><div class="brand-text">Securing AI with Microsoft</div></div>
   </div>
   <div class="nav-links">
-<a href="index.html" class="">Start Here</a>
+<a href="index.html" class="">Home</a>
 <a href="overview.html" class="">Overview</a>
 <a href="risk.html" class="">AI Risk</a>
 <a href="product-map.html" class="">Products</a>
@@ -328,7 +328,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 <div class="mobile-drawer-overlay" id="drawerOverlay"></div>
 <div class="mobile-drawer" id="mobileDrawer">
-<a href="index.html" class="">Start Here</a>
+<a href="index.html" class="">Home</a>
 <a href="overview.html" class="">Overview</a>
 <a href="risk.html" class="">AI Risk</a>
 <a href="product-map.html" class="">Products</a>
@@ -429,7 +429,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <tbody>
 <tr><td><strong>Tool Poisoning</strong></td><td>Malicious MCP server returns poisoned tool descriptions. Agent reads descriptions to decide which tool to invoke — poisoned descriptions redirect agent to attacker-controlled tools.</td><td><span class="severity-critical">CRITICAL</span> Full agent hijack</td><td>Foundry Guardrails (whitelist); Defender for Cloud Apps (MCP server governance)</td></tr>
 <tr><td><strong>MCP Server Impersonation</strong></td><td>Attacker substitutes a malicious MCP server (DNS hijack, supply chain, local server swap). Agent connects to attacker's server and receives malicious tool outputs.</td><td><span class="severity-critical">CRITICAL</span> Data exfiltration, action hijack</td><td>Defender for Cloud Apps (MCP server registry); no cryptographic binding standard in MCP spec</td></tr>
-<tr><td><strong>Indirect Prompt Injection via MCP</strong></td><td>Malicious instructions embedded in data returned by an MCP tool. Agent treats the embedded text as legitimate instruction and acts on it using maker credentials.</td><td><span class="severity-critical">CRITICAL</span> Data exfiltration, lateral movement</td><td>Prompt Shields (XPIA detection); Entra Internet Access Prompt Injection Protection (GA Mar 31)</td></tr>
+<tr><td><strong>Indirect Prompt Injection via MCP</strong></td><td>Malicious instructions embedded in data returned by an MCP tool. Agent treats the embedded text as legitimate instruction and acts on it using maker credentials.</td><td><span class="severity-critical">CRITICAL</span> Data exfiltration, lateral movement</td><td>Prompt Shields (XPIA detection); Entra Internet Access Prompt Injection Protection (GA Mar 31 2026)</td></tr>
 <tr><td><strong>OAuth Scope Abuse</strong></td><td>Agent inherits overly broad OAuth scopes from maker credentials when connecting to MCP-backed SaaS. Broad token enables lateral movement across multiple services.</td><td><span class="severity-high">HIGH</span> Lateral movement across SaaS</td><td>Defender for Cloud Apps OAuth governance; enforce end-user auth per agent</td></tr>
 <tr><td><strong>Unauthenticated MCP Server</strong></td><td>Many community MCP servers have no authentication. Any agent or attacker on the network can call them without credentials.</td><td><span class="severity-high">HIGH</span> Unauthorised tool execution</td><td>Network segmentation; Entra Internet Access; security review of MCP server implementations</td></tr>
 <tr><td><strong>MCP Supply Chain Attack</strong></td><td>Malicious package in MCP server registry. Enterprise deploys a compromised MCP server — attacker gains persistent access to the agent's tool layer.</td><td><span class="severity-high">HIGH</span> Persistent backdoor in agent tooling</td><td>Defender for Cloud (supply chain scanning); Security Dashboard AI Inventory; GitHub Advanced Security</td></tr>
@@ -467,8 +467,8 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
   <a href="https://learn.microsoft.com/en-us/entra/global-secure-access/how-to-manage-microsoft-profile" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.15);">
     <div class="card-name">Entra Internet Access — Prompt Injection Protection</div>
-    <div class="card-desc">Network-layer enforcement blocking malicious AI prompts across apps and agents. Complements Prompt Shields at the network boundary. GA March 31, 2026.</div>
-    <div class="tag-row"><span class="tag green">GA March 31</span><span class="tag">Network Layer</span></div>
+    <div class="card-desc">Network-layer enforcement blocking malicious AI prompts across apps and agents. Complements Prompt Shields at the network boundary. GA March 31 2026, 2026.</div>
+    <div class="tag-row"><span class="tag green">GA March 31 2026</span><span class="tag">Network Layer</span></div>
   <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
   <a href="https://learn.microsoft.com/en-us/azure/sentinel/overview" target="_blank" class="card-link"><div class="card" style="border-color:rgba(84,176,84,0.15);">
     <div class="card-name">Sentinel MCP Entity Analyzer</div>
@@ -483,7 +483,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <thead><tr><th>Layer</th><th>What It Covers</th><th>Microsoft Control</th><th>Status</th></tr></thead>
 <tbody>
 <tr><td><strong>Catalog governance</strong></td><td>Vetting which MCP servers are approved for use; lifecycle reviews</td><td>Internal policy + "MCP Tool Configured" Advanced Hunting query</td><td><span class="caution-inline">Process control — no product enforcement</span></td></tr>
-<tr><td><strong>Network</strong></td><td>Control which MCP servers agents can reach; block malicious prompts</td><td>Entra Internet Access</td><td><span class="green-inline">GA Mar 31</span></td></tr>
+<tr><td><strong>Network</strong></td><td>Control which MCP servers agents can reach; block malicious prompts</td><td>Entra Internet Access</td><td><span class="green-inline">GA Mar 31 2026</span></td></tr>
 <tr><td><strong>Identity</strong></td><td>Authenticate which agents can invoke which MCP tools; prevent maker credential blast radius</td><td>Enforce end-user auth (Power Platform admin)</td><td><span class="green-inline">Available now</span></td></tr>
 <tr><td><strong>Orchestration</strong></td><td>Whitelist allowed tools per agent (Foundry only)</td><td>Foundry Guardrails</td><td><span class="caution-inline">Preview · Foundry only</span></td></tr>
 <tr><td><strong>Content Inspection</strong></td><td>Detect adversarial instructions in MCP tool outputs</td><td>Prompt Shields</td><td><span class="green-inline">GA</span></td></tr>

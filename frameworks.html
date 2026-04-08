@@ -310,7 +310,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
     <div><div class="brand-text">Securing AI with Microsoft</div></div>
   </div>
   <div class="nav-links">
-<a href="index.html" class="">Start Here</a>
+<a href="index.html" class="">Home</a>
 <a href="overview.html" class="">Overview</a>
 <a href="risk.html" class="">AI Risk</a>
 <a href="product-map.html" class="">Products</a>
@@ -328,7 +328,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 <div class="mobile-drawer-overlay" id="drawerOverlay"></div>
 <div class="mobile-drawer" id="mobileDrawer">
-<a href="index.html" class="">Start Here</a>
+<a href="index.html" class="">Home</a>
 <a href="overview.html" class="">Overview</a>
 <a href="risk.html" class="">AI Risk</a>
 <a href="product-map.html" class="">Products</a>
@@ -390,7 +390,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
       <div class="nist-item"><div class="nist-control">Inventory agent authentication posture</div><div class="nist-tool">AIAgentsInfo Advanced Hunting (Defender)</div></div>
       <div class="nist-item"><div class="nist-control">Identify Classic vs Modern agents</div><div class="nist-tool">Entra Agent ID portal · AIAgentsInfo KQL</div><div class="nist-gap">⚠ Name sync bug complicates this</div></div>
       <div class="nist-item"><div class="nist-control">Identify sensitive data exposure</div><div class="nist-tool">Purview DSPM for AI</div></div>
-      <div class="nist-item"><div class="nist-control">Identify shadow AI deployment</div><div class="nist-tool">Entra Internet Access Shadow AI</div><div class="nist-gap" style="color:var(--green2);">GA Mar 31</div></div>
+      <div class="nist-item"><div class="nist-control">Identify shadow AI deployment</div><div class="nist-tool">Entra Internet Access Shadow AI</div><div class="nist-gap" style="color:var(--green2);">GA Mar 31 2026</div></div>
       <div class="nist-item"><div class="nist-control">Identify threat actors and attack vectors</div><div class="nist-tool">Defender · Sentinel · ZT4AI</div></div>
       <div class="nist-item"><div class="nist-control">AI bias and fairness assessment</div><div class="nist-gap">⚠ Responsible AI tools (separate)</div></div>
     </div>
@@ -419,7 +419,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
       <div class="nist-item"><div class="nist-control">Enforce access controls on AI systems</div><div class="nist-tool">Entra CA · Foundry Guardrails</div><div class="nist-gap">⚠ Modern Agents only for CA</div></div>
       <div class="nist-item"><div class="nist-control">Block unauthenticated agent access</div><div class="nist-tool">Power Platform Managed Environments</div><div class="nist-gap" style="color:var(--green2);">Available now</div></div>
       <div class="nist-item"><div class="nist-control">Manage agent lifecycle (onboard/retire)</div><div class="nist-tool">Entra Agent ID</div><div class="nist-gap">⚠ preview · Modern only</div></div>
-      <div class="nist-item"><div class="nist-control">Enforce data governance in AI workflows</div><div class="nist-tool">Purview · DLP for Copilot</div><div class="nist-gap" style="color:var(--green2);">DLP: GA Mar 31</div></div>
+      <div class="nist-item"><div class="nist-control">Enforce data governance in AI workflows</div><div class="nist-tool">Purview · DLP for Copilot</div><div class="nist-gap" style="color:var(--green2);">DLP: GA Mar 31 2026</div></div>
       <div class="nist-item"><div class="nist-control">Limit blast radius during active attack</div><div class="nist-tool">Defender Predictive Shielding</div><div class="nist-gap">Preview · RSAC 2026</div></div>
       <div class="nist-item"><div class="nist-control">Recover identity infrastructure</div><div class="nist-tool">Entra Backup and Recovery</div><div class="nist-gap">Preview · RSAC 2026</div></div>
     </div>
@@ -436,7 +436,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <tr><td><strong>6.1 — Risk Assessment</strong></td><td>AI-specific risk identification and assessment process</td><td>Security Dashboard for AI (now GA); Purview DSPM; AIAgentsInfo Advanced Hunting; Foundry Red Teaming</td><td>Quantitative risk scoring still limited; qualitative posture now available via GA dashboard. Classic Agent estate requires separate inventory.</td></tr>
 <tr><td><strong>6.1.3 — AI Impact Assessment</strong></td><td>Assess impacts on individuals and society</td><td>Microsoft Responsible AI Impact Assessment tools (separate from Security)</td><td>Outside security product scope; separate RAI tooling required</td></tr>
 <tr><td><strong>8.4 — AI System Development</strong></td><td>Security in AI development lifecycle</td><td>SDL for AI; GitHub Advanced Security; Foundry Red Teaming; Classic→Modern Agent migration</td><td>Classic Agent legacy complicates this — agents built before Agent ID may have no secure development baseline</td></tr>
-<tr><td><strong>8.6 — Data for AI Systems</strong></td><td>Data quality, provenance, and governance</td><td>Purview Information Protection; DSPM for AI; DLP for Copilot (GA March 31)</td><td>Training data provenance still limited; inference-time data controls now stronger. Maker credentials can bypass data governance if not configured correctly.</td></tr>
+<tr><td><strong>8.6 — Data for AI Systems</strong></td><td>Data quality, provenance, and governance</td><td>Purview Information Protection; DSPM for AI; DLP for Copilot (GA March 31 2026)</td><td>Training data provenance still limited; inference-time data controls now stronger. Maker credentials can bypass data governance if not configured correctly.</td></tr>
 <tr><td><strong>9.1 — Monitoring & Measurement</strong></td><td>Continuous monitoring of AI system performance and risks</td><td>Security Dashboard (GA); Sentinel + MCP Entity Analyzer; Defender for AI; AIAgentsInfo KQL; Purview AI Observability</td><td>Good coverage when fully deployed. AI Agent Inventory requires Defender + Power Platform admin collaboration — complex setup.</td></tr>
 <tr><td><strong>10.2 — Continual Improvement</strong></td><td>Improve AIMS based on incidents and audit findings</td><td>Sentinel incident management; SDL feedback loops; ZT Workshop; ZT Assessment (AI pillar summer 2026)</td><td>ZT Assessment AI pillar not until summer 2026. Classic Agent name sync bug makes agent-level policy improvement tracking difficult.</td></tr>
 </tbody>

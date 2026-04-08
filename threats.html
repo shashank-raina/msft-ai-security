@@ -310,7 +310,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
     <div><div class="brand-text">Securing AI with Microsoft</div></div>
   </div>
   <div class="nav-links">
-<a href="index.html" class="">Start Here</a>
+<a href="index.html" class="">Home</a>
 <a href="overview.html" class="">Overview</a>
 <a href="risk.html" class="">AI Risk</a>
 <a href="product-map.html" class="">Products</a>
@@ -328,7 +328,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 <div class="mobile-drawer-overlay" id="drawerOverlay"></div>
 <div class="mobile-drawer" id="mobileDrawer">
-<a href="index.html" class="">Start Here</a>
+<a href="index.html" class="">Home</a>
 <a href="overview.html" class="">Overview</a>
 <a href="risk.html" class="">AI Risk</a>
 <a href="product-map.html" class="">Products</a>
@@ -376,7 +376,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
       <div>
         <div class="threat-col-title">Controls</div>
         <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>Prompt Shields</strong> — direct injection detection at orchestration layer</div></div>
-        <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>Entra Internet Access Prompt Injection Protection</strong> — network-level block. GA March 31.</div></div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>Entra Internet Access Prompt Injection Protection</strong> — network-level block. GA March 31 2026.</div></div>
         <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>Azure AI Content Safety</strong> — jailbreak classifier at model boundary</div></div>
         <div class="threat-step"><div class="threat-step-num" style="background:rgba(252,225,0,0.2);color:var(--caution-text);">⚠</div><div class="threat-step-text"><strong>Defender for Cloud Apps RT protection (Copilot Studio)</strong> — blocks tool invocations, but 1-second timeout means fast tool calls may execute</div></div>
       </div>
@@ -404,7 +404,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
         <div class="threat-col-title">Controls</div>
         <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>Prompt Shields (Indirect)</strong> — detects adversarial instructions in retrieved content. Primary XPIA control.</div></div>
         <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>Defender for Cloud Apps RT protection</strong> — blocks mail.send tool invocation if prompt is flagged as suspicious</div></div>
-        <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>Purview DLP for Copilot</strong> — blocks sensitive data types in prompts (GA March 31)</div></div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>Purview DLP for Copilot</strong> — blocks sensitive data types in prompts (GA March 31 2026)</div></div>
         <div class="threat-step"><div class="threat-step-num" style="background:rgba(252,225,0,0.2);color:var(--caution-text);">⚠</div><div class="threat-step-text"><strong>Gap</strong>: Prompt Shields must be enabled per agent. No native control prevents malicious document upload to SharePoint (the attack origin) — requires conventional DLP + Defender for Office 365.</div></div>
       </div>
     </div>
@@ -467,7 +467,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
     <div class="threat-category" style="background:rgba(0,133,117,0.15);color:var(--teal2);border:1px solid rgba(0,183,195,0.25);">HIGH · COMPLIANCE · OFTEN UNINTENTIONAL</div>
   </div>
   <div class="threat-body">
-    <p>Sensitive data enters the AI's context as "helpful" grounding material and surfaces in outputs. The AI context window is the new data perimeter. New: Purview DLP for M365 Copilot (GA March 31) directly blocks PII and sensitive data types from entering Copilot prompts and web grounding flows.</p>
+    <p>Sensitive data enters the AI's context as "helpful" grounding material and surfaces in outputs. The AI context window is the new data perimeter. New: Purview DLP for M365 Copilot (GA March 31 2026) directly blocks PII and sensitive data types from entering Copilot prompts and web grounding flows.</p>
     <div class="threat-cols">
       <div>
         <div class="threat-col-title">Leakage Vectors</div>
@@ -480,8 +480,8 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
         <div class="threat-col-title">Controls per Vector</div>
         <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">A</div><div class="threat-step-text"><strong>Purview DSPM</strong> → sensitive data mapping. <strong>Information Protection</strong> → label-based access. <strong>Foundry Guardrails</strong> → restrict data source scope per agent.</div></div>
         <div class="threat-step"><div class="threat-step-num" style="background:rgba(252,225,0,0.2);color:var(--caution-text);">B</div><div class="threat-step-text"><strong>Partial</strong>: Session isolation is an architecture design responsibility — no native Microsoft platform control for cross-user context contamination.</div></div>
-        <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">C</div><div class="threat-step-text"><strong>Entra Internet Access Shadow AI Detection</strong> (GA March 31) + <strong>Defender for Cloud Apps</strong> CASB + <strong>Purview DLP</strong> outbound detection.</div></div>
-        <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">D</div><div class="threat-step-text"><strong>Purview DLP for M365 Copilot</strong> — GA March 31. Blocks PII, credit card numbers, custom data types in prompts from being processed or used for web grounding.</div></div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">C</div><div class="threat-step-text"><strong>Entra Internet Access Shadow AI Detection</strong> (GA March 31 2026) + <strong>Defender for Cloud Apps</strong> CASB + <strong>Purview DLP</strong> outbound detection.</div></div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">D</div><div class="threat-step-text"><strong>Purview DLP for M365 Copilot</strong> — GA March 31 2026. Blocks PII, credit card numbers, custom data types in prompts from being processed or used for web grounding.</div></div>
       </div>
     </div>
   </div>
@@ -573,3 +573,31 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
   Last updated:
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var btn = document.getElementById('hamburgerBtn');
+  var drawer = document.getElementById('mobileDrawer');
+  var overlay = document.getElementById('drawerOverlay');
+  if(!btn || !drawer || !overlay) return;
+  function closeMenu(){
+    btn.classList.remove('open');
+    drawer.classList.remove('open');
+    overlay.classList.remove('open');
+  }
+  btn.addEventListener('click', function(){
+    var isOpen = drawer.classList.contains('open');
+    if(isOpen){ closeMenu(); } else {
+      btn.classList.add('open');
+      drawer.classList.add('open');
+      overlay.classList.add('open');
+    }
+  });
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', closeMenu);
+  });
+});
+</script>
+
+</body>
+</html>

@@ -307,7 +307,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
     <div><div class="brand-text">Securing AI with Microsoft</div></div>
   </div>
   <div class="nav-links">
-<a href="index.html" class="">Start Here</a>
+<a href="index.html" class="">Home</a>
 <a href="overview.html" class="">Overview</a>
 <a href="risk.html" class="">AI Risk</a>
 <a href="product-map.html" class="">Products</a>
@@ -325,7 +325,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 <div class="mobile-drawer-overlay" id="drawerOverlay"></div>
 <div class="mobile-drawer" id="mobileDrawer">
-<a href="index.html" class="">Start Here</a>
+<a href="index.html" class="">Home</a>
 <a href="overview.html" class="">Overview</a>
 <a href="risk.html" class="">AI Risk</a>
 <a href="product-map.html" class="">Products</a>
@@ -405,7 +405,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
   <!-- Type selector -->
   <div class="field" style="margin-bottom:24px;">
-    <label>WHAT KIND OF FEEDBACK IS THIS?</label>
+    <label>CATEGORY</label>
     <div class="type-pills">
       <div class="type-pill selected" onclick="selectType(this,'Factual correction')">⚠️ Factual correction</div>
       <div class="type-pill" onclick="selectType(this,'Missing content')">🆕 Missing content</div>
@@ -435,7 +435,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
         <label>PAGE THIS RELATES TO</label>
         <select name="page">
           <option value="">— Select a page (optional) —</option>
-          <option>Start Here</option>
+          <option>Home</option>
           <option>Overview</option>
           <option>AI Risk Reality</option>
           <option>Products</option>
@@ -546,3 +546,32 @@ async function handleSubmit(e) {
   }
 }
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var btn = document.getElementById('hamburgerBtn');
+  var drawer = document.getElementById('mobileDrawer');
+  var overlay = document.getElementById('drawerOverlay');
+  if(!btn || !drawer || !overlay) return;
+  function closeMenu(){
+    btn.classList.remove('open');
+    drawer.classList.remove('open');
+    overlay.classList.remove('open');
+  }
+  btn.addEventListener('click', function(){
+    var isOpen = drawer.classList.contains('open');
+    if(isOpen){ closeMenu(); } else {
+      btn.classList.add('open');
+      drawer.classList.add('open');
+      overlay.classList.add('open');
+    }
+  });
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', closeMenu);
+  });
+});
+</script>
+
+</body>
+</html>
