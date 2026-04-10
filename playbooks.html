@@ -318,9 +318,9 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="mcp.html" class="">MCP</a>
 <a href="threats.html" class="">Threats</a>
 <a href="frameworks.html" class="">Frameworks</a>
-<a href="zero-trust.html" class="">Zero Trust</a>
 <a href="gaps.html" class="">Gaps</a>
 <a href="playbooks.html" class=" active">Playbooks</a>
+<a href="copilot-vs-foundry.html" class="">CS vs Foundry</a>
 <a href="changelog.html" class="">Changelog</a>
 <a href="contact.html" class="">Contact</a>
 </div>
@@ -336,9 +336,9 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="mcp.html" class="">MCP</a>
 <a href="threats.html" class="">Threats</a>
 <a href="frameworks.html" class="">Frameworks</a>
-<a href="zero-trust.html" class="">Zero Trust</a>
 <a href="gaps.html" class="">Gaps</a>
 <a href="playbooks.html" class=" active">Playbooks</a>
+<a href="copilot-vs-foundry.html" class="">CS vs Foundry</a>
 <a href="changelog.html" class="">Changelog</a>
 <a href="contact.html" class="">Contact</a>
 </div>
@@ -435,7 +435,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   </div>
   <div class="pb-nav-card" onclick="showPlaybook('pb3',this)">
     <div class="pb-nav-num">PLAYBOOK 03</div>
-    <div class="pb-nav-title">Set Up the Security Dashboard for AI</div>
+    <div class="pb-nav-title" style="color:var(--blue);font-weight:700;">⭐ Set Up the Security Dashboard for AI</div>
     <div class="pb-nav-meta">~2 hrs · Defender Admin + Power Platform Admin · Agent 365 or E7 required</div>
   </div>
   <div class="pb-nav-card" onclick="showPlaybook('pb4',this)">
@@ -739,7 +739,7 @@ AIAgentsInfo
 <div class="pb-panel" id="pb3">
   <div class="pb-header">
     <div class="pb-header-eyebrow">PLAYBOOK 03</div>
-    <div class="pb-header-title">Set Up the Security Dashboard for AI</div>
+    <div class="pb-header-title">Set Up the Security Dashboard for AI <span style="font-family:'JetBrains Mono',monospace;font-size:10px;background:rgba(16,124,16,0.1);color:#0a5a20;border:1px solid rgba(16,124,16,0.25);border-radius:4px;padding:2px 8px;margin-left:8px;vertical-align:middle;">GA · START HERE</span></div>
     <div class="pb-header-sub">Configure the unified AI security posture view in Microsoft Defender. Requires collaboration between Defender admin and Power Platform admin. Allow up to 2 hours for data population.</div>
     <div class="pb-meta-row">
       <span class="pb-meta-item warn">⚠ Requires Agent 365 or M365 E7</span>
@@ -972,7 +972,156 @@ function showPlaybook(id, btn) {
 }
 </script>
 
-<div class="page-nav"><a href="gaps.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Gaps</span></a><a href="changelog.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Changelog</span></a></div>
+
+<!-- ═══════════════ PLAYBOOK 5 — FOUNDRY LOGGING SETUP ═══════════════ -->
+<div class="pb-block" id="playbook5">
+  <div class="pb-header">
+    <div class="pb-header-top">
+      <div class="pb-num">05</div>
+      <div class="pb-title">Microsoft Foundry — Enable Security Logging</div>
+      <div class="pb-badge" style="background:rgba(139,92,246,0.15);color:#6264a7;border:1px solid rgba(139,92,246,0.3);">FOUNDRY · AZURE MONITOR · SENTINEL</div>
+    </div>
+    <div class="pb-header-sub">Enable and route the four Foundry logging layers into Microsoft Sentinel before your workload carries real traffic. Log gaps in production are possible to close retrospectively — but data that was never collected cannot be recovered.</div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">PREREQUISITE — UNDERSTAND THE FOUNDRY RESOURCE MODEL</div>
+    <div class="step">
+      <div class="step-num">!</div>
+      <div class="step-body">
+        <div class="step-title">Foundry resource ≠ Foundry project — they are separate Azure Monitor resources</div>
+        <div class="step-desc">A Foundry resource (Microsoft.CognitiveServices/accounts) can contain many Foundry projects (Microsoft.CognitiveServices/accounts/projects). Diagnostic Settings configured at the resource level do <strong>not</strong> cascade to projects. Every new project needs its own separate configuration — or you accept the gap silently. RBAC assigned at resource scope does cascade to projects, but least-privilege access may require project-level RBAC assignments.</div>
+        <div class="step-warn">⚠ This is the most common Foundry security misconfiguration — teams enable logging on the resource and assume projects are covered. They are not.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STEP 1 — ENABLE ACTIVITY LOG ROUTING</div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Route the Activity Log to your Sentinel Log Analytics Workspace</div>
+        <div class="step-desc">The Activity Log is the only Foundry logging layer that requires no opt-in — it is generated automatically by Azure Resource Manager. It captures resource creation/deletion, RBAC role assignment changes, key rotation events, network config changes, and model deployment operations. It does not route to your Sentinel workspace by default.</div>
+        <div class="step-code">Azure Portal → Foundry Resource → Monitoring → Diagnostic settings
+→ Add diagnostic setting
+→ Select: "Activity Log"
+→ Destination: Send to Log Analytics workspace (your Sentinel LAW)
+→ Save</div>
+        <div class="step-tip">💡 Route to the same Log Analytics Workspace as your Sentinel instance. Foundry resource logs and Entra ID logs must share the same workspace for Sentinel analytics rules to correlate them.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STEP 2 — ENABLE DIAGNOSTIC SETTINGS AT RESOURCE LEVEL</div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Enable Audit and RequestResponse at the Foundry resource level</div>
+        <div class="step-desc">Data plane logging must be explicitly enabled — nothing is collected by default. At the resource level, enable these two categories for SecOps. Note: data can take up to 2 hours before it is available to query.</div>
+        <div class="step-code">Azure Portal → Foundry Resource → Monitoring → Diagnostic settings
+→ Add diagnostic setting → Name: "SecOps-Resource-Logs"
+→ Enable categories:
+    ✅ Audit         (data plane access — key retrievals, connection access, admin API calls)
+    ✅ RequestResponse  (inference metadata — model, operation, status, latency, tokens)
+    ❌ AzureOpenAIRequestUsage  (no SecOps value)
+    ❌ Trace         (not a detection source under normal conditions)
+    ❌ AllMetrics    (no SecOps value)
+→ Destination: Log Analytics workspace (Sentinel LAW)
+→ Save</div>
+        <div class="step-warn">⚠ RequestResponse captures metadata about every inference call — model name, operation type, status codes, latency. It does NOT include prompt text or model-generated completions. That is a deliberate design choice by Microsoft to reduce sensitive data exposure through platform-level logging.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STEP 3 — ENABLE DIAGNOSTIC SETTINGS AT EACH PROJECT LEVEL</div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Repeat Diagnostic Settings for every Foundry project — separately</div>
+        <div class="step-desc">This is a separate configuration from Step 2. Projects are separate resources in Azure Monitor. For each project, enable the Audit category — it records agent operations such as runs, file uploads, and evaluations at project scope. This is the only source that tells you which identities accessed which Foundry capabilities and when.</div>
+        <div class="step-code">Azure Portal → Foundry Resource → Projects → [select each project]
+→ Monitoring → Diagnostic settings
+→ Add diagnostic setting → Name: "SecOps-Project-Logs"
+→ Enable categories:
+    ✅ Audit    (agent runs, file uploads, evaluations, data plane access at project scope)
+    ❌ Trace
+    ❌ AllMetrics
+→ Destination: Log Analytics workspace (same Sentinel LAW)
+→ Save
+→ Repeat for every project</div>
+        <div class="step-tip">💡 Build a governance process: every new Foundry project created must have Diagnostic Settings configured before it receives any production traffic. Make this a deployment checklist item.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STEP 4 — ENABLE ENTRA ID LOGS</div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">Configure Entra ID diagnostic settings at the tenant level</div>
+        <div class="step-desc">Foundry agents are Entra ID identities. Without Entra ID logs, non-interactive sign-ins, service principal activity, and agent lifecycle events are invisible. Entra ID diagnostic settings are configured at the tenant level — not at the Foundry resource. Route to the same Log Analytics Workspace as your Foundry resource logs.</div>
+        <div class="step-code">Entra admin center → Monitoring → Diagnostic settings
+→ Add diagnostic setting
+→ Enable:
+    ✅ SignInLogs             (interactive sign-ins)
+    ✅ NonInteractiveUserSignInLogs  (service principal / agent sign-ins)
+    ✅ ServicePrincipalSignInLogs
+    ✅ AuditLogs              (agent lifecycle events, RBAC changes)
+→ Destination: Same Log Analytics workspace as Foundry logs
+→ Save</div>
+        <div class="step-warn">⚠ This is a tenant-level setting — it affects all Entra logs, not just Foundry. Confirm with your identity team before enabling if this workspace doesn't already receive Entra logs.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STEP 5 — CONNECT APPLICATION INSIGHTS (OPTIONAL BUT RECOMMENDED)</div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <div class="step-title">Connect Application Insights for agent-level runtime visibility</div>
+        <div class="step-desc">Application Insights is the deepest logging layer — it surfaces agent-level behaviours absent from Foundry resource logs: anomalous tool call chains, unexpected external dependencies, unusual exception patterns, and (optionally) prompt and completion content. It must be a workspace-based Application Insights instance linked to the same Log Analytics Workspace as Sentinel — otherwise Sentinel analytics rules cannot query it.</div>
+        <div class="step-code">Azure Portal → Foundry Project → Settings → Application Insights
+→ Connect to workspace-based Application Insights resource
+→ Must use the SAME Log Analytics workspace as Sentinel
+
+// Key tables available once connected:
+AppDependencies  → model inference calls, tool calls
+AppTraces        → agent execution traces, orchestration steps
+AppExceptions    → errors during inference or tool execution
+AppRequests      → inbound requests (if agent exposed via HTTP)</div>
+        <div class="step-warn">⚠ Content capture (prompt and completion logging) is OFF by default. To enable: set AZURE_TRACING_GEN_AI_CONTENT_RECORDING_ENABLED=true in your SDK config. Before enabling, ensure you have governance controls in place for storage, access, and retention — prompt content may contain PII, secrets, or business data.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-checklist">
+    <div class="pb-checklist-title">✅ Playbook 05 Checklist</div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Activity Log routed to Sentinel LAW</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Diagnostic Settings (Audit + RequestResponse) enabled at Foundry resource level</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Diagnostic Settings (Audit) enabled at every Foundry project level separately</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Entra ID sign-in + audit logs routing to same LAW</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Application Insights connected — workspace-based, same LAW as Sentinel</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Governance process established: every new project gets Diagnostic Settings before production traffic</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Content capture decision documented — enabled or explicitly deferred with governance rationale</div></div>
+  </div>
+</div>
+
+<div class="page-nav"><a href="gaps.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Gaps</span></a><a href="copilot-vs-foundry.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">CS vs Foundry</span></a></div>
+
+<div style="text-align:center;margin:32px 0 0;padding:24px 0;border-top:1px solid var(--border2);">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text3);margin-bottom:10px;">STAY UPDATED</div>
+  <div style="font-size:15px;font-weight:700;color:#0d1526;margin-bottom:6px;">Get notified when Microsoft AI security changes</div>
+  <div style="font-size:13px;color:#2e3d5e;margin-bottom:14px;">Monthly updates on new controls, GA announcements, and critical gaps — direct to your inbox.</div>
+  <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#ffffff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;padding:12px 24px;border-radius:8px;text-decoration:none;transition:opacity 0.15s;" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">
+    Subscribe to updates →
+  </a>
+  <div style="font-size:11px;color:var(--text3);margin-top:10px;font-family:'JetBrains Mono',monospace;">aiagentsecurity.substack.com · Free · No spam</div>
+</div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Learn · Field research from Microsoft Security professionals<br>
   Last updated: April 8, 2026 · Playbooks reflect publicly announced Microsoft capabilities only

@@ -318,9 +318,9 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="mcp.html" class="">MCP</a>
 <a href="threats.html" class="">Threats</a>
 <a href="frameworks.html" class="">Frameworks</a>
-<a href="zero-trust.html" class="">Zero Trust</a>
 <a href="gaps.html" class="">Gaps</a>
 <a href="playbooks.html" class="">Playbooks</a>
+<a href="copilot-vs-foundry.html" class="">CS vs Foundry</a>
 <a href="changelog.html" class=" active">Changelog</a>
 <a href="contact.html" class="">Contact</a>
 </div>
@@ -336,9 +336,9 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="mcp.html" class="">MCP</a>
 <a href="threats.html" class="">Threats</a>
 <a href="frameworks.html" class="">Frameworks</a>
-<a href="zero-trust.html" class="">Zero Trust</a>
 <a href="gaps.html" class="">Gaps</a>
 <a href="playbooks.html" class="">Playbooks</a>
+<a href="copilot-vs-foundry.html" class="">CS vs Foundry</a>
 <a href="changelog.html" class=" active">Changelog</a>
 <a href="contact.html" class="">Contact</a>
 </div>
@@ -361,8 +361,49 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <p>Entries marked <strong>🆕 New</strong> are net-new content additions. Entries marked <strong>✏️ Updated</strong> are corrections or refinements to existing content. Entries marked <strong>⚠️ Correction</strong> are cases where earlier content was wrong or misleading and has been fixed.</p>
 </div>
 
+<div style="background:linear-gradient(135deg,rgba(0,120,212,0.07),rgba(0,99,177,0.04));border:1.5px solid rgba(0,120,212,0.25);border-radius:12px;padding:20px 24px;margin:20px 0 32px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+  <div style="flex:1;min-width:200px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;color:var(--blue);margin-bottom:5px;">📬 NEVER MISS AN UPDATE</div>
+    <div style="font-size:16px;font-weight:700;color:#0d1526;margin-bottom:4px;">Subscribe for monthly change alerts</div>
+    <div style="font-size:12px;color:#2e3d5e;line-height:1.5;">Get notified when significant changes land — new controls going GA, critical corrections, new gaps discovered. Free, no spam.</div>
+  </div>
+  <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" style="flex-shrink:0;display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#ffffff;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;padding:11px 20px;border-radius:8px;text-decoration:none;white-space:nowrap;">Subscribe free →</a>
+</div>
 
 
+
+
+
+<div class="section-label" style="margin-top:40px;">APRIL 10, 2026</div>
+<h2>New Page: Copilot Studio vs Microsoft Foundry · Playbook 05 · Merge: Frameworks + Zero Trust</h2>
+
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag blue">🆕 New page</span></td>
+<td><strong>Copilot Studio vs Microsoft Foundry — condensed security handbook</strong> — single page covering both platforms side by side: five Copilot Studio auth patterns, Classic vs Modern gap, 30-minute audit KQL, critical gaps, Foundry resource/project model, four logging layers, what to enable for SecOps, and Foundry-specific gotchas. Added between Playbooks and Changelog in nav.</td>
+<td>copilot-vs-foundry.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Playbook 05 — Microsoft Foundry Security Logging</strong> — five-step runbook: Activity Log routing, Diagnostic Settings at resource level (Audit + RequestResponse), Diagnostic Settings at project level (separate — does not cascade), Entra ID logs at tenant level, Application Insights connection. Includes content capture governance guidance and a deployment checklist. Sourced from Cyphora.io Foundry logging overview (April 10, 2026).</td>
+<td>playbooks.html</td></tr>
+
+<tr><td><span class="tag blue">🔀 Merged</span></td>
+<td><strong>Zero Trust for AI merged into Frameworks page</strong> — Zero Trust principles, maturity model, and 12 priority controls now sit alongside NIST AI RMF and ISO 42001 on a single "Frameworks, Standards & Zero Trust" page. zero-trust.html retired. Nav reduced from 13 to 12 pages (before CS vs Foundry addition).</td>
+<td>frameworks.html</td></tr>
+
+<tr><td><span class="tag blue">🔀 Renamed</span></td>
+<td><strong>Azure AI Foundry → Microsoft Foundry</strong> across all pages — effective January 1, 2026, Microsoft renamed Azure AI Foundry to Microsoft Foundry in the January 2026 Product Terms. This was the third rename in two years (Azure AI Studio → Azure AI Foundry → Microsoft Foundry).</td>
+<td>All pages</td></tr>
+
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Sources</div>
+  <p><a href="https://www.cyphora.io/blog/microsoft-foundry/microsoft-foundry-logging-overview/" target="_blank" style="color:var(--blue);">Cyphora.io — Microsoft Foundry Logging (April 10, 2026)</a> · Microsoft Product Terms January 2026 (Foundry rename) · Derk van der Woude MVP field research · Microsoft Entra security for AI overview</p>
+</div>
 
 <div class="section-label" style="margin-top:40px;">APRIL 7, 2026</div>
 <h2>Agent Identity Architecture — Five Patterns, A2A Protocol, Agent Sprawl</h2>
@@ -554,7 +595,16 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <p>Microsoft Security Blog (RSAC 2026, March 20 2026) · Microsoft Tech Community · learn.microsoft.com · Microsoft Copilot Studio agent security field research · NIST AI RMF 1.0 · ISO/IEC 42001:2023 · Derk van der Woude Medium blog series (Microsoft Security MVP)</p>
 </div>
 
-<div class="page-nav"><a href="playbooks.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Playbooks</span></a><a href="contact.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Contact</span></a></div>
+<div class="page-nav"><a href="copilot-vs-foundry.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">CS vs Foundry</span></a><a href="contact.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Contact</span></a></div>
+<div style="text-align:center;margin:32px 0 0;padding:24px 0;border-top:1px solid var(--border2);">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text3);margin-bottom:10px;">STAY UPDATED</div>
+  <div style="font-size:15px;font-weight:700;color:#0d1526;margin-bottom:6px;">Get notified when Microsoft AI security changes</div>
+  <div style="font-size:13px;color:#2e3d5e;margin-bottom:14px;">Monthly updates on new controls, GA announcements, and critical gaps — direct to your inbox.</div>
+  <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#ffffff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;padding:12px 24px;border-radius:8px;text-decoration:none;transition:opacity 0.15s;" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">
+    Subscribe to updates →
+  </a>
+  <div style="font-size:11px;color:var(--text3);margin-top:10px;font-family:'JetBrains Mono',monospace;">aiagentsecurity.substack.com · Free · No spam</div>
+</div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
   Last updated: April 8, 2026 · Analysis covers publicly announced Microsoft security capabilities only

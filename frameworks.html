@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Frameworks — Securing AI with Microsoft</title>
+<title>Frameworks & Standards — Securing AI with Microsoft</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -300,6 +300,34 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   .nav-links{display:none !important;}
   .hamburger{display:flex;}
 }
+
+/* ZT-specific styles */
+.zt-principle{background:#ffffff;border:1.5px solid var(--border);border-radius:12px;padding:24px;margin-bottom:12px;}
+.zt-principle-header{display:flex;align-items:center;gap:14px;margin-bottom:12px;}
+.zt-principle-icon{font-size:28px;flex-shrink:0;}
+.zt-principle-title{font-size:18px;font-weight:800;color:#0d1526;}
+.zt-principle-sub{font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--blue);letter-spacing:0.04em;margin-top:2px;}
+.zt-principle-body{font-size:14px;color:#2e3d5e;line-height:1.7;}
+.zt-maturity{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:24px 0;}
+.zt-stage{border-radius:12px;padding:20px;border:1.5px solid;}
+.zt-stage-num{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.08em;margin-bottom:6px;}
+.zt-stage-name{font-size:16px;font-weight:800;margin-bottom:8px;}
+.zt-stage-desc{font-size:12px;line-height:1.6;}
+.zt-stage-items{margin-top:10px;display:flex;flex-direction:column;gap:4px;}
+.zt-stage-item{font-size:11px;font-family:'JetBrains Mono',monospace;padding:3px 8px;border-radius:4px;background:rgba(255,255,255,0.6);}
+.zt-controls-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;}
+.zt-control{background:#ffffff;border:1.5px solid var(--border);border-radius:10px;padding:16px;}
+.zt-control-id{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--blue);letter-spacing:0.06em;margin-bottom:4px;}
+.zt-control-name{font-size:13px;font-weight:700;color:#0d1526;margin-bottom:6px;line-height:1.3;}
+.zt-control-desc{font-size:12px;color:#2e3d5e;line-height:1.5;}
+.zt-effort{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 8px;border-radius:3px;margin-top:8px;}
+.effort-low{background:rgba(16,124,16,0.1);color:#0a5a20;border:1px solid rgba(16,124,16,0.2);}
+.effort-med{background:rgba(255,170,0,0.1);color:#7a5000;border:1px solid rgba(255,170,0,0.2);}
+.effort-high{background:rgba(192,0,0,0.1);color:#8a2000;border:1px solid rgba(192,0,0,0.2);}
+@media(max-width:700px){
+  .zt-maturity{grid-template-columns:1fr;}
+  .zt-controls-grid{grid-template-columns:1fr;}
+}
 </style>
 </head>
 <body>
@@ -318,9 +346,9 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="mcp.html" class="">MCP</a>
 <a href="threats.html" class="">Threats</a>
 <a href="frameworks.html" class=" active">Frameworks</a>
-<a href="zero-trust.html" class="">Zero Trust</a>
 <a href="gaps.html" class="">Gaps</a>
 <a href="playbooks.html" class="">Playbooks</a>
+<a href="copilot-vs-foundry.html" class="">CS vs Foundry</a>
 <a href="changelog.html" class="">Changelog</a>
 <a href="contact.html" class="">Contact</a>
 </div>
@@ -336,9 +364,9 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="mcp.html" class="">MCP</a>
 <a href="threats.html" class="">Threats</a>
 <a href="frameworks.html" class=" active">Frameworks</a>
-<a href="zero-trust.html" class="">Zero Trust</a>
 <a href="gaps.html" class="">Gaps</a>
 <a href="playbooks.html" class="">Playbooks</a>
+<a href="copilot-vs-foundry.html" class="">CS vs Foundry</a>
 <a href="changelog.html" class="">Changelog</a>
 <a href="contact.html" class="">Contact</a>
 </div>
@@ -448,10 +476,263 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 
 
-<div class="page-nav"><a href="threats.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Threats</span></a><a href="zero-trust.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Zero Trust</span></a></div>
+
+<div class="divider" style="margin-top:56px;"></div>
+
+<div class="section-label" style="margin-top:48px;">Zero Trust for AI</div>
+<h2>Applying Zero Trust to AI Workloads</h2>
+<p>Zero Trust isn't just for users and devices. The three core principles apply directly to AI agents, but the implementation looks very different from user-centric Zero Trust. Here's what each principle means in practice — and where the hardest gaps are today.</p>
+
+<div class="zt-principle">
+  <div class="zt-principle-header">
+    <div class="zt-principle-icon">🔍</div>
+    <div><div class="zt-principle-title">Verify Explicitly</div><div class="zt-principle-sub">PRINCIPLE 01 · IDENTITY & AUTHENTICATION</div></div>
+  </div>
+  <div class="zt-principle-body">For users, this means MFA and Conditional Access. For AI agents, it means ensuring every agent has a verified identity — not just a name — before it can access resources or communicate with other agents. In practice: require Entra ID authentication for all agent interactions, register agents in the Agent 365 Registry, and use modern Agent ID authentication (OAuth 2.0) where available. For Copilot Studio agents, this means enforcing one of the four authentication patterns rather than allowing No Authentication. <strong>The hardest part:</strong> Classic Copilot Studio agents authenticate as service principals or OBO — they don't use modern Agent ID and therefore can't be verified by CA for Agents or ID Protection. This is the single biggest gap in Microsoft's current Zero Trust for AI story.</div>
+</div>
+
+<div class="zt-principle">
+  <div class="zt-principle-header">
+    <div class="zt-principle-icon">🔒</div>
+    <div><div class="zt-principle-title">Use Least Privilege</div><div class="zt-principle-sub">PRINCIPLE 02 · ACCESS & PERMISSIONS</div></div>
+  </div>
+  <div class="zt-principle-body">For users, this means JIT/JEA and PIM. For AI agents, it means scoping each agent's permissions to exactly what it needs for its specific task — no broader. In practice: avoid Application permissions (tenant-wide) in favour of Delegated permissions (user-scoped), avoid maker credentials (which grant the maker's full permission set to every user), use access packages for time-bound agent resource assignments, and configure Custom Security Attributes to classify agent access levels for attribute-based CA policies. <strong>The hardest part:</strong> agents are often provisioned broadly "to make sure they work" and permissions are rarely reviewed. Agent lifecycle workflows and access reviews are the operational controls that enforce this principle over time.</div>
+</div>
+
+<div class="zt-principle">
+  <div class="zt-principle-header">
+    <div class="zt-principle-icon">🛡️</div>
+    <div><div class="zt-principle-title">Assume Breach</div><div class="zt-principle-sub">PRINCIPLE 03 · DETECTION & RESPONSE</div></div>
+  </div>
+  <div class="zt-principle-body">For users, this means SIEM, SOAR, and EDR. For AI agents, it means assuming any agent could be compromised via prompt injection, malicious tool output, or credential theft — and building detection and containment accordingly. In practice: deploy Sentinel AI analytics rules, configure Defender real-time agent protection, build AI incident response playbooks, and set up automated response rules for high-risk AI activity. <strong>The hardest part:</strong> agent compromise often looks like normal agent behaviour — the agent is doing what it was told, just by an attacker rather than a legitimate user. Detection requires behavioural baselines, not just signature matching.</div>
+</div>
+
+
+
+<div class="section-label" style="margin-top:48px;">Zero Trust Maturity Model</div>
+<h2>Where to start — a staged approach</h2>
+<p>Don't try to implement all 80+ ZT Workshop AI controls at once. This three-stage model gives organisations a practical sequence from zero visibility to full automation.</p>
+
+<div class="zt-maturity">
+  <div class="zt-stage" style="border-color:rgba(0,120,212,0.3);background:rgba(0,120,212,0.04);">
+    <div class="zt-stage-num" style="color:var(--blue);">STAGE 01</div>
+    <div class="zt-stage-name" style="color:#0d1526;">Visibility</div>
+    <div class="zt-stage-desc" style="color:#2e3d5e;">Know what you have before you try to control it. Most organisations skip this and jump to controls — then discover the controls don't apply to most of their agents.</div>
+    <div class="zt-stage-items">
+      <div class="zt-stage-item" style="color:#0d1526;">Discover agents in Agent 365 Registry</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Enable AI Agent Inventory (Defender)</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Run Playbook 01 KQL audit queries</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Identify Classic vs Modern agents</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Triage no-auth and maker-cred agents</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Assign owners to all published agents</div>
+    </div>
+  </div>
+  <div class="zt-stage" style="border-color:rgba(255,140,0,0.3);background:rgba(255,140,0,0.04);">
+    <div class="zt-stage-num" style="color:#8a5000;">STAGE 02</div>
+    <div class="zt-stage-name" style="color:#0d1526;">Control</div>
+    <div class="zt-stage-desc" style="color:#2e3d5e;">Apply identity and access controls to the agents you've inventoried. Focus on the highest-risk patterns first — no-auth, maker credentials, org-wide sharing.</div>
+    <div class="zt-stage-items">
+      <div class="zt-stage-item" style="color:#0d1526;">Enforce Entra ID auth on all agents</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Deploy CA posture for Modern Agents</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Enable ID Protection for Agents</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Configure Global Secure Access for agents</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Deploy DSPM for AI + DLP policies</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Enable Defender real-time protection</div>
+    </div>
+  </div>
+  <div class="zt-stage" style="border-color:rgba(16,124,16,0.3);background:rgba(16,124,16,0.04);">
+    <div class="zt-stage-num" style="color:#0a5a20;">STAGE 03</div>
+    <div class="zt-stage-name" style="color:#0d1526;">Automation</div>
+    <div class="zt-stage-desc" style="color:#2e3d5e;">Operationalise your controls so they scale without manual effort. Governance that requires manual review of every agent will break down as agent count grows.</div>
+    <div class="zt-stage-items">
+      <div class="zt-stage-item" style="color:#0d1526;">Lifecycle workflows for mover/leaver</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Access reviews for agent permissions</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Automated response rules in Sentinel</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Graph API agent registry management</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Recurring AI threat review cadence</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Red teaming cadence for all agents</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label" style="margin-top:48px;">Priority Controls</div>
+<h2>The highest-impact ZT Workshop AI controls</h2>
+<p>From the 80+ controls in the <a href="https://microsoft.github.io/zerotrustassessment/docs/category/ai" target="_blank" style="color:var(--blue);">Microsoft Zero Trust Assessment Workshop AI section</a>, these are the ones security architects should prioritise first.</p>
+
+<div class="zt-controls-grid">
+  <div class="zt-control">
+    <div class="zt-control-id">AI_000 · IDENTITY</div>
+    <div class="zt-control-name">Require Entra ID Auth for All Agent Interactions</div>
+    <div class="zt-control-desc">Ensure every agent that interacts with users or data authenticates via Entra ID. No anonymous or no-auth agents in production. Foundation for everything else.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_001–002 · VISIBILITY</div>
+    <div class="zt-control-name">Discover, Inventory and Assign Ownership</div>
+    <div class="zt-control-desc">Use Agent 365 Registry to discover all agents. Triage each one and assign an accountable owner. Unowned agents are your highest sprawl risk.</div>
+    <span class="zt-effort effort-low">LOW EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_005 · IDENTITY</div>
+    <div class="zt-control-name">Custom Security Attributes for Agent Classification</div>
+    <div class="zt-control-desc">Tag agents with custom attributes (risk level, data sensitivity, environment). Enables attribute-based CA policies that scale to hundreds of agents without per-agent rules — directly addresses the agent name sync gap.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_006 · IDENTITY</div>
+    <div class="zt-control-name">ID Protection + Risk-Based CA for Agents</div>
+    <div class="zt-control-desc">Enable Identity Protection risk signals for Modern Agents and deploy risk-based CA policies. Automatically blocks high-risk agents without manual intervention.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_014 · GOVERNANCE</div>
+    <div class="zt-control-name">Lifecycle Workflows for Sponsor Mover/Leaver</div>
+    <div class="zt-control-desc">When the person who sponsors an agent leaves the organisation, a workflow must reassign sponsorship or decommission the agent. Without this, agents become orphaned and unmanaged over time.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_072 · RUNTIME</div>
+    <div class="zt-control-name">Content Safety SDK for All Agent Inputs</div>
+    <div class="zt-control-desc">Require all agents to pass inputs through Azure AI Content Safety before processing. Detects prompt injection, harmful content, and jailbreak attempts at the input layer before the model sees them.</div>
+    <span class="zt-effort effort-high">HIGH EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_077 · MCP</div>
+    <div class="zt-control-name">APIM Gateway for All MCP Server Deployments</div>
+    <div class="zt-control-desc">Require Azure API Management as a governance layer in front of all custom MCP servers. Provides authentication, rate limiting, logging, and policy enforcement at the tool layer.</div>
+    <span class="zt-effort effort-high">HIGH EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_080 · DATA</div>
+    <div class="zt-control-name">Sensitivity Label Inheritance for AI Outputs</div>
+    <div class="zt-control-desc">AI-generated content should inherit the highest sensitivity label of its source data. Without this, a Confidential document summarised by an agent produces an Unclassified output — bypassing your data protection controls.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_090–091 · DETECT</div>
+    <div class="zt-control-name">Sentinel AI Analytics Rules</div>
+    <div class="zt-control-desc">Enable AI-specific analytics rules for prompt injection detection and create custom rules for agent anomaly detection. Also configure AI threat detection workbooks for ongoing visibility.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_094 · RESPOND</div>
+    <div class="zt-control-name">Automated Response Rules for High-Risk AI Activity</div>
+    <div class="zt-control-desc">Configure SOAR-style automated containment for high-risk AI activity — automatic agent suspension, access revocation, or alert escalation without waiting for manual triage.</div>
+    <span class="zt-effort effort-high">HIGH EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_081–083 · RUNTIME</div>
+    <div class="zt-control-name">AI Red Teaming Cadence</div>
+    <div class="zt-control-desc">Configure AI Red Teaming Agent in Microsoft Foundry. Establish red teaming as a requirement for all new agent deployments and a recurring validation cadence (quarterly recommended) for existing agents.</div>
+    <span class="zt-effort effort-high">HIGH EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_128 · MCP</div>
+    <div class="zt-control-name">MCP Management Server</div>
+    <div class="zt-control-desc">Deploy a dedicated MCP Management Server as the control plane for all custom MCP server deployments. Provides centralised approval, discovery, and governance of the tool layer — the MCP equivalent of an app catalogue.</div>
+    <span class="zt-effort effort-high">HIGH EFFORT</span>
+  </div>
+</div>
+
+<div class="callout callout-info" style="margin-top:32px;">
+  <div class="callout-title">📌 Full control list</div>
+
+<div class="section-label" style="margin-top:48px;">Priority Controls</div>
+<h2>The highest-impact ZT Workshop AI controls</h2>
+<p>From the 80+ controls in the <a href="https://microsoft.github.io/zerotrustassessment/docs/category/ai" target="_blank" style="color:var(--blue);">Microsoft Zero Trust Assessment Workshop AI section</a>, these are the ones security architects should prioritise first.</p>
+
+<div class="zt-controls-grid">
+  <div class="zt-control">
+    <div class="zt-control-id">AI_000 · IDENTITY</div>
+    <div class="zt-control-name">Require Entra ID Auth for All Agent Interactions</div>
+    <div class="zt-control-desc">Ensure every agent that interacts with users or data authenticates via Entra ID. No anonymous or no-auth agents in production. Foundation for everything else.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_001–002 · VISIBILITY</div>
+    <div class="zt-control-name">Discover, Inventory and Assign Ownership</div>
+    <div class="zt-control-desc">Use Agent 365 Registry to discover all agents. Triage each one and assign an accountable owner. Unowned agents are your highest sprawl risk.</div>
+    <span class="zt-effort effort-low">LOW EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_005 · IDENTITY</div>
+    <div class="zt-control-name">Custom Security Attributes for Agent Classification</div>
+    <div class="zt-control-desc">Tag agents with custom attributes (risk level, data sensitivity, environment). Enables attribute-based CA policies that scale to hundreds of agents without per-agent rules — directly addresses the agent name sync gap.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_006 · IDENTITY</div>
+    <div class="zt-control-name">ID Protection + Risk-Based CA for Agents</div>
+    <div class="zt-control-desc">Enable Identity Protection risk signals for Modern Agents and deploy risk-based CA policies. Automatically blocks high-risk agents without manual intervention.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_014 · GOVERNANCE</div>
+    <div class="zt-control-name">Lifecycle Workflows for Sponsor Mover/Leaver</div>
+    <div class="zt-control-desc">When the person who sponsors an agent leaves the organisation, a workflow must reassign sponsorship or decommission the agent. Without this, agents become orphaned and unmanaged over time.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_072 · RUNTIME</div>
+    <div class="zt-control-name">Content Safety SDK for All Agent Inputs</div>
+    <div class="zt-control-desc">Require all agents to pass inputs through Azure AI Content Safety before processing. Detects prompt injection, harmful content, and jailbreak attempts at the input layer before the model sees them.</div>
+    <span class="zt-effort effort-high">HIGH EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_077 · MCP</div>
+    <div class="zt-control-name">APIM Gateway for All MCP Server Deployments</div>
+    <div class="zt-control-desc">Require Azure API Management as a governance layer in front of all custom MCP servers. Provides authentication, rate limiting, logging, and policy enforcement at the tool layer.</div>
+    <span class="zt-effort effort-high">HIGH EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_080 · DATA</div>
+    <div class="zt-control-name">Sensitivity Label Inheritance for AI Outputs</div>
+    <div class="zt-control-desc">AI-generated content should inherit the highest sensitivity label of its source data. Without this, a Confidential document summarised by an agent produces an Unclassified output — bypassing your data protection controls.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_090–091 · DETECT</div>
+    <div class="zt-control-name">Sentinel AI Analytics Rules</div>
+    <div class="zt-control-desc">Enable AI-specific analytics rules for prompt injection detection and create custom rules for agent anomaly detection. Also configure AI threat detection workbooks for ongoing visibility.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_094 · RESPOND</div>
+    <div class="zt-control-name">Automated Response Rules for High-Risk AI Activity</div>
+    <div class="zt-control-desc">Configure SOAR-style automated containment for high-risk AI activity — automatic agent suspension, access revocation, or alert escalation without waiting for manual triage.</div>
+    <span class="zt-effort effort-high">HIGH EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_081–083 · RUNTIME</div>
+    <div class="zt-control-name">AI Red Teaming Cadence</div>
+    <div class="zt-control-desc">Configure AI Red Teaming Agent in Microsoft Foundry. Establish red teaming as a requirement for all new agent deployments and a recurring validation cadence (quarterly recommended) for existing agents.</div>
+    <span class="zt-effort effort-high">HIGH EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_128 · MCP</div>
+    <div class="zt-control-name">MCP Management Server</div>
+    <div class="zt-control-desc">Deploy a dedicated MCP Management Server as the control plane for all custom MCP server deployments. Provides centralised approval, discovery, and governance of the tool layer — the MCP equivalent of an app catalogue.</div>
+    <span class="zt-effort effort-high">HIGH EFFORT</span>
+  </div>
+</div>
+
+<div class="callout callout-info" style="margin-top:32px;">
+  <div class="callout-title">📌 Full control list</div>
+
+
+<div class="page-nav"><a href="threats.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Threats</span></a><a href="gaps.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Gaps</span></a></div>
+<div style="text-align:center;margin:32px 0 0;padding:24px 0;border-top:1px solid var(--border2);">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text3);margin-bottom:10px;">STAY UPDATED</div>
+  <div style="font-size:15px;font-weight:700;color:#0d1526;margin-bottom:6px;">Get notified when Microsoft AI security changes</div>
+  <div style="font-size:13px;color:#2e3d5e;margin-bottom:14px;">Monthly updates on new controls, GA announcements, and critical gaps — direct to your inbox.</div>
+  <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#ffffff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;padding:12px 24px;border-radius:8px;text-decoration:none;transition:opacity 0.15s;" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">
+    Subscribe to updates →
+  </a>
+  <div style="font-size:11px;color:var(--text3);margin-top:10px;font-family:'JetBrains Mono',monospace;">aiagentsecurity.substack.com · Free · No spam</div>
+</div>
 <div class="footer">
-  SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  Last updated: April 8, 2026 · Analysis covers publicly announced Microsoft security capabilities only
+  SOURCES: NIST AI RMF 1.0 · ISO/IEC 42001:2023 · Microsoft Zero Trust Assessment Workshop · Microsoft Entra security for AI overview · RSAC 2026<br>
+  Last updated: April 10, 2026
 </div>
 </div>
 
