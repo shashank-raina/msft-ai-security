@@ -342,6 +342,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="changelog.html" class=" active">Changelog</a>
 <a href="contact.html" class="">Contact</a>
 </div>
+  <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" class="substack-nav" style="flex-shrink:0;margin-left:10px;display:flex;align-items:center;gap:5px;background:var(--blue);color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:6px 13px;border-radius:6px;text-decoration:none;white-space:nowrap;letter-spacing:0.03em;">📬 Subscribe</a>
 </nav>
 <div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
   📌 <strong>Author's note:</strong> This site synthesises the author's own understanding from publicly available Microsoft documentation, official Microsoft Security blog posts, RSAC 2026 announcements, and insights from Microsoft Security professionals and MVPs. It is independent and not affiliated with or endorsed by Microsoft. Microsoft updates products and documentation frequently — always verify current status directly with Microsoft before making architecture or purchasing decisions.
@@ -373,6 +374,98 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 
 
+
+
+
+
+<div class="section-label" style="margin-top:40px;">APRIL 11, 2026 (3)</div>
+<h2>Correction — Security Copilot Agent Identity: Microsoft-built vs Custom agents</h2>
+
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag warn">⚠️ Correction</span></td>
+<td><strong>Security Copilot custom agent maker credentials risk</strong> — custom and partner Security Copilot agents use "Connect with existing user account", storing the configuring user's credentials for all executions. Security Copilot users are typically high-privilege accounts. A custom agent built by a Global Admin extends admin-level access to Sentinel, Defender, Entra, and threat intelligence to every user who runs it — with no CA for Agents or ID Protection coverage. Added as a significant gap with mitigation guidance. Described as "maker credentials problem in disguise" on the identity page.</td>
+<td>identity.html, copilot-vs-foundry.html, gaps.html</td></tr>
+
+<tr><td><span class="tag warn">⚠️ Correction</span></td>
+<td><strong>CA for Agents — Security Copilot nuance</strong> — the site previously stated CA for Agents applies to "Security Copilot and AI Foundry agents" without qualification. Field research from Microsoft Learn (April 2026) clarifies: Security Copilot offers two identity options. Microsoft-built agents use a dedicated Entra Agent ID — CA for Agents and ID Protection apply. Custom and partner Security Copilot agents use "Connect with existing user account" — the agent runs using the configuring user's credentials. This is functionally identical to Copilot Studio's Agent's User Account pattern (⑤) — CA for Agents does NOT apply. Corrected across identity page, product map CA card, and Copilot vs Foundry comparison table.</td>
+<td>identity.html, product-map.html, copilot-vs-foundry.html</td></tr>
+
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Source</div>
+  <p><a href="https://learn.microsoft.com/en-us/copilot/security/agents-overview" target="_blank" style="color:var(--blue);">Microsoft Security Copilot agents overview (learn.microsoft.com, April 2026)</a></p>
+</div>
+
+<div class="section-label" style="margin-top:40px;">APRIL 11, 2026 (2)</div>
+<h2>Agent Governance Toolkit · OWASP Agentic AI Top 10 · Regulatory Deadlines</h2>
+
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Agent Governance Toolkit — new product card</strong> — open-source MIT-licensed toolkit from Microsoft providing runtime security governance for autonomous AI agents. Seven packages covering policy enforcement, cryptographic identity, execution rings, circuit breakers, kill switch, plugin signing, and compliance mapping. Framework-agnostic, sub-millisecond latency. Available April 2026.</td>
+<td>product-map.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>OWASP Top 10 for Agentic Applications 2026</strong> — added to Frameworks page. First formal taxonomy of risks specific to autonomous AI agents (December 2025): goal hijacking, tool misuse, identity abuse, memory poisoning, cascading failures, rogue agents and four others. Full table mapping each risk to Microsoft controls and Agent Governance Toolkit coverage.</td>
+<td>frameworks.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Regulatory deadlines — EU AI Act (August 2026) and Colorado AI Act (June 2026)</strong> — both apply to organisations deploying high-risk AI agents. Added to Frameworks page with key obligations and a callout on how the Classic Agent gap compounds regulatory risk.</td>
+<td>frameworks.html</td></tr>
+
+<tr><td><span class="tag warn">⚠️ Updated</span></td>
+<td><strong>Kill switch gap updated</strong> — previously documented as "No platform-level agent kill switch". Agent Governance Toolkit now provides an open-source programmatic kill switch with ring isolation and trust decay. Gap updated to reflect this partial resolution.</td>
+<td>gaps.html</td></tr>
+
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Source</div>
+  <p><a href="https://opensource.microsoft.com/blog/2026/04/02/introducing-the-agent-governance-toolkit-open-source-runtime-security-for-ai-agents/" target="_blank" style="color:var(--blue);">Microsoft Open Source Blog — Introducing the Agent Governance Toolkit (April 2, 2026)</a> · <a href="https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/" target="_blank" style="color:var(--blue);">OWASP Top 10 for Agentic Applications 2026</a></p>
+</div>
+
+<div class="section-label" style="margin-top:40px;">APRIL 11, 2026</div>
+<h2>Purview Data Security — Three DLP Layers, Agentic Governance, DSPM Unification</h2>
+
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Browser-layer DLP — Edge for Business inline protection</strong> — operates at browser layer natively in Edge via Intune policy sync. Inspects typed prompt submissions to any GenAI app including shadow AI. Activates without endpoint DLP deployment. Extends to unmanaged (BYOD) devices where users are signed into Edge for Business profile. Added to product map with architecture callout explaining all three DLP layers.</td>
+<td>product-map.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Network Data Security (network-layer DLP)</strong> — covers the gap endpoint and browser DLP cannot reach: unmanaged devices, desktop apps, Office add-ins, API calls. Delivered via Microsoft Entra Global Secure Access (preview). Added to product map and gaps page.</td>
+<td>product-map.html, gaps.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Agentic data governance</strong> — DLP policies now extend to agent-to-human, agent-to-tools, and agent-to-agent interactions. Sensitive files can be blocked from being used as grounding data. Agent instances in Agent 365 automatically enrolled for audit and data classification at creation. IRM, DLM, and eDiscovery apply to agent-generated content.</td>
+<td>product-map.html, copilot-vs-foundry.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 Updated</span></td>
+<td><strong>DSPM for AI card updated</strong> — now reflects broader scope covering Copilot, Foundry/Entra apps, and third-party GenAI tools via browser telemetry. Notes upcoming unification of DSPM and DSPM for AI into single pane.</td>
+<td>product-map.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New gap</span></td>
+<td><strong>DLP coverage gap on unmanaged non-Edge devices</strong> — browser-layer DLP only covers Edge for Business. Chrome/Firefox/Safari users on BYOD have no browser-layer coverage until Network Data Security (GSA) reaches GA.</td>
+<td>gaps.html</td></tr>
+
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Source</div>
+  <p>LinkedIn post by Microsoft Purview field research team (April 11, 2026) covering DSPM for AI, Edge for Business inline protection, Network Data Security, and agentic data governance.</p>
+</div>
 
 <div class="section-label" style="margin-top:40px;">APRIL 10, 2026</div>
 <h2>New Page: Copilot Studio vs Microsoft Foundry · Playbook 05 · Merge: Frameworks + Zero Trust</h2>
@@ -607,7 +700,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  Last updated: April 8, 2026 · Analysis covers publicly announced Microsoft security capabilities only
+  Last updated: April 11, 2026 · Analysis covers publicly announced Microsoft security capabilities only
 </div>
 </div>
 

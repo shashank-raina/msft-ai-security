@@ -339,6 +339,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="contact.html" class="">Contact</a>
   </div>
   <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+  <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" class="substack-nav" style="flex-shrink:0;margin-left:10px;display:flex;align-items:center;gap:5px;background:var(--blue);color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:6px 13px;border-radius:6px;text-decoration:none;white-space:nowrap;letter-spacing:0.03em;">📬 Subscribe</a>
 </nav>
 <div class="mobile-drawer-overlay" id="drawerOverlay"></div>
 <div class="mobile-drawer" id="mobileDrawer">
@@ -474,7 +475,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
     <div class="platform-list">
       <div class="platform-item"><strong>Who uses it:</strong> Developers, solution architects, AI engineers — people building custom AI agents and workloads in Azure using SDKs and code</div>
       <div class="platform-item"><strong>What it produces:</strong> Custom AI agents, RAG pipelines, multi-agent orchestration, enterprise AI applications — deployed as Azure resources</div>
-      <div class="platform-item"><strong>Critical distinction:</strong> Uses modern Agent ID authentication (OAuth 2.0) by default — CA for Agents and ID Protection apply. Much stronger baseline than Classic Copilot Studio agents</div>
+      <div class="platform-item"><strong>Critical distinction:</strong> Foundry agents use modern Agent ID (OAuth 2.0) — CA for Agents and ID Protection apply. Much stronger baseline than Classic Copilot Studio agents</div>
       <div class="platform-item"><strong>Primary risk surface:</strong> Logging gaps (nothing collected by default), content capture governance, RBAC at resource vs project level, supply chain</div>
       <div class="platform-item"><strong>Primary detection surface:</strong> Azure Monitor Diagnostic Settings, Application Insights, Entra ID sign-in logs</div>
     </div>
@@ -491,13 +492,16 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </tr></thead>
 <tbody>
 <tr><td>Entra Agent ID</td><td>⚠️ Modern agents only — most existing deployments are Classic and excluded</td><td>✅ Supported — agents are Entra identities by default</td></tr>
-<tr><td>Conditional Access for Agents</td><td>❌ Does NOT apply to Copilot Studio agents</td><td>✅ Applies — OAuth 2.0 Agent ID authentication</td></tr>
+<tr><td>Conditional Access for Agents</td><td>❌ Does NOT apply to Copilot Studio agents</td><td>✅ Applies to Foundry agents (OAuth 2.0 Agent ID)<br><span style="font-size:11px;color:var(--text3);">⚠️ Security Copilot: applies to Microsoft-built agents only. Custom/partner agents use "Connect with existing user account" — no Agent ID, CA for Agents does not apply.</span></td></tr>
 <tr><td>ID Protection for Agents</td><td>❌ Classic agents only — Modern agents supported</td><td>✅ Supported</td></tr>
 <tr><td>Identity Governance (lifecycle)</td><td>⚠️ Modern agents only</td><td>✅ Supported via Entra ID Governance</td></tr>
 <tr><td>Defender real-time protection</td><td>✅ Copilot Studio agents (Defender for Cloud Apps)</td><td>✅ Defender for Cloud AI security posture</td></tr>
 <tr><td>Sentinel analytics rules</td><td>✅ AIAgentsInfo table queries</td><td>✅ Azure Monitor + App Insights tables</td></tr>
 <tr><td>Prompt Shield / Content Safety</td><td>✅ Built-in via M365 Copilot layer</td><td>✅ Content Safety SDK — opt-in per agent</td></tr>
-<tr><td>DLP / Purview</td><td>✅ DLP for M365 Copilot (GA March 31 2026)</td><td>✅ Azure data governance applies</td></tr>
+<tr><td>DLP / Purview (policy layer)</td><td>✅ DLP for M365 Copilot (GA March 31 2026) — covers Copilot experiences</td><td>✅ Azure data governance applies</td></tr>
+<tr><td>Browser-layer DLP</td><td>✅ Edge for Business inline protection — inspects typed prompts to any GenAI app incl. shadow AI. Works on BYOD if signed into Edge for Business profile</td><td>✅ Same — applies to any browser-based interaction</td></tr>
+<tr><td>Network-layer DLP</td><td>⚠️ Preview — Network Data Security via Global Secure Access. Covers unmanaged devices, desktop apps, API calls</td><td>⚠️ Preview — same coverage</td></tr>
+<tr><td>Agentic data governance</td><td>✅ DLP extends to agent-to-human, agent-to-tools, agent-to-agent. Sensitive files blocked from grounding data. Auto-enrolled for audit at creation</td><td>✅ Same — agent instances enrolled as auditable entities</td></tr>
 <tr><td>Inventory / discovery</td><td>✅ Agent 365 + AIAgentsInfo table</td><td>⚠️ Azure Resource Manager + Entra Agent ID — no unified agent-level inventory table equivalent</td></tr>
 <tr><td>Logging — default state</td><td>✅ Some data in AIAgentsInfo automatically</td><td>⚠️ Nothing collected by default — all logging is opt-in</td></tr>
 <tr><td>Red teaming</td><td>⚠️ No native Copilot Studio red teaming tool</td><td>✅ AI Red Teaming Agent in Microsoft Foundry</td></tr>
@@ -505,6 +509,13 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </tbody>
 </table>
 
+
+<div class="callout callout-warn" style="margin-top:20px;">
+  <div class="callout-title">⚠️ Security Copilot agent identity — a third distinction</div>
+  <p>Security Copilot agents offer two identity options. <strong>Microsoft-built agents</strong> (Phishing Triage, Threat Intelligence Briefing, Vulnerability Remediation etc.) use a dedicated Entra Agent ID — CA for Agents and ID Protection apply. <strong>Custom and partner agents</strong> use <em>"Connect with existing user account"</em> — the agent runs using the configuring user's credentials, inheriting their full access and permissions.</p>
+  <p><strong>Why this is worse than Copilot Studio maker credentials:</strong> Security Copilot users are typically high-privilege accounts — Security Admins, SOC engineers, Global Admins. A custom agent configured by a Global Admin silently extends Global Admin-level access to Sentinel incidents, Defender signals, Entra identity risk data, and threat intelligence — to every user who runs the agent. The blast radius of a compromised or misconfigured custom Security Copilot agent is significantly larger than a typical Copilot Studio agent.</p>
+  <p><strong>Mitigation:</strong> Use a dedicated low-privilege service account for configuring custom Security Copilot agents. Audit who configures custom agents and what permissions their account holds. Establish an approval gate before production deployment.</p>
+</div>
 <div class="section-label">Copilot Studio — Security Condensed</div>
 <h2>The five authentication patterns — risk at a glance</h2>
 <p>Every Copilot Studio agent uses one of five authentication patterns. The pattern determines the risk level, what controls apply, and how you detect it.</p>
@@ -695,7 +706,7 @@ directActions | union topicActions | sort by AIAgentId, Timestamp desc</div>
 </div>
 <div class="footer">
   SOURCES: Derk van der Woude (MVP) · Microsoft Entra security for AI overview · Cyphora.io Foundry Logging · RSAC 2026 · Microsoft Zero Trust Workshop<br>
-  Last updated: April 10, 2026
+  Last updated: April 11, 2026
 </div>
 </div>
 

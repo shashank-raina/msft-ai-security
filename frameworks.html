@@ -370,6 +370,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="changelog.html" class="">Changelog</a>
 <a href="contact.html" class="">Contact</a>
 </div>
+  <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" class="substack-nav" style="flex-shrink:0;margin-left:10px;display:flex;align-items:center;gap:5px;background:var(--blue);color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:6px 13px;border-radius:6px;text-decoration:none;white-space:nowrap;letter-spacing:0.03em;">📬 Subscribe</a>
 </nav>
 <div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
   📌 <strong>Author's note:</strong> This site synthesises the author's own understanding from publicly available Microsoft documentation, official Microsoft Security blog posts, RSAC 2026 announcements, and insights from Microsoft Security professionals and MVPs. It is independent and not affiliated with or endorsed by Microsoft. Microsoft updates products and documentation frequently — always verify current status directly with Microsoft before making architecture or purchasing decisions.
@@ -379,15 +380,68 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 <div class="hero">
   <div class="hero-badge"><div class="live-dot"></div>UPDATED · RSAC 2026 + FIELD RESEARCH · MARCH 2026</div>
-  <h1>NIST AI RMF &<br><span>ISO 42001 Alignment</span></h1>
+  <h1>Frameworks, Standards<br><span>&amp; Compliance</span></h1>
   <p style="color:#2e3d5e;font-size:17px;font-weight:400;max-width:640px;line-height:1.7;">
-    How Microsoft's AI security controls map to NIST AI RMF and ISO 42001 — with gap analysis per clause. Updated with RSAC 2026 GA announcements and the Zero Trust Workshop tool reference.
+    How Microsoft's AI security controls map to NIST AI RMF, ISO 42001, and the OWASP Agentic AI Top 10 — with gap analysis per clause. Includes upcoming regulatory deadlines for organisations deploying AI agents.
   </p>
 </div>
 
 <div class="callout callout-info">
   <div class="callout-title">🛠️ Zero Trust Workshop & Assessment Tool</div>
   <p>Microsoft's <a href="https://microsoft.github.io/zerotrustassessment/" target="_blank">Zero Trust Workshop</a> (microsoft.github.io/zerotrustassessment) is a free, open-source guided assessment framework built by the Microsoft Security CxE team. It provides pillar-specific assessment checks, a step-by-step deployment guide using a first-then-next structure, app permissions analysis, and workshop documentation. It is built from learnings across thousands of customer deployments. A formal <strong>AI pillar</strong> for the assessment tool is in development — expected summer 2026. Until then, architects should use the existing Identity, Data, and Networking pillar assessments alongside the new Zero Trust for AI reference architecture published at RSAC 2026.</p>
+</div>
+
+
+<div class="section-label" style="margin-top:48px;">OWASP Agentic AI</div>
+<h2>OWASP Top 10 for Agentic Applications 2026</h2>
+<p>In December 2025, OWASP published the first formal taxonomy of risks specific to autonomous AI agents. Unlike the existing OWASP Top 10 for LLM applications (which focuses on model-level risks), the Agentic AI Top 10 covers risks that emerge when AI agents act autonomously — making decisions, invoking tools, and interacting with other agents. Microsoft's <a href="https://github.com/microsoft/agent-governance-toolkit" target="_blank" style="color:var(--blue);">Agent Governance Toolkit</a> (open source, April 2026) maps to all 10 risks.</p>
+
+<table>
+<thead><tr><th>OWASP Risk</th><th>Description</th><th>Microsoft Control</th><th>AGT Coverage</th></tr></thead>
+<tbody>
+<tr><td><strong>Goal Hijacking</strong></td><td>Adversary manipulates agent's objective through prompt injection or environmental data</td><td>Prompt Shield, Entra Internet Access Prompt Injection Protection</td><td>Semantic intent classifier in Agent OS policy engine</td></tr>
+<tr><td><strong>Tool Misuse</strong></td><td>Agent invokes tools beyond intended scope — accessing unauthorised APIs, data, or systems</td><td>Foundry Guardrails, Defender for Cloud Apps CASB</td><td>Capability sandboxing + MCP security gateway</td></tr>
+<tr><td><strong>Identity Abuse</strong></td><td>Agent impersonates users or other agents, acquires excessive permissions</td><td>Entra Agent ID, CA for Agents, ID Protection for Agents</td><td>DID-based identity + behavioural trust scoring</td></tr>
+<tr><td><strong>Supply Chain Risks</strong></td><td>Compromised model, plugin, or dependency introduced into agent pipeline</td><td>Defender for Cloud AI model scanning, GitHub Advanced Security</td><td>Plugin signing with Ed25519 + manifest verification</td></tr>
+<tr><td><strong>Unsafe Code Execution</strong></td><td>Agent executes unvalidated code or scripts with excessive privileges</td><td>Foundry execution sandboxing</td><td>Execution rings with resource limits</td></tr>
+<tr><td><strong>Memory Poisoning</strong></td><td>Adversarial data injected into agent memory or RAG grounding data</td><td>DSPM for AI (grounding data blocking)</td><td>Cross-Model Verification Kernel (CMVK) with majority voting</td></tr>
+<tr><td><strong>Insecure Communications</strong></td><td>Unencrypted or unauthenticated agent-to-agent communication</td><td>Entra Agent ID A2A protocol</td><td>Inter-Agent Trust Protocol (IATP) encryption</td></tr>
+<tr><td><strong>Cascading Failures</strong></td><td>Failure or compromise in one agent propagates through multi-agent chain</td><td>Sentinel AI analytics rules, automated response rules</td><td>Circuit breakers + SLO enforcement</td></tr>
+<tr><td><strong>Human-Agent Trust Exploitation</strong></td><td>Agent manipulates human oversight — bypassing approval workflows or creating false urgency</td><td>Human-in-the-loop controls in Copilot Studio</td><td>Approval workflows with quorum logic</td></tr>
+<tr><td><strong>Rogue Agents</strong></td><td>Agent operates outside intended boundaries — ignoring instructions, self-replicating</td><td>Power Platform admin kill switch, Entra CA for Modern Agents</td><td>Ring isolation, trust decay, automated kill switch</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;">
+  <div class="callout-title">📌 Sources</div>
+  <p><a href="https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/" target="_blank" style="color:var(--blue);">OWASP Top 10 for Agentic Applications 2026</a> · <a href="https://github.com/microsoft/agent-governance-toolkit" target="_blank" style="color:var(--blue);">Microsoft Agent Governance Toolkit (GitHub, April 2026)</a></p>
+</div>
+
+<div class="section-label" style="margin-top:48px;">Regulatory Deadlines</div>
+<h2>Upcoming Compliance Dates — AI Agents</h2>
+<p>Two regulatory frameworks become enforceable in 2026 that directly apply to organisations deploying autonomous AI agents. These are not hypothetical — they have hard enforcement dates.</p>
+
+<table>
+<thead><tr><th>Regulation</th><th>Enforcement Date</th><th>Who It Affects</th><th>Key Obligations for AI Agents</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>EU AI Act — High-Risk AI Obligations</strong></td>
+  <td><span style="font-family:'JetBrains Mono',monospace;font-size:11px;background:rgba(216,59,1,0.1);color:#8a2000;padding:2px 8px;border-radius:4px;border:1px solid rgba(216,59,1,0.2);">August 2026</span></td>
+  <td>Any organisation deploying AI systems classified as high-risk in the EU market</td>
+  <td>Risk management system, data governance, technical documentation, human oversight, accuracy and robustness requirements, logging and auditability obligations</td>
+</tr>
+<tr>
+  <td><strong>Colorado AI Act</strong></td>
+  <td><span style="font-family:'JetBrains Mono',monospace;font-size:11px;background:rgba(216,59,1,0.1);color:#8a2000;padding:2px 8px;border-radius:4px;border:1px solid rgba(216,59,1,0.2);">June 2026</span></td>
+  <td>Developers and deployers of high-risk AI systems affecting Colorado consumers</td>
+  <td>Impact assessments, transparency disclosures, human oversight mechanisms, discrimination risk mitigation, consumer complaint process</td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout callout-warn" style="margin-top:16px;">
+  <div class="callout-title">⚠️ The Classic Agent gap compounds regulatory risk</div>
+  <p>Most existing Copilot Studio agents are Classic agents — outside the Entra security perimeter with no lifecycle governance, no audit trail in Entra, and no automated kill switch. If your high-risk AI deployments include Classic agents, meeting EU AI Act auditability and human oversight obligations will require either migration to Modern agents or compensating controls. Microsoft's planned migration tool does not yet exist.</p>
 </div>
 
 <div class="section-label">NIST AI RMF</div>
@@ -732,7 +786,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 <div class="footer">
   SOURCES: NIST AI RMF 1.0 · ISO/IEC 42001:2023 · Microsoft Zero Trust Assessment Workshop · Microsoft Entra security for AI overview · RSAC 2026<br>
-  Last updated: April 10, 2026
+  Last updated: April 11, 2026
 </div>
 </div>
 

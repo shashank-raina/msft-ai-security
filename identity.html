@@ -342,6 +342,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="changelog.html" class="">Changelog</a>
 <a href="contact.html" class="">Contact</a>
 </div>
+  <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" class="substack-nav" style="flex-shrink:0;margin-left:10px;display:flex;align-items:center;gap:5px;background:var(--blue);color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:6px 13px;border-radius:6px;text-decoration:none;white-space:nowrap;letter-spacing:0.03em;">📬 Subscribe</a>
 </nav>
 <div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
   📌 <strong>Author's note:</strong> This site synthesises the author's own understanding from publicly available Microsoft documentation, official Microsoft Security blog posts, RSAC 2026 announcements, and insights from Microsoft Security professionals and MVPs. It is independent and not affiliated with or endorsed by Microsoft. Microsoft updates products and documentation frequently — always verify current status directly with Microsoft before making architecture or purchasing decisions.
@@ -556,7 +557,14 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 <div class="callout callout-warn" style="margin-top:20px;">
   <div class="callout-title">⚠️ Critical Correction — Conditional Access for Agents does NOT apply to Copilot Studio</div>
-  <p>CA for Agents and ID Protection for Agents are triggered only during <strong>modern Agent ID authentication</strong> (OAuth 2.0) — used by Security Copilot and AI Foundry agents. Copilot Studio agents authenticate via OBO (pattern ①), maker credentials (pattern ②), or service principal (patterns ③ and ④) — <strong>none of which trigger CA for Agents</strong>. For Copilot Studio, apply Conditional Access policies targeting the <em>invoking user</em> or the <em>workload identity (service principal)</em> instead. Use ID Protection for Workload Identities as the equivalent control for App Registration patterns.</p>
+  <p>CA for Agents and ID Protection for Agents are triggered only during <strong>modern Agent ID authentication</strong> (OAuth 2.0). This applies to <strong>Microsoft-built Security Copilot agents</strong> and <strong>Microsoft Foundry agents</strong> that use Agent ID. Copilot Studio agents authenticate via OBO (pattern ①), maker credentials (pattern ②), or service principal (patterns ③ and ④) — <strong>none of which trigger CA for Agents</strong>.</p><p><strong>Critical nuance — Security Copilot custom agents:</strong> Security Copilot offers two identity options when building agents. Microsoft-built agents use a dedicated Entra Agent ID (modern, CA for Agents applies). Custom and partner agents use the <em>"Connect with existing user account"</em> option — the agent runs using the configuring user's credentials, inheriting their access and permissions. This is functionally identical to Copilot Studio's Agent's User Account pattern (⑤) — CA for Agents does <strong>not</strong> apply to these agents. This distinction is not prominently documented by Microsoft.</p>
+<div class="callout callout-warn" style="margin-top:16px;">
+  <div class="callout-title">⚠️ Security Copilot custom agents — a maker credentials problem in disguise</div>
+  <p>When building a custom or partner Security Copilot agent, the "Connect with existing user account" option stores the <strong>configuring user's credentials</strong> and uses them every time the agent runs — regardless of who triggers it. This is structurally identical to Copilot Studio's maker credentials risk (pattern ②) but with a much higher blast radius.</p>
+  <p>Security Copilot users are typically high-privilege accounts — Security Admins, SOC engineers, Global Admins. An agent configured by a Global Admin silently extends Global Admin-level access to threat intelligence, Sentinel incidents, Defender signals, Entra identity risk data, and more — to every user who runs it. The configuring user's permissions become the agent's permissions, invisibly, for every execution.</p>
+  <p><strong>What to do:</strong> Audit who configures custom Security Copilot agents and what permissions their account holds. Use a dedicated low-privilege service account specifically for agent configuration — not a personal admin account. Treat this account like a shared mailbox: minimal permissions, no interactive login, monitored. Establish an approval gate before any custom Security Copilot agent goes to production.</p>
+</div>
+<p>For Copilot Studio, apply Conditional Access policies targeting the <em>invoking user</em> or the <em>workload identity (service principal)</em> instead. Use ID Protection for Workload Identities as the equivalent control for App Registration patterns.</p>
 </div>
 
 <div class="section-label" style="margin-top:32px;">Advanced Detection KQL</div>
@@ -657,7 +665,7 @@ directActions
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  Last updated: April 8, 2026 · Analysis covers publicly announced Microsoft security capabilities only
+  Last updated: April 11, 2026 · Analysis covers publicly announced Microsoft security capabilities only
 </div>
 </div>
 
