@@ -756,6 +756,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
 
+
 <!-- AI CHAT WIDGET -->
 <style>
 #aisec-chat-btn{position:fixed;bottom:28px;right:28px;z-index:9999;
@@ -766,19 +767,24 @@ document.addEventListener('DOMContentLoaded', function(){
   display:flex;align-items:center;gap:8px;
   transition:background 0.15s,transform 0.15s;}
 #aisec-chat-btn:hover{background:#005fa3;transform:translateY(-2px);}
-#aisec-chat-btn .chat-icon{font-size:16px;}
 
+/* Panel — normal and fullscreen modes */
 #aisec-chat-panel{position:fixed;bottom:88px;right:28px;z-index:9998;
-  width:380px;max-width:calc(100vw - 40px);
+  width:400px;max-width:calc(100vw - 40px);
   background:#ffffff;border-radius:16px;
   box-shadow:0 8px 40px rgba(0,0,0,0.18);
   border:1px solid #d0d8ec;
   display:none;flex-direction:column;overflow:hidden;
-  font-family:'Plus Jakarta Sans',sans-serif;}
+  font-family:'Plus Jakarta Sans',sans-serif;
+  transition:all 0.25s cubic-bezier(0.4,0,0.2,1);}
 #aisec-chat-panel.open{display:flex;}
+#aisec-chat-panel.fullscreen{
+  top:16px;left:16px;right:16px;bottom:16px;
+  width:auto;max-width:none;border-radius:16px;
+  box-shadow:0 16px 60px rgba(0,0,0,0.3);}
 
 #aisec-chat-header{background:#0d1526;padding:14px 18px;
-  display:flex;align-items:center;justify-content:space-between;}
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
 #aisec-chat-header-left{display:flex;align-items:center;gap:10px;}
 #aisec-chat-header-logo{width:22px;height:22px;display:grid;grid-template-columns:1fr 1fr;gap:2px;flex-shrink:0;}
 #aisec-chat-header-logo div:nth-child(1){background:#f25022;border-radius:1px;}
@@ -787,12 +793,14 @@ document.addEventListener('DOMContentLoaded', function(){
 #aisec-chat-header-logo div:nth-child(4){background:#ffb900;border-radius:1px;}
 #aisec-chat-title{color:#ffffff;font-size:13px;font-weight:700;}
 #aisec-chat-subtitle{color:#8a9abc;font-size:10px;font-family:'JetBrains Mono',monospace;letter-spacing:0.04em;}
-#aisec-chat-close{background:none;border:none;color:#8a9abc;
-  font-size:20px;cursor:pointer;padding:0;line-height:1;}
-#aisec-chat-close:hover{color:#ffffff;}
+.aisec-header-btns{display:flex;align-items:center;gap:6px;}
+#aisec-chat-expand,#aisec-chat-close{background:none;border:none;color:#8a9abc;
+  font-size:16px;cursor:pointer;padding:4px 6px;line-height:1;border-radius:4px;
+  transition:color 0.12s,background 0.12s;}
+#aisec-chat-expand:hover,#aisec-chat-close:hover{color:#ffffff;background:rgba(255,255,255,0.1);}
 
 /* Password gate */
-#aisec-pw-gate{padding:28px 24px;display:flex;flex-direction:column;gap:14px;background:#f5f7fc;}
+#aisec-pw-gate{padding:28px 24px;display:flex;flex-direction:column;gap:14px;background:#f5f7fc;flex-shrink:0;}
 #aisec-pw-gate-title{font-size:14px;font-weight:700;color:#0d1526;}
 #aisec-pw-gate-sub{font-size:12px;color:#5a6a8a;line-height:1.5;margin-top:-8px;}
 #aisec-pw-input{border:1px solid #d0d8ec;border-radius:8px;
@@ -807,14 +815,25 @@ document.addEventListener('DOMContentLoaded', function(){
   background:rgba(197,15,31,0.06);border:1px solid rgba(197,15,31,0.2);
   border-radius:6px;padding:8px 12px;}
 
-/* Chat UI */
-#aisec-chat-body{display:none;flex-direction:column;flex:1;}
+/* Chat body */
+#aisec-chat-body{display:none;flex-direction:column;flex:1;min-height:0;}
 #aisec-chat-body.unlocked{display:flex;}
 
-#aisec-chat-messages{flex:1;overflow-y:auto;padding:16px;
-  display:flex;flex-direction:column;gap:10px;
-  min-height:260px;max-height:360px;background:#f5f7fc;}
+/* Suggestions — scrollable row */
+#aisec-chat-suggestions{padding:10px 14px 8px;
+  display:flex;gap:6px;overflow-x:auto;flex-shrink:0;background:#f5f7fc;}
+#aisec-chat-suggestions::-webkit-scrollbar{height:3px;}
+#aisec-chat-suggestions::-webkit-scrollbar-track{background:transparent;}
+#aisec-chat-suggestions::-webkit-scrollbar-thumb{background:#c0cce0;border-radius:2px;}
+.aisec-suggestion{background:#ffffff;border:1px solid #d0d8ec;border-radius:20px;
+  padding:5px 12px;font-size:11px;color:#0078d4;cursor:pointer;white-space:nowrap;
+  font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;flex-shrink:0;
+  transition:background 0.12s,border-color 0.12s;}
+.aisec-suggestion:hover{background:#e8f0fc;border-color:#0078d4;}
 
+/* Messages */
+#aisec-chat-messages{flex:1;overflow-y:auto;padding:14px;
+  display:flex;flex-direction:column;gap:10px;background:#f5f7fc;min-height:0;}
 .aisec-msg{max-width:88%;font-size:13px;line-height:1.6;padding:10px 14px;border-radius:12px;}
 .aisec-msg.user{background:#0078d4;color:#ffffff;align-self:flex-end;border-radius:12px 12px 3px 12px;}
 .aisec-msg.assistant{background:#ffffff;color:#0d1526;align-self:flex-start;
@@ -825,15 +844,9 @@ document.addEventListener('DOMContentLoaded', function(){
   font-family:'JetBrains Mono',monospace;font-size:11px;}
 .aisec-msg.user code{background:rgba(255,255,255,0.2);}
 
-#aisec-chat-suggestions{padding:10px 16px 0;display:flex;gap:6px;flex-wrap:wrap;background:#f5f7fc;}
-.aisec-suggestion{background:#ffffff;border:1px solid #d0d8ec;border-radius:20px;
-  padding:5px 12px;font-size:11px;color:#0078d4;cursor:pointer;
-  font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;
-  transition:background 0.12s,border-color 0.12s;}
-.aisec-suggestion:hover{background:#e8f0fc;border-color:#0078d4;}
-
-#aisec-chat-input-row{display:flex;gap:8px;padding:12px 14px;
-  border-top:1px solid #d0d8ec;background:#ffffff;}
+/* Input row */
+#aisec-chat-input-row{display:flex;gap:8px;padding:10px 12px;
+  border-top:1px solid #d0d8ec;background:#ffffff;flex-shrink:0;}
 #aisec-chat-input{flex:1;border:1px solid #d0d8ec;border-radius:8px;
   padding:8px 12px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;
   outline:none;resize:none;color:#0d1526;}
@@ -843,19 +856,19 @@ document.addEventListener('DOMContentLoaded', function(){
   font-family:'Plus Jakarta Sans',sans-serif;transition:background 0.12s;white-space:nowrap;}
 #aisec-chat-send:hover{background:#005fa3;}
 #aisec-chat-send:disabled{background:#b0bcd4;cursor:not-allowed;}
-
-#aisec-chat-footer{padding:6px 14px 10px;background:#ffffff;
+#aisec-chat-footer{padding:5px 14px 8px;background:#ffffff;flex-shrink:0;
   font-size:10px;color:#8a9abc;font-family:'JetBrains Mono',monospace;
   text-align:center;letter-spacing:0.02em;}
 
 @media(max-width:480px){
   #aisec-chat-panel{right:12px;bottom:80px;width:calc(100vw - 24px);}
-  #aisec-chat-btn{right:16px;bottom:20px;}
+  #aisec-chat-btn{right:16px;bottom:20px;padding:10px 16px;font-size:12px;}
+  #aisec-chat-panel.fullscreen{top:8px;left:8px;right:8px;bottom:8px;}
 }
 </style>
 
 <button id="aisec-chat-btn" aria-label="Chat with AI about this site">
-  <span class="chat-icon">💬</span> Ask AI about this site
+  <span>💬</span> Ask AI about this site
 </button>
 
 <div id="aisec-chat-panel" role="dialog" aria-label="AI Chat">
@@ -867,10 +880,13 @@ document.addEventListener('DOMContentLoaded', function(){
         <div id="aisec-chat-subtitle">POWERED BY CLAUDE · INTERNAL ONLY</div>
       </div>
     </div>
-    <button id="aisec-chat-close" aria-label="Close chat">✕</button>
+    <div class="aisec-header-btns">
+      <button id="aisec-chat-expand" aria-label="Expand to full screen" title="Full screen">⛶</button>
+      <button id="aisec-chat-close" aria-label="Close chat">✕</button>
+    </div>
   </div>
 
-  <!-- Password gate (shown first) -->
+  <!-- Password gate -->
   <div id="aisec-pw-gate">
     <div id="aisec-pw-gate-title">🔒 Internal access only</div>
     <div id="aisec-pw-gate-sub">Enter the team passphrase to unlock the AI assistant.</div>
@@ -882,9 +898,15 @@ document.addEventListener('DOMContentLoaded', function(){
   <!-- Chat (shown after unlock) -->
   <div id="aisec-chat-body">
     <div id="aisec-chat-suggestions">
+      <button class="aisec-suggestion" data-q="What should I set up on Day 1?">Day 1 setup</button>
       <button class="aisec-suggestion" data-q="Does CA for Agents apply to Copilot Studio?">CA for Agents?</button>
       <button class="aisec-suggestion" data-q="What's the difference between Classic and Modern agents?">Classic vs Modern</button>
-      <button class="aisec-suggestion" data-q="What KQL detects no-auth agents?">No-auth KQL</button>
+      <button class="aisec-suggestion" data-q="Does maker credentials risk apply to Security Copilot custom agents?">Maker creds + Security Copilot</button>
+      <button class="aisec-suggestion" data-q="How do I detect orphaned agents in my tenant?">Detect orphaned agents</button>
+      <button class="aisec-suggestion" data-q="What KQL query detects no-auth agents?">No-auth KQL</button>
+      <button class="aisec-suggestion" data-q="Is Entra Agent ID generally available yet?">Entra Agent ID GA?</button>
+      <button class="aisec-suggestion" data-q="What are the EU AI Act and Colorado AI Act deadlines?">EU AI Act deadlines</button>
+      <button class="aisec-suggestion" data-q="How do I set up logging for Microsoft Foundry?">Foundry logging</button>
       <button class="aisec-suggestion" data-q="What are the biggest gaps in Microsoft AI security today?">Key gaps</button>
     </div>
     <div id="aisec-chat-messages">
@@ -902,58 +924,71 @@ document.addEventListener('DOMContentLoaded', function(){
 
 <script>
 (function(){
-  const btn = document.getElementById('aisec-chat-btn');
-  const panel = document.getElementById('aisec-chat-panel');
+  const btn      = document.getElementById('aisec-chat-btn');
+  const panel    = document.getElementById('aisec-chat-panel');
   const closeBtn = document.getElementById('aisec-chat-close');
-  const pwGate = document.getElementById('aisec-pw-gate');
-  const pwInput = document.getElementById('aisec-pw-input');
-  const pwBtn = document.getElementById('aisec-pw-btn');
-  const pwError = document.getElementById('aisec-pw-error');
+  const expandBtn= document.getElementById('aisec-chat-expand');
+  const pwGate   = document.getElementById('aisec-pw-gate');
+  const pwInput  = document.getElementById('aisec-pw-input');
+  const pwBtn    = document.getElementById('aisec-pw-btn');
+  const pwError  = document.getElementById('aisec-pw-error');
   const chatBody = document.getElementById('aisec-chat-body');
-  const input = document.getElementById('aisec-chat-input');
-  const sendBtn = document.getElementById('aisec-chat-send');
+  const input    = document.getElementById('aisec-chat-input');
+  const sendBtn  = document.getElementById('aisec-chat-send');
   const messages = document.getElementById('aisec-chat-messages');
   const suggestions = document.querySelectorAll('.aisec-suggestion');
 
   let history = [];
   let isOpen = false;
-  let sessionPassword = null; // held in memory only, never persisted
+  let isFullscreen = false;
+  let sessionPassword = null;
 
   function togglePanel() {
     isOpen = !isOpen;
     panel.classList.toggle('open', isOpen);
     if (isOpen && !sessionPassword) pwInput.focus();
-    if (isOpen && sessionPassword) input.focus();
+    else if (isOpen) input.focus();
+  }
+
+  function toggleFullscreen() {
+    isFullscreen = !isFullscreen;
+    panel.classList.toggle('fullscreen', isFullscreen);
+    expandBtn.textContent = isFullscreen ? '⊡' : '⛶';
+    expandBtn.title = isFullscreen ? 'Exit full screen' : 'Full screen';
+    if (isFullscreen) input.focus();
   }
 
   btn.addEventListener('click', togglePanel);
-  closeBtn.addEventListener('click', togglePanel);
+  closeBtn.addEventListener('click', () => {
+    if (isFullscreen) { isFullscreen = false; panel.classList.remove('fullscreen'); expandBtn.textContent = '⛶'; }
+    isOpen = false; panel.classList.remove('open');
+  });
+  expandBtn.addEventListener('click', toggleFullscreen);
 
-  // Unlock flow — validate password against the worker
+  // ESC to exit fullscreen
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && isFullscreen) toggleFullscreen();
+    else if (e.key === 'Escape' && isOpen) togglePanel();
+  });
+
+  // Unlock flow
   async function attemptUnlock() {
     const pw = pwInput.value.trim();
     if (!pw) return;
     pwBtn.textContent = 'Checking...';
     pwBtn.disabled = true;
     pwError.style.display = 'none';
-
     try {
-      // Send a test message to validate the password
       const res = await fetch('/api/chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          password: pw,
-          messages: [{ role: 'user', content: 'hello' }]
-        })
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({password: pw, messages: [{role:'user', content:'hello'}]})
       });
-
       if (res.status === 401) {
         pwError.style.display = 'block';
         pwInput.value = '';
         pwInput.focus();
       } else if (res.ok) {
-        // Password correct — unlock and store in memory
         sessionPassword = pw;
         pwGate.style.display = 'none';
         chatBody.classList.add('unlocked');
@@ -966,17 +1001,14 @@ document.addEventListener('DOMContentLoaded', function(){
       pwError.textContent = 'Connection error — please try again.';
       pwError.style.display = 'block';
     }
-
     pwBtn.textContent = 'Unlock →';
     pwBtn.disabled = false;
   }
 
   pwBtn.addEventListener('click', attemptUnlock);
-  pwInput.addEventListener('keydown', e => {
-    if (e.key === 'Enter') attemptUnlock();
-  });
+  pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') attemptUnlock(); });
 
-  // Suggestion chips
+  // Suggestions
   suggestions.forEach(s => {
     s.addEventListener('click', () => {
       input.value = s.dataset.q;
@@ -988,7 +1020,7 @@ document.addEventListener('DOMContentLoaded', function(){
   function addMessage(role, text) {
     const div = document.createElement('div');
     div.className = 'aisec-msg ' + role;
-    text = text.replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) =>
+    text = text.replace(/```(\w*)\n?([\s\S]*?)```/g, (_,lang,code) =>
       '<pre style="background:rgba(0,0,0,0.06);padding:8px;border-radius:6px;overflow-x:auto;font-family:JetBrains Mono,monospace;font-size:10px;margin:4px 0;white-space:pre;">' + code.trim() + '</pre>'
     );
     text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
@@ -1003,35 +1035,28 @@ document.addEventListener('DOMContentLoaded', function(){
   async function sendMessage() {
     const text = input.value.trim();
     if (!text || !sessionPassword) return;
-
     input.value = '';
     input.style.height = 'auto';
     sendBtn.disabled = true;
-
     addMessage('user', text);
-    history.push({ role: 'user', content: text });
-
+    history.push({role:'user', content:text});
     const thinking = addMessage('thinking', '...');
-
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: history, password: sessionPassword })
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({messages: history, password: sessionPassword})
       });
-
       const data = await res.json();
       thinking.remove();
-
       if (res.status === 401) {
-        // Password invalidated (rotated) — show lock screen again
         sessionPassword = null;
         chatBody.classList.remove('unlocked');
         pwGate.style.display = '';
         addMessage('assistant', 'Session expired — please re-enter the passphrase.');
       } else if (data.reply) {
         addMessage('assistant', data.reply);
-        history.push({ role: 'assistant', content: data.reply });
+        history.push({role:'assistant', content:data.reply});
         if (history.length > 20) history = history.slice(-20);
       } else {
         addMessage('assistant', 'Something went wrong — please try again.');
@@ -1040,7 +1065,6 @@ document.addEventListener('DOMContentLoaded', function(){
       thinking.remove();
       addMessage('assistant', 'Connection error — please try again.');
     }
-
     sendBtn.disabled = false;
     input.focus();
   }
