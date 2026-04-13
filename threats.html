@@ -626,6 +626,7 @@ document.addEventListener('DOMContentLoaded', function(){
 /* Panel — normal and fullscreen modes */
 #aisec-chat-panel{position:fixed;bottom:88px;right:28px;z-index:9998;
   width:400px;max-width:calc(100vw - 40px);
+  max-height:calc(100vh - 110px);
   background:#ffffff;border-radius:16px;
   box-shadow:0 8px 40px rgba(0,0,0,0.18);
   border:1px solid #d0d8ec;
@@ -688,7 +689,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
 /* Messages */
 #aisec-chat-messages{flex:1;overflow-y:auto;padding:14px;
-  display:flex;flex-direction:column;gap:10px;background:#f5f7fc;min-height:0;}
+  display:flex;flex-direction:column;gap:10px;background:#f5f7fc;
+  min-height:120px;max-height:none;}
 .aisec-msg{max-width:88%;font-size:13px;line-height:1.6;padding:10px 14px;border-radius:12px;}
 .aisec-msg.user{background:#0078d4;color:#ffffff;align-self:flex-end;border-radius:12px 12px 3px 12px;}
 .aisec-msg.assistant{background:#ffffff;color:#0d1526;align-self:flex-start;
