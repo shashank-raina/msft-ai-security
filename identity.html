@@ -477,6 +477,12 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <p>Entra security products — ID Protection for Agents, Conditional Access, and the Agent ID portal — all reference the original names. In any enterprise with more than a handful of agents, this makes per-agent policy management in Entra nearly unworkable. You cannot create a meaningful Conditional Access policy for <code>Agent #47</code>. Microsoft has confirmed this inconsistency and states work is in progress — no fix timeline confirmed. Field workaround: use the Agent ID object-ID (not name) as the primary key for agent identification, cross-referenced via script against the Power Platform Admin Environment URL.</p>
 </div>
 
+
+<div class="callout callout-info" style="margin-top:12px;">
+  <div class="callout-title">📌 Two protection layers — different messages, different triggers</div>
+  <p><strong>Responsible AI content filtering</strong> — always active, operates at conversational level. Message shown: "The content was filtered due to Responsible AI restrictions." Evaluates the nature of the conversation — harmful content, jailbreak attempts, prompt injection in input, copyright infringement.</p>
+  <p><strong>Real-time threat protection (Defender for Cloud Apps)</strong> — must be explicitly configured, operates at action execution level. Message shown: "Blocked by threat protection." Evaluates tool invocations — unauthorized data access, privilege escalation through tool chaining, data exfiltration patterns. Only activates when configured. Has a 1-second timeout: if Defender doesn't respond in time, the agent proceeds regardless.</p>
+</div>
 <div class="section-label">Entra Agent ID</div>
 <h2>Entra Agent ID — Status & What It Delivers for Modern Agents</h2>
 <div class="callout callout-caution">
@@ -636,6 +642,79 @@ directActions
 </table>
 <p style="font-size:12px;color:#5a6a8a;margin-top:8px;">Source: <a href="https://learn.microsoft.com/en-gb/entra/agent-id/security-for-ai-overview" target="_blank" style="color:var(--blue);">Microsoft Entra security for AI overview (April 2026)</a></p>
 
+
+<div class="section-label" style="margin-top:32px;">Owner, Sponsor &amp; Orphaned Identities</div>
+<h2>Three Agent Identity Governance Concepts</h2>
+<p>Entra Agent ID introduces two distinct accountability roles and a new failure mode — orphaned identities — that security architects need to understand separately.</p>
+
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:16px 0;">
+  <div class="card" style="border-color:rgba(0,120,212,0.25);">
+    <div class="card-name" style="color:var(--blue);">👤 Owner</div>
+    <div class="card-desc"><strong>Technical accountability.</strong> The person responsible for operational management — setup, configuration, credential management, and monitoring anomalies. Without an Owner, credentials go unmanaged and anomalies go unnoticed.</div>
+  </div>
+  <div class="card" style="border-color:rgba(0,133,117,0.25);">
+    <div class="card-name" style="color:#008575;">🏢 Sponsor</div>
+    <div class="card-desc"><strong>Business accountability.</strong> The person who can answer: "Why does this agent exist, and is it still needed?" Without a Sponsor, no one can request or approve Access Packages on behalf of the agent. Lifecycle reviews have no accountable party.</div>
+  </div>
+  <div class="card" style="border-color:rgba(216,59,1,0.25);">
+    <div class="card-name" style="color:#c23000;">👻 Orphaned</div>
+    <div class="card-desc"><strong>Blueprint deleted, identity remains.</strong> When a Blueprint is deleted, its Agent Identities are NOT automatically removed. They retain all permissions but can no longer authenticate. Orphaned Agent Users appear as normal user accounts with no flag. Identity debt with no owner.</div>
+  </div>
+</div>
+
+<div class="callout callout-warn" style="margin-top:8px;">
+  <div class="callout-title">⚠️ Microsoft does not automatically flag orphaned Agent Identities</div>
+  <p>When a Blueprint is deleted, two dangerous remnants remain: <strong>Orphaned Agent Identities</strong> — retain all Graph API permissions, Azure RBAC roles, and Entra directory roles but can no longer authenticate. These are unclaimed permission assignments with no Blueprint, no owner, no accountability. <strong>Orphaned Agent Users</strong> — appear as completely normal user accounts in the Entra portal with no indication they belonged to a deleted agent. They may hold group memberships, licenses, and resource access. Microsoft does not detect or flag these automatically. Detection requires querying the tenant and cross-referencing Agent Identities against active Blueprint Principals.</p>
+</div>
+
+<h2 style="margin-top:24px;">Detecting Ownerless &amp; Orphaned Modern Agents (Graph API)</h2>
+<p>AIAgentsInfo KQL covers Classic agents. For Modern agents (Entra Agent ID), use PowerShell via Microsoft Graph. Note: Global Reader gets a 403 on the agentIdentity endpoint — requires Agent ID Administrator role.</p>
+
+<div style="background:#f0f4fb;border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-top:8px;overflow-x:auto;">
+<pre style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#0d1526;line-height:1.8;margin:0;white-space:pre;">
+# Find Modern agents missing Owner or Sponsor
+Connect-MgGraph -Scopes "AgentIdentity.Read.All"
+
+$agents = Invoke-MgGraphRequest -Method GET `
+    -Uri "https://graph.microsoft.com/beta/servicePrincipals/microsoft.graph.agentIdentity" `
+    -OutputType PSObject
+
+foreach ($agent in $agents.value) {
+    $owners   = Invoke-MgGraphRequest -Method GET `
+        -Uri "https://graph.microsoft.com/beta/servicePrincipals/$($agent.id)/owners" `
+        -OutputType PSObject
+    $sponsors = Invoke-MgGraphRequest -Method GET `
+        -Uri "https://graph.microsoft.com/beta/servicePrincipals/$($agent.id)/sponsors" `
+        -OutputType PSObject
+    $flags = @()
+    if ($owners.value.Count -eq 0)   { $flags += "No Owner" }
+    if ($sponsors.value.Count -eq 0) { $flags += "No Sponsor" }
+    if ($flags.Count -gt 0) {
+        Write-Host "$($agent.displayName) | $($flags -join ', ')" -ForegroundColor Red
+    }
+}
+Disconnect-MgGraph</pre>
+</div>
+
+<p style="font-size:12px;color:#5a6a8a;margin-top:8px;">Source: <a href="https://thalpius.com/2026/03/14/microsoft-ownerless-agents-the-silent-risk-in-your-entra-tenant/" target="_blank" style="color:var(--blue);">Thalpius — Microsoft Ownerless Agents: The silent risk in your Entra tenant (March 2026)</a></p>
+
+<div class="section-label" style="margin-top:24px;">The Blueprint Model</div>
+<h2>Three Agent Categories + The Blueprint Architecture</h2>
+<p>The Entra Agent ID portal shows three distinct agent categories — not two:</p>
+<table>
+<thead><tr><th>Category</th><th>Description</th><th>Entra Coverage</th></tr></thead>
+<tbody>
+<tr><td><strong>Modern agents</strong><br><span style="font-family:'JetBrains Mono',monospace;font-size:9px;">"Agent identities"</span></td><td>Created via Entra Agent ID platform, backed by an Agent Identity Blueprint. Full governance capabilities.</td><td><span class="green-inline">✓ Full — CA, ID Protection, lifecycle</span></td></tr>
+<tr><td><strong>Classic agents</strong><br><span style="font-family:'JetBrains Mono',monospace;font-size:9px;">"Agents with service principals"</span></td><td>Created before Agent ID platform, registered as standard service principals. Most existing Copilot Studio agents.</td><td><span class="severity-critical">❌ None</span></td></tr>
+<tr><td><strong>Agents with no identities</strong><br><span style="font-family:'JetBrains Mono',monospace;font-size:9px;">"Agents with no identities"</span></td><td>Registered in Agent Registry but have no associated Entra Agent ID at all — not even a service principal.</td><td><span class="severity-critical">❌ None — invisible to security tooling</span></td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:12px;">
+  <div class="callout-title">📌 Blueprint credential model</div>
+  <p>Agent Identities do not have credentials of their own. Credentials are configured on the Blueprint. When an agent authenticates, it uses the Blueprint's credentials to request an access token from Entra ID. This means: if a Blueprint is deleted, the credentials are gone but all permissions assigned to the Agent Identities remain — creating orphaned permission assignments with no authentication path.</p>
+</div>
+
 <div class="section-label">What to Do Today</div>
 <h2>Practical Controls — Ranked by Availability</h2>
 <table>
@@ -665,7 +744,7 @@ directActions
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  Last updated: April 11, 2026 · Analysis covers publicly announced Microsoft security capabilities only
+  Last updated: April 13, 2026 · Analysis covers publicly announced Microsoft security capabilities only
 </div>
 </div>
 
@@ -695,5 +774,307 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
+
+
+<!-- AI CHAT WIDGET -->
+<style>
+#aisec-chat-btn{position:fixed;bottom:28px;right:28px;z-index:9999;
+  background:#0078d4;color:#fff;border:none;border-radius:50px;
+  padding:12px 20px;font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:13px;font-weight:700;cursor:pointer;
+  box-shadow:0 4px 20px rgba(0,120,212,0.4);
+  display:flex;align-items:center;gap:8px;
+  transition:background 0.15s,transform 0.15s;}
+#aisec-chat-btn:hover{background:#005fa3;transform:translateY(-2px);}
+#aisec-chat-btn .chat-icon{font-size:16px;}
+
+#aisec-chat-panel{position:fixed;bottom:88px;right:28px;z-index:9998;
+  width:380px;max-width:calc(100vw - 40px);
+  background:#ffffff;border-radius:16px;
+  box-shadow:0 8px 40px rgba(0,0,0,0.18);
+  border:1px solid #d0d8ec;
+  display:none;flex-direction:column;overflow:hidden;
+  font-family:'Plus Jakarta Sans',sans-serif;}
+#aisec-chat-panel.open{display:flex;}
+
+#aisec-chat-header{background:#0d1526;padding:14px 18px;
+  display:flex;align-items:center;justify-content:space-between;}
+#aisec-chat-header-left{display:flex;align-items:center;gap:10px;}
+#aisec-chat-header-logo{width:22px;height:22px;display:grid;grid-template-columns:1fr 1fr;gap:2px;flex-shrink:0;}
+#aisec-chat-header-logo div:nth-child(1){background:#f25022;border-radius:1px;}
+#aisec-chat-header-logo div:nth-child(2){background:#7fba00;border-radius:1px;}
+#aisec-chat-header-logo div:nth-child(3){background:#00a4ef;border-radius:1px;}
+#aisec-chat-header-logo div:nth-child(4){background:#ffb900;border-radius:1px;}
+#aisec-chat-title{color:#ffffff;font-size:13px;font-weight:700;}
+#aisec-chat-subtitle{color:#8a9abc;font-size:10px;font-family:'JetBrains Mono',monospace;letter-spacing:0.04em;}
+#aisec-chat-close{background:none;border:none;color:#8a9abc;
+  font-size:20px;cursor:pointer;padding:0;line-height:1;}
+#aisec-chat-close:hover{color:#ffffff;}
+
+/* Password gate */
+#aisec-pw-gate{padding:28px 24px;display:flex;flex-direction:column;gap:14px;background:#f5f7fc;}
+#aisec-pw-gate-title{font-size:14px;font-weight:700;color:#0d1526;}
+#aisec-pw-gate-sub{font-size:12px;color:#5a6a8a;line-height:1.5;margin-top:-8px;}
+#aisec-pw-input{border:1px solid #d0d8ec;border-radius:8px;
+  padding:10px 14px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;
+  outline:none;color:#0d1526;letter-spacing:0.08em;}
+#aisec-pw-input:focus{border-color:#0078d4;}
+#aisec-pw-btn{background:#0078d4;color:#ffffff;border:none;
+  border-radius:8px;padding:10px;cursor:pointer;font-size:13px;font-weight:700;
+  font-family:'Plus Jakarta Sans',sans-serif;transition:background 0.12s;}
+#aisec-pw-btn:hover{background:#005fa3;}
+#aisec-pw-error{font-size:12px;color:#c50f1f;display:none;
+  background:rgba(197,15,31,0.06);border:1px solid rgba(197,15,31,0.2);
+  border-radius:6px;padding:8px 12px;}
+
+/* Chat UI */
+#aisec-chat-body{display:none;flex-direction:column;flex:1;}
+#aisec-chat-body.unlocked{display:flex;}
+
+#aisec-chat-messages{flex:1;overflow-y:auto;padding:16px;
+  display:flex;flex-direction:column;gap:10px;
+  min-height:260px;max-height:360px;background:#f5f7fc;}
+
+.aisec-msg{max-width:88%;font-size:13px;line-height:1.6;padding:10px 14px;border-radius:12px;}
+.aisec-msg.user{background:#0078d4;color:#ffffff;align-self:flex-end;border-radius:12px 12px 3px 12px;}
+.aisec-msg.assistant{background:#ffffff;color:#0d1526;align-self:flex-start;
+  border:1px solid #d0d8ec;border-radius:12px 12px 12px 3px;}
+.aisec-msg.thinking{color:#5a6a8a;font-style:italic;background:#eef1f8;
+  border:1px solid #d0d8ec;align-self:flex-start;border-radius:12px;}
+.aisec-msg code{background:rgba(0,0,0,0.08);padding:1px 5px;border-radius:3px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;}
+.aisec-msg.user code{background:rgba(255,255,255,0.2);}
+
+#aisec-chat-suggestions{padding:10px 16px 0;display:flex;gap:6px;flex-wrap:wrap;background:#f5f7fc;}
+.aisec-suggestion{background:#ffffff;border:1px solid #d0d8ec;border-radius:20px;
+  padding:5px 12px;font-size:11px;color:#0078d4;cursor:pointer;
+  font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;
+  transition:background 0.12s,border-color 0.12s;}
+.aisec-suggestion:hover{background:#e8f0fc;border-color:#0078d4;}
+
+#aisec-chat-input-row{display:flex;gap:8px;padding:12px 14px;
+  border-top:1px solid #d0d8ec;background:#ffffff;}
+#aisec-chat-input{flex:1;border:1px solid #d0d8ec;border-radius:8px;
+  padding:8px 12px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;
+  outline:none;resize:none;color:#0d1526;}
+#aisec-chat-input:focus{border-color:#0078d4;}
+#aisec-chat-send{background:#0078d4;color:#ffffff;border:none;
+  border-radius:8px;padding:8px 14px;cursor:pointer;font-size:13px;font-weight:700;
+  font-family:'Plus Jakarta Sans',sans-serif;transition:background 0.12s;white-space:nowrap;}
+#aisec-chat-send:hover{background:#005fa3;}
+#aisec-chat-send:disabled{background:#b0bcd4;cursor:not-allowed;}
+
+#aisec-chat-footer{padding:6px 14px 10px;background:#ffffff;
+  font-size:10px;color:#8a9abc;font-family:'JetBrains Mono',monospace;
+  text-align:center;letter-spacing:0.02em;}
+
+@media(max-width:480px){
+  #aisec-chat-panel{right:12px;bottom:80px;width:calc(100vw - 24px);}
+  #aisec-chat-btn{right:16px;bottom:20px;}
+}
+</style>
+
+<button id="aisec-chat-btn" aria-label="Chat with AI about this site">
+  <span class="chat-icon">💬</span> Ask AI about this site
+</button>
+
+<div id="aisec-chat-panel" role="dialog" aria-label="AI Chat">
+  <div id="aisec-chat-header">
+    <div id="aisec-chat-header-left">
+      <div id="aisec-chat-header-logo"><div></div><div></div><div></div><div></div></div>
+      <div>
+        <div id="aisec-chat-title">AI Security Guide</div>
+        <div id="aisec-chat-subtitle">POWERED BY CLAUDE · INTERNAL ONLY</div>
+      </div>
+    </div>
+    <button id="aisec-chat-close" aria-label="Close chat">✕</button>
+  </div>
+
+  <!-- Password gate (shown first) -->
+  <div id="aisec-pw-gate">
+    <div id="aisec-pw-gate-title">🔒 Internal access only</div>
+    <div id="aisec-pw-gate-sub">Enter the team passphrase to unlock the AI assistant.</div>
+    <input id="aisec-pw-input" type="password" placeholder="Enter passphrase..." autocomplete="off" />
+    <div id="aisec-pw-error">Incorrect passphrase — please try again.</div>
+    <button id="aisec-pw-btn">Unlock →</button>
+  </div>
+
+  <!-- Chat (shown after unlock) -->
+  <div id="aisec-chat-body">
+    <div id="aisec-chat-suggestions">
+      <button class="aisec-suggestion" data-q="Does CA for Agents apply to Copilot Studio?">CA for Agents?</button>
+      <button class="aisec-suggestion" data-q="What's the difference between Classic and Modern agents?">Classic vs Modern</button>
+      <button class="aisec-suggestion" data-q="What KQL detects no-auth agents?">No-auth KQL</button>
+      <button class="aisec-suggestion" data-q="What are the biggest gaps in Microsoft AI security today?">Key gaps</button>
+    </div>
+    <div id="aisec-chat-messages">
+      <div class="aisec-msg assistant">
+        Hi! I can answer questions about Microsoft AI security based on this site's content — auth patterns, product coverage, gaps, KQL queries, playbooks, and more. What would you like to know?
+      </div>
+    </div>
+    <div id="aisec-chat-input-row">
+      <textarea id="aisec-chat-input" rows="1" placeholder="Ask about auth patterns, gaps, KQL..." aria-label="Chat input"></textarea>
+      <button id="aisec-chat-send">Send</button>
+    </div>
+    <div id="aisec-chat-footer">Answers based on aiagentsecurity.guide · Not affiliated with Microsoft</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const btn = document.getElementById('aisec-chat-btn');
+  const panel = document.getElementById('aisec-chat-panel');
+  const closeBtn = document.getElementById('aisec-chat-close');
+  const pwGate = document.getElementById('aisec-pw-gate');
+  const pwInput = document.getElementById('aisec-pw-input');
+  const pwBtn = document.getElementById('aisec-pw-btn');
+  const pwError = document.getElementById('aisec-pw-error');
+  const chatBody = document.getElementById('aisec-chat-body');
+  const input = document.getElementById('aisec-chat-input');
+  const sendBtn = document.getElementById('aisec-chat-send');
+  const messages = document.getElementById('aisec-chat-messages');
+  const suggestions = document.querySelectorAll('.aisec-suggestion');
+
+  let history = [];
+  let isOpen = false;
+  let sessionPassword = null; // held in memory only, never persisted
+
+  function togglePanel() {
+    isOpen = !isOpen;
+    panel.classList.toggle('open', isOpen);
+    if (isOpen && !sessionPassword) pwInput.focus();
+    if (isOpen && sessionPassword) input.focus();
+  }
+
+  btn.addEventListener('click', togglePanel);
+  closeBtn.addEventListener('click', togglePanel);
+
+  // Unlock flow — validate password against the worker
+  async function attemptUnlock() {
+    const pw = pwInput.value.trim();
+    if (!pw) return;
+    pwBtn.textContent = 'Checking...';
+    pwBtn.disabled = true;
+    pwError.style.display = 'none';
+
+    try {
+      // Send a test message to validate the password
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          password: pw,
+          messages: [{ role: 'user', content: 'hello' }]
+        })
+      });
+
+      if (res.status === 401) {
+        pwError.style.display = 'block';
+        pwInput.value = '';
+        pwInput.focus();
+      } else if (res.ok) {
+        // Password correct — unlock and store in memory
+        sessionPassword = pw;
+        pwGate.style.display = 'none';
+        chatBody.classList.add('unlocked');
+        input.focus();
+      } else {
+        pwError.textContent = 'Connection error — please try again.';
+        pwError.style.display = 'block';
+      }
+    } catch(e) {
+      pwError.textContent = 'Connection error — please try again.';
+      pwError.style.display = 'block';
+    }
+
+    pwBtn.textContent = 'Unlock →';
+    pwBtn.disabled = false;
+  }
+
+  pwBtn.addEventListener('click', attemptUnlock);
+  pwInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') attemptUnlock();
+  });
+
+  // Suggestion chips
+  suggestions.forEach(s => {
+    s.addEventListener('click', () => {
+      input.value = s.dataset.q;
+      document.getElementById('aisec-chat-suggestions').style.display = 'none';
+      sendMessage();
+    });
+  });
+
+  function addMessage(role, text) {
+    const div = document.createElement('div');
+    div.className = 'aisec-msg ' + role;
+    text = text.replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) =>
+      '<pre style="background:rgba(0,0,0,0.06);padding:8px;border-radius:6px;overflow-x:auto;font-family:JetBrains Mono,monospace;font-size:10px;margin:4px 0;white-space:pre;">' + code.trim() + '</pre>'
+    );
+    text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+    text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    text = text.replace(/\n/g, '<br>');
+    div.innerHTML = text;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+    return div;
+  }
+
+  async function sendMessage() {
+    const text = input.value.trim();
+    if (!text || !sessionPassword) return;
+
+    input.value = '';
+    input.style.height = 'auto';
+    sendBtn.disabled = true;
+
+    addMessage('user', text);
+    history.push({ role: 'user', content: text });
+
+    const thinking = addMessage('thinking', '...');
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: history, password: sessionPassword })
+      });
+
+      const data = await res.json();
+      thinking.remove();
+
+      if (res.status === 401) {
+        // Password invalidated (rotated) — show lock screen again
+        sessionPassword = null;
+        chatBody.classList.remove('unlocked');
+        pwGate.style.display = '';
+        addMessage('assistant', 'Session expired — please re-enter the passphrase.');
+      } else if (data.reply) {
+        addMessage('assistant', data.reply);
+        history.push({ role: 'assistant', content: data.reply });
+        if (history.length > 20) history = history.slice(-20);
+      } else {
+        addMessage('assistant', 'Something went wrong — please try again.');
+      }
+    } catch(e) {
+      thinking.remove();
+      addMessage('assistant', 'Connection error — please try again.');
+    }
+
+    sendBtn.disabled = false;
+    input.focus();
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  });
+  input.addEventListener('input', () => {
+    input.style.height = 'auto';
+    input.style.height = Math.min(input.scrollHeight, 100) + 'px';
+  });
+})();
+</script>
+<!-- END AI CHAT WIDGET -->
 </body>
 </html>

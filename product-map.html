@@ -363,6 +363,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <div class="card-grid">
   <a href="https://www.microsoft.com/en-us/microsoft-agent-365" target="_blank" class="card-link"><div class="card" style="border-color:rgba(252,225,0,0.15);">
     <div class="card-name">Agent 365 <span style="color:var(--blue);font-size:11px;">↗</span></div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#0a5a20;background:rgba(16,124,16,0.08);border:1px solid rgba(16,124,16,0.2);border-radius:4px;padding:2px 8px;display:inline-block;margin-bottom:6px;">GA May 1, 2026 · $15/user/month</div>
     <div class="card-desc">Unified control plane for all agents. Inventory, governance, and security posture across Microsoft and partner agents. <strong>Licensing is per-user, not per-agent</strong> — governance scope does not scale with agent count. Includes new Defender, Entra, and Purview capabilities to secure agent access and prevent data oversharing.</div>
     <div class="tag-row"><span class="tag blue">GA May 1 2026</span><span class="tag warn">⚠ Per-user only</span><span class="tag">$15/user/mo</span></div>
   <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
@@ -429,6 +430,11 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
 </div>
 
+  <a href="https://learn.microsoft.com/en-us/entra/agent-id/" target="_blank" class="card-link"><div class="card" style="border-color:rgba(0,120,212,0.2);">
+    <div class="card-name">Ephemerality Controls — JIT for Agents <span style="color:var(--blue);font-size:11px;">↗</span></div>
+    <div class="card-desc">Time-bound access for AI agents — credentials expire the moment a specific task is completed. Delivered via Entra Agent ID lifecycle workflows and time-limited access packages. If an agent is compromised mid-task, the attacker's access window is minutes, not days. Part of the ZT4AI framework announced at RSAC 2026. Applies to Modern agents only.</div>
+    <div class="tag-row"><span class="tag caution">Preview · Modern Agents only</span><span class="tag">ZT4AI framework</span><span class="tag">Access Packages</span></div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
 <div class="section-label">Threat Detection & Runtime</div>
 <h2>Runtime Defence & Threat Detection</h2>
 <p style="font-size:13px;color:#1a4a9a;margin:-6px 0 16px;font-weight:600;">↗ Click on a product name to navigate to the Microsoft documentation page.</p>
@@ -593,7 +599,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  Last updated: April 11, 2026 · Analysis covers publicly announced Microsoft security capabilities only
+  Last updated: April 13, 2026 · Analysis covers publicly announced Microsoft security capabilities only
 </div>
 </div>
 
@@ -623,5 +629,307 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
+
+
+<!-- AI CHAT WIDGET -->
+<style>
+#aisec-chat-btn{position:fixed;bottom:28px;right:28px;z-index:9999;
+  background:#0078d4;color:#fff;border:none;border-radius:50px;
+  padding:12px 20px;font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:13px;font-weight:700;cursor:pointer;
+  box-shadow:0 4px 20px rgba(0,120,212,0.4);
+  display:flex;align-items:center;gap:8px;
+  transition:background 0.15s,transform 0.15s;}
+#aisec-chat-btn:hover{background:#005fa3;transform:translateY(-2px);}
+#aisec-chat-btn .chat-icon{font-size:16px;}
+
+#aisec-chat-panel{position:fixed;bottom:88px;right:28px;z-index:9998;
+  width:380px;max-width:calc(100vw - 40px);
+  background:#ffffff;border-radius:16px;
+  box-shadow:0 8px 40px rgba(0,0,0,0.18);
+  border:1px solid #d0d8ec;
+  display:none;flex-direction:column;overflow:hidden;
+  font-family:'Plus Jakarta Sans',sans-serif;}
+#aisec-chat-panel.open{display:flex;}
+
+#aisec-chat-header{background:#0d1526;padding:14px 18px;
+  display:flex;align-items:center;justify-content:space-between;}
+#aisec-chat-header-left{display:flex;align-items:center;gap:10px;}
+#aisec-chat-header-logo{width:22px;height:22px;display:grid;grid-template-columns:1fr 1fr;gap:2px;flex-shrink:0;}
+#aisec-chat-header-logo div:nth-child(1){background:#f25022;border-radius:1px;}
+#aisec-chat-header-logo div:nth-child(2){background:#7fba00;border-radius:1px;}
+#aisec-chat-header-logo div:nth-child(3){background:#00a4ef;border-radius:1px;}
+#aisec-chat-header-logo div:nth-child(4){background:#ffb900;border-radius:1px;}
+#aisec-chat-title{color:#ffffff;font-size:13px;font-weight:700;}
+#aisec-chat-subtitle{color:#8a9abc;font-size:10px;font-family:'JetBrains Mono',monospace;letter-spacing:0.04em;}
+#aisec-chat-close{background:none;border:none;color:#8a9abc;
+  font-size:20px;cursor:pointer;padding:0;line-height:1;}
+#aisec-chat-close:hover{color:#ffffff;}
+
+/* Password gate */
+#aisec-pw-gate{padding:28px 24px;display:flex;flex-direction:column;gap:14px;background:#f5f7fc;}
+#aisec-pw-gate-title{font-size:14px;font-weight:700;color:#0d1526;}
+#aisec-pw-gate-sub{font-size:12px;color:#5a6a8a;line-height:1.5;margin-top:-8px;}
+#aisec-pw-input{border:1px solid #d0d8ec;border-radius:8px;
+  padding:10px 14px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;
+  outline:none;color:#0d1526;letter-spacing:0.08em;}
+#aisec-pw-input:focus{border-color:#0078d4;}
+#aisec-pw-btn{background:#0078d4;color:#ffffff;border:none;
+  border-radius:8px;padding:10px;cursor:pointer;font-size:13px;font-weight:700;
+  font-family:'Plus Jakarta Sans',sans-serif;transition:background 0.12s;}
+#aisec-pw-btn:hover{background:#005fa3;}
+#aisec-pw-error{font-size:12px;color:#c50f1f;display:none;
+  background:rgba(197,15,31,0.06);border:1px solid rgba(197,15,31,0.2);
+  border-radius:6px;padding:8px 12px;}
+
+/* Chat UI */
+#aisec-chat-body{display:none;flex-direction:column;flex:1;}
+#aisec-chat-body.unlocked{display:flex;}
+
+#aisec-chat-messages{flex:1;overflow-y:auto;padding:16px;
+  display:flex;flex-direction:column;gap:10px;
+  min-height:260px;max-height:360px;background:#f5f7fc;}
+
+.aisec-msg{max-width:88%;font-size:13px;line-height:1.6;padding:10px 14px;border-radius:12px;}
+.aisec-msg.user{background:#0078d4;color:#ffffff;align-self:flex-end;border-radius:12px 12px 3px 12px;}
+.aisec-msg.assistant{background:#ffffff;color:#0d1526;align-self:flex-start;
+  border:1px solid #d0d8ec;border-radius:12px 12px 12px 3px;}
+.aisec-msg.thinking{color:#5a6a8a;font-style:italic;background:#eef1f8;
+  border:1px solid #d0d8ec;align-self:flex-start;border-radius:12px;}
+.aisec-msg code{background:rgba(0,0,0,0.08);padding:1px 5px;border-radius:3px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;}
+.aisec-msg.user code{background:rgba(255,255,255,0.2);}
+
+#aisec-chat-suggestions{padding:10px 16px 0;display:flex;gap:6px;flex-wrap:wrap;background:#f5f7fc;}
+.aisec-suggestion{background:#ffffff;border:1px solid #d0d8ec;border-radius:20px;
+  padding:5px 12px;font-size:11px;color:#0078d4;cursor:pointer;
+  font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;
+  transition:background 0.12s,border-color 0.12s;}
+.aisec-suggestion:hover{background:#e8f0fc;border-color:#0078d4;}
+
+#aisec-chat-input-row{display:flex;gap:8px;padding:12px 14px;
+  border-top:1px solid #d0d8ec;background:#ffffff;}
+#aisec-chat-input{flex:1;border:1px solid #d0d8ec;border-radius:8px;
+  padding:8px 12px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;
+  outline:none;resize:none;color:#0d1526;}
+#aisec-chat-input:focus{border-color:#0078d4;}
+#aisec-chat-send{background:#0078d4;color:#ffffff;border:none;
+  border-radius:8px;padding:8px 14px;cursor:pointer;font-size:13px;font-weight:700;
+  font-family:'Plus Jakarta Sans',sans-serif;transition:background 0.12s;white-space:nowrap;}
+#aisec-chat-send:hover{background:#005fa3;}
+#aisec-chat-send:disabled{background:#b0bcd4;cursor:not-allowed;}
+
+#aisec-chat-footer{padding:6px 14px 10px;background:#ffffff;
+  font-size:10px;color:#8a9abc;font-family:'JetBrains Mono',monospace;
+  text-align:center;letter-spacing:0.02em;}
+
+@media(max-width:480px){
+  #aisec-chat-panel{right:12px;bottom:80px;width:calc(100vw - 24px);}
+  #aisec-chat-btn{right:16px;bottom:20px;}
+}
+</style>
+
+<button id="aisec-chat-btn" aria-label="Chat with AI about this site">
+  <span class="chat-icon">💬</span> Ask AI about this site
+</button>
+
+<div id="aisec-chat-panel" role="dialog" aria-label="AI Chat">
+  <div id="aisec-chat-header">
+    <div id="aisec-chat-header-left">
+      <div id="aisec-chat-header-logo"><div></div><div></div><div></div><div></div></div>
+      <div>
+        <div id="aisec-chat-title">AI Security Guide</div>
+        <div id="aisec-chat-subtitle">POWERED BY CLAUDE · INTERNAL ONLY</div>
+      </div>
+    </div>
+    <button id="aisec-chat-close" aria-label="Close chat">✕</button>
+  </div>
+
+  <!-- Password gate (shown first) -->
+  <div id="aisec-pw-gate">
+    <div id="aisec-pw-gate-title">🔒 Internal access only</div>
+    <div id="aisec-pw-gate-sub">Enter the team passphrase to unlock the AI assistant.</div>
+    <input id="aisec-pw-input" type="password" placeholder="Enter passphrase..." autocomplete="off" />
+    <div id="aisec-pw-error">Incorrect passphrase — please try again.</div>
+    <button id="aisec-pw-btn">Unlock →</button>
+  </div>
+
+  <!-- Chat (shown after unlock) -->
+  <div id="aisec-chat-body">
+    <div id="aisec-chat-suggestions">
+      <button class="aisec-suggestion" data-q="Does CA for Agents apply to Copilot Studio?">CA for Agents?</button>
+      <button class="aisec-suggestion" data-q="What's the difference between Classic and Modern agents?">Classic vs Modern</button>
+      <button class="aisec-suggestion" data-q="What KQL detects no-auth agents?">No-auth KQL</button>
+      <button class="aisec-suggestion" data-q="What are the biggest gaps in Microsoft AI security today?">Key gaps</button>
+    </div>
+    <div id="aisec-chat-messages">
+      <div class="aisec-msg assistant">
+        Hi! I can answer questions about Microsoft AI security based on this site's content — auth patterns, product coverage, gaps, KQL queries, playbooks, and more. What would you like to know?
+      </div>
+    </div>
+    <div id="aisec-chat-input-row">
+      <textarea id="aisec-chat-input" rows="1" placeholder="Ask about auth patterns, gaps, KQL..." aria-label="Chat input"></textarea>
+      <button id="aisec-chat-send">Send</button>
+    </div>
+    <div id="aisec-chat-footer">Answers based on aiagentsecurity.guide · Not affiliated with Microsoft</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const btn = document.getElementById('aisec-chat-btn');
+  const panel = document.getElementById('aisec-chat-panel');
+  const closeBtn = document.getElementById('aisec-chat-close');
+  const pwGate = document.getElementById('aisec-pw-gate');
+  const pwInput = document.getElementById('aisec-pw-input');
+  const pwBtn = document.getElementById('aisec-pw-btn');
+  const pwError = document.getElementById('aisec-pw-error');
+  const chatBody = document.getElementById('aisec-chat-body');
+  const input = document.getElementById('aisec-chat-input');
+  const sendBtn = document.getElementById('aisec-chat-send');
+  const messages = document.getElementById('aisec-chat-messages');
+  const suggestions = document.querySelectorAll('.aisec-suggestion');
+
+  let history = [];
+  let isOpen = false;
+  let sessionPassword = null; // held in memory only, never persisted
+
+  function togglePanel() {
+    isOpen = !isOpen;
+    panel.classList.toggle('open', isOpen);
+    if (isOpen && !sessionPassword) pwInput.focus();
+    if (isOpen && sessionPassword) input.focus();
+  }
+
+  btn.addEventListener('click', togglePanel);
+  closeBtn.addEventListener('click', togglePanel);
+
+  // Unlock flow — validate password against the worker
+  async function attemptUnlock() {
+    const pw = pwInput.value.trim();
+    if (!pw) return;
+    pwBtn.textContent = 'Checking...';
+    pwBtn.disabled = true;
+    pwError.style.display = 'none';
+
+    try {
+      // Send a test message to validate the password
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          password: pw,
+          messages: [{ role: 'user', content: 'hello' }]
+        })
+      });
+
+      if (res.status === 401) {
+        pwError.style.display = 'block';
+        pwInput.value = '';
+        pwInput.focus();
+      } else if (res.ok) {
+        // Password correct — unlock and store in memory
+        sessionPassword = pw;
+        pwGate.style.display = 'none';
+        chatBody.classList.add('unlocked');
+        input.focus();
+      } else {
+        pwError.textContent = 'Connection error — please try again.';
+        pwError.style.display = 'block';
+      }
+    } catch(e) {
+      pwError.textContent = 'Connection error — please try again.';
+      pwError.style.display = 'block';
+    }
+
+    pwBtn.textContent = 'Unlock →';
+    pwBtn.disabled = false;
+  }
+
+  pwBtn.addEventListener('click', attemptUnlock);
+  pwInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') attemptUnlock();
+  });
+
+  // Suggestion chips
+  suggestions.forEach(s => {
+    s.addEventListener('click', () => {
+      input.value = s.dataset.q;
+      document.getElementById('aisec-chat-suggestions').style.display = 'none';
+      sendMessage();
+    });
+  });
+
+  function addMessage(role, text) {
+    const div = document.createElement('div');
+    div.className = 'aisec-msg ' + role;
+    text = text.replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) =>
+      '<pre style="background:rgba(0,0,0,0.06);padding:8px;border-radius:6px;overflow-x:auto;font-family:JetBrains Mono,monospace;font-size:10px;margin:4px 0;white-space:pre;">' + code.trim() + '</pre>'
+    );
+    text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+    text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    text = text.replace(/\n/g, '<br>');
+    div.innerHTML = text;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+    return div;
+  }
+
+  async function sendMessage() {
+    const text = input.value.trim();
+    if (!text || !sessionPassword) return;
+
+    input.value = '';
+    input.style.height = 'auto';
+    sendBtn.disabled = true;
+
+    addMessage('user', text);
+    history.push({ role: 'user', content: text });
+
+    const thinking = addMessage('thinking', '...');
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: history, password: sessionPassword })
+      });
+
+      const data = await res.json();
+      thinking.remove();
+
+      if (res.status === 401) {
+        // Password invalidated (rotated) — show lock screen again
+        sessionPassword = null;
+        chatBody.classList.remove('unlocked');
+        pwGate.style.display = '';
+        addMessage('assistant', 'Session expired — please re-enter the passphrase.');
+      } else if (data.reply) {
+        addMessage('assistant', data.reply);
+        history.push({ role: 'assistant', content: data.reply });
+        if (history.length > 20) history = history.slice(-20);
+      } else {
+        addMessage('assistant', 'Something went wrong — please try again.');
+      }
+    } catch(e) {
+      thinking.remove();
+      addMessage('assistant', 'Connection error — please try again.');
+    }
+
+    sendBtn.disabled = false;
+    input.focus();
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  });
+  input.addEventListener('input', () => {
+    input.style.height = 'auto';
+    input.style.height = Math.min(input.scrollHeight, 100) + 'px';
+  });
+})();
+</script>
+<!-- END AI CHAT WIDGET -->
 </body>
 </html>

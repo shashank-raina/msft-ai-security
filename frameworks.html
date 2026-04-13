@@ -550,7 +550,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
     <div class="zt-principle-icon">🔒</div>
     <div><div class="zt-principle-title">Use Least Privilege</div><div class="zt-principle-sub">PRINCIPLE 02 · ACCESS & PERMISSIONS</div></div>
   </div>
-  <div class="zt-principle-body">For users, this means JIT/JEA and PIM. For AI agents, it means scoping each agent's permissions to exactly what it needs for its specific task — no broader. In practice: avoid Application permissions (tenant-wide) in favour of Delegated permissions (user-scoped), avoid maker credentials (which grant the maker's full permission set to every user), use access packages for time-bound agent resource assignments, and configure Custom Security Attributes to classify agent access levels for attribute-based CA policies. <strong>The hardest part:</strong> agents are often provisioned broadly "to make sure they work" and permissions are rarely reviewed. Agent lifecycle workflows and access reviews are the operational controls that enforce this principle over time.</div>
+  <div class="zt-principle-body">For users, this means JIT/JEA and PIM. For AI agents, it means scoping each agent's permissions to exactly what it needs for its specific task — no broader. In practice: avoid Application permissions (tenant-wide) in favour of Delegated permissions (user-scoped), avoid maker credentials (which grant the maker's full permission set to every user), use access packages for time-bound agent resource assignments, and configure Custom Security Attributes to classify agent access levels for attribute-based CA policies. <strong>The hardest part:</strong> agents are often provisioned broadly "to make sure they work" and permissions are rarely reviewed. Agent lifecycle workflows and access reviews are the operational controls that enforce this principle over time.<br><br><strong>Least agency — an extension of least privilege for AI:</strong> The ZT4AI framework introduces a more specific concept. It is not enough to give an agent a limited set of data sources — you must also limit the APIs, UI actions, and side effects it can invoke. Each connector added to an agent (CRM, ticketing system, database, line-of-business app) expands its blast radius if compromised or manipulated via prompt injection. Least agency means giving agents the minimum set of tools and actions required for the specific task — not everything that might be convenient. In Copilot Studio terms: restrict which connectors and MCP tools are available per agent, not just which data sources it can read.</div>
 </div>
 
 <div class="zt-principle">
@@ -563,9 +563,50 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 
 
+
+<div class="callout callout-info" style="margin-top:16px;">
+  <div class="callout-title">📌 Three concepts from the ZT4AI announcement worth knowing</div>
+  <p><strong>"Double agents" framing:</strong> Overprivileged, manipulated, or misaligned agents can act like double agents — working against the very outcomes they were built to support. This is Microsoft's framing for why standard least-privilege and assume-breach thinking must extend to AI agents, not just users.</p>
+  <p><strong>Ephemerality Controls (JIT for agents):</strong> Agents should be granted short-lived credentials that expire the moment their specific task is completed. This Just-in-Time model limits blast radius if an agent is compromised mid-task — the attacker's access window is minutes, not days. Entra Agent ID supports this via time-bound access packages and lifecycle workflows.</p>
+  <p><strong>Full AI lifecycle scope:</strong> ZT4AI covers not just agent runtime but the entire AI lifecycle — data ingestion, model training, deployment, and agent behavior. Supply chain and model security are in scope, not just the agent identity and access layer.</p>
+</div>
+<div style="background:linear-gradient(135deg,rgba(0,120,212,0.07),rgba(0,99,177,0.04));border:1.5px solid rgba(0,120,212,0.25);border-radius:12px;padding:20px 24px;margin:24px 0;display:flex;gap:18px;align-items:flex-start;">
+  <div style="font-size:32px;flex-shrink:0;line-height:1;">🗺️</div>
+  <div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;color:var(--blue);margin-bottom:5px;">ZT4AI · OFFICIAL RESOURCE · RSAC 2026</div>
+    <div style="font-size:15px;font-weight:700;color:#0d1526;margin-bottom:6px;">Zero Trust for AI — Reference Architecture</div>
+    <div style="font-size:13px;color:#2e3d5e;line-height:1.6;margin-bottom:10px;">Microsoft published a dedicated Zero Trust for AI reference architecture at RSAC 2026 — an extension of the existing Zero Trust reference architecture. It shows how policy-driven access controls, continuous verification, monitoring, and governance work together to secure AI systems and increase resilience when incidents occur. Covers the full AI lifecycle: data ingestion, model training, deployment, and agent behaviour. Free to use and a practical starting point for any organisation building an AI security roadmap, regardless of how much of the Microsoft stack is in use.</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <a href="https://www.microsoft.com/en-us/security/blog/2026/03/19/new-tools-and-guidance-announcing-zero-trust-for-ai/" target="_blank" style="display:inline-flex;align-items:center;gap:5px;background:var(--blue);color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:7px 14px;border-radius:6px;text-decoration:none;">→ ZT4AI Announcement</a>
+      <a href="https://microsoft.github.io/zerotrustassessment/docs/category/ai" target="_blank" style="display:inline-flex;align-items:center;gap:5px;background:rgba(0,120,212,0.08);color:#004a9e;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:7px 14px;border-radius:6px;text-decoration:none;border:1px solid rgba(0,120,212,0.2);">→ ZT Workshop AI Controls</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="section-label" style="margin-top:48px;">Access Fabric</div>
+<h2>The Access Fabric — Microsoft's Architectural Framing for AI-Scale Access</h2>
+<p>Alongside ZT4AI, Microsoft has introduced the <strong>Access Fabric</strong> concept — an architectural approach that treats access as a continuous, end-to-end system rather than a set of point controls. It uses identity as the consistent decision point and enforces those decisions across environments in near real time.</p>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0;">
+  <div class="card" style="border-color:rgba(0,120,212,0.2);">
+    <div class="card-name" style="color:var(--blue);">🏗️ What an Access Fabric provides</div>
+    <div class="card-desc">A common identity foundation for employees, workloads, and AI agents. Near-real-time enforcement of access decisions across the network. Continuous signal sharing across identity, network, and security tools. Faster propagation of policy and risk changes without manual stitching between tools.</div>
+  </div>
+  <div class="card" style="border-color:rgba(216,59,1,0.2);">
+    <div class="card-name" style="color:#c23000;">⚠️ Why fragmentation is the enemy</div>
+    <div class="card-desc">Microsoft research found organisations use an average of <strong>5 identity solutions and 4 network access tools</strong> — often from different vendors. Nearly half of security leaders report being overwhelmed by vendor sprawl. With AI agents operating at machine speed, static decisions and delayed enforcement create exploitable gaps.</div>
+  </div>
+</div>
+
+<div class="callout callout-info" style="margin-top:8px;">
+  <div class="callout-title">📌 Why this matters for AI agent security specifically</div>
+  <p>AI agents operate continuously, interact with multiple systems, and often require broad access. In a fragmented access environment, policy changes take longer to propagate, visibility is partial, and gaps between tools create openings. The Access Fabric model is directly relevant to Microsoft's agent security story — the same integrated Entra + Defender + Purview platform that Microsoft markets for agent governance is its implementation of this concept. The Classic vs Modern agent gap is a concrete example of what fragmentation looks like in practice: agents outside the Entra perimeter get zero coverage from the access fabric regardless of what other controls are deployed.</p>
+</div>
+
 <div class="section-label" style="margin-top:48px;">Zero Trust Maturity Model</div>
 <h2>Where to start — a staged approach</h2>
-<p>Don't try to implement all 80+ ZT Workshop AI controls at once. This three-stage model gives organisations a practical sequence from zero visibility to full automation.</p>
+<p>Don't try to implement all 700+ ZT Workshop AI controls (116 logical groups, 33 swim lanes) at once. This three-stage model gives organisations a practical sequence from zero visibility to full automation.</p>
 
 <div class="zt-maturity">
   <div class="zt-stage" style="border-color:rgba(0,120,212,0.3);background:rgba(0,120,212,0.04);">
@@ -611,7 +652,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 <div class="section-label" style="margin-top:48px;">Priority Controls</div>
 <h2>The highest-impact ZT Workshop AI controls</h2>
-<p>From the 80+ controls in the <a href="https://microsoft.github.io/zerotrustassessment/docs/category/ai" target="_blank" style="color:var(--blue);">Microsoft Zero Trust Assessment Workshop AI section</a>, these are the ones security architects should prioritise first.</p>
+<p>From the 700+ controls in the <a href="https://microsoft.github.io/zerotrustassessment/docs/category/ai" target="_blank" style="color:var(--blue);">Microsoft Zero Trust Assessment Workshop AI section</a>, these are the ones security architects should prioritise first.</p>
 
 <div class="zt-controls-grid">
   <div class="zt-control">
@@ -693,7 +734,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 <div class="section-label" style="margin-top:48px;">Priority Controls</div>
 <h2>The highest-impact ZT Workshop AI controls</h2>
-<p>From the 80+ controls in the <a href="https://microsoft.github.io/zerotrustassessment/docs/category/ai" target="_blank" style="color:var(--blue);">Microsoft Zero Trust Assessment Workshop AI section</a>, these are the ones security architects should prioritise first.</p>
+<p>From the 700+ controls in the <a href="https://microsoft.github.io/zerotrustassessment/docs/category/ai" target="_blank" style="color:var(--blue);">Microsoft Zero Trust Assessment Workshop AI section</a>, these are the ones security architects should prioritise first.</p>
 
 <div class="zt-controls-grid">
   <div class="zt-control">
@@ -786,7 +827,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 <div class="footer">
   SOURCES: NIST AI RMF 1.0 · ISO/IEC 42001:2023 · Microsoft Zero Trust Assessment Workshop · Microsoft Entra security for AI overview · RSAC 2026<br>
-  Last updated: April 11, 2026
+  Last updated: April 13, 2026
 </div>
 </div>
 
@@ -816,5 +857,307 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
+
+
+<!-- AI CHAT WIDGET -->
+<style>
+#aisec-chat-btn{position:fixed;bottom:28px;right:28px;z-index:9999;
+  background:#0078d4;color:#fff;border:none;border-radius:50px;
+  padding:12px 20px;font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:13px;font-weight:700;cursor:pointer;
+  box-shadow:0 4px 20px rgba(0,120,212,0.4);
+  display:flex;align-items:center;gap:8px;
+  transition:background 0.15s,transform 0.15s;}
+#aisec-chat-btn:hover{background:#005fa3;transform:translateY(-2px);}
+#aisec-chat-btn .chat-icon{font-size:16px;}
+
+#aisec-chat-panel{position:fixed;bottom:88px;right:28px;z-index:9998;
+  width:380px;max-width:calc(100vw - 40px);
+  background:#ffffff;border-radius:16px;
+  box-shadow:0 8px 40px rgba(0,0,0,0.18);
+  border:1px solid #d0d8ec;
+  display:none;flex-direction:column;overflow:hidden;
+  font-family:'Plus Jakarta Sans',sans-serif;}
+#aisec-chat-panel.open{display:flex;}
+
+#aisec-chat-header{background:#0d1526;padding:14px 18px;
+  display:flex;align-items:center;justify-content:space-between;}
+#aisec-chat-header-left{display:flex;align-items:center;gap:10px;}
+#aisec-chat-header-logo{width:22px;height:22px;display:grid;grid-template-columns:1fr 1fr;gap:2px;flex-shrink:0;}
+#aisec-chat-header-logo div:nth-child(1){background:#f25022;border-radius:1px;}
+#aisec-chat-header-logo div:nth-child(2){background:#7fba00;border-radius:1px;}
+#aisec-chat-header-logo div:nth-child(3){background:#00a4ef;border-radius:1px;}
+#aisec-chat-header-logo div:nth-child(4){background:#ffb900;border-radius:1px;}
+#aisec-chat-title{color:#ffffff;font-size:13px;font-weight:700;}
+#aisec-chat-subtitle{color:#8a9abc;font-size:10px;font-family:'JetBrains Mono',monospace;letter-spacing:0.04em;}
+#aisec-chat-close{background:none;border:none;color:#8a9abc;
+  font-size:20px;cursor:pointer;padding:0;line-height:1;}
+#aisec-chat-close:hover{color:#ffffff;}
+
+/* Password gate */
+#aisec-pw-gate{padding:28px 24px;display:flex;flex-direction:column;gap:14px;background:#f5f7fc;}
+#aisec-pw-gate-title{font-size:14px;font-weight:700;color:#0d1526;}
+#aisec-pw-gate-sub{font-size:12px;color:#5a6a8a;line-height:1.5;margin-top:-8px;}
+#aisec-pw-input{border:1px solid #d0d8ec;border-radius:8px;
+  padding:10px 14px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;
+  outline:none;color:#0d1526;letter-spacing:0.08em;}
+#aisec-pw-input:focus{border-color:#0078d4;}
+#aisec-pw-btn{background:#0078d4;color:#ffffff;border:none;
+  border-radius:8px;padding:10px;cursor:pointer;font-size:13px;font-weight:700;
+  font-family:'Plus Jakarta Sans',sans-serif;transition:background 0.12s;}
+#aisec-pw-btn:hover{background:#005fa3;}
+#aisec-pw-error{font-size:12px;color:#c50f1f;display:none;
+  background:rgba(197,15,31,0.06);border:1px solid rgba(197,15,31,0.2);
+  border-radius:6px;padding:8px 12px;}
+
+/* Chat UI */
+#aisec-chat-body{display:none;flex-direction:column;flex:1;}
+#aisec-chat-body.unlocked{display:flex;}
+
+#aisec-chat-messages{flex:1;overflow-y:auto;padding:16px;
+  display:flex;flex-direction:column;gap:10px;
+  min-height:260px;max-height:360px;background:#f5f7fc;}
+
+.aisec-msg{max-width:88%;font-size:13px;line-height:1.6;padding:10px 14px;border-radius:12px;}
+.aisec-msg.user{background:#0078d4;color:#ffffff;align-self:flex-end;border-radius:12px 12px 3px 12px;}
+.aisec-msg.assistant{background:#ffffff;color:#0d1526;align-self:flex-start;
+  border:1px solid #d0d8ec;border-radius:12px 12px 12px 3px;}
+.aisec-msg.thinking{color:#5a6a8a;font-style:italic;background:#eef1f8;
+  border:1px solid #d0d8ec;align-self:flex-start;border-radius:12px;}
+.aisec-msg code{background:rgba(0,0,0,0.08);padding:1px 5px;border-radius:3px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;}
+.aisec-msg.user code{background:rgba(255,255,255,0.2);}
+
+#aisec-chat-suggestions{padding:10px 16px 0;display:flex;gap:6px;flex-wrap:wrap;background:#f5f7fc;}
+.aisec-suggestion{background:#ffffff;border:1px solid #d0d8ec;border-radius:20px;
+  padding:5px 12px;font-size:11px;color:#0078d4;cursor:pointer;
+  font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;
+  transition:background 0.12s,border-color 0.12s;}
+.aisec-suggestion:hover{background:#e8f0fc;border-color:#0078d4;}
+
+#aisec-chat-input-row{display:flex;gap:8px;padding:12px 14px;
+  border-top:1px solid #d0d8ec;background:#ffffff;}
+#aisec-chat-input{flex:1;border:1px solid #d0d8ec;border-radius:8px;
+  padding:8px 12px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;
+  outline:none;resize:none;color:#0d1526;}
+#aisec-chat-input:focus{border-color:#0078d4;}
+#aisec-chat-send{background:#0078d4;color:#ffffff;border:none;
+  border-radius:8px;padding:8px 14px;cursor:pointer;font-size:13px;font-weight:700;
+  font-family:'Plus Jakarta Sans',sans-serif;transition:background 0.12s;white-space:nowrap;}
+#aisec-chat-send:hover{background:#005fa3;}
+#aisec-chat-send:disabled{background:#b0bcd4;cursor:not-allowed;}
+
+#aisec-chat-footer{padding:6px 14px 10px;background:#ffffff;
+  font-size:10px;color:#8a9abc;font-family:'JetBrains Mono',monospace;
+  text-align:center;letter-spacing:0.02em;}
+
+@media(max-width:480px){
+  #aisec-chat-panel{right:12px;bottom:80px;width:calc(100vw - 24px);}
+  #aisec-chat-btn{right:16px;bottom:20px;}
+}
+</style>
+
+<button id="aisec-chat-btn" aria-label="Chat with AI about this site">
+  <span class="chat-icon">💬</span> Ask AI about this site
+</button>
+
+<div id="aisec-chat-panel" role="dialog" aria-label="AI Chat">
+  <div id="aisec-chat-header">
+    <div id="aisec-chat-header-left">
+      <div id="aisec-chat-header-logo"><div></div><div></div><div></div><div></div></div>
+      <div>
+        <div id="aisec-chat-title">AI Security Guide</div>
+        <div id="aisec-chat-subtitle">POWERED BY CLAUDE · INTERNAL ONLY</div>
+      </div>
+    </div>
+    <button id="aisec-chat-close" aria-label="Close chat">✕</button>
+  </div>
+
+  <!-- Password gate (shown first) -->
+  <div id="aisec-pw-gate">
+    <div id="aisec-pw-gate-title">🔒 Internal access only</div>
+    <div id="aisec-pw-gate-sub">Enter the team passphrase to unlock the AI assistant.</div>
+    <input id="aisec-pw-input" type="password" placeholder="Enter passphrase..." autocomplete="off" />
+    <div id="aisec-pw-error">Incorrect passphrase — please try again.</div>
+    <button id="aisec-pw-btn">Unlock →</button>
+  </div>
+
+  <!-- Chat (shown after unlock) -->
+  <div id="aisec-chat-body">
+    <div id="aisec-chat-suggestions">
+      <button class="aisec-suggestion" data-q="Does CA for Agents apply to Copilot Studio?">CA for Agents?</button>
+      <button class="aisec-suggestion" data-q="What's the difference between Classic and Modern agents?">Classic vs Modern</button>
+      <button class="aisec-suggestion" data-q="What KQL detects no-auth agents?">No-auth KQL</button>
+      <button class="aisec-suggestion" data-q="What are the biggest gaps in Microsoft AI security today?">Key gaps</button>
+    </div>
+    <div id="aisec-chat-messages">
+      <div class="aisec-msg assistant">
+        Hi! I can answer questions about Microsoft AI security based on this site's content — auth patterns, product coverage, gaps, KQL queries, playbooks, and more. What would you like to know?
+      </div>
+    </div>
+    <div id="aisec-chat-input-row">
+      <textarea id="aisec-chat-input" rows="1" placeholder="Ask about auth patterns, gaps, KQL..." aria-label="Chat input"></textarea>
+      <button id="aisec-chat-send">Send</button>
+    </div>
+    <div id="aisec-chat-footer">Answers based on aiagentsecurity.guide · Not affiliated with Microsoft</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const btn = document.getElementById('aisec-chat-btn');
+  const panel = document.getElementById('aisec-chat-panel');
+  const closeBtn = document.getElementById('aisec-chat-close');
+  const pwGate = document.getElementById('aisec-pw-gate');
+  const pwInput = document.getElementById('aisec-pw-input');
+  const pwBtn = document.getElementById('aisec-pw-btn');
+  const pwError = document.getElementById('aisec-pw-error');
+  const chatBody = document.getElementById('aisec-chat-body');
+  const input = document.getElementById('aisec-chat-input');
+  const sendBtn = document.getElementById('aisec-chat-send');
+  const messages = document.getElementById('aisec-chat-messages');
+  const suggestions = document.querySelectorAll('.aisec-suggestion');
+
+  let history = [];
+  let isOpen = false;
+  let sessionPassword = null; // held in memory only, never persisted
+
+  function togglePanel() {
+    isOpen = !isOpen;
+    panel.classList.toggle('open', isOpen);
+    if (isOpen && !sessionPassword) pwInput.focus();
+    if (isOpen && sessionPassword) input.focus();
+  }
+
+  btn.addEventListener('click', togglePanel);
+  closeBtn.addEventListener('click', togglePanel);
+
+  // Unlock flow — validate password against the worker
+  async function attemptUnlock() {
+    const pw = pwInput.value.trim();
+    if (!pw) return;
+    pwBtn.textContent = 'Checking...';
+    pwBtn.disabled = true;
+    pwError.style.display = 'none';
+
+    try {
+      // Send a test message to validate the password
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          password: pw,
+          messages: [{ role: 'user', content: 'hello' }]
+        })
+      });
+
+      if (res.status === 401) {
+        pwError.style.display = 'block';
+        pwInput.value = '';
+        pwInput.focus();
+      } else if (res.ok) {
+        // Password correct — unlock and store in memory
+        sessionPassword = pw;
+        pwGate.style.display = 'none';
+        chatBody.classList.add('unlocked');
+        input.focus();
+      } else {
+        pwError.textContent = 'Connection error — please try again.';
+        pwError.style.display = 'block';
+      }
+    } catch(e) {
+      pwError.textContent = 'Connection error — please try again.';
+      pwError.style.display = 'block';
+    }
+
+    pwBtn.textContent = 'Unlock →';
+    pwBtn.disabled = false;
+  }
+
+  pwBtn.addEventListener('click', attemptUnlock);
+  pwInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') attemptUnlock();
+  });
+
+  // Suggestion chips
+  suggestions.forEach(s => {
+    s.addEventListener('click', () => {
+      input.value = s.dataset.q;
+      document.getElementById('aisec-chat-suggestions').style.display = 'none';
+      sendMessage();
+    });
+  });
+
+  function addMessage(role, text) {
+    const div = document.createElement('div');
+    div.className = 'aisec-msg ' + role;
+    text = text.replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) =>
+      '<pre style="background:rgba(0,0,0,0.06);padding:8px;border-radius:6px;overflow-x:auto;font-family:JetBrains Mono,monospace;font-size:10px;margin:4px 0;white-space:pre;">' + code.trim() + '</pre>'
+    );
+    text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+    text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    text = text.replace(/\n/g, '<br>');
+    div.innerHTML = text;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+    return div;
+  }
+
+  async function sendMessage() {
+    const text = input.value.trim();
+    if (!text || !sessionPassword) return;
+
+    input.value = '';
+    input.style.height = 'auto';
+    sendBtn.disabled = true;
+
+    addMessage('user', text);
+    history.push({ role: 'user', content: text });
+
+    const thinking = addMessage('thinking', '...');
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: history, password: sessionPassword })
+      });
+
+      const data = await res.json();
+      thinking.remove();
+
+      if (res.status === 401) {
+        // Password invalidated (rotated) — show lock screen again
+        sessionPassword = null;
+        chatBody.classList.remove('unlocked');
+        pwGate.style.display = '';
+        addMessage('assistant', 'Session expired — please re-enter the passphrase.');
+      } else if (data.reply) {
+        addMessage('assistant', data.reply);
+        history.push({ role: 'assistant', content: data.reply });
+        if (history.length > 20) history = history.slice(-20);
+      } else {
+        addMessage('assistant', 'Something went wrong — please try again.');
+      }
+    } catch(e) {
+      thinking.remove();
+      addMessage('assistant', 'Connection error — please try again.');
+    }
+
+    sendBtn.disabled = false;
+    input.focus();
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  });
+  input.addEventListener('input', () => {
+    input.style.height = 'auto';
+    input.style.height = Math.min(input.scrollHeight, 100) + 'px';
+  });
+})();
+</script>
+<!-- END AI CHAT WIDGET -->
 </body>
 </html>

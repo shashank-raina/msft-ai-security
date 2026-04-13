@@ -626,8 +626,75 @@ AIAgentsInfo
     <div class="check-item"><input type="checkbox"><div class="check-label">High-privilege maker credentials identified<span class="check-caveat">Agents built by admins with org-wide sharing = critical priority</span></div></div>
     <div class="check-item"><input type="checkbox"><div class="check-label">Findings documented for remediation tracking</div></div>
     <div class="check-item"><input type="checkbox"><div class="check-label">Change-detection KQL saved as Sentinel Analytics Rule<span class="check-caveat">Alerts on any agent being switched to no-auth, even by non-owners</span></div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Modern agents checked for missing Owner + Sponsor (Step 6 PowerShell)<span class="check-caveat">Requires Agent ID Administrator — Global Reader returns 403</span></div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Orphaned Agent Identities detected and remediated (Step 7 PowerShell)</div></div>
   </div>
 
+
+  <div class="pb-section">
+    <div class="pb-section-label">STEP 6 — DETECT OWNERLESS MODERN AGENTS (GRAPH API)</div>
+    <div class="step">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <div class="step-title">Find Modern agents missing Owner or Sponsor (PowerShell via Graph)</div>
+        <div class="step-desc">AIAgentsInfo covers Classic agents. For Modern agents (Entra Agent ID), use this PowerShell script. Requires Agent ID Administrator role — Global Reader returns 403 on the agentIdentity endpoint.</div>
+        <div class="step-code">Connect-MgGraph -Scopes "AgentIdentity.Read.All"
+
+$agents = Invoke-MgGraphRequest -Method GET `
+    -Uri "https://graph.microsoft.com/beta/servicePrincipals/microsoft.graph.agentIdentity" `
+    -OutputType PSObject
+
+foreach ($agent in $agents.value) {
+    $owners   = Invoke-MgGraphRequest -Method GET `
+        -Uri "https://graph.microsoft.com/beta/servicePrincipals/$($agent.id)/owners" `
+        -OutputType PSObject
+    $sponsors = Invoke-MgGraphRequest -Method GET `
+        -Uri "https://graph.microsoft.com/beta/servicePrincipals/$($agent.id)/sponsors" `
+        -OutputType PSObject
+    $flags = @()
+    if ($owners.value.Count -eq 0)   { $flags += "No Owner" }
+    if ($sponsors.value.Count -eq 0) { $flags += "No Sponsor" }
+    if ($flags.Count -gt 0) {
+        Write-Host "$($agent.displayName) | ID: $($agent.id) | $($flags -join ', ')" -ForegroundColor Red
+    }
+}
+Disconnect-MgGraph</div>
+        <div class="step-tip">💡 Owner = technical admin (credential management, monitoring). Sponsor = business accountable (answers "why does this agent exist?"). Both are optional at creation time but both are required for proper governance. Without a Sponsor, no one can approve Access Packages on behalf of the agent.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STEP 7 — DETECT ORPHANED AGENT IDENTITIES (GRAPH API)</div>
+    <div class="step">
+      <div class="step-num warn">7</div>
+      <div class="step-body">
+        <div class="step-title">Find Agent Identities whose Blueprint has been deleted</div>
+        <div class="step-desc">When a Blueprint is deleted, its Agent Identities are NOT automatically removed. They retain all permissions but can no longer authenticate — identity debt. This three-step script cross-references Agent Identities against active Blueprint Principals to surface orphaned objects.</div>
+        <div class="step-code">Connect-MgGraph -Scopes "AgentIdentity.Read.All"
+
+# Step 1: Get all Agent Identities and their Blueprint IDs
+$agents = Invoke-MgGraphRequest -Method GET `
+    -Uri "https://graph.microsoft.com/beta/servicePrincipals/microsoft.graph.agentIdentity" `
+    -OutputType PSObject
+
+# Step 2: Get all active Blueprint Principals
+$blueprints = Invoke-MgGraphRequest -Method GET `
+    -Uri "https://graph.microsoft.com/beta/servicePrincipals?$filter=servicePrincipalType eq 'ManagedIdentity'" `
+    -OutputType PSObject
+$activeBlueprintIds = $blueprints.value | Select-Object -ExpandProperty id
+
+# Step 3: Find orphaned — Blueprint ID not in active list
+foreach ($agent in $agents.value) {
+    if ($agent.agentIdentityBlueprintId -notin $activeBlueprintIds) {
+        Write-Host "ORPHANED: $($agent.displayName) | ID: $($agent.id) | Blueprint: $($agent.agentIdentityBlueprintId)" -ForegroundColor Red
+    }
+}
+Disconnect-MgGraph</div>
+        <div class="step-warn">⚠ Orphaned Agent Users are more dangerous — they appear as normal user accounts in the Entra portal with no indication they belonged to a deleted agent. They may hold group memberships, licenses, and resource access. Remove both orphaned Agent Identities and their associated Agent Users, then revoke any permissions assigned to them.</div>
+      </div>
+    </div>
+  </div>
   <div class="step-tip" style="margin-top:16px;">💡 <strong>Community Queries tip:</strong> In Defender Advanced Hunting → Community queries, there is a dedicated <strong>AI Agents</strong> section containing multiple queries created by the Microsoft Product Group. Check this section for the latest detection queries beyond what's listed here.</div>
 </div>
 
@@ -1125,7 +1192,7 @@ AppRequests      → inbound requests (if agent exposed via HTTP)</div>
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Learn · Field research from Microsoft Security professionals<br>
-  Last updated: April 11, 2026 · Playbooks reflect publicly announced Microsoft capabilities only
+  Last updated: April 13, 2026 · Playbooks reflect publicly announced Microsoft capabilities only
 </div>
 </div>
 <script>
@@ -1154,4 +1221,306 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
+
+
+<!-- AI CHAT WIDGET -->
+<style>
+#aisec-chat-btn{position:fixed;bottom:28px;right:28px;z-index:9999;
+  background:#0078d4;color:#fff;border:none;border-radius:50px;
+  padding:12px 20px;font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:13px;font-weight:700;cursor:pointer;
+  box-shadow:0 4px 20px rgba(0,120,212,0.4);
+  display:flex;align-items:center;gap:8px;
+  transition:background 0.15s,transform 0.15s;}
+#aisec-chat-btn:hover{background:#005fa3;transform:translateY(-2px);}
+#aisec-chat-btn .chat-icon{font-size:16px;}
+
+#aisec-chat-panel{position:fixed;bottom:88px;right:28px;z-index:9998;
+  width:380px;max-width:calc(100vw - 40px);
+  background:#ffffff;border-radius:16px;
+  box-shadow:0 8px 40px rgba(0,0,0,0.18);
+  border:1px solid #d0d8ec;
+  display:none;flex-direction:column;overflow:hidden;
+  font-family:'Plus Jakarta Sans',sans-serif;}
+#aisec-chat-panel.open{display:flex;}
+
+#aisec-chat-header{background:#0d1526;padding:14px 18px;
+  display:flex;align-items:center;justify-content:space-between;}
+#aisec-chat-header-left{display:flex;align-items:center;gap:10px;}
+#aisec-chat-header-logo{width:22px;height:22px;display:grid;grid-template-columns:1fr 1fr;gap:2px;flex-shrink:0;}
+#aisec-chat-header-logo div:nth-child(1){background:#f25022;border-radius:1px;}
+#aisec-chat-header-logo div:nth-child(2){background:#7fba00;border-radius:1px;}
+#aisec-chat-header-logo div:nth-child(3){background:#00a4ef;border-radius:1px;}
+#aisec-chat-header-logo div:nth-child(4){background:#ffb900;border-radius:1px;}
+#aisec-chat-title{color:#ffffff;font-size:13px;font-weight:700;}
+#aisec-chat-subtitle{color:#8a9abc;font-size:10px;font-family:'JetBrains Mono',monospace;letter-spacing:0.04em;}
+#aisec-chat-close{background:none;border:none;color:#8a9abc;
+  font-size:20px;cursor:pointer;padding:0;line-height:1;}
+#aisec-chat-close:hover{color:#ffffff;}
+
+/* Password gate */
+#aisec-pw-gate{padding:28px 24px;display:flex;flex-direction:column;gap:14px;background:#f5f7fc;}
+#aisec-pw-gate-title{font-size:14px;font-weight:700;color:#0d1526;}
+#aisec-pw-gate-sub{font-size:12px;color:#5a6a8a;line-height:1.5;margin-top:-8px;}
+#aisec-pw-input{border:1px solid #d0d8ec;border-radius:8px;
+  padding:10px 14px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;
+  outline:none;color:#0d1526;letter-spacing:0.08em;}
+#aisec-pw-input:focus{border-color:#0078d4;}
+#aisec-pw-btn{background:#0078d4;color:#ffffff;border:none;
+  border-radius:8px;padding:10px;cursor:pointer;font-size:13px;font-weight:700;
+  font-family:'Plus Jakarta Sans',sans-serif;transition:background 0.12s;}
+#aisec-pw-btn:hover{background:#005fa3;}
+#aisec-pw-error{font-size:12px;color:#c50f1f;display:none;
+  background:rgba(197,15,31,0.06);border:1px solid rgba(197,15,31,0.2);
+  border-radius:6px;padding:8px 12px;}
+
+/* Chat UI */
+#aisec-chat-body{display:none;flex-direction:column;flex:1;}
+#aisec-chat-body.unlocked{display:flex;}
+
+#aisec-chat-messages{flex:1;overflow-y:auto;padding:16px;
+  display:flex;flex-direction:column;gap:10px;
+  min-height:260px;max-height:360px;background:#f5f7fc;}
+
+.aisec-msg{max-width:88%;font-size:13px;line-height:1.6;padding:10px 14px;border-radius:12px;}
+.aisec-msg.user{background:#0078d4;color:#ffffff;align-self:flex-end;border-radius:12px 12px 3px 12px;}
+.aisec-msg.assistant{background:#ffffff;color:#0d1526;align-self:flex-start;
+  border:1px solid #d0d8ec;border-radius:12px 12px 12px 3px;}
+.aisec-msg.thinking{color:#5a6a8a;font-style:italic;background:#eef1f8;
+  border:1px solid #d0d8ec;align-self:flex-start;border-radius:12px;}
+.aisec-msg code{background:rgba(0,0,0,0.08);padding:1px 5px;border-radius:3px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;}
+.aisec-msg.user code{background:rgba(255,255,255,0.2);}
+
+#aisec-chat-suggestions{padding:10px 16px 0;display:flex;gap:6px;flex-wrap:wrap;background:#f5f7fc;}
+.aisec-suggestion{background:#ffffff;border:1px solid #d0d8ec;border-radius:20px;
+  padding:5px 12px;font-size:11px;color:#0078d4;cursor:pointer;
+  font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;
+  transition:background 0.12s,border-color 0.12s;}
+.aisec-suggestion:hover{background:#e8f0fc;border-color:#0078d4;}
+
+#aisec-chat-input-row{display:flex;gap:8px;padding:12px 14px;
+  border-top:1px solid #d0d8ec;background:#ffffff;}
+#aisec-chat-input{flex:1;border:1px solid #d0d8ec;border-radius:8px;
+  padding:8px 12px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;
+  outline:none;resize:none;color:#0d1526;}
+#aisec-chat-input:focus{border-color:#0078d4;}
+#aisec-chat-send{background:#0078d4;color:#ffffff;border:none;
+  border-radius:8px;padding:8px 14px;cursor:pointer;font-size:13px;font-weight:700;
+  font-family:'Plus Jakarta Sans',sans-serif;transition:background 0.12s;white-space:nowrap;}
+#aisec-chat-send:hover{background:#005fa3;}
+#aisec-chat-send:disabled{background:#b0bcd4;cursor:not-allowed;}
+
+#aisec-chat-footer{padding:6px 14px 10px;background:#ffffff;
+  font-size:10px;color:#8a9abc;font-family:'JetBrains Mono',monospace;
+  text-align:center;letter-spacing:0.02em;}
+
+@media(max-width:480px){
+  #aisec-chat-panel{right:12px;bottom:80px;width:calc(100vw - 24px);}
+  #aisec-chat-btn{right:16px;bottom:20px;}
+}
+</style>
+
+<button id="aisec-chat-btn" aria-label="Chat with AI about this site">
+  <span class="chat-icon">💬</span> Ask AI about this site
+</button>
+
+<div id="aisec-chat-panel" role="dialog" aria-label="AI Chat">
+  <div id="aisec-chat-header">
+    <div id="aisec-chat-header-left">
+      <div id="aisec-chat-header-logo"><div></div><div></div><div></div><div></div></div>
+      <div>
+        <div id="aisec-chat-title">AI Security Guide</div>
+        <div id="aisec-chat-subtitle">POWERED BY CLAUDE · INTERNAL ONLY</div>
+      </div>
+    </div>
+    <button id="aisec-chat-close" aria-label="Close chat">✕</button>
+  </div>
+
+  <!-- Password gate (shown first) -->
+  <div id="aisec-pw-gate">
+    <div id="aisec-pw-gate-title">🔒 Internal access only</div>
+    <div id="aisec-pw-gate-sub">Enter the team passphrase to unlock the AI assistant.</div>
+    <input id="aisec-pw-input" type="password" placeholder="Enter passphrase..." autocomplete="off" />
+    <div id="aisec-pw-error">Incorrect passphrase — please try again.</div>
+    <button id="aisec-pw-btn">Unlock →</button>
+  </div>
+
+  <!-- Chat (shown after unlock) -->
+  <div id="aisec-chat-body">
+    <div id="aisec-chat-suggestions">
+      <button class="aisec-suggestion" data-q="Does CA for Agents apply to Copilot Studio?">CA for Agents?</button>
+      <button class="aisec-suggestion" data-q="What's the difference between Classic and Modern agents?">Classic vs Modern</button>
+      <button class="aisec-suggestion" data-q="What KQL detects no-auth agents?">No-auth KQL</button>
+      <button class="aisec-suggestion" data-q="What are the biggest gaps in Microsoft AI security today?">Key gaps</button>
+    </div>
+    <div id="aisec-chat-messages">
+      <div class="aisec-msg assistant">
+        Hi! I can answer questions about Microsoft AI security based on this site's content — auth patterns, product coverage, gaps, KQL queries, playbooks, and more. What would you like to know?
+      </div>
+    </div>
+    <div id="aisec-chat-input-row">
+      <textarea id="aisec-chat-input" rows="1" placeholder="Ask about auth patterns, gaps, KQL..." aria-label="Chat input"></textarea>
+      <button id="aisec-chat-send">Send</button>
+    </div>
+    <div id="aisec-chat-footer">Answers based on aiagentsecurity.guide · Not affiliated with Microsoft</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const btn = document.getElementById('aisec-chat-btn');
+  const panel = document.getElementById('aisec-chat-panel');
+  const closeBtn = document.getElementById('aisec-chat-close');
+  const pwGate = document.getElementById('aisec-pw-gate');
+  const pwInput = document.getElementById('aisec-pw-input');
+  const pwBtn = document.getElementById('aisec-pw-btn');
+  const pwError = document.getElementById('aisec-pw-error');
+  const chatBody = document.getElementById('aisec-chat-body');
+  const input = document.getElementById('aisec-chat-input');
+  const sendBtn = document.getElementById('aisec-chat-send');
+  const messages = document.getElementById('aisec-chat-messages');
+  const suggestions = document.querySelectorAll('.aisec-suggestion');
+
+  let history = [];
+  let isOpen = false;
+  let sessionPassword = null; // held in memory only, never persisted
+
+  function togglePanel() {
+    isOpen = !isOpen;
+    panel.classList.toggle('open', isOpen);
+    if (isOpen && !sessionPassword) pwInput.focus();
+    if (isOpen && sessionPassword) input.focus();
+  }
+
+  btn.addEventListener('click', togglePanel);
+  closeBtn.addEventListener('click', togglePanel);
+
+  // Unlock flow — validate password against the worker
+  async function attemptUnlock() {
+    const pw = pwInput.value.trim();
+    if (!pw) return;
+    pwBtn.textContent = 'Checking...';
+    pwBtn.disabled = true;
+    pwError.style.display = 'none';
+
+    try {
+      // Send a test message to validate the password
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          password: pw,
+          messages: [{ role: 'user', content: 'hello' }]
+        })
+      });
+
+      if (res.status === 401) {
+        pwError.style.display = 'block';
+        pwInput.value = '';
+        pwInput.focus();
+      } else if (res.ok) {
+        // Password correct — unlock and store in memory
+        sessionPassword = pw;
+        pwGate.style.display = 'none';
+        chatBody.classList.add('unlocked');
+        input.focus();
+      } else {
+        pwError.textContent = 'Connection error — please try again.';
+        pwError.style.display = 'block';
+      }
+    } catch(e) {
+      pwError.textContent = 'Connection error — please try again.';
+      pwError.style.display = 'block';
+    }
+
+    pwBtn.textContent = 'Unlock →';
+    pwBtn.disabled = false;
+  }
+
+  pwBtn.addEventListener('click', attemptUnlock);
+  pwInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') attemptUnlock();
+  });
+
+  // Suggestion chips
+  suggestions.forEach(s => {
+    s.addEventListener('click', () => {
+      input.value = s.dataset.q;
+      document.getElementById('aisec-chat-suggestions').style.display = 'none';
+      sendMessage();
+    });
+  });
+
+  function addMessage(role, text) {
+    const div = document.createElement('div');
+    div.className = 'aisec-msg ' + role;
+    text = text.replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) =>
+      '<pre style="background:rgba(0,0,0,0.06);padding:8px;border-radius:6px;overflow-x:auto;font-family:JetBrains Mono,monospace;font-size:10px;margin:4px 0;white-space:pre;">' + code.trim() + '</pre>'
+    );
+    text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+    text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    text = text.replace(/\n/g, '<br>');
+    div.innerHTML = text;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+    return div;
+  }
+
+  async function sendMessage() {
+    const text = input.value.trim();
+    if (!text || !sessionPassword) return;
+
+    input.value = '';
+    input.style.height = 'auto';
+    sendBtn.disabled = true;
+
+    addMessage('user', text);
+    history.push({ role: 'user', content: text });
+
+    const thinking = addMessage('thinking', '...');
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: history, password: sessionPassword })
+      });
+
+      const data = await res.json();
+      thinking.remove();
+
+      if (res.status === 401) {
+        // Password invalidated (rotated) — show lock screen again
+        sessionPassword = null;
+        chatBody.classList.remove('unlocked');
+        pwGate.style.display = '';
+        addMessage('assistant', 'Session expired — please re-enter the passphrase.');
+      } else if (data.reply) {
+        addMessage('assistant', data.reply);
+        history.push({ role: 'assistant', content: data.reply });
+        if (history.length > 20) history = history.slice(-20);
+      } else {
+        addMessage('assistant', 'Something went wrong — please try again.');
+      }
+    } catch(e) {
+      thinking.remove();
+      addMessage('assistant', 'Connection error — please try again.');
+    }
+
+    sendBtn.disabled = false;
+    input.focus();
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  });
+  input.addEventListener('input', () => {
+    input.style.height = 'auto';
+    input.style.height = Math.min(input.scrollHeight, 100) + 'px';
+  });
+})();
+</script>
+<!-- END AI CHAT WIDGET -->
 </body></html>
