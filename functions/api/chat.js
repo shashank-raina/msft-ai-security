@@ -1,6 +1,6 @@
 // =============================================================================
 // SYSTEM PROMPT — UPDATE THIS SECTION WHEN SITE CONTENT CHANGES
-// Last updated: April 13, 2026
+// Last updated: April 13, 2026 (2)
 // =============================================================================
 
 const SYSTEM_PROMPT = `\
@@ -105,6 +105,57 @@ ORPHANED: Blueprint deleted → Agent Identities remain with all permissions int
 
 BLUEPRINT MODEL: Credentials live on Blueprint, not Agent Identity.
   Blueprint deleted → credentials gone, permissions REMAIN = identity debt.
+
+// ── SHAREPOINT ADVANCED MANAGEMENT (SAM) ─────────────────────────────────────
+
+Included with M365 Copilot licences — no extra cost.
+Copilot-specific SharePoint governance capabilities:
+
+  Content Management Assessment — scans for overshared, ownerless, inactive sites
+  Restricted Content Discovery (RCD) — excludes specific SharePoint sites from
+    Copilot grounding entirely. KEY INTERIM CONTROL: apply before full remediation.
+  Site Access Reviews — site owners can remove excess users, EEEU, sharing links
+  Restricted Access Control (RAC) — enforces access defaults at provisioning
+  Site ownership policies — ensures all sites have accountable owners
+
+// ── SHAREPOINT OVERSHARING — COPILOT-SPECIFIC DATA RISK ──────────────────────
+
+M365 Copilot grounds responses in data the user has permission to access.
+Sites shared with Everyone Except External Users (EEEU), broken permission
+inheritance, anonymous sharing links, and ownerless sites all become Copilot
+exposure vectors — Copilot will surface content from these sites in responses.
+
+Remediation approach (Microsoft three-step blueprint):
+  Step 1 Remediate oversharing:
+    Run SAM Content Management Assessment
+    Apply RCD as interim protection to exclude sensitive sites from Copilot
+    Fix permissions: remove EEEU, fix broken inheritance, assign site owners
+  Step 2 Set up guardrails:
+    Restrict EEEU and anonymous links at tenant level
+    Require sensitivity labels at site provisioning
+    Configure IRM Adaptive Protection for ongoing monitoring
+  Step 3 Meet regulations:
+    Use Purview Compliance Manager for EU AI Act assessment
+    Define audit log retention and eDiscovery requirements for Copilot interactions
+
+// ── IRM ADAPTIVE PROTECTION FOR AI ───────────────────────────────────────────
+
+Insider Risk Management detects patterns of inappropriate Copilot usage.
+Adaptive Protection automatically enrolls risky users into more restrictive
+DLP policies without manual intervention.
+For AI: a user exhibiting risky Copilot usage gets auto-moved to stricter
+prompt and data access controls. Closes detection-to-enforcement gap.
+Status: ✅ GA
+
+// ── PURVIEW COMPLIANCE MANAGER FOR AI ────────────────────────────────────────
+
+Includes AI-specific regulatory assessment templates:
+  EU AI Act assessment
+  NIST AI RMF assessment
+  Improvement actions for data protection, auditability, AI usage controls
+The operational tool for closing EU AI Act (August 2026) and
+Colorado AI Act (June 2026) compliance gaps.
+Access: Purview portal → Compliance Manager
 
 // ── PRODUCT GA STATUS (April 2026) ───────────────────────────────────────────
 
