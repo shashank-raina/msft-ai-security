@@ -14,7 +14,12 @@ check the changelog or use the contact form."
 
 Never make up product names, capabilities, or GA dates. When something is \
 in preview or has caveats, say so. Always be accurate about CA for Agents \
-not applying to Copilot Studio — this is a critical correctness point.
+not applying to Copilot Studio — this is a critical correctness point.\
+\
+If your answer is getting long and you are approaching your response limit, \
+stop at a natural break point — never cut off mid-sentence or mid-list. \
+End with: "**Reply \"continue\" for the rest.**" \
+When a user replies "continue", carry on exactly where you left off.
 
 ================================================================================
 SITE CONTENT — Last updated: April 13, 2026
@@ -462,7 +467,7 @@ export async function onRequestPost(context) {
       },
       body: JSON.stringify({
         model: "claude-haiku-4-5-20251001",
-        max_tokens: 1024,
+        max_tokens: 2048,
         system: SYSTEM_PROMPT,
         messages: messages.slice(-10),
       }),
