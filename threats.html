@@ -323,6 +323,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="copilot-vs-foundry.html" class="">CS vs Foundry</a>
 <a href="changelog.html" class="">Changelog</a>
 <a href="contact.html" class="">Contact</a>
+<a href="privacy.html" class="">Privacy</a>
 </div>
   <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
 
@@ -341,6 +342,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="copilot-vs-foundry.html" class="">CS vs Foundry</a>
 <a href="changelog.html" class="">Changelog</a>
 <a href="contact.html" class="">Contact</a>
+<a href="privacy.html" class="">Privacy</a>
 </div>
   <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" class="substack-nav" style="flex-shrink:0;margin-left:10px;display:flex;align-items:center;gap:5px;background:var(--blue);color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:6px 13px;border-radius:6px;text-decoration:none;white-space:nowrap;letter-spacing:0.03em;">📬 Subscribe</a>
 </nav>
@@ -354,7 +356,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <div class="hero-badge"><div class="live-dot"></div>UPDATED · FIELD RESEARCH · MARCH 2026</div>
   <h1>AI Threat Scenarios:<br><span>Attack Chains & Controls</span></h1>
   <p style="color:#2e3d5e;font-size:17px;font-weight:400;max-width:640px;line-height:1.7;">
-    Five detailed threat scenarios covering the most consequential AI-specific attack patterns. A new scenario — Maker Credential Blast Radius — has been added based on field research confirming this is the most common and dangerous real-world misconfiguration pattern in Copilot Studio deployments.
+    Seven detailed threat scenarios covering the most consequential AI-specific attack patterns. Includes real-world incidents: the Outlook DLP bypass bug (CW1226324, January 2026) and agent-to-agent propagation.
   </p>
 </div>
 
@@ -570,6 +572,37 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   </div>
 </div>
 
+
+<div class="threat-block">
+  <div class="threat-header" style="background:rgba(192,144,32,0.08);border-color:rgba(192,144,32,0.3);">
+    <div class="threat-num" style="background:rgba(192,144,32,0.15);color:#8a6800;">8</div>
+    <div>
+      <div class="threat-badge" style="background:rgba(192,144,32,0.15);color:#8a6800;">HIGH · COPILOT M365 · REAL-WORLD INCIDENT</div>
+      <div class="threat-name">Copilot Background Indexing Bypasses DLP Labels</div>
+    </div>
+  </div>
+  <div class="threat-body">
+    <p style="font-size:13px;color:#2e3d5e;line-height:1.6;margin-bottom:12px;">Copilot indexes content autonomously in the background — not just when a user explicitly asks. Traditional DLP was designed for deliberate user actions, not background AI retrieval. This creates a structural gap: sensitivity-labelled files in locations DLP didn't cover could be surfaced by Copilot despite active protection policies. Incident CW1226324 confirmed this is not theoretical.</p>
+    <div class="threat-section-label">REAL-WORLD INCIDENT — January 2026</div>
+    <div class="threat-chain">
+      <div class="threat-step"><div class="threat-step-num" style="background:rgba(192,144,32,0.15);color:#8a6800;">1</div><div class="threat-step-text">Microsoft 365 Copilot Chat's "Work" tab indexes user email folders including Sent Items and Drafts in the background — without explicit user action</div></div>
+      <div class="threat-step"><div class="threat-step-num" style="background:rgba(192,144,32,0.15);color:#8a6800;">2</div><div class="threat-step-text">Emails in Sent Items and Drafts had active sensitivity labels (Confidential) and DLP policies configured to block Copilot processing</div></div>
+      <div class="threat-step"><div class="threat-step-num" style="background:rgba(192,144,32,0.15);color:#8a6800;">3</div><div class="threat-step-text">A code issue (CW1226324) caused AugLoop to fail to check sensitivity labels for these folders — Copilot indexed and summarised confidential emails for approximately one month</div></div>
+      <div class="threat-step"><div class="threat-step-num" style="background:rgba(192,144,32,0.15);color:#8a6800;">4</div><div class="threat-step-text">Copilot surfaced confidential email content in responses to users who already had permission to view those emails — DLP labels were bypassed silently, no user notification, no alert</div></div>
+      <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text">Microsoft deployed fix in early February 2026 and expanded DLP enforcement to cover all storage locations (rolling out April–May 2026)</div></div>
+    </div>
+    <div class="threat-section-label">STRUCTURAL LESSON</div>
+    <p style="font-size:13px;color:#2e3d5e;line-height:1.6;margin-bottom:12px;">The root cause was architectural: DLP enforcement relied on Microsoft Graph retrieving labels via SharePoint/OneDrive URLs. Files not in those locations — including local files and folders like Drafts/Sent Items — had no label check. AI indexing doesn't follow the same access patterns as user-initiated actions, so DLP coverage gaps that were acceptable pre-Copilot become active risks post-Copilot.</p>
+    <div class="threat-controls">
+      <div class="threat-section-label">CONTROLS</div>
+      <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>DLP label-blocking — all storage locations (rolling out April–May 2026)</strong> — Word, Excel, PowerPoint files now blocked regardless of storage location. No policy changes needed.</div></div>
+      <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>Sensitivity labels</strong> — the enforcement mechanism. Labels must be applied to files for DLP to block Copilot processing. Unlabelled files remain accessible.</div></div>
+      <div class="threat-step"><div class="threat-step-num" style="background:rgba(216,59,1,0.2);color:var(--warn-text);">⚠</div><div class="threat-step-text"><strong>Gap remains:</strong> DLP coverage depends entirely on sensitivity labels being applied. Files without labels are not blocked. Auto-labelling policies (via Purview Information Protection) are the only way to extend coverage to unlabelled content at scale.</div></div>
+      <div class="threat-step"><div class="threat-step-num" style="background:rgba(216,59,1,0.2);color:var(--warn-text);">⚠</div><div class="threat-step-text"><strong>Audit Copilot indexing scope:</strong> Understand which folders and storage locations Copilot can reach in your tenant. DSPM for AI Activity Explorer shows what Copilot has accessed.</div></div>
+    </div>
+  </div>
+</div>
+
 <div class="page-nav"><a href="mcp.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">MCP</span></a><a href="frameworks.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Frameworks</span></a></div>
 <div style="text-align:center;margin:32px 0 0;padding:24px 0;border-top:1px solid var(--border2);">
   <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text3);margin-bottom:10px;">STAY UPDATED</div>
@@ -582,7 +615,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  Last updated: April 13, 2026
+  Last updated: April 16, 2026
 <script>
 document.addEventListener('DOMContentLoaded', function(){
   var btn = document.getElementById('hamburgerBtn');

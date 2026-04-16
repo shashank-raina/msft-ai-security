@@ -323,6 +323,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="copilot-vs-foundry.html" class="">CS vs Foundry</a>
 <a href="changelog.html" class="">Changelog</a>
 <a href="contact.html" class="">Contact</a>
+<a href="privacy.html" class="">Privacy</a>
 </div>
   <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
 
@@ -341,6 +342,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="copilot-vs-foundry.html" class="">CS vs Foundry</a>
 <a href="changelog.html" class="">Changelog</a>
 <a href="contact.html" class="">Contact</a>
+<a href="privacy.html" class="">Privacy</a>
 </div>
   <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" class="substack-nav" style="flex-shrink:0;margin-left:10px;display:flex;align-items:center;gap:5px;background:var(--blue);color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:6px 13px;border-radius:6px;text-decoration:none;white-space:nowrap;letter-spacing:0.03em;">📬 Subscribe</a>
 </nav>
@@ -668,7 +670,7 @@ directActions
 </div>
 
 <h2 style="margin-top:24px;">Detecting Ownerless &amp; Orphaned Modern Agents (Graph API)</h2>
-<p>AIAgentsInfo KQL covers Classic agents. For Modern agents (Entra Agent ID), use PowerShell via Microsoft Graph. Note: Global Reader gets a 403 on the agentIdentity endpoint — requires Agent ID Administrator role.</p>
+<p>AIAgentsInfo KQL covers Copilot Studio agents (Classic and Modern) and Foundry, marketplace, and LOB agents registered with Agent 365. Use the <code>RegistrySource</code> column to distinguish: <code>RegistrySource == "PowerPlatform"</code> for Copilot Studio agents via the Power Platform connector; <code>RegistrySource == "A365"</code> for Agent 365-registered agents. Most existing KQL queries on this page target Copilot Studio (PowerPlatform) — see Playbook 01 Step 8 for A365-specific queries. For Modern agent Owner/Sponsor checks, use PowerShell via Microsoft Graph (Agent ID Administrator role required — Global Reader returns 403).</p>
 
 <div style="background:#f0f4fb;border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-top:8px;overflow-x:auto;">
 <pre style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#0d1526;line-height:1.8;margin:0;white-space:pre;">
@@ -744,7 +746,7 @@ Disconnect-MgGraph</pre>
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  Last updated: April 13, 2026 · Analysis covers publicly announced Microsoft security capabilities only
+  Last updated: April 16, 2026 · Analysis covers publicly announced Microsoft security capabilities only
 </div>
 </div>
 

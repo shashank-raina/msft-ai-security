@@ -323,6 +323,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="copilot-vs-foundry.html" class="">CS vs Foundry</a>
 <a href="changelog.html" class="">Changelog</a>
 <a href="contact.html" class="">Contact</a>
+<a href="privacy.html" class="">Privacy</a>
 </div>
   <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
 
@@ -341,6 +342,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="copilot-vs-foundry.html" class="">CS vs Foundry</a>
 <a href="changelog.html" class="">Changelog</a>
 <a href="contact.html" class="">Contact</a>
+<a href="privacy.html" class="">Privacy</a>
 </div>
   <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" class="substack-nav" style="flex-shrink:0;margin-left:10px;display:flex;align-items:center;gap:5px;background:var(--blue);color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:6px 13px;border-radius:6px;text-decoration:none;white-space:nowrap;letter-spacing:0.03em;">📬 Subscribe</a>
 </nav>
@@ -450,11 +452,11 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <div class="pb-panel active" id="pb1">
   <div class="pb-header">
     <div class="pb-header-eyebrow">PLAYBOOK 01</div>
-    <div class="pb-header-title">Audit Your Copilot Studio Estate in 30 Minutes</div>
-    <div class="pb-header-sub">Find no-auth agents, overly shared agents, ownerless agents, and maker credential risks — using only KQL in Microsoft Defender Advanced Hunting. No extra licensing required beyond Defender.</div>
+    <div class="pb-header-title">Audit Your Agent Estate in 30 Minutes</div>
+    <div class="pb-header-sub">Find no-auth agents, overly shared agents, ownerless agents, and maker credential risks — using KQL in Microsoft Defender Advanced Hunting. The AIAgentsInfo table now covers Copilot Studio, Microsoft Foundry, 3rd-party marketplace, and custom LOB agents. No extra licensing required beyond Defender.</div>
     <div class="pb-meta-row">
       <span class="pb-meta-item green">✓ Works for Classic & Modern Agents</span>
-      <span class="pb-meta-item green">✓ No extra licensing</span>
+      <span class="pb-meta-item green">✓ Copilot Studio · Foundry · Marketplace · LOB</span>
       <span class="pb-meta-item warn">⚠ Requires AI Agent Inventory enabled</span>
     </div>
   </div>
@@ -464,8 +466,8 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
     <div class="step">
       <div class="step-num">P</div>
       <div class="step-body">
-        <div class="step-title">Enable AI Agent Inventory</div>
-        <div class="step-desc">In Microsoft Defender portal → Settings → Cloud Apps → Copilot Studio AI Agents → enable. Then in Power Platform Admin Center → Security → Threat Detection → enable Microsoft Defender — Copilot Studio AI Agents. This is a dual-admin setup requiring both Defender admin and Power Platform admin.</div>
+        <div class="step-title">Enable AI Agent Inventory — Security for AI</div>
+        <div class="step-desc">In Microsoft Defender portal → <strong>Settings → Security for AI</strong> (previously: Settings → Cloud Apps → AI Agents). Then in Power Platform Admin Center → Security → Threat Detection → enable Microsoft Defender — Copilot Studio AI Agents. Dual-admin setup required (Defender admin + Power Platform admin).<br><br><strong>April 2026 expansion:</strong> The AIAgentsInfo table now includes additional columns covering all agent types — not just Copilot Studio. Foundry agents, 3rd-party marketplace agents, and custom LOB agents are now included where they are registered with Agent 365 or use the Agent 365 SDK.</div>
         <div class="step-warn">⚠ Takes up to 2 hours for initial data population in the AIAgentsInfo table.</div>
       </div>
     </div>
@@ -628,6 +630,7 @@ AIAgentsInfo
     <div class="check-item"><input type="checkbox"><div class="check-label">Change-detection KQL saved as Sentinel Analytics Rule<span class="check-caveat">Alerts on any agent being switched to no-auth, even by non-owners</span></div></div>
     <div class="check-item"><input type="checkbox"><div class="check-label">Modern agents checked for missing Owner + Sponsor (Step 6 PowerShell)<span class="check-caveat">Requires Agent ID Administrator — Global Reader returns 403</span></div></div>
     <div class="check-item"><input type="checkbox"><div class="check-label">Orphaned Agent Identities detected and remediated (Step 7 PowerShell)</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">A365 agents audited — no-instructions, MCP tools, non-HTTPS endpoints (Step 8 KQL)<span class="check-caveat">Requires Agent 365 Frontier programme access</span></div></div>
   </div>
 
 
@@ -637,7 +640,7 @@ AIAgentsInfo
       <div class="step-num">6</div>
       <div class="step-body">
         <div class="step-title">Find Modern agents missing Owner or Sponsor (PowerShell via Graph)</div>
-        <div class="step-desc">AIAgentsInfo covers Classic agents. For Modern agents (Entra Agent ID), use this PowerShell script. Requires Agent ID Administrator role — Global Reader returns 403 on the agentIdentity endpoint.</div>
+        <div class="step-desc">AIAgentsInfo covers Copilot Studio agents (Classic and Modern) and now also Foundry, marketplace, and LOB agents registered with Agent 365. For Modern agents specifically (Entra Agent ID owner/sponsor check), use this PowerShell script. Requires Agent ID Administrator role — Global Reader returns 403.</div>
         <div class="step-code">Connect-MgGraph -Scopes "AgentIdentity.Read.All"
 
 $agents = Invoke-MgGraphRequest -Method GET `
@@ -695,6 +698,67 @@ Disconnect-MgGraph</div>
       </div>
     </div>
   </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STEP 8 — AUDIT AGENT 365 REGISTERED AGENTS (KQL)</div>
+    <div class="step">
+      <div class="step-num">8</div>
+      <div class="step-body">
+        <div class="step-title">Query A365-registered agents using RegistrySource filter</div>
+        <div class="step-desc">The AIAgentsInfo table now has a <code>RegistrySource</code> column distinguishing agent origin: <code>"A365"</code> (Agent 365 registered) vs <code>"PowerPlatform"</code> (Copilot Studio via Power Platform connector). Use these filters to target the right agent population. The four queries below cover the highest-risk patterns for A365-registered agents.<br><br>
+        <strong>Portal direct URL:</strong> <a href="https://security.microsoft.com/securitysettings/security_for_ai" target="_blank" style="color:var(--blue);">security.microsoft.com/securitysettings/security_for_ai</a></div>
+
+        <div class="step-code">// Query 8a: All Agent 365 registered agents (latest state)
+AIAgentsInfo
+| where RegistrySource == "A365"
+| summarize arg_max(Timestamp, *) by AIAgentId
+| where AgentStatus != "Deleted"
+| project AIAgentId, AIAgentName, AgentStatus, IsBlocked, AIModel, Instructions, AgentCreationTime</div>
+
+        <div class="step-code">// Query 8b: Published A365 agents with NO INSTRUCTIONS (prompt injection risk)
+// Empty Instructions = no guardrails = agent can be redirected by adversarial input
+AIAgentsInfo
+| summarize arg_max(Timestamp, *) by AIAgentId
+| where RegistrySource == "A365"
+| where IsBlocked == 0
+| where isnotnull(Instructions)
+| where isempty(Instructions) or Instructions == "N/A"
+| extend RawAgentInfoJson = parse_json(RawAgentInfo)
+| extend PublishedStatus = RawAgentInfoJson.publishedStatus
+| where PublishedStatus == "Published"
+| project AIAgentId, AIAgentName, Instructions, PublishedStatus</div>
+
+        <div class="step-code">// Query 8c: A365 agents with MCP tools configured (expanded attack surface)
+// Each MCP server = additional entry point into enterprise systems
+AIAgentsInfo
+| where RegistrySource == "A365"
+| summarize arg_max(Timestamp, *) by AIAgentId
+| where isnotempty(AgentActionTriggers)
+| extend AgentActionTriggersJson = parse_json(AgentActionTriggers)
+| mv-expand Trigger = AgentActionTriggersJson
+| extend ActionType = Trigger.type
+| where ActionType == "RemoteMCPServer"
+| project AIAgentId, AIAgentName, ActionType</div>
+
+        <div class="step-code">// Query 8d: A365 agents using non-HTTPS endpoints (insecure MCP connections)
+AIAgentsInfo
+| where RegistrySource == "A365"
+| summarize arg_max(Timestamp, *) by AIAgentId
+| where isnotempty(AgentActionTriggers)
+| extend AgentActionTriggersJson = parse_json(AgentActionTriggers)
+| mv-expand Trigger = AgentActionTriggersJson
+| extend ServerUrls = Trigger.serverUrls
+| mv-expand Url = ServerUrls
+| extend ParsedUrl = parse_url(tostring(Url))
+| extend Scheme = tostring(ParsedUrl["Scheme"])
+| where isnotempty(Scheme) and Scheme != "https"
+| project AIAgentId, AIAgentName, Url, Scheme</div>
+
+        <div class="step-tip">💡 For Copilot Studio agents, use <code>RegistrySource == "PowerPlatform"</code> in the same queries. The no-auth query from Step 1 remains the most important for Copilot Studio — Query 8a–8d are specifically designed for A365-registered agents.</div>
+      </div>
+    </div>
+  </div>
+
   <div class="step-tip" style="margin-top:16px;">💡 <strong>Community Queries tip:</strong> In Defender Advanced Hunting → Community queries, there is a dedicated <strong>AI Agents</strong> section containing multiple queries created by the Microsoft Product Group. Check this section for the latest detection queries beyond what's listed here.</div>
 </div>
 
@@ -829,14 +893,14 @@ Disconnect-MgGraph</div>
       <div class="step-num">2</div>
       <div class="step-body">
         <div class="step-title">Connect the Microsoft 365 app connector</div>
-        <div class="step-desc">Defender portal → Settings → Cloud Apps → Connected Apps → Microsoft 365 → connect. This is required for Copilot agent telemetry to flow into Defender.</div>
+        <div class="step-desc">Defender portal → Settings → Security for AI → connect Microsoft 365 (previously: Settings → Cloud Apps → Connected Apps → Microsoft 365). This is required for Copilot agent telemetry to flow into Defender.</div>
       </div>
     </div>
     <div class="step">
       <div class="step-num">3</div>
       <div class="step-body">
         <div class="step-title">Enable Copilot Studio AI Agents</div>
-        <div class="step-desc">Defender portal → Settings → Cloud Apps → Copilot Studio AI Agents → enable. Copy the URL shown — you will need to share this with your Power Platform admin to complete the next step.</div>
+        <div class="step-desc">Defender portal → <strong>Settings → Security for AI</strong> → enable Copilot Studio AI Agents (previously: Settings → Cloud Apps → Copilot Studio AI Agents). Copy the URL shown — you will need to share this with your Power Platform admin to complete the next step.</div>
         <div class="step-tip">💡 Save this URL carefully — it encodes your tenant ID and is required for the Power Platform side of setup.</div>
       </div>
     </div>
@@ -856,7 +920,7 @@ Disconnect-MgGraph</div>
       <div class="step-num">5</div>
       <div class="step-body">
         <div class="step-title">Verify connection status</div>
-        <div class="step-desc">Back in Defender portal → Settings → Cloud Apps → Copilot Studio AI Agents → check that the Power Platform action status shows "Connected". If it shows "Pending" after 30 minutes, re-check the App ID and URL entered in Step 4.</div>
+        <div class="step-desc">Back in Defender portal → Settings → Security for AI → check that the Power Platform action status shows "Connected". If it shows "Pending" after 30 minutes, re-check the App ID and URL entered in Step 4.</div>
       </div>
     </div>
   </div>
@@ -889,7 +953,7 @@ Disconnect-MgGraph</div>
       <div class="step-num">8</div>
       <div class="step-body">
         <div class="step-title">Enable RT protection for Copilot Studio agents</div>
-        <div class="step-desc">This step enables the webhook-based runtime inspection of tool invocations. Defender evaluates each tool call before execution and can block suspicious actions. Defender portal → Settings → Cloud Apps → Copilot Studio AI Agents → enable Real-time protection.</div>
+        <div class="step-desc">This step enables the webhook-based runtime inspection of tool invocations. Defender evaluates each tool call before execution and can block suspicious actions. Defender portal → Settings → Security for AI → enable Real-time protection for Copilot Studio AI Agents.</div>
         <div class="step-warn">⚠ 1-second timeout applies. If Defender doesn't respond within 1 second, the tool invocation is allowed through. This is a deliberate tradeoff for reliability but means high-speed tool calls may not always be evaluated.</div>
       </div>
     </div>
@@ -1192,7 +1256,7 @@ AppRequests      → inbound requests (if agent exposed via HTTP)</div>
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Learn · Field research from Microsoft Security professionals<br>
-  Last updated: April 13, 2026 · Playbooks reflect publicly announced Microsoft capabilities only
+  Last updated: April 16, 2026 · Playbooks reflect publicly announced Microsoft capabilities only
 </div>
 </div>
 <script>

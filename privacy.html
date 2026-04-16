@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Gaps & Roadmap — Securing AI with Microsoft</title>
+<title>Overview — Securing AI with Microsoft</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -274,6 +274,20 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   .flow{flex-direction:column;}
   .flow-arrow{display:none;}
   h1{font-size:26px;}
+  /* Viz mobile — stack label above pills */
+  .viz-layer-inner{flex-direction:column !important;}
+  .viz-label{width:100% !important;border-right:none !important;
+    border-bottom:1.5px solid;padding:12px 14px !important;}
+  .viz-label-name{font-size:15px !important;}
+  .viz-label-sub{font-size:12px !important;}
+  .viz-label-num{font-size:10px !important;}
+  .viz-label-badge{font-size:9px !important;}
+  .viz-pills{padding:10px 14px !important;gap:7px !important;}
+  .viz-pill{font-size:10px !important;padding:5px 10px !important;white-space:normal !important;}
+  .viz-top{flex-direction:column !important;gap:10px !important;}
+  .viz-top-agents{gap:6px !important;}
+  .viz-agent{font-size:11px !important;padding:6px 10px !important;}
+  .viz-footer{flex-wrap:wrap;gap:10px !important;}
 }
 
 /* HAMBURGER */
@@ -303,7 +317,6 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </style>
 </head>
 <body>
-
 <nav class="topnav">
   <div class="nav-brand">
     <div class="msft-logo"><div></div><div></div><div></div><div></div></div>
@@ -318,15 +331,16 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="mcp.html" class="">MCP</a>
 <a href="threats.html" class="">Threats</a>
 <a href="frameworks.html" class="">Frameworks</a>
-<a href="gaps.html" class=" active">Gaps</a>
+<a href="gaps.html" class="">Gaps</a>
 <a href="playbooks.html" class="">Playbooks</a>
 <a href="copilot-vs-foundry.html" class="">CS vs Foundry</a>
 <a href="changelog.html" class="">Changelog</a>
 <a href="contact.html" class="">Contact</a>
-<a href="privacy.html" class="">Privacy</a>
-</div>
+<a href="privacy.html" class=" active">Privacy</a>
+  </div>
   <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
-
+  <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" class="substack-nav" style="flex-shrink:0;margin-left:10px;display:flex;align-items:center;gap:5px;background:var(--blue);color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:6px 13px;border-radius:6px;text-decoration:none;white-space:nowrap;letter-spacing:0.03em;">📬 Subscribe</a>
+</nav>
 <div class="mobile-drawer-overlay" id="drawerOverlay"></div>
 <div class="mobile-drawer" id="mobileDrawer">
 <a href="index.html" class="">Home</a>
@@ -337,246 +351,86 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="mcp.html" class="">MCP</a>
 <a href="threats.html" class="">Threats</a>
 <a href="frameworks.html" class="">Frameworks</a>
-<a href="gaps.html" class=" active">Gaps</a>
+<a href="gaps.html" class="">Gaps</a>
 <a href="playbooks.html" class="">Playbooks</a>
 <a href="copilot-vs-foundry.html" class="">CS vs Foundry</a>
 <a href="changelog.html" class="">Changelog</a>
 <a href="contact.html" class="">Contact</a>
-<a href="privacy.html" class="">Privacy</a>
+<a href="privacy.html" class=" active">Privacy</a>
 </div>
-  <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" class="substack-nav" style="flex-shrink:0;margin-left:10px;display:flex;align-items:center;gap:5px;background:var(--blue);color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:6px 13px;border-radius:6px;text-decoration:none;white-space:nowrap;letter-spacing:0.03em;">📬 Subscribe</a>
-</nav>
 <div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
-  📌 <strong>Author's note:</strong> This site synthesises the author's own understanding from publicly available Microsoft documentation, official Microsoft Security blog posts, RSAC 2026 announcements, and insights from Microsoft Security professionals and MVPs. It is independent and not affiliated with or endorsed by Microsoft. Microsoft updates products and documentation frequently — always verify current status directly with Microsoft before making architecture or purchasing decisions.
+  📌 <strong>Author's note:</strong> This site synthesises the author's own understanding from publicly available Microsoft documentation, official Microsoft Security blog posts, RSAC 2026 announcements, and insights from Microsoft Security professionals and MVPs. It is independent and not affiliated with or endorsed by Microsoft.
 </div>
+
 <div class="page">
 
-
 <div class="hero">
-  <div class="hero-badge"><div class="live-dot"></div>UPDATED · RSAC 2026 + FIELD RESEARCH · MARCH 2026</div>
-  <h1>Gaps, Limitations<br><span>& Roadmap</span></h1>
-  <p style="color:#2e3d5e;font-size:17px;font-weight:400;max-width:640px;line-height:1.7;">
-    Updated with RSAC 2026 GA announcements and field research findings. The Classic vs Modern agent distinction, maker credentials, and the AI Agent Inventory setup complexity are newly added gaps based on practitioner research.
+  <div class="hero-badge"><div class="live-dot"></div>PRIVACY · DATA · TRANSPARENCY</div>
+  <h1>Privacy<br><span>Policy</span></h1>
+  <p style="color:#2e3d5e;font-size:17px;font-weight:400;max-width:560px;line-height:1.7;">
+    A plain-English explanation of what this site collects, what it doesn't, and how your information is used.
   </p>
 </div>
 
-<div class="callout callout-green">
-  <div class="callout-title">✅ Resolved at RSAC 2026</div>
-  <p><strong>Security Dashboard for AI: Now GA.</strong> Entra Internet Access Shadow AI Detection and Prompt Injection Protection both GA March 31 2026. Purview DLP for M365 Copilot GA March 31 2026. Entra External MFA GA.</p>
+<div style="max-width:680px;">
+
+  <div class="section-label">Last updated: April 16, 2026</div>
+  <h2>The short version</h2>
+  <p>This site does not use cookies, does not track you across other sites, and does not sell your data. The only personal information collected is what you voluntarily submit via the contact form.</p>
+
+  <h2 style="margin-top:32px;">What we collect and why</h2>
+
+  <h3>1. Contact form submissions</h3>
+  <p>When you use the contact form on this site, your name and email address (if provided) are sent to and stored by <a href="https://formspree.io/legal/privacy-policy" target="_blank" style="color:var(--blue);">Formspree</a>, a third-party form processing service. This information is used solely to respond to your message. Email address is optional — if you don't provide one, we cannot reply to you.</p>
+  <p>Formspree stores submissions on servers in the United States. Their privacy policy is available at <a href="https://formspree.io/legal/privacy-policy" target="_blank" style="color:var(--blue);">formspree.io/legal/privacy-policy</a>.</p>
+  <p><strong>Retention:</strong> Form submissions are retained for as long as needed to respond, then deleted. You can request deletion by contacting us at <a href="mailto:shashankraina@yahoo.co.in" style="color:var(--blue);">shashankraina@yahoo.co.in</a>.</p>
+
+  <h3>2. Web analytics</h3>
+  <p>This site uses <strong>Cloudflare Web Analytics</strong>, which is privacy-focused by design. It does not use cookies, does not fingerprint users, does not track individuals across sessions, and does not share data with advertisers. It collects only aggregate, anonymised metrics — page views, referrer information, and approximate geographic region. No personal data is collected by the analytics system.</p>
+  <p>More information: <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" style="color:var(--blue);">cloudflare.com/privacypolicy</a></p>
+
+  <h3>3. AI chat widget</h3>
+  <p>The AI chat assistant on this site is password-protected and intended for internal use only. Messages sent via the chat are processed in real time by the <a href="https://www.anthropic.com/privacy" target="_blank" style="color:var(--blue);">Anthropic API</a> and are not stored by this site. Anthropic's data handling is governed by their privacy policy. Chat sessions are ephemeral — closing the browser tab clears the session entirely.</p>
+
+  <h3>4. Cookies</h3>
+  <p>This site does not set any cookies. No tracking cookies, no analytics cookies, no session cookies. Cloudflare may set technical cookies as part of its network infrastructure — these are necessary for site delivery and are not used for tracking. See <a href="https://www.cloudflare.com/cookie-policy/" target="_blank" style="color:var(--blue);">Cloudflare's cookie policy</a>.</p>
+
+  <h3>5. Newsletter (Substack)</h3>
+  <p>If you subscribe to updates via the Subscribe button, you are directed to <a href="https://substack.com/privacy" target="_blank" style="color:var(--blue);">Substack</a>, an independent platform. Substack handles all newsletter data under their own privacy policy. This site does not have access to your Substack subscriber information.</p>
+
+  <h2 style="margin-top:32px;">Your rights (GDPR)</h2>
+  <p>If you are in the European Economic Area, you have the right to access, correct, or delete any personal data held about you. The only personal data this site holds is contact form submissions (name and email, if provided). To exercise these rights, contact: <a href="mailto:shashankraina@yahoo.co.in" style="color:var(--blue);">shashankraina@yahoo.co.in</a></p>
+
+  <h2 style="margin-top:32px;">Third-party services used</h2>
+  <table>
+  <thead><tr><th>Service</th><th>Purpose</th><th>Data handled</th><th>Privacy policy</th></tr></thead>
+  <tbody>
+  <tr><td><strong>Cloudflare Pages</strong></td><td>Website hosting and delivery</td><td>IP addresses (anonymised), technical request data</td><td><a href="https://www.cloudflare.com/privacypolicy/" target="_blank" style="color:var(--blue);">cloudflare.com/privacypolicy</a></td></tr>
+  <tr><td><strong>Cloudflare Web Analytics</strong></td><td>Anonymous page view metrics</td><td>Aggregate, anonymised only — no personal data</td><td><a href="https://www.cloudflare.com/privacypolicy/" target="_blank" style="color:var(--blue);">cloudflare.com/privacypolicy</a></td></tr>
+  <tr><td><strong>Formspree</strong></td><td>Contact form processing</td><td>Name and email (when submitted)</td><td><a href="https://formspree.io/legal/privacy-policy" target="_blank" style="color:var(--blue);">formspree.io/legal</a></td></tr>
+  <tr><td><strong>Anthropic API</strong></td><td>AI chat responses</td><td>Chat messages (not stored by this site)</td><td><a href="https://www.anthropic.com/privacy" target="_blank" style="color:var(--blue);">anthropic.com/privacy</a></td></tr>
+  <tr><td><strong>Substack</strong></td><td>Newsletter subscriptions</td><td>Email (managed entirely by Substack)</td><td><a href="https://substack.com/privacy" target="_blank" style="color:var(--blue);">substack.com/privacy</a></td></tr>
+  </tbody>
+  </table>
+
+  <h2 style="margin-top:32px;">Contact</h2>
+  <p>Questions about this privacy policy: <a href="mailto:shashankraina@yahoo.co.in" style="color:var(--blue);">shashankraina@yahoo.co.in</a></p>
+  <p>This site is operated by Shashank Raina, an independent security architect. It is not affiliated with or endorsed by Microsoft Corporation.</p>
+
 </div>
 
-<div class="section-label">Critical Gaps</div>
-<h2>🔴 Critical — Active Now</h2>
-<table>
-<thead><tr><th>Gap</th><th>Why It Matters</th><th>Interim Mitigation</th><th>Expected Resolution</th></tr></thead>
-<tbody>
-<tr>
-  <td><strong>Classic Agents — no Entra security product coverage</strong></td>
-  <td>Most existing Copilot Studio agents in production are Classic Agents (Service Principals). They receive zero Entra Agent ID security product coverage: no ID Protection, no Conditional Access, no lifecycle governance. This gap is invisible from Microsoft's marketing materials. Field research confirms this is the default state of most enterprise Copilot Studio deployments.</td>
-  <td>Inventory Classic vs Modern agents via AIAgentsInfo KQL; enforce end-user auth per agent via Power Platform admin; restrict org-wide sharing; manually recreate critical agents as Modern Agents</td>
-  <td>Microsoft migration tool planned — no date confirmed. Manual recreation is the only current path.</td>
-</tr>
-<tr>
-  <td><strong>Maker credentials — agent authenticates as builder, not user</strong></td>
-  <td>Copilot Studio agents authenticate to connected services as the maker (builder), not the invoking user. Combined with org-wide sharing and no authentication, a single admin-built agent extends admin permissions to every employee. This is structurally more dangerous than OBO in Copilot Studio deployments.</td>
-  <td>Enforce end-user authentication per agent (Power Platform admin); restrict sharing scope via Managed Environments; PAM hygiene on developers who build agents</td>
-  <td>Architectural — requires Power Platform admin enforcement. Product default is unlikely to change.</td>
-</tr>
-<tr>
-  <td><strong>OBO — no true per-agent least privilege (non-Copilot Studio agents)</strong></td>
-  <td>Standard agents inherit invoking user's full token scope. Overprivileged users = overprivileged agents. No changes at RSAC 2026.</td>
-  <td>PAM hygiene on users; Foundry Guardrails for tool whitelisting; Entra Workload Identity for app-level scoping; Defender Predictive Shielding during active attacks (preview)</td>
-  <td>Dependent on Entra Agent ID GA — timeline unconfirmed</td>
-</tr>
-<tr>
-  <td><strong>Entra Agent ID — preview only, Modern Agents only</strong></td>
-  <td>The primary Entra security primitive for agents isn't GA. Even when it is, it will only protect Modern Agents — Classic Agent migration must happen first. Not announced as GA at RSAC 2026.</td>
-  <td>Entra Workload Identity as stopgap; manual agent inventory; Agent 365 for discovery (GA May 1 2026)</td>
-  <td>GA timeline not publicly committed; expected H2 2026. Migration tool needed before most orgs can benefit.</td>
-</tr>
-<tr>
-  <td><strong>Per-user licensing mismatch</strong></td>
-  <td>Agent 365 licenses per user, not per agent. Governance scope doesn't scale with agent proliferation. Not addressed at RSAC 2026.</td>
-  <td>Architect agent deployments to be user-anchored; track agent count separately</td>
-  <td>No per-agent tier announced</td>
-</tr>
-<tr>
-  <td><strong>OBO audit trail — user not agent identity</strong></td>
-  <td>Logs show user UPN (or service), not agent identity. In Copilot Studio with maker credentials, logs may show the service account — making the attacker invisible. Forensic attribution is fundamentally broken until Agent ID GA + Classic migration.</td>
-  <td>Purview AI Observability (data-access layer); Sentinel correlation; application-layer logging; AIAgentsInfo Advanced Hunting for agent-side context</td>
-  <td>Improves with Agent ID GA and Classic→Modern migration</td>
-</tr>
-</tbody>
-</table>
+<div class="page-nav"><a href="contact.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Contact</span></a></div>
 
-<div class="section-label">Significant Gaps</div>
-<table>
-<thead><tr><th>Gap</th><th>Interim Mitigation</th></tr></thead>
-<tbody>
-<tr>
-  <td><strong>Identity tool fragmentation — 5 identity + 4 network tools on average</strong><br>
-  <span style="font-size:11px;color:var(--text3);">Microsoft research (March 2026) found organisations manage an average of 5 identity solutions and 4 network access solutions, often from different vendors. Nearly half of security leaders report being overwhelmed by vendor sprawl — a figure increasing year over year. In this environment, deploying Microsoft's agent security stack (Entra Agent ID, CA for Agents, Defender, Purview) alongside existing non-Microsoft identity infrastructure creates integration complexity that slows policy propagation and creates coverage gaps between tools. Classic agents are invisible to Entra products regardless of other tools deployed.</span></td>
-  <td>Adopt the Microsoft Access Fabric model: consolidate identity and network access tooling where possible so policy changes propagate in near real time. At minimum, ensure Defender + Entra + Purview signals flow into a single Sentinel workspace. Audit which agents fall outside the Entra perimeter regardless of what other identity tools are in use.</td>
-</tr>
-</tbody>
-</table>
-
-<h2>🟡 Significant — Manageable with Controls</h2>
-<table>
-<thead><tr><th>Gap</th><th>Interim Mitigation</th></tr></thead>
-<tbody>
-<tr>
-  <td><strong>Orphaned Agent Identities &amp; Agent Users — not automatically detected</strong><br>
-  <span style="font-size:11px;color:var(--text3);">When a Blueprint is deleted, the Modern Agent Identities it created are not automatically removed. They remain with all permissions (Graph API, Azure RBAC, Entra roles) intact — but can no longer authenticate. Orphaned Agent Users appear as normal user accounts in the Entra portal with no flag or indicator. They may hold group memberships, licenses, and resource access with no accountable owner. Microsoft does not flag or surface these automatically. Detection requires cross-referencing Agent Identities against active Blueprint Principals via Graph API.</span></td>
-  <td>Run quarterly Graph API sweep to detect orphaned Agent Identities (Agent Identities whose Blueprint Principal no longer exists). Use PowerShell with AgentIdentity.Read.All scope — note Global Reader gets 403, requires Agent ID Administrator. Remove orphaned identities and revoke their permissions. See Identity page for detection scripts.</td>
-</tr>
-<tr>
-  <td><strong>Agent sprawl — no lifecycle enforcement by default</strong><br>
-  <span style="font-size:11px;color:var(--text3);">Microsoft formally defines agent sprawl as the uncontrolled expansion of agents without adequate visibility, management, or lifecycle controls. It manifests as shadow AI (agents created without IT oversight), abandoned agents (created for temporary purposes and never decommissioned), and over-privileged agents (permissions granted and never reviewed). Agent sprawl leads to increased security risk, compliance challenges, and incident response difficulty.</span></td>
-  <td>Implement Entra ID Governance lifecycle management for Modern Agents — assign sponsors, configure Access Reviews, use access packages for time-bound permissions. For Classic Agents, use AIAgentsInfo KQL to audit and track all published agents quarterly. Run Playbook 01 to detect ownerless and abandoned agents.</td>
-</tr>
-<tr>
-  <td><strong>Microsoft Managed Policies not widely known or deployed</strong><br>
-  <span style="font-size:11px;color:var(--text3);">Microsoft Managed Policies for agents provide automatic baseline CA policies that block high-risk agents — available through Conditional Access. Many organisations are unaware these exist or have not deployed them. Without them, high-risk agent identities have no automatic blocking controls.</span></td>
-  <td>Review Microsoft Managed Policies in Entra → Conditional Access → Microsoft-managed policies. Enable the agent risk baseline policy to automatically block agents flagged as high-risk by Identity Protection. Applies to Modern Agents only.</td>
-</tr>
-<tr>
-  <td><strong>Security Copilot custom agents — maker credentials risk with elevated blast radius</strong><br>
-  <span style="font-size:11px;color:var(--text3);">Custom and partner Security Copilot agents use "Connect with existing user account" — the configuring user's credentials are stored and used for every execution regardless of who triggers the agent. Security Copilot users are typically high-privilege accounts (Security Admin, SOC engineer, Global Admin). A custom agent built by a Global Admin silently extends admin-level access to Sentinel, Defender, Entra, and threat intelligence to every user who runs it. No CA for Agents, no Identity Protection coverage. Structurally identical to Copilot Studio maker credentials but with a larger attack surface.</span></td>
-  <td>Use a dedicated low-privilege service account specifically for configuring custom Security Copilot agents — not a personal admin account. Treat this account like a shared service identity: minimal permissions scoped to what the agent actually needs, monitored, no interactive use. Establish an approval gate before any custom Security Copilot agent reaches production. Audit existing custom agents and review the permissions of the accounts used to configure them.</td>
-</tr>
-<tr>
-  <td><strong>Any user can change another agent's authentication type</strong><br>
-  <span style="font-size:11px;color:var(--text3);">By design in Copilot Studio, any tenant user can change the authentication settings of an agent they did not create and do not own — including downgrading a published agent from authenticated to No Authentication. A single non-admin user can silently expose any published agent to anonymous access without the owner's knowledge. There is currently no platform-enforced owner-only restriction on auth type changes.</span></td>
-  <td>Deploy the change-detection Sentinel Analytics Rule (see Playbooks) to alert immediately when any agent is switched to No Authentication. Audit auth type changes regularly via the AIAgentsInfo table. Restrict who can access Copilot Studio environments via Managed Environments in Power Platform Admin Center.</td>
-</tr><br><span style="font-size:11px;color:var(--text3);">Agent 365, Security Dashboard for AI, and Entra Agent ID portal show different agent counts. Microsoft has confirmed this is a known issue. Security teams cannot rely on any single portal for a definitive agent inventory.</span></td>
-  <td>Cross-reference all three portals; use AIAgentsInfo Advanced Hunting table as the most granular source; treat any portal count as approximate until Microsoft resolves the consistency issue</td>
-</tr>
-<tr>
-  <td><strong>Purview triage agent 90-day re-auth requirement</strong><br><span style="font-size:11px;color:var(--text3);">Purview Security Copilot triage agents (DLP, IRM) run in the security context of the last user who saved the config. After 90 days, the agent stops running until config is manually re-saved. No automatic renewal.</span></td>
-  <td>Create a calendar reminder at 80 days post-config to re-save. Consider assigning a shared service account as the config owner to avoid disruption if the original user departs.</td>
-</tr>
-<tr>
-  <td><strong>SharePoint oversharing — silent Copilot data exposure vector</strong><br>
-  <span style="font-size:11px;color:var(--text3);">M365 Copilot grounds responses in data the user has permission to access. Sites shared with Everyone Except External Users (EEEU), broken permission inheritance, anonymous sharing links, and ownerless sites all become Copilot exposure vectors — Copilot will surface content from these sites in responses to any user with access. Most organisations have significant oversharing debt that predates Copilot deployment. This is a data risk distinct from agent identity risks — it exists even in well-governed Classic/Modern agent environments.</span></td>
-  <td>Run SharePoint Advanced Management (SAM) Content Management Assessment to identify high-risk sites. Apply Restricted Content Discovery (RCD) immediately to exclude sensitive sites from Copilot grounding while remediation is underway. Then remediate: remove EEEU access, fix broken inheritance, assign site owners, restrict sharing links. Use DSPM for AI Data Risk Assessments to continuously monitor. See <a href="https://learn.microsoft.com/en-us/microsoft-365/copilot/configure-secure-governed-data-foundation-microsoft-365-copilot" target="_blank" style="color:var(--blue);">Microsoft's three-step blueprint</a>.</td>
-</tr>
-<tr>
-  <td><strong>Real-time agent tool protection — Agent Tooling Gateway (ATG)</strong><br>
-  <span style="font-size:11px;color:var(--text3);">Agents onboarded via Agent 365's Agent Tooling Gateway (ATG) now get real-time protection equivalent to the existing Copilot Studio Defender RT integration — tool actions evaluated and blocked before execution. However, this only applies to agents explicitly onboarded via ATG. Custom agents, Classic Copilot Studio agents, and any agent not registered with Agent 365 receive no ATG protection. Coverage depends on adoption of Agent 365 SDK or ATG integration by the agent builder.</span></td>
-  <td>Ensure new custom agent builds onboard via Agent 365 SDK to receive ATG real-time protection. Classic Copilot Studio agents remain outside this coverage. Treat ATG as the enforcement path for Agent 365-registered agents going forward.</td>
-</tr>
-<tr>
-  <td><strong>DLP label-blocking previously limited to SharePoint/OneDrive — now being fixed</strong><br>
-  <span style="font-size:11px;color:var(--text3);">Until April 2026, Purview DLP label-blocking for Copilot only applied to files stored in SharePoint or OneDrive. Files on local devices, network shares, and non-Microsoft cloud locations were not covered — Copilot could process sensitivity-labelled confidential files from these locations despite active DLP policies. This was confirmed in practice by incident CW1226324 (January 2026), in which Copilot accessed confidential emails in Outlook Drafts and Sent Items for approximately one month. Resolution: rolling out mid-April to May 2026, DLP label-blocking now applies to Word, Excel, and PowerPoint files regardless of storage location. No policy changes required — existing rules apply automatically.</span></td>
-  <td><span style="color:var(--green2);font-weight:600;">✓ Resolving April–May 2026 rollout</span> — verify rollout has reached your tenant before treating as closed. Ensure sensitivity labels are applied to files requiring protection — unlabelled files remain unblocked regardless of DLP policies. Deploy auto-labelling policies via Purview Information Protection to cover unlabelled content at scale.</td>
-</tr>
-<tr>
-  <td><strong>DLP coverage gap — unmanaged devices without Edge for Business</strong><br>
-  <span style="font-size:11px;color:var(--text3);">Browser-layer DLP (Edge for Business inline protection) only activates where users are signed into their Edge for Business profile. Users on unmanaged devices using Chrome, Firefox, or Safari to access external GenAI tools have no browser-layer DLP coverage. Network Data Security (Global Secure Access) fills this gap but is still in preview. Organisations have a residual exposure window for BYOD users on non-Edge browsers.</span></td>
-  <td>Prioritise Edge for Business rollout as an immediate mitigation. Enable Network Data Security (Global Secure Access preview) for broader device coverage. Communicate acceptable use policy for GenAI apps on personal devices pending GA.</td>
-</tr>
-<tr><td><strong>AI Agent Inventory — complex setup requiring two admins</strong><br><span style="font-size:11px;color:var(--text3);">Setup requires collaboration between Defender admin (enable 3 preview features) AND Power Platform admin (enable separate threat detection toggle). Takes up to 30 min for connection, longer for data population. Not self-service.</span></td><td>Assign a joint Defender + Power Platform admin workstream for onboarding. Verify via AIAgentsInfo KQL after setup. Plan for 30-minute minimum delay on initial data.</td></tr>
-<tr><td><strong>Agent name sync bug — Copilot Studio rename not reflected in Entra Agent ID</strong><br><span style="font-size:11px;color:var(--text3);">Agents renamed in Copilot Studio keep their original "Agent #" name in Entra. Makes per-agent CA policy management nearly impossible at scale.</span></td><td>Use Agent ID object-ID (not name) as primary key for agent identification. Cross-reference via PowerShell script against Power Platform Admin Environment URL. Monitor for Microsoft fix — no timeline confirmed.</td></tr>
-<tr><td><strong>No MCP server authentication standard</strong> — MCP spec doesn't mandate cryptographic server binding</td><td>Defender for Cloud Apps MCP server registry + anomaly detection; network segmentation; Foundry Guardrails tool whitelist (Foundry agents only); Sentinel MCP Entity Analyzer (GA April) for investigation</td></tr>
-<tr><td><strong>Foundry Guardrails in preview, Foundry agents only</strong> — no equivalent control for Copilot Studio agents</td><td>Power Platform admin controls for Copilot Studio agents (authentication enforcement, sharing limits); Defender for Cloud Apps for API-layer controls</td></tr>
-<tr><td><strong>CopilotActivity table prompt sensitivity + ingestion cost</strong><br><span style="font-size:11px;color:var(--text3);">The Copilot Data Connector for Sentinel ingests prompt content into the CopilotActivity table — making user prompts a sensitive artifact inside the SIEM. Standard ingestion costs apply (pay-per-GB). Organisations must apply field-level masking, retention policies, and access controls on the table before enabling in production.</span></td><td>Enable in a controlled test workspace first. Apply field-level masking on prompt content fields. Set short retention for sensitive fields. Restrict CopilotActivity table access to SOC personnel only. Plan and budget for ingestion volume before enabling at scale.</td></tr>
-<tr><td><strong>Defender for Cloud Apps RT protection — 1-second timeout</strong><br><span style="font-size:11px;color:var(--text3);">If the Defender system doesn't return a block decision within 1 second, the agent proceeds to execute the tool anyway. Fast tool calls may bypass protection.</span></td><td>Ensure network latency between Copilot Studio environment and Defender is minimised. Treat as a detection tool, not a guaranteed prevention control.</td></tr>
-<tr><td><strong>ZT Assessment AI pillar not until summer 2026</strong></td><td>Use existing ZT Workshop assessment for Identity/Data/Network pillars; manually assess against ZT for AI reference architecture (published March 2026)</td></tr>
-<tr><td><strong>No built-in platform kill switch — open-source option now available</strong><br><span style="font-size:11px;color:var(--text3);">Microsoft has no single-click kill switch for all agent types. The Agent Governance Toolkit (open-source, MIT, April 2026) provides an automated kill switch with ring isolation and trust decay via Agent Runtime package. For platform controls: Entra CA for Modern Agents, Power Platform admin can disable Classic agents, Defender Predictive Shielding (preview).</span></td><td>Adopt Agent Governance Toolkit for programmatic kill switch capability. Pre-plan incident response runbook for agent compromise scenarios. Entra CA for Modern Agents provides policy-based blocking. Power Platform admin can disable Classic agents manually. See <a href="playbooks.html#playbook4" style="color:var(--blue);">Playbook 04</a> for incident response.</td></tr>
-<tr><td><strong>Cross-user context contamination in shared agents</strong></td><td>Architecture control: enforce session isolation in agent design; no native Microsoft platform control</td></tr>
-<tr><td><strong>Org-wide sharing default enables blast radius</strong></td><td>Power Platform Managed Environments: set sharing limits; require end-user auth; AIAgentsInfo KQL to detect widely-shared no-auth agents</td></tr>
-</tbody>
-</table>
-
-<div class="section-label">KQL Detection Queries</div>
-<h2>🔍 Key Advanced Hunting Queries (AIAgentsInfo table)</h2>
-<p>These queries require the AI Agent Inventory to be enabled in Defender for Cloud Apps (requires Defender admin + Power Platform admin collaboration).</p>
-<div class="card-grid">
-  <a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/configuration-end-user-authentication" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.2);">
-    <div class="card-name">No-Auth Agents</div>
-    <div class="card-desc">Finds agents accessible without user authentication — highest blast radius risk combined with maker credentials.</div>
-    <div style="background:var(--surface3);border-radius:6px;padding:10px 12px;margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--blue2);line-height:1.7;">AIAgentsInfo<br>| summarize arg_max(Timestamp, *) by AIAgentId<br>| where UserAuthenticationType == "None"<br>| project AgentCreationTime, AIAgentName,<br>&nbsp;&nbsp;AIAgentId, AgentStatus, CreatorAccountUpn</div>
-  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
-  <a href="https://learn.microsoft.com/en-us/defender-cloud-apps/ai-agent-inventory" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.2);">
-    <div class="card-name">Ownerless Published Agents</div>
-    <div class="card-desc">Finds published agents with no accountable owner — governance blind spots that can persist indefinitely.</div>
-    <div style="background:var(--surface3);border-radius:6px;padding:10px 12px;margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--blue2);line-height:1.7;">AIAgentsInfo<br>| where AgentStatus == "Published"<br>| where isempty(OwnerAccountUpns)<br>| project AgentCreationTime, AIAgentName,<br>&nbsp;&nbsp;AIAgentId, AgentStatus, CreatorAccountUpn</div>
-  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
-</div>
-
-<div class="section-label">Roadmap</div>
-<h2>📅 What to Watch</h2>
-<div class="pill-list">
-  <div class="pill"><div class="pill-dot" style="background:var(--green2);"></div>Security Dashboard for AI — <strong>Now GA</strong></div>
-  <div class="pill"><div class="pill-dot" style="background:var(--green2);"></div>Entra Internet Access Shadow AI + Prompt Injection — GA March 31 2026</div>
-  <div class="pill"><div class="pill-dot" style="background:var(--green2);"></div>Purview DLP for M365 Copilot — GA March 31 2026</div>
-  <div class="pill"><div class="pill-dot" style="background:var(--green2);"></div>Entra External MFA — Now GA</div>
-  <div class="pill"><div class="pill-dot" style="background:var(--blue2);"></div>Sentinel MCP Entity Analyzer — GA April 2026</div>
-  <div class="pill"><div class="pill-dot" style="background:var(--blue2);"></div>Security Analyst Agent — Preview March 26 2026</div>
-  <div class="pill"><div class="pill-dot" style="background:var(--blue2);"></div>Purview in Copilot Control System — GA April</div>
-  <div class="pill"><div class="pill-dot" style="background:var(--caution-text);"></div>Agent 365 + M365 E7 — GA May 1 2026, 2026</div>
-  <div class="pill"><div class="pill-dot" style="background:var(--caution-text);"></div>ZT Assessment AI Pillar — Summer 2026</div>
-  <div class="pill"><div class="pill-dot" style="background:var(--warn-text);"></div>Entra Agent ID GA — unconfirmed; H2 2026 expected</div>
-  <div class="pill"><div class="pill-dot" style="background:var(--warn-text);"></div>Classic → Modern Agent migration tool — no date confirmed</div>
-  <div class="pill"><div class="pill-dot" style="background:var(--warn-text);"></div">Agent name sync fix (Copilot Studio ↔ Entra) — no date confirmed</div>
-  <div class="pill"><div class="pill-dot" style="background:var(--purple2);"></div>MCP spec authentication standard — open-source community</div>
-</div>
-
-<div class="callout callout-green" style="margin-top:28px;">
-  <div class="callout-title">✅ Where the Stack Is Genuinely Strong Today</div>
-  <p>Production-ready GA controls: Prompt Shields, Azure AI Content Safety, Defender for Cloud Apps (OAuth + SaaS governance + Copilot Studio RT protection), Purview Information Protection, Sentinel, Entra Conditional Access, Security Dashboard for AI (now GA), Entra Internet Access Shadow AI and Prompt Injection Protection (GA March 31 2026), Purview DLP for Copilot (GA March 31 2026), Power Platform Managed Environments (sharing limits + auth enforcement). A well-architected deployment combining these controls with Modern Agent migration provides meaningful defence in depth — but the Classic Agent estate must be addressed first.</p>
-</div>
-
-<div class="section-label">Full Availability Matrix</div>
-<h2>Control Availability — Updated March 2026</h2>
-<table>
-<thead><tr><th>Control</th><th>Product</th><th>Status</th><th>Applies To</th><th>Key Caveat</th></tr></thead>
-<tbody>
-<tr><td><strong>Agent 365 Control Plane</strong></td><td>Agent 365</td><td><span class="caution-inline">GA May 1 2026</span></td><td>All agents</td><td>Per-user, not per-agent licensing</td></tr>
-<tr><td><strong>Security Dashboard for AI</strong></td><td>Defender/Entra/Purview</td><td><span class="green-inline">✓ Now GA</span></td><td>All agents + third-party AI</td><td>Previously preview</td></tr>
-<tr><td><strong>AI Agent Inventory (Defender)</strong></td><td>Defender for Cloud Apps</td><td><span class="caution-inline">Preview</span></td><td>Copilot Studio agents only</td><td>Requires Defender admin + Power Platform admin collaboration; complex setup; 30min+ data delay</td></tr>
-<tr><td><strong>Entra Agent ID</strong></td><td>Entra</td><td><span class="warn-inline">Preview · Frontier only</span></td><td>Modern Agents only</td><td>Classic Agents require migration first; OBO still underlying</td></tr>
-<tr><td><strong>ID Protection for Agents</strong></td><td>Entra</td><td><span class="warn-inline">Preview</span></td><td>Modern Agents only</td><td>Classic Agents not covered</td></tr>
-<tr><td><strong>Conditional Access for Agents</strong></td><td>Entra</td><td><span class="green-inline">GA</span></td><td>Modern Agents only</td><td>Classic Agents cannot be targeted; name sync bug complicates policy management</td></tr>
-<tr><td><strong>Entra Workload Identity</strong></td><td>Entra</td><td><span class="green-inline">GA</span></td><td>App-level (not per-agent)</td><td>Stopgap — not purpose-scoped for agent-instances</td></tr>
-<tr><td><strong>Entra External MFA</strong></td><td>Entra</td><td><span class="green-inline">✓ Now GA</span></td><td>All users + agents</td><td>New at RSAC 2026</td></tr>
-<tr><td><strong>Entra Backup and Recovery</strong></td><td>Entra</td><td><span class="caution-inline">Preview · RSAC 2026</span></td><td>Entra directory objects</td><td>New capability</td></tr>
-<tr><td><strong>Entra Tenant Governance</strong></td><td>Entra</td><td><span class="caution-inline">Preview · RSAC 2026</span></td><td>Multi-tenant</td><td>Shadow tenant discovery</td></tr>
-<tr><td><strong>Entra Internet Access — Shadow AI</strong></td><td>Entra Suite</td><td><span class="green-inline">GA March 31 2026</span></td><td>Network-wide</td><td>—</td></tr>
-<tr><td><strong>Entra Internet Access — Prompt Injection</strong></td><td>Entra Suite</td><td><span class="green-inline">GA March 31 2026</span></td><td>Network-wide</td><td>Complements Prompt Shields; not a replacement</td></tr>
-<tr><td><strong>Power Platform Managed Environments</strong></td><td>Power Platform</td><td><span class="green-inline">GA</span></td><td>Copilot Studio agents</td><td>Primary control for maker creds + org-wide sharing risk</td></tr>
-<tr><td><strong>Prompt Shields</strong></td><td>Azure AI / Foundry</td><td><span class="green-inline">GA</span></td><td>Foundry agents, SDK</td><td>Must be explicitly enabled per agent; not auto-applied</td></tr>
-<tr><td><strong>Azure AI Content Safety</strong></td><td>Azure AI</td><td><span class="green-inline">GA</span></td><td>Model boundary</td><td>Separate from Prompt Shields</td></tr>
-<tr><td><strong>Defender for Cloud Apps RT Protection</strong></td><td>Defender for Cloud Apps</td><td><span class="caution-inline">Preview</span></td><td>Copilot Studio agents only</td><td>1-second timeout — fast tool calls may bypass; complex setup</td></tr>
-<tr><td><strong>Defender Predictive Shielding</strong></td><td>Defender</td><td><span class="caution-inline">Preview · RSAC 2026</span></td><td>All identities</td><td>Reactive during active attacks</td></tr>
-<tr><td><strong>Foundry Guardrails</strong></td><td>Microsoft Foundry</td><td><span class="caution-inline">Preview</span></td><td>Foundry agents only</td><td>No equivalent for Copilot Studio agents</td></tr>
-<tr><td><strong>Defender for Cloud Apps (CASB)</strong></td><td>Defender</td><td><span class="green-inline">GA</span></td><td>All MCP-SaaS connections</td><td>Primary MCP boundary control</td></tr>
-<tr><td><strong>Microsoft Sentinel</strong></td><td>Sentinel</td><td><span class="green-inline">GA</span></td><td>All</td><td>MCP Entity Analyzer GA April; Data Federation preview</td></tr>
-<tr><td><strong>Purview DSPM for AI</strong></td><td>Purview</td><td><span class="caution-inline">Preview</span></td><td>AI workloads</td><td>—</td></tr>
-<tr><td><strong>Purview DLP for M365 Copilot</strong></td><td>Purview</td><td><span class="green-inline">GA March 31 2026</span></td><td>M365 Copilot prompts</td><td>New at RSAC 2026</td></tr>
-<tr><td><strong>Purview DLP — SIT Prompt Blocking</strong></td><td>Purview</td><td><span class="caution-inline">Preview · GA June/July 2026</span></td><td>M365 Copilot, Copilot Chat, Word/Excel/PPT</td><td>No response when triggered (does not fall back to Graph). Files uploaded to prompts not scanned. Two conditions can't be in same rule.</td></tr>
-<tr><td><strong>Purview Information Protection</strong></td><td>Purview</td><td><span class="green-inline">GA</span></td><td>All AI workflows</td><td>—</td></tr>
-<tr><td><strong>Security Copilot</strong></td><td>Security Copilot</td><td><span class="green-inline">GA · Included E5 + E7</span></td><td>SOC workflows</td><td>400 SCU/1K users/mo (E5); 15+ partner agents</td></tr>
-<tr><td><strong>Security Analyst Agent</strong></td><td>Defender / Security Copilot</td><td><span class="caution-inline">Preview March 26 2026</span></td><td>Defender investigations</td><td>New at RSAC 2026</td></tr>
-<tr><td><strong>Security Alert Triage Agent</strong></td><td>Defender / Security Copilot</td><td><span class="caution-inline">Preview Apr 2026il</span></td><td>Cloud + identity alerts</td><td>New at RSAC 2026</td></tr>
-</tbody>
-</table>
-
-
-<div class="page-nav"><a href="frameworks.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Frameworks</span></a><a href="playbooks.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Playbooks</span></a></div>
 <div style="text-align:center;margin:32px 0 0;padding:24px 0;border-top:1px solid var(--border2);">
   <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text3);margin-bottom:10px;">STAY UPDATED</div>
   <div style="font-size:15px;font-weight:700;color:#0d1526;margin-bottom:6px;">Get notified when Microsoft AI security changes</div>
   <div style="font-size:13px;color:#2e3d5e;margin-bottom:14px;">Monthly updates on new controls, GA announcements, and critical gaps — direct to your inbox.</div>
-  <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#ffffff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;padding:12px 24px;border-radius:8px;text-decoration:none;transition:opacity 0.15s;" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">
-    Subscribe to updates →
-  </a>
+  <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#ffffff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;padding:12px 24px;border-radius:8px;text-decoration:none;">Subscribe to updates →</a>
   <div style="font-size:11px;color:var(--text3);margin-top:10px;font-family:'JetBrains Mono',monospace;">aiagentsecurity.substack.com · Free · No spam</div>
 </div>
+
 <div class="footer">
-  SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  Last updated: April 16, 2026 · Analysis covers publicly announced Microsoft security capabilities only
+  Last updated: April 16, 2026
 </div>
 </div>
 
@@ -605,9 +459,6 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 });
 </script>
-
-
-
 
 <!-- AI CHAT WIDGET -->
 <style>

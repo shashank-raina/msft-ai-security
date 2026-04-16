@@ -1,6 +1,6 @@
 // =============================================================================
 // SYSTEM PROMPT — UPDATE THIS SECTION WHEN SITE CONTENT CHANGES
-// Last updated: April 13, 2026 (2)
+// Last updated: April 16, 2026 (3)
 // =============================================================================
 
 const SYSTEM_PROMPT = `\
@@ -172,7 +172,14 @@ IDENTITY:
                                Prompt Injection Protection: ✅ GA March 31
 
 DATA SECURITY:
-  DLP for M365 Copilot         Label blocking: ✅ GA March 31
+  DLP for M365 Copilot         Label blocking: ✅ GA · all storage locations rolling out April-May 2026
+  (policy layer)               PREVIOUSLY: only applied to SharePoint/OneDrive files
+                               NOW: Word/Excel/PowerPoint regardless of storage location
+                               (local device, network shares, non-Microsoft cloud)
+                               No policy changes needed — existing rules apply automatically
+                               Incident CW1226324 (Jan 2026): Copilot accessed confidential
+                               Outlook Drafts/Sent Items despite DLP labels for ~1 month
+                               Root cause: AugLoop used SharePoint/OneDrive URLs for labels
                                SIT prompt blocking: Preview → GA June/July 2026
   Browser-layer DLP            ✅ GA · Edge for Business · typed prompt inspection
   (Edge for Business)          Works on BYOD if signed into Edge for Business profile
@@ -248,6 +255,51 @@ Graph API — ownerless Modern agents (needs Agent ID Administrator, NOT Global 
 10. Foundry: nothing logged by default, Diagnostic Settings don't cascade
 11. Agent name sync bug: Copilot Studio rename doesn't update Entra Agent ID name
 12. Identity fragmentation: avg 5 identity + 4 network tools per org
+
+// ── THREAT SCENARIO 8 — COPILOT BACKGROUND INDEXING ─────────────────────────────
+
+Real-world incident CW1226324 (January 2026):
+- Copilot Chat "Work" tab indexed Outlook Drafts and Sent Items in background
+- Emails had active Confidential sensitivity labels + DLP policies to block Copilot
+- Code issue caused AugLoop to skip label checks for these folders
+- Copilot summarised confidential emails for ~1 month with no alerts
+- Root cause: DLP enforcement relied on SharePoint/OneDrive URLs — folders outside
+  those locations had no label check
+- Fix: deployed February 2026 + DLP expanded to all storage locations April-May 2026
+- Structural lesson: AI indexes content autonomously; DLP was designed for user actions
+
+// ── AGENT 365 + DEFENDER INTEGRATION (April 2026) ────────────────────────────────
+
+AIAgentsInfo RegistrySource COLUMN:
+  "A365"          = Agent 365 registered agents
+  "PowerPlatform" = Copilot Studio agents (via Power Platform connector)
+  Use this filter to target the right population in KQL queries
+
+NEW A365 KQL QUERIES (Playbook 01 Step 8):
+  8a: All A365 agents — RegistrySource=="A365" | summarize arg_max | project...
+  8b: No instructions (prompt injection risk) — empty Instructions field
+  8c: MCP tools configured — ActionType == "RemoteMCPServer"
+  8d: Non-HTTPS endpoints — Scheme != "https"
+
+AGENT TOOLING GATEWAY (ATG):
+  Blocks: credential exfiltration, data leakage via tool calls, routing to malicious
+          destinations, obfuscated content manipulation, internal tool misuse
+  CRITICAL LIMITATION: Only operates on tool execution path
+  Does NOT inspect raw model prompts or model reasoning between tool calls
+  If agent acts suspiciously in reasoning loop without calling tools — ATG won't catch it
+
+CAPABILITY MATRIX (coverage depth by agent type):
+  Copilot Studio          = deepest (audit logs by default, extended alert set, RTP)
+  Agent 365 SDK agents    = near-real-time detection + ATG protection
+  Foundry/Bedrock/Vertex  = UI inventory + posture assessment (less detection depth)
+  Custom agents (no SDK)  = KQL discovery only if registered with Agent 365
+
+AGENT 365 IS PLATFORM-AGNOSTIC:
+  Works with: Copilot Studio, Foundry, Microsoft Agent Framework,
+              OpenAI Agents SDK, Claude Code SDK, LangChain SDK
+  Hosted on: Azure, AWS, GCP, or own infrastructure — any
+
+PORTAL DIRECT URL: security.microsoft.com/securitysettings/security_for_ai
 
 // ── FIVE PLAYBOOKS ────────────────────────────────────────────────────────────
 
@@ -339,6 +391,14 @@ pip install agent-governance-toolkit
   Agent Compliance  — OWASP Top 10, EU AI Act, HIPAA, SOC2
   Agent Marketplace — plugin signing
   Agent Lightning   — RL training governance
+
+// ── DEFENDER PORTAL — SECURITY FOR AI (NEW LOCATION) ────────────────────────────
+
+NEW PATH (rolling out April 2026): Settings → Security for AI
+OLD PATH (still works if new not visible): Settings → Cloud Apps → AI Agents
+Covers: Copilot Studio, Foundry, Agent 365, M365
+Detects: suspicious behaviour, prompt injection, data leakage, misconfigurations
+Status: Preview · rolling out to some tenants
 
 // ── SITE NAVIGATION ───────────────────────────────────────────────────────────
 

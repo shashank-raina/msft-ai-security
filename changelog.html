@@ -323,6 +323,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="copilot-vs-foundry.html" class="">CS vs Foundry</a>
 <a href="changelog.html" class=" active">Changelog</a>
 <a href="contact.html" class="">Contact</a>
+<a href="privacy.html" class="">Privacy</a>
 </div>
   <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
 
@@ -341,6 +342,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="copilot-vs-foundry.html" class="">CS vs Foundry</a>
 <a href="changelog.html" class=" active">Changelog</a>
 <a href="contact.html" class="">Contact</a>
+<a href="privacy.html" class="">Privacy</a>
 </div>
   <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" class="substack-nav" style="flex-shrink:0;margin-left:10px;display:flex;align-items:center;gap:5px;background:var(--blue);color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:6px 13px;border-radius:6px;text-decoration:none;white-space:nowrap;letter-spacing:0.03em;">📬 Subscribe</a>
 </nav>
@@ -381,6 +383,114 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 
 
+
+
+
+
+
+<div class="section-label" style="margin-top:40px;">APRIL 16, 2026 (3)</div>
+<h2>RegistrySource Column · A365 KQL Queries · ATG Detail + Limitation · Capability Matrix</h2>
+
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>RegistrySource column documented</strong> — new AIAgentsInfo column distinguishing agent source: "A365" (Agent 365 registered) vs "PowerPlatform" (Copilot Studio). Added to identity and playbooks pages with guidance on when to use each filter.</td>
+<td>identity.html, playbooks.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Four new A365 KQL queries in Playbook 01 Step 8</strong> — all A365 agents, published agents with no instructions (prompt injection risk), agents with MCP tools (expanded attack surface), agents using non-HTTPS endpoints. All use RegistrySource == "A365" filter. Direct portal URL added: security.microsoft.com/securitysettings/security_for_ai</td>
+<td>playbooks.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 Updated</span></td>
+<td><strong>ATG blocks specific categories documented</strong> — credential exfiltration, data leakage via tool calls, routing to malicious destinations, obfuscated content manipulation. Critical limitation added: ATG only operates on tool execution path — does NOT inspect model reasoning between tool calls.</td>
+<td>product-map.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Capability matrix documented</strong> — different coverage depth by agent type: Copilot Studio (deepest), Agent 365 SDK agents (near-real-time detection + ATG), Foundry/Bedrock/Vertex AI (UI inventory + posture, less depth). Agent 365 platform-agnostic nature documented — works with OpenAI Agents SDK, Claude Code SDK, LangChain SDK, AWS/GCP-hosted agents.</td>
+<td>product-map.html</td></tr>
+
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Source</div>
+  <p><a href="https://learn.cloudpartner.fi/posts/defender-security-for-ai-agents-agent365" target="_blank" style="color:var(--blue);">Cloudpartner.fi — Microsoft Defender Now Covers Your AI Agents: What the Agent365 Integration Does (April 16, 2026)</a></p>
+</div>
+
+<div class="section-label" style="margin-top:40px;">APRIL 16, 2026 (2)</div>
+<h2>Agent 365 + Defender Integration · AIAgentsInfo Expanded · Agent Tooling Gateway</h2>
+
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag blue">🆕 Updated</span></td>
+<td><strong>AIAgentsInfo table expanded beyond Copilot Studio</strong> — now includes additional columns covering Microsoft Foundry agents, 3rd-party marketplace agents, and custom LOB agents — where registered with Agent 365 or using the Agent 365 SDK. Previously documented as Copilot Studio only. KQL guidance updated across playbooks and identity pages.</td>
+<td>product-map.html, playbooks.html, identity.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Agent Tooling Gateway (ATG)</strong> — Agent 365 concept. Agents onboarded via ATG get real-time protection from Defender — tool actions evaluated and blocked before execution. Equivalent to existing Copilot Studio Defender RT protection but for the Agent 365 ecosystem. Added as a significant gap: coverage depends on explicit ATG onboarding by the agent builder.</td>
+<td>product-map.html, gaps.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Agent 365 SDK integration with Defender</strong> — agents built with the Agent 365 SDK get near-real-time detections, alerts, and Advanced Hunting coverage automatically. Defender now explicitly discovers agents registered with Agent 365.</td>
+<td>product-map.html</td></tr>
+
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Sources</div>
+  <p>LinkedIn post from Microsoft Defender team · Microsoft Learn: Discover AI agents and assess security posture using Microsoft Defender (Preview) · Detect, block, and investigate threats to AI agents using Microsoft Defender (Preview)</p>
+</div>
+
+<div class="section-label" style="margin-top:40px;">APRIL 16, 2026</div>
+<h2>Security for AI — New Home in Defender Portal</h2>
+
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag warn">⚠️ Navigation change</span></td>
+<td><strong>Security for AI agents moved to new location in Defender portal</strong> — previously accessed via Settings → Cloud Apps → AI Agents. Now: Settings → Security for AI. Currently rolling out to some tenants (preview). All playbook navigation paths updated. Feature now covers runtime monitoring for Copilot Studio, Microsoft Foundry, Agent 365, and Microsoft 365 (not just Copilot Studio). Detects suspicious behaviour, prompt injection, data leakage, and misconfigurations.</td>
+<td>playbooks.html, product-map.html, copilot-vs-foundry.html</td></tr>
+
+</tbody>
+</table>
+
+<div class="callout callout-warn" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">⚠️ If you can't find the new path</div>
+  <p>The move to Settings → Security for AI is rolling out gradually. If your tenant hasn't received it yet, the old path (Settings → Cloud Apps → AI Agents) still works. Check back in coming weeks if the new path isn't visible.</p>
+</div>
+
+<div class="section-label" style="margin-top:40px;">APRIL 15, 2026</div>
+<h2>DLP All Storage Locations · Copilot Background Indexing Threat Scenario</h2>
+
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag blue">🆕 Updated</span></td>
+<td><strong>DLP for M365 Copilot — all storage locations</strong> — previously, label-blocking only applied to SharePoint and OneDrive. Rolling out mid-April to May 2026: DLP label-blocking now applies to Word, Excel, and PowerPoint files regardless of where they are stored (local device, network shares, non-Microsoft cloud). No policy changes needed. Existing rules apply automatically. Triggered by incident CW1226324 (January 2026).</td>
+<td>product-map.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New scenario</span></td>
+<td><strong>Threat Scenario 8 — Copilot Background Indexing Bypasses DLP Labels</strong> — new threat scenario documenting the real-world CW1226324 incident. Copilot indexed confidential emails in Outlook Drafts/Sent Items for ~1 month despite active DLP labels. Root cause: AugLoop relied on SharePoint/OneDrive URLs for label retrieval — folders outside those locations had no check. Includes structural lesson and current controls.</td>
+<td>threats.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New gap</span></td>
+<td><strong>DLP storage location gap added to gaps register</strong> — noted as resolving April–May 2026, with caveat that unlabelled files remain unblocked regardless of policies.</td>
+<td>gaps.html</td></tr>
+
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Sources</div>
+  <p>Microsoft 365 Message Center — MC1234661 · <a href="https://www.bleepingcomputer.com/news/microsoft/microsoft-adds-copilot-data-controls-to-all-storage-locations/" target="_blank" style="color:var(--blue);">BleepingComputer — Microsoft adds Copilot data controls to all storage locations (Feb 2026)</a></p>
+</div>
 
 <div class="section-label" style="margin-top:40px;">APRIL 13, 2026 (2)</div>
 <h2>SharePoint Advanced Management · Oversharing Risk · IRM Adaptive Protection · Compliance Manager</h2>
@@ -480,6 +590,114 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 
 
+
+
+
+
+
+<div class="section-label" style="margin-top:40px;">APRIL 16, 2026 (3)</div>
+<h2>RegistrySource Column · A365 KQL Queries · ATG Detail + Limitation · Capability Matrix</h2>
+
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>RegistrySource column documented</strong> — new AIAgentsInfo column distinguishing agent source: "A365" (Agent 365 registered) vs "PowerPlatform" (Copilot Studio). Added to identity and playbooks pages with guidance on when to use each filter.</td>
+<td>identity.html, playbooks.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Four new A365 KQL queries in Playbook 01 Step 8</strong> — all A365 agents, published agents with no instructions (prompt injection risk), agents with MCP tools (expanded attack surface), agents using non-HTTPS endpoints. All use RegistrySource == "A365" filter. Direct portal URL added: security.microsoft.com/securitysettings/security_for_ai</td>
+<td>playbooks.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 Updated</span></td>
+<td><strong>ATG blocks specific categories documented</strong> — credential exfiltration, data leakage via tool calls, routing to malicious destinations, obfuscated content manipulation. Critical limitation added: ATG only operates on tool execution path — does NOT inspect model reasoning between tool calls.</td>
+<td>product-map.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Capability matrix documented</strong> — different coverage depth by agent type: Copilot Studio (deepest), Agent 365 SDK agents (near-real-time detection + ATG), Foundry/Bedrock/Vertex AI (UI inventory + posture, less depth). Agent 365 platform-agnostic nature documented — works with OpenAI Agents SDK, Claude Code SDK, LangChain SDK, AWS/GCP-hosted agents.</td>
+<td>product-map.html</td></tr>
+
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Source</div>
+  <p><a href="https://learn.cloudpartner.fi/posts/defender-security-for-ai-agents-agent365" target="_blank" style="color:var(--blue);">Cloudpartner.fi — Microsoft Defender Now Covers Your AI Agents: What the Agent365 Integration Does (April 16, 2026)</a></p>
+</div>
+
+<div class="section-label" style="margin-top:40px;">APRIL 16, 2026 (2)</div>
+<h2>Agent 365 + Defender Integration · AIAgentsInfo Expanded · Agent Tooling Gateway</h2>
+
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag blue">🆕 Updated</span></td>
+<td><strong>AIAgentsInfo table expanded beyond Copilot Studio</strong> — now includes additional columns covering Microsoft Foundry agents, 3rd-party marketplace agents, and custom LOB agents — where registered with Agent 365 or using the Agent 365 SDK. Previously documented as Copilot Studio only. KQL guidance updated across playbooks and identity pages.</td>
+<td>product-map.html, playbooks.html, identity.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Agent Tooling Gateway (ATG)</strong> — Agent 365 concept. Agents onboarded via ATG get real-time protection from Defender — tool actions evaluated and blocked before execution. Equivalent to existing Copilot Studio Defender RT protection but for the Agent 365 ecosystem. Added as a significant gap: coverage depends on explicit ATG onboarding by the agent builder.</td>
+<td>product-map.html, gaps.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Agent 365 SDK integration with Defender</strong> — agents built with the Agent 365 SDK get near-real-time detections, alerts, and Advanced Hunting coverage automatically. Defender now explicitly discovers agents registered with Agent 365.</td>
+<td>product-map.html</td></tr>
+
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Sources</div>
+  <p>LinkedIn post from Microsoft Defender team · Microsoft Learn: Discover AI agents and assess security posture using Microsoft Defender (Preview) · Detect, block, and investigate threats to AI agents using Microsoft Defender (Preview)</p>
+</div>
+
+<div class="section-label" style="margin-top:40px;">APRIL 16, 2026</div>
+<h2>Security for AI — New Home in Defender Portal</h2>
+
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag warn">⚠️ Navigation change</span></td>
+<td><strong>Security for AI agents moved to new location in Defender portal</strong> — previously accessed via Settings → Cloud Apps → AI Agents. Now: Settings → Security for AI. Currently rolling out to some tenants (preview). All playbook navigation paths updated. Feature now covers runtime monitoring for Copilot Studio, Microsoft Foundry, Agent 365, and Microsoft 365 (not just Copilot Studio). Detects suspicious behaviour, prompt injection, data leakage, and misconfigurations.</td>
+<td>playbooks.html, product-map.html, copilot-vs-foundry.html</td></tr>
+
+</tbody>
+</table>
+
+<div class="callout callout-warn" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">⚠️ If you can't find the new path</div>
+  <p>The move to Settings → Security for AI is rolling out gradually. If your tenant hasn't received it yet, the old path (Settings → Cloud Apps → AI Agents) still works. Check back in coming weeks if the new path isn't visible.</p>
+</div>
+
+<div class="section-label" style="margin-top:40px;">APRIL 15, 2026</div>
+<h2>DLP All Storage Locations · Copilot Background Indexing Threat Scenario</h2>
+
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag blue">🆕 Updated</span></td>
+<td><strong>DLP for M365 Copilot — all storage locations</strong> — previously, label-blocking only applied to SharePoint and OneDrive. Rolling out mid-April to May 2026: DLP label-blocking now applies to Word, Excel, and PowerPoint files regardless of where they are stored (local device, network shares, non-Microsoft cloud). No policy changes needed. Existing rules apply automatically. Triggered by incident CW1226324 (January 2026).</td>
+<td>product-map.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New scenario</span></td>
+<td><strong>Threat Scenario 8 — Copilot Background Indexing Bypasses DLP Labels</strong> — new threat scenario documenting the real-world CW1226324 incident. Copilot indexed confidential emails in Outlook Drafts/Sent Items for ~1 month despite active DLP labels. Root cause: AugLoop relied on SharePoint/OneDrive URLs for label retrieval — folders outside those locations had no check. Includes structural lesson and current controls.</td>
+<td>threats.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New gap</span></td>
+<td><strong>DLP storage location gap added to gaps register</strong> — noted as resolving April–May 2026, with caveat that unlabelled files remain unblocked regardless of policies.</td>
+<td>gaps.html</td></tr>
+
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Sources</div>
+  <p>Microsoft 365 Message Center — MC1234661 · <a href="https://www.bleepingcomputer.com/news/microsoft/microsoft-adds-copilot-data-controls-to-all-storage-locations/" target="_blank" style="color:var(--blue);">BleepingComputer — Microsoft adds Copilot data controls to all storage locations (Feb 2026)</a></p>
+</div>
 
 <div class="section-label" style="margin-top:40px;">APRIL 13, 2026 (2)</div>
 <h2>SharePoint Advanced Management · Oversharing Risk · IRM Adaptive Protection · Compliance Manager</h2>
@@ -931,7 +1149,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  Last updated: April 13, 2026 · Analysis covers publicly announced Microsoft security capabilities only
+  Last updated: April 16, 2026 · Analysis covers publicly announced Microsoft security capabilities only
 </div>
 </div>
 
