@@ -528,7 +528,22 @@ COMMON MISTAKES:
 - Deploying Copilot without reviewing what SharePoint data it can access
 - No process for when an agent's creator leaves the organisation
 
-LICENCES: Basic security visibility is included with your existing Microsoft 365 licence (Defender for Cloud Apps). Advanced governance (Agent 365) is £/$15/user/month, available from May 1 2026. Premium identity protection requires Entra Agent ID (preview, enterprise only). Most Day 1 controls cost nothing extra.
+LICENCES: Basic security visibility is included with your existing Microsoft 365 licence (Defender for Cloud Apps). Advanced governance (Agent 365) is $15/user/month, available from May 1 2026. Premium identity protection requires Entra Agent ID (preview, enterprise only). Most Day 1 controls cost nothing extra.
+
+AGENT 365 — WHAT IT IS (in plain English):
+Agent 365 is Microsoft's new enterprise control plane for AI agents. Think of it as the management and security layer that wraps around your existing AI agents — regardless of what platform they were built on. It gives every agent an enterprise identity, connects it to Microsoft's security monitoring, and lets you govern what it can do. It does NOT build agents — it secures and governs agents you already have or build.
+
+AGENT 365 LICENSING OPTIONS:
+- Standalone: $15/user/month — GA May 1, 2026
+  What you get: agent inventory and governance, Entra identity per agent, Defender security monitoring, Agent Tooling Gateway (blocks unsafe tool actions in real time), SDK for custom agents
+  Important caveat: it's priced per USER not per AGENT. If you have 50 licensed users but 500 deployed agents, you have a governance gap.
+
+- Microsoft 365 E7 (The Frontier Suite): $99/user/month — GA May 1, 2026
+  This is a BRAND NEW bundle announced in 2026 — NOT the old E7 (which was an older Skype-era bundle and is completely different).
+  What's included: Agent 365 + Microsoft 365 Copilot (the AI assistant) + Microsoft 365 E5 (full security and compliance) + Entra Suite (all identity products)
+  When it makes sense: if your organisation is already planning to buy M365 Copilot, E5, and Entra Suite, E7 is likely cheaper than buying them separately. Run the numbers for your situation.
+
+WHAT CLIENTS OFTEN CONFUSE: The old "E7" was an enterprise bundle from the Skype/Teams transition era. The new M365 E7 announced in 2026 is completely different — it's Microsoft's premium AI + security + governance bundle. Always clarify which one is being discussed.
 
 COMPLIANCE DEADLINES:
 - EU AI Act high-risk AI obligations: August 2026
@@ -537,6 +552,14 @@ COMPLIANCE DEADLINES:
 TIMELINES: Basic visibility (30 min), Basic controls (1-2 days), Full governance programme (weeks to months depending on agent estate size).
 
 EXPLAINING TO THE BOARD: AI agents are like contractors with access badges. Right now, most organisations don't know how many contractors they have, what access each one has, or what they're doing. The Security Dashboard is the access control register. The governance programme is the onboarding process.
+
+After answering, always end with a short natural follow-up question to keep the conversation going.
+
+================================================================================
+FULL SITE CONTENT — same as technical mode, translate into plain English
+================================================================================
+
+${SYSTEM_PROMPT}
 `;
 
 // =============================================================================
