@@ -1,6 +1,6 @@
 // =============================================================================
 // SYSTEM PROMPT — UPDATE THIS SECTION WHEN SITE CONTENT CHANGES
-// Last updated: April 16, 2026 (3)
+// Last updated: April 17, 2026
 // =============================================================================
 
 const SYSTEM_PROMPT = `\
@@ -30,7 +30,7 @@ Examples: "Want me to show you the KQL for detecting this?" or \
 Keep the follow-up question short — one sentence maximum.
 
 ================================================================================
-SITE CONTENT — Last updated: April 13, 2026
+SITE CONTENT — Last updated: April 17, 2026
 ================================================================================
 
 // ── SITE OVERVIEW ─────────────────────────────────────────────────────────────
@@ -306,6 +306,44 @@ Real-world incident CW1226324 (January 2026):
 - Fix: deployed February 2026 + DLP expanded to all storage locations April-May 2026
 - Structural lesson: AI indexes content autonomously; DLP was designed for user actions
 
+// ── AGENT 365 — WHAT IT IS ───────────────────────────────────────────────────────────
+
+Agent 365 is an enterprise control plane for AI agents — NOT a builder or hosting platform.
+It wraps existing agents in enterprise identity, governance, observability, and security.
+GA: May 1, 2026
+
+WHAT AGENT 365 ADDS TO ANY AGENT:
+  - Entra-backed Agent Identity (own Entra ID, mailbox, user resources)
+  - Governed MCP tool access via Agent Tooling Gateway (ATG)
+  - OpenTelemetry observability → Microsoft 365 audit logs → AIAgentsInfo table
+  - Blueprint-based governance (capabilities, MCP access, security constraints, DLP)
+  - M365 notifications (Teams @mentions, Outlook, Word comments)
+  - Defender Security for AI integration (near-real-time detection + ATG protection)
+
+PLATFORM SUPPORT (platform-agnostic):
+  Microsoft: Copilot Studio, Foundry, Microsoft Agent Framework
+  Third-party: LangChain SDK, OpenAI Agents SDK, Claude Code SDK
+  Hosting: Azure, AWS (Bedrock), GCP (Vertex AI), own infrastructure
+
+LICENSING:
+  Standalone: $15/user/month — GA May 1, 2026
+    Includes: inventory, Entra Agent ID, Defender integration, ATG, SDK
+    CAVEAT: per-user NOT per-agent — coverage gap if agents >> licensed users
+
+  M365 E7 (Frontier Suite): $99/user/month
+    Includes: Agent 365 + M365 Copilot + M365 E5 + Entra Suite (all Entra products)
+    Best for: orgs buying Copilot + E5 + Entra Suite anyway — likely cheaper than parts
+
+FRONTIER PROGRAMME (current preview):
+  Enrol at: adoption.microsoft.com/copilot/frontier-program
+  Required for: Agent 365 before May 1, Entra Agent ID, some advanced features
+
+HOW TO GET STARTED:
+  1. Enrol in Frontier programme (pre-May 1)
+  2. Enable Entra Agent Identity for Copilot Studio in Power Platform admin center
+  3. Connect Defender: Settings → Security for AI agents
+  4. Instrument custom agents with Agent 365 SDK
+
 // ── AGENT 365 + DEFENDER INTEGRATION (April 2026) ────────────────────────────────
 
 AIAgentsInfo RegistrySource COLUMN:
@@ -443,6 +481,7 @@ Status: Preview · rolling out to some tenants
 overview.html           7-layer stack viz, RSAC stats, Day 1 dashboard callout
 risk.html               Agent properties, risk taxonomy, 53/47 incident split
 product-map.html        32+ products with GA/Preview status
+agent365.html          Agent 365 deep dive — what it is, licensing, platform support, KQL
 identity.html           5 auth patterns, Classic/Modern, Owner/Sponsor,
                         orphaned agents, KQL queries, Graph API scripts
 mcp.html                MCP architecture, attack vectors, A2A protocol

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>MCP Ecosystem — Securing AI with Microsoft</title>
+<title>Overview — Securing AI with Microsoft</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -274,6 +274,20 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   .flow{flex-direction:column;}
   .flow-arrow{display:none;}
   h1{font-size:26px;}
+  /* Viz mobile — stack label above pills */
+  .viz-layer-inner{flex-direction:column !important;}
+  .viz-label{width:100% !important;border-right:none !important;
+    border-bottom:1.5px solid;padding:12px 14px !important;}
+  .viz-label-name{font-size:15px !important;}
+  .viz-label-sub{font-size:12px !important;}
+  .viz-label-num{font-size:10px !important;}
+  .viz-label-badge{font-size:9px !important;}
+  .viz-pills{padding:10px 14px !important;gap:7px !important;}
+  .viz-pill{font-size:10px !important;padding:5px 10px !important;white-space:normal !important;}
+  .viz-top{flex-direction:column !important;gap:10px !important;}
+  .viz-top-agents{gap:6px !important;}
+  .viz-agent{font-size:11px !important;padding:6px 10px !important;}
+  .viz-footer{flex-wrap:wrap;gap:10px !important;}
 }
 
 /* HAMBURGER */
@@ -303,7 +317,6 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </style>
 </head>
 <body>
-
 <nav class="topnav">
   <div class="nav-brand">
     <div class="msft-logo"><div></div><div></div><div></div><div></div></div>
@@ -314,9 +327,9 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="overview.html" class="">Overview</a>
 <a href="risk.html" class="">AI Risk</a>
 <a href="product-map.html" class="">Products</a>
-<a href="agent365.html" class="">Agent 365</a>
+<a href="agent365.html" class=" active">Agent 365</a>
 <a href="identity.html" class="">Identity</a>
-<a href="mcp.html" class=" active">MCP</a>
+<a href="mcp.html" class="">MCP</a>
 <a href="threats.html" class="">Threats</a>
 <a href="frameworks.html" class="">Frameworks</a>
 <a href="gaps.html" class="">Gaps</a>
@@ -324,18 +337,19 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="copilot-vs-foundry.html" class="">CS vs Foundry</a>
 <a href="changelog.html" class="">Changelog</a>
 <a href="contact.html" class="">Contact</a>
-</div>
+  </div>
   <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
-
+  <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" class="substack-nav" style="flex-shrink:0;margin-left:10px;display:flex;align-items:center;gap:5px;background:var(--blue);color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:6px 13px;border-radius:6px;text-decoration:none;white-space:nowrap;letter-spacing:0.03em;">📬 Subscribe</a>
+</nav>
 <div class="mobile-drawer-overlay" id="drawerOverlay"></div>
 <div class="mobile-drawer" id="mobileDrawer">
 <a href="index.html" class="">Home</a>
 <a href="overview.html" class="">Overview</a>
 <a href="risk.html" class="">AI Risk</a>
 <a href="product-map.html" class="">Products</a>
-<a href="agent365.html" class="">Agent 365</a>
+<a href="agent365.html" class=" active">Agent 365</a>
 <a href="identity.html" class="">Identity</a>
-<a href="mcp.html" class=" active">MCP</a>
+<a href="mcp.html" class="">MCP</a>
 <a href="threats.html" class="">Threats</a>
 <a href="frameworks.html" class="">Frameworks</a>
 <a href="gaps.html" class="">Gaps</a>
@@ -344,194 +358,286 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="changelog.html" class="">Changelog</a>
 <a href="contact.html" class="">Contact</a>
 </div>
-  <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" class="substack-nav" style="flex-shrink:0;margin-left:10px;display:flex;align-items:center;gap:5px;background:var(--blue);color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:6px 13px;border-radius:6px;text-decoration:none;white-space:nowrap;letter-spacing:0.03em;">📬 Subscribe</a>
-</nav>
 <div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
-  📌 <strong>Author's note:</strong> This site synthesises the author's own understanding from publicly available Microsoft documentation, official Microsoft Security blog posts, RSAC 2026 announcements, and insights from Microsoft Security professionals and MVPs. It is independent and not affiliated with or endorsed by Microsoft. Microsoft updates products and documentation frequently — always verify current status directly with Microsoft before making architecture or purchasing decisions.
+  📌 <strong>Author's note:</strong> This site synthesises the author's own understanding from publicly available Microsoft documentation, official Microsoft Security blog posts, RSAC 2026 announcements, and insights from Microsoft Security professionals and MVPs. It is independent and not affiliated with or endorsed by Microsoft.
 </div>
 <div class="page">
 
+<style>
+/* Agent 365 page styles */
+.a365-hero-badge{display:inline-flex;align-items:center;gap:6px;
+  background:rgba(16,124,16,0.08);border:1px solid rgba(16,124,16,0.25);
+  border-radius:100px;padding:4px 14px;font-family:'JetBrains Mono',monospace;
+  font-size:10px;color:#0a5a20;letter-spacing:0.08em;margin-bottom:16px;}
+
+.a365-what-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0;}
+.a365-what-card{background:#ffffff;border:1.5px solid var(--border);border-radius:12px;padding:20px;}
+.a365-what-icon{font-size:24px;margin-bottom:10px;}
+.a365-what-title{font-size:14px;font-weight:700;color:#0d1526;margin-bottom:6px;}
+.a365-what-desc{font-size:12px;color:#2e3d5e;line-height:1.6;}
+
+.a365-lic-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0;}
+.a365-lic-card{border-radius:12px;padding:22px;border:2px solid;}
+.a365-lic-card.standalone{border-color:rgba(0,120,212,0.3);background:rgba(0,120,212,0.04);}
+.a365-lic-card.e7{border-color:rgba(192,144,32,0.35);background:rgba(192,144,32,0.04);}
+.a365-lic-price{font-size:28px;font-weight:800;letter-spacing:-0.02em;line-height:1;margin-bottom:4px;}
+.a365-lic-card.standalone .a365-lic-price{color:#0078d4;}
+.a365-lic-card.e7 .a365-lic-price{color:#8a6800;}
+.a365-lic-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.08em;margin-bottom:12px;}
+.a365-lic-name{font-size:14px;font-weight:700;color:#0d1526;margin-bottom:10px;}
+.a365-lic-items{display:flex;flex-direction:column;gap:4px;}
+.a365-lic-item{font-size:11px;color:#2e3d5e;padding-left:14px;position:relative;}
+.a365-lic-item::before{content:'✓';position:absolute;left:0;color:var(--green2);font-weight:700;}
+
+.a365-platform-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0;}
+.a365-platform-chip{background:#ffffff;border:1px solid var(--border);border-radius:8px;
+  padding:10px 12px;text-align:center;font-size:11px;font-weight:600;color:#2e3d5e;}
+.a365-platform-chip span{display:block;font-size:16px;margin-bottom:4px;}
+
+.a365-flow{display:flex;flex-direction:column;gap:6px;margin:16px 0;}
+.a365-flow-step{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;
+  background:#ffffff;border:1px solid var(--border);border-radius:8px;}
+.a365-flow-num{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;
+  color:#ffffff;background:var(--blue);border-radius:50%;width:22px;height:22px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.a365-flow-text{font-size:13px;color:#2e3d5e;line-height:1.5;}
+.a365-flow-text strong{color:#0d1526;}
+
+.a365-coverage-table{width:100%;border-collapse:collapse;font-size:12px;margin:12px 0;}
+.a365-coverage-table th{background:#f0f4fb;padding:8px 12px;text-align:left;
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.06em;
+  color:#2e3d5e;border-bottom:2px solid var(--border2);}
+.a365-coverage-table td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.4;}
+.a365-coverage-table tr:last-child td{border-bottom:none;}
+.a365-coverage-table td:first-child{font-weight:600;color:#0d1526;white-space:nowrap;}
+
+@media(max-width:700px){
+  .a365-what-grid,.a365-lic-grid{grid-template-columns:1fr;}
+  .a365-platform-grid{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+
 
 <div class="hero">
-  <div class="hero-badge"><div class="live-dot"></div>UPDATED · FIELD RESEARCH · MARCH 2026</div>
-  <h1>Model Context Protocol:<br><span>Architecture, Catalog & Attack Surface</span></h1>
-  <p style="color:#2e3d5e;font-size:17px;font-weight:400;max-width:640px;line-height:1.7;">
-    MCP is no longer experimental. Microsoft has published an official MCP server catalog and Copilot Studio now supports MCP tools natively. This significantly expands both the capability and the attack surface of enterprise agents.
+  <div class="a365-hero-badge">✅ GA May 1, 2026 · $15/user/month</div>
+  <h1>Microsoft<br><span>Agent 365</span></h1>
+  <p style="color:#2e3d5e;font-size:17px;font-weight:400;max-width:600px;line-height:1.7;">
+    The enterprise control plane for AI agents. Agent 365 doesn't build or host agents — it wraps agents you've already built in enterprise-grade identity, governance, observability, and security controls.
   </p>
-</div>
-
-<div class="callout callout-info">
-  <div class="callout-title">📌 Microsoft Official MCP Catalog</div>
-  <p>Microsoft publishes a formal catalog of official MCP server implementations at <a href="https://github.com/microsoft/mcp" target="_blank">github.com/microsoft/mcp</a>. These include servers for Azure, GitHub, SharePoint, Teams, Outlook, SQL Server, and more. Copilot Studio agents can now use MCP tools directly — each tool added extends the agent's action surface to everything that MCP server can reach. The security implications scale with the permissions of the MCP server's connected services.</p>
-</div>
-
-<div class="section-label">MCP Architecture</div>
-<h2>The Three-Layer MCP Model</h2>
-<p>MCP defines how AI agents discover, connect to, and invoke tools, data sources, and services across a standard protocol. With Microsoft's official server catalog, MCP is now enterprise infrastructure — not a prototype technology.</p>
-<div class="mcp-layer">
-  <div class="mcp-layer-header" style="background:rgba(0,120,212,0.1);">
-    <div class="mcp-layer-title" style="color:var(--blue2);">Layer 1 — MCP Host (the AI agent / client)</div>
-  </div>
-  <div class="mcp-layer-body">
-    <div class="mcp-item control">Copilot Studio agent (MCP tools natively supported)</div>
-    <div class="mcp-item control">Microsoft Foundry agent</div>
-    <div class="mcp-item control">GitHub Copilot (VS Code / Visual Studio)</div>
-    <div class="mcp-item control">Custom LLM application</div>
-    <div class="mcp-item risk">Shadow / unsanctioned agents with unreviewed MCP tools</div>
-  </div>
-</div>
-<div class="mcp-layer">
-  <div class="mcp-layer-header" style="background:rgba(98,100,167,0.1);">
-    <div class="mcp-layer-title" style="color:#a4a8d8;">Layer 2 — MCP Server (the tool/connector layer)</div>
-  </div>
-  <div class="mcp-layer-body">
-    <div class="mcp-item control">Microsoft Azure MCP Server</div>
-    <div class="mcp-item control">GitHub MCP Server</div>
-    <div class="mcp-item control">SharePoint / M365 MCP Server</div>
-    <div class="mcp-item control">Azure DevOps MCP Server</div>
-    <div class="mcp-item control">SQL Server MCP Server</div>
-    <div class="mcp-item risk">Third-party / community MCP servers (unvetted)</div>
-    <div class="mcp-item risk">Often lacks authentication in OSS implementations</div>
-    <div class="mcp-item risk">Tool descriptions (used by agent for routing) can be poisoned</div>
-  </div>
-</div>
-<div class="mcp-layer">
-  <div class="mcp-layer-header" style="background:rgba(0,133,117,0.1);">
-    <div class="mcp-layer-title" style="color:var(--teal2);">Layer 3 — Backend Resources</div>
-  </div>
-  <div class="mcp-layer-body">
-    <div class="mcp-item">Azure subscriptions / resource groups</div>
-    <div class="mcp-item">GitHub repositories / issues / PRs</div>
-    <div class="mcp-item">SharePoint / OneDrive / Exchange</div>
-    <div class="mcp-item">SQL databases</div>
-    <div class="mcp-item">Salesforce, ServiceNow, Jira (via third-party servers)</div>
-    <div class="mcp-item risk">All accessed using the agent's credentials — in Copilot Studio, this is maker credentials by default</div>
+  <div class="hero-chips" style="margin-top:16px;">
+    <span style="background:rgba(16,124,16,0.1);color:#0a5a20;border:1px solid rgba(16,124,16,0.25);border-radius:20px;padding:5px 14px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;">GA May 1, 2026</span>
+    <span style="background:rgba(0,120,212,0.08);color:#004a9e;border:1px solid rgba(0,120,212,0.2);border-radius:20px;padding:5px 14px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;">$15/user/month standalone</span>
+    <span style="background:rgba(192,144,32,0.1);color:#8a6800;border:1px solid rgba(192,144,32,0.25);border-radius:20px;padding:5px 14px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;">Included in M365 E7 ($99/user/mo)</span>
   </div>
 </div>
 
-<div class="section-label">Copilot Studio + MCP</div>
-<h2>Copilot Studio MCP Tools — A Specific Risk Pattern</h2>
-<p>When a Copilot Studio agent is configured with MCP tools, the agent authenticates to those MCP servers using maker credentials by default. This means:</p>
-<div class="card-grid">
-  <a href="https://www.microsoft.com/en-us/security/blog/2026/02/12/copilot-studio-agent-security-top-10-risks-detect-prevent/" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.3);">
-    <div class="card-name">⚠ Maker Credentials × MCP Tools</div>
-    <div class="card-desc">The maker (developer/admin) connects an Azure MCP server to a Copilot Studio agent. The agent authenticates to Azure as the maker. If the agent is shared org-wide with no authentication, every employee can trigger Azure resource queries or management actions — using the maker's Azure permissions.</div>
-    <div class="tag-row"><span class="tag warn">CRITICAL COMBINATION</span><span class="tag">Copilot Studio</span></div>
-  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
-  <a href="https://github.com/microsoft/mcp" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.3);">
-    <div class="card-name">⚠ Unreviewed MCP Tool Lifecycle</div>
-    <div class="card-desc">MCP tools added to a Copilot Studio agent are not subject to the same App Registration review as traditional app permissions. Microsoft recommends using the "MCP Tool Configured" Advanced Hunting query and enforcing lifecycle reviews for every MCP tool configuration in the environment.</div>
-    <div class="tag-row"><span class="tag warn">Governance Gap</span><span class="tag">KQL Detectable</span></div>
-  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+<div class="section-label">What Agent 365 Is</div>
+<h2>The enterprise layer above your agent logic</h2>
+<p>Agent 365 is not an agent builder or hosting platform. It is a management and security layer that sits above whatever platform your agents run on — Copilot Studio, Microsoft Foundry, LangChain, OpenAI Agents SDK, or anything else. Once an agent is onboarded to Agent 365, it gains enterprise-grade controls it didn't have before.</p>
+
+<div class="a365-what-grid">
+  <div class="a365-what-card">
+    <div class="a365-what-icon">🪪</div>
+    <div class="a365-what-title">Entra-backed Agent Identity</div>
+    <div class="a365-what-desc">Each agent gets its own identity in Microsoft Entra ID — including a dedicated mailbox and user resources for secure authentication. Enables Conditional Access, ID Protection, and lifecycle governance per agent.</div>
+  </div>
+  <div class="a365-what-card">
+    <div class="a365-what-icon">🔌</div>
+    <div class="a365-what-title">Governed MCP Tool Access</div>
+    <div class="a365-what-desc">Agents invoke MCP servers under admin control via the Agent Tooling Gateway (ATG). Tool invocations are evaluated by Defender before execution — unsafe actions blocked in real time. No open-ended permissions.</div>
+  </div>
+  <div class="a365-what-card">
+    <div class="a365-what-icon">📊</div>
+    <div class="a365-what-title">OpenTelemetry Observability</div>
+    <div class="a365-what-desc">Agent interactions, inference events, and tool usage are instrumented automatically via the Agent 365 SDK. All events routed to Microsoft 365 audit logs — visible in Defender Advanced Hunting via the AIAgentsInfo table.</div>
+  </div>
+  <div class="a365-what-card">
+    <div class="a365-what-icon">📋</div>
+    <div class="a365-what-title">Blueprint-Based Governance</div>
+    <div class="a365-what-desc">Each agent operates within an IT-approved blueprint defining capabilities, required MCP accesses, security constraints, audit requirements, and linked DLP or external access policies. Consistent configuration at scale.</div>
+  </div>
+  <div class="a365-what-card">
+    <div class="a365-what-icon">🔔</div>
+    <div class="a365-what-title">M365 Notifications</div>
+    <div class="a365-what-desc">Agents can participate in M365 apps like a human participant — via @mentions in Teams, comments in Word, and Outlook notifications. Enables agents to surface work to users in their existing workflows.</div>
+  </div>
+  <div class="a365-what-card">
+    <div class="a365-what-icon">🛡️</div>
+    <div class="a365-what-title">Defender Integration</div>
+    <div class="a365-what-desc">Agents registered with Agent 365 appear in the AIAgentsInfo Advanced Hunting table (<code>RegistrySource == "A365"</code>). Near-real-time threat detection, incident alerts, and investigation via Defender portal → Settings → Security for AI.</div>
+  </div>
 </div>
 
-<div class="section-label">Attack Vectors</div>
-<h2>MCP-Specific Attack Vectors</h2>
-<table>
-<thead><tr><th>Attack</th><th>How It Works</th><th>Impact</th><th>Primary Control</th></tr></thead>
+<div class="section-label" style="margin-top:48px;">Platform Support</div>
+<h2>Agent 365 is platform-agnostic</h2>
+<p>Agent 365 works with agents built on any platform and hosted anywhere. This is not a Microsoft-only capability.</p>
+
+<div class="a365-platform-grid">
+  <div class="a365-platform-chip"><span>🤖</span>Copilot Studio</div>
+  <div class="a365-platform-chip"><span>🏭</span>Microsoft Foundry</div>
+  <div class="a365-platform-chip"><span>🔗</span>LangChain SDK</div>
+  <div class="a365-platform-chip"><span>🤖</span>OpenAI Agents SDK</div>
+  <div class="a365-platform-chip"><span>🦾</span>Claude Code SDK</div>
+  <div class="a365-platform-chip"><span>⚙️</span>Microsoft Agent Framework</div>
+  <div class="a365-platform-chip"><span>☁️</span>AWS Bedrock</div>
+  <div class="a365-platform-chip"><span>🌐</span>GCP Vertex AI</div>
+</div>
+
+<div class="callout callout-info" style="margin-top:8px;">
+  <div class="callout-title">📌 What "platform-agnostic" means in practice</div>
+  <p>You add the Agent 365 SDK to your agent code. Once instrumented, the agent registers with Agent 365 regardless of where it runs — Azure, AWS, GCP, or your own infrastructure. The SDK handles the Entra identity registration, OpenTelemetry event emission, and ATG integration automatically. You don't rewrite your agent; you add a governance layer around it.</p>
+</div>
+
+<div class="section-label" style="margin-top:48px;">Licensing</div>
+<h2>Two ways to get Agent 365</h2>
+
+<div class="a365-lic-grid">
+  <div class="a365-lic-card standalone">
+    <div class="a365-lic-price">$15</div>
+    <div class="a365-lic-label">PER USER / MONTH · GA MAY 1, 2026</div>
+    <div class="a365-lic-name">Agent 365 Standalone</div>
+    <div class="a365-lic-items">
+      <div class="a365-lic-item">Agent inventory and governance control plane</div>
+      <div class="a365-lic-item">Entra Agent ID for all onboarded agents</div>
+      <div class="a365-lic-item">Defender Security for AI integration</div>
+      <div class="a365-lic-item">Agent Tooling Gateway (ATG) real-time protection</div>
+      <div class="a365-lic-item">Agent 365 SDK and CLI</div>
+      <div class="a365-lic-item">AIAgentsInfo Advanced Hunting (A365 agents)</div>
+    </div>
+    <div class="callout callout-warn" style="margin-top:14px;padding:10px 14px;">
+      <p style="font-size:11px;margin:0;"><strong>⚠️ Per-user, not per-agent.</strong> Governance scope doesn't automatically scale with agent count. An organisation with 50 licensed users but 500 deployed agents has a coverage gap. Plan accordingly.</p>
+    </div>
+  </div>
+  <div class="a365-lic-card e7">
+    <div class="a365-lic-price">$99</div>
+    <div class="a365-lic-label">PER USER / MONTH · GA MAY 1, 2026</div>
+    <div class="a365-lic-name">Microsoft 365 E7 — The Frontier Suite</div>
+    <div class="a365-lic-items">
+      <div class="a365-lic-item">Everything in Agent 365 standalone</div>
+      <div class="a365-lic-item">Microsoft 365 Copilot (M365 AI assistant)</div>
+      <div class="a365-lic-item">Microsoft 365 E5 (full compliance + security stack)</div>
+      <div class="a365-lic-item">Entra Suite (all Entra products bundled)</div>
+      <div class="a365-lic-item">Best for orgs deploying Copilot + agents together</div>
+      <div class="a365-lic-item">Single SKU replacing multiple add-ons</div>
+    </div>
+    <div class="callout callout-info" style="margin-top:14px;padding:10px 14px;">
+      <p style="font-size:11px;margin:0;"><strong>💡 When E7 makes sense:</strong> If you're buying M365 Copilot + E5 + Entra Suite anyway, E7 likely costs less than the sum of parts. Run the numbers — the break-even depends on your existing licence baseline.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section-label" style="margin-top:48px;">Access & Preview</div>
+<h2>Frontier programme — current preview access</h2>
+<p>Agent 365 is GA on May 1, 2026. Before that date — and for some advanced preview features — access is via the <strong>Microsoft Frontier programme</strong>.</p>
+
+<div class="a365-flow">
+  <div class="a365-flow-step">
+    <div class="a365-flow-num">1</div>
+    <div class="a365-flow-text"><strong>Enrol in Frontier</strong> — go to <a href="https://adoption.microsoft.com/copilot/frontier-program/" target="_blank" style="color:var(--blue);">adoption.microsoft.com/copilot/frontier-program</a> and request access. Frontier gives early access to Agent 365, Entra Agent ID, and related preview capabilities.</div>
+  </div>
+  <div class="a365-flow-step">
+    <div class="a365-flow-num">2</div>
+    <div class="a365-flow-text"><strong>Enable in Power Platform admin center</strong> — for Copilot Studio agents: Power Platform admin → Copilot → Settings → Entra Agent Identity for Copilot Studio → On. This makes new Copilot Studio agents Modern agents automatically.</div>
+  </div>
+  <div class="a365-flow-step">
+    <div class="a365-flow-num">3</div>
+    <div class="a365-flow-text"><strong>Connect Defender</strong> — Defender portal → <a href="https://security.microsoft.com/securitysettings/security_for_ai" target="_blank" style="color:var(--blue);">Settings → Security for AI agents</a> → enable and connect your Agent 365 tenant. Agents registered with Agent 365 start appearing in AIAgentsInfo.</div>
+  </div>
+  <div class="a365-flow-step">
+    <div class="a365-flow-num">4</div>
+    <div class="a365-flow-text"><strong>Instrument custom agents</strong> — add the Agent 365 SDK to agents not on Copilot Studio. This gives them Entra identity, OpenTelemetry observability, and ATG real-time protection. Available on PyPI and npm.</div>
+  </div>
+</div>
+
+<div class="section-label" style="margin-top:48px;">Security Coverage</div>
+<h2>What you get — by agent type</h2>
+<p>Coverage depth varies depending on how the agent was built and whether the Agent 365 SDK is integrated.</p>
+
+<table class="a365-coverage-table">
+<thead><tr>
+  <th>Agent type</th>
+  <th>Discovery (AIAgentsInfo)</th>
+  <th>Threat detection</th>
+  <th>Real-time protection (ATG)</th>
+  <th>Requires</th>
+</tr></thead>
 <tbody>
-<tr><td><strong>Tool Poisoning</strong></td><td>Malicious MCP server returns poisoned tool descriptions. Agent reads descriptions to decide which tool to invoke — poisoned descriptions redirect agent to attacker-controlled tools.</td><td><span class="severity-critical">CRITICAL</span> Full agent hijack</td><td>Foundry Guardrails (whitelist); Defender for Cloud Apps (MCP server governance)</td></tr>
-<tr><td><strong>MCP Server Impersonation</strong></td><td>Attacker substitutes a malicious MCP server (DNS hijack, supply chain, local server swap). Agent connects to attacker's server and receives malicious tool outputs.</td><td><span class="severity-critical">CRITICAL</span> Data exfiltration, action hijack</td><td>Defender for Cloud Apps (MCP server registry); no cryptographic binding standard in MCP spec</td></tr>
-<tr><td><strong>Indirect Prompt Injection via MCP</strong></td><td>Malicious instructions embedded in data returned by an MCP tool. Agent treats the embedded text as legitimate instruction and acts on it using maker credentials.</td><td><span class="severity-critical">CRITICAL</span> Data exfiltration, lateral movement</td><td>Prompt Shields (XPIA detection); Entra Internet Access Prompt Injection Protection (GA Mar 31 2026)</td></tr>
-<tr><td><strong>OAuth Scope Abuse</strong></td><td>Agent inherits overly broad OAuth scopes from maker credentials when connecting to MCP-backed SaaS. Broad token enables lateral movement across multiple services.</td><td><span class="severity-high">HIGH</span> Lateral movement across SaaS</td><td>Defender for Cloud Apps OAuth governance; enforce end-user auth per agent</td></tr>
-<tr><td><strong>Unauthenticated MCP Server</strong></td><td>Many community MCP servers have no authentication. Any agent or attacker on the network can call them without credentials.</td><td><span class="severity-high">HIGH</span> Unauthorised tool execution</td><td>Network segmentation; Entra Internet Access; security review of MCP server implementations</td></tr>
-<tr><td><strong>MCP Supply Chain Attack</strong></td><td>Malicious package in MCP server registry. Enterprise deploys a compromised MCP server — attacker gains persistent access to the agent's tool layer.</td><td><span class="severity-high">HIGH</span> Persistent backdoor in agent tooling</td><td>Defender for Cloud (supply chain scanning); Security Dashboard AI Inventory; GitHub Advanced Security</td></tr>
-<tr><td><strong>Unreviewed MCP Tool in Copilot Studio</strong></td><td>Developer adds a community MCP server to a Copilot Studio agent without security review. Agent runs with maker credentials against unvetted tool surface.</td><td><span class="severity-high">HIGH</span> Uncontrolled action surface</td><td>"MCP Tool Configured" Advanced Hunting query; enforce MCP tool lifecycle reviews</td></tr>
+<tr>
+  <td>Copilot Studio agents</td>
+  <td><span class="green-inline">✓ Automatic</span><br><code style="font-size:9px;">RegistrySource == "PowerPlatform"</code></td>
+  <td><span class="green-inline">✓ Extended alert set</span><br>Audit logs sent by default</td>
+  <td><span class="green-inline">✓ Available</span></td>
+  <td>Power Platform connector enabled in Defender</td>
+</tr>
+<tr>
+  <td>Agent 365 SDK agents</td>
+  <td><span class="green-inline">✓</span><br><code style="font-size:9px;">RegistrySource == "A365"</code></td>
+  <td><span class="green-inline">✓ Near-real-time</span><br>Requires M365 audit log routing</td>
+  <td><span class="green-inline">✓ ATG</span></td>
+  <td>Agent 365 licence + SDK integration</td>
+</tr>
+<tr>
+  <td>Foundry / Bedrock / Vertex AI</td>
+  <td><span class="green-inline">✓ UI inventory</span></td>
+  <td><span class="caution-inline">⚠ Limited — no SDK</span></td>
+  <td><span class="severity-critical">❌ Without SDK</span></td>
+  <td>Agent 365 SDK required for detection + ATG</td>
+</tr>
+<tr>
+  <td>Classic Copilot Studio agents</td>
+  <td><span class="green-inline">✓ via PowerPlatform connector</span></td>
+  <td><span class="caution-inline">⚠ Basic only</span></td>
+  <td><span class="green-inline">✓ Existing Defender RT</span></td>
+  <td>No Agent 365 needed — but no Entra Agent ID</td>
+</tr>
 </tbody>
 </table>
 
-<div class="callout callout-warn">
-  <div class="callout-title">⚠ Critical Gap: No Strong MCP Server Authentication Standard</div>
-  <p>The MCP specification (as of early 2026) does not mandate strong cryptographic authentication for MCP server-to-client binding. Microsoft's official MCP catalog servers use standard OAuth where supported, but third-party and community servers vary widely. There is no platform-enforced way to guarantee the MCP server an agent connects to is the legitimate, unmodified server it expects. This requires defence-in-depth at the network, CASB, and orchestration layers — no single product closes it.</p>
+<div class="section-label" style="margin-top:48px;">Key KQL — Agent 365 Agents</div>
+<h2>Essential Advanced Hunting queries</h2>
+<p>Use <code>RegistrySource == "A365"</code> to target Agent 365-registered agents specifically. See <a href="playbooks.html" style="color:var(--blue);">Playbook 01 Step 8</a> for the full query set.</p>
+
+<div style="background:#f0f4fb;border:1px solid var(--border);border-radius:8px;padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:10px;color:#0d1526;line-height:1.8;overflow-x:auto;margin:8px 0;">
+<pre style="margin:0;white-space:pre;">// All A365 registered agents
+AIAgentsInfo
+| where RegistrySource == "A365"
+| summarize arg_max(Timestamp, *) by AIAgentId
+| where AgentStatus != "Deleted"
+| project AIAgentId, AIAgentName, AgentStatus, IsBlocked, AIModel, Instructions
+
+// Agents with no instructions — prompt injection risk
+AIAgentsInfo
+| where RegistrySource == "A365"
+| summarize arg_max(Timestamp, *) by AIAgentId
+| where isempty(Instructions) or Instructions == "N/A"
+| project AIAgentId, AIAgentName, Instructions
+
+// Agents with MCP tools — expanded attack surface
+AIAgentsInfo
+| where RegistrySource == "A365"
+| summarize arg_max(Timestamp, *) by AIAgentId
+| where isnotempty(AgentActionTriggers)
+| extend Triggers = parse_json(AgentActionTriggers)
+| mv-expand Trigger = Triggers
+| where Trigger.type == "RemoteMCPServer"
+| project AIAgentId, AIAgentName, Trigger.type</pre>
 </div>
 
-<div class="section-label">Microsoft Controls</div>
-<h2>How Microsoft Secures the MCP Boundary</h2>
-<div class="card-grid">
-  <a href="https://learn.microsoft.com/en-us/defender-cloud-apps/ai-agent-protection" target="_blank" class="card-link"><div class="card" style="border-color:rgba(0,120,212,0.2);">
-    <div class="card-name">Defender for Cloud Apps (CASB)</div>
-    <div class="card-desc">Primary control for MCP-to-SaaS boundary. Discovers MCP-connected SaaS apps. Governs OAuth permissions. Detects anomalous access from agent-driven API calls. Can block or alert on risky MCP-to-SaaS connections. For Copilot Studio specifically: provides real-time protection — blocks tool invocations if prompt is suspicious (1-second timeout, then allow if no decision).</div>
-    <div class="tag-row"><span class="tag green">GA</span><span class="tag">OAuth Governance</span><span class="tag">RT Protection</span></div>
-  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
-  <a href="https://learn.microsoft.com/en-us/security/security-for-ai/security-dashboard-for-ai" target="_blank" class="card-link"><div class="card" style="border-color:rgba(84,176,84,0.15);">
-    <div class="card-name">Security Dashboard — AI Inventory</div>
-    <div class="card-desc">Includes MCP servers in AI inventory — now GA. Discovery and risk assessment of MCP servers across the environment including those deployed without IT knowledge. Coverage extends to third-party AI including ChatGPT, Gemini, and MCP servers.</div>
-    <div class="tag-row"><span class="tag green">✓ Now GA · RSAC 2026</span><span class="tag">MCP Server Discovery</span></div>
-  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
-  <a href="https://azure.microsoft.com/en-us/products/ai-foundry" target="_blank" class="card-link"><div class="card" style="border-color:rgba(252,225,0,0.15);">
-    <div class="card-name">Foundry Guardrails</div>
-    <div class="card-desc">For Foundry-deployed agents — define which MCP tools the agent is allowed to invoke. Whitelist at the orchestration layer. Does not apply to Copilot Studio agents — each platform has its own governance model.</div>
-    <div class="tag-row"><span class="tag caution">Preview</span><span class="tag">Tool Whitelist</span><span class="tag warn">⚠ Foundry only — not Copilot Studio</span></div>
-  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
-  <a href="https://learn.microsoft.com/en-us/azure/ai-services/content-safety/concepts/jailbreak-detection" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.15);">
-    <div class="card-name">Prompt Shields</div>
-    <div class="card-desc">Primary defence against indirect prompt injection via MCP tool outputs. Inspects content flowing from MCP responses into agent context before reaching the model.</div>
-    <div class="tag-row"><span class="tag green">GA</span><span class="tag">XPIA Defence</span><span class="tag">Tool Output Inspection</span></div>
-  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
-  <a href="https://learn.microsoft.com/en-us/entra/global-secure-access/how-to-manage-microsoft-profile" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.15);">
-    <div class="card-name">Entra Internet Access — Prompt Injection Protection</div>
-    <div class="card-desc">Network-layer enforcement blocking malicious AI prompts across apps and agents. Complements Prompt Shields at the network boundary. GA March 31 2026, 2026.</div>
-    <div class="tag-row"><span class="tag green">GA March 31 2026</span><span class="tag">Network Layer</span></div>
-  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
-  <a href="https://learn.microsoft.com/en-us/azure/sentinel/overview" target="_blank" class="card-link"><div class="card" style="border-color:rgba(84,176,84,0.15);">
-    <div class="card-name">Sentinel MCP Entity Analyzer</div>
-    <div class="card-desc">Natural language querying of MCP entity data within Sentinel investigations. GA April 2026. Enables analysts to explore MCP-connected entity relationships without writing KQL from scratch.</div>
-    <div class="tag-row"><span class="tag blue">GA April 2026</span><span class="tag">Natural Language</span><span class="tag">Sentinel</span></div>
-  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+<div class="page-nav">
+  <a href="product-map.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Products</span></a>
+  <a href="identity.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Identity</span></a>
 </div>
 
-<div class="section-label">Defence Architecture</div>
-<h2>Layered MCP Defence-in-Depth</h2>
-<table>
-<thead><tr><th>Layer</th><th>What It Covers</th><th>Microsoft Control</th><th>Status</th></tr></thead>
-<tbody>
-<tr><td><strong>Catalog governance</strong></td><td>Vetting which MCP servers are approved for use; lifecycle reviews</td><td>Internal policy + "MCP Tool Configured" Advanced Hunting query</td><td><span class="caution-inline">Process control — no product enforcement</span></td></tr>
-<tr><td><strong>Network</strong></td><td>Control which MCP servers agents can reach; block malicious prompts</td><td>Entra Internet Access</td><td><span class="green-inline">GA Mar 31 2026</span></td></tr>
-<tr><td><strong>Identity</strong></td><td>Authenticate which agents can invoke which MCP tools; prevent maker credential blast radius</td><td>Enforce end-user auth (Power Platform admin)</td><td><span class="green-inline">Available now</span></td></tr>
-<tr><td><strong>Orchestration</strong></td><td>Whitelist allowed tools per agent (Foundry only)</td><td>Foundry Guardrails</td><td><span class="caution-inline">Preview · Foundry only</span></td></tr>
-<tr><td><strong>Content Inspection</strong></td><td>Detect adversarial instructions in MCP tool outputs</td><td>Prompt Shields</td><td><span class="green-inline">GA</span></td></tr>
-<tr><td><strong>Runtime Protection</strong></td><td>Block tool invocations during suspicious Copilot Studio agent activity</td><td>Defender for Cloud Apps real-time protection</td><td><span class="caution-inline">Preview · Copilot Studio only</span></td></tr>
-<tr><td><strong>SaaS Governance</strong></td><td>OAuth scope governance; anomalous API usage detection</td><td>Defender for Cloud Apps</td><td><span class="green-inline">GA</span></td></tr>
-<tr><td><strong>Inventory & Posture</strong></td><td>Discover all MCP servers; assess risk</td><td>Security Dashboard for AI</td><td><span class="green-inline">Now GA</span></td></tr>
-<tr><td><strong>Investigation</strong></td><td>NL querying of MCP entity relationships in Sentinel</td><td>Sentinel MCP Entity Analyzer</td><td><span class="green-inline">GA April</span></td></tr>
-</tbody>
-</table>
-
-
-
-<div class="section-label" style="margin-top:32px;">Agent-to-Agent (A2A) Protocol</div>
-<h2>Beyond MCP — A2A for Inter-Agent Communication</h2>
-<p>While MCP governs how agents connect to external tools and data sources, <strong>A2A (Agent-to-Agent)</strong> is an emerging protocol for authenticated communication between agents themselves. Microsoft's Entra Agent ID platform now supports A2A for agent-to-agent discovery and authorisation — enabling orchestration agents to delegate tasks to sub-agents with verified identities. This is separate from MCP and addresses a different attack surface: the communication channels between agents in multi-agent architectures.</p>
-<div class="card-grid" style="grid-template-columns:1fr 1fr;margin-top:16px;">
-  <div class="card">
-    <div class="card-name">MCP (Model Context Protocol)</div>
-    <div class="card-desc">Governs agent-to-tool and agent-to-data-source connections. An agent calls an external tool (file system, API, database) via MCP. Standardised by Anthropic, adopted by Microsoft.</div>
-    <div class="tag-row"><span class="tag green">Widely adopted</span><span class="tag">Agent → Tool</span></div>
-  </div>
-  <div class="card">
-    <div class="card-name">A2A (Agent-to-Agent Protocol)</div>
-    <div class="card-desc">Governs agent-to-agent communication and delegation. An orchestration agent delegates tasks to sub-agents via A2A with identity verification. Emerging standard supported by Entra Agent ID.</div>
-    <div class="tag-row"><span class="tag caution">Emerging</span><span class="tag">Agent → Agent</span><span class="tag">Entra Agent ID</span></div>
-  </div>
-</div>
-<div class="callout callout-warn" style="margin-top:16px;">
-  <div class="callout-title">⚠️ Most multi-agent architectures today have no A2A verification</div>
-  <p>Copilot Studio agent chains, Power Automate flows that call agents, and custom orchestration built on Microsoft Foundry typically have no formal A2A authentication. This means a compromised orchestrator can issue malicious delegations to sub-agents without any identity check. Until A2A becomes standard, treat every inter-agent boundary as an untrusted boundary and apply least-privilege scoping per agent.</p>
-</div>
-
-<div class="page-nav"><a href="identity.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Identity</span></a><a href="threats.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Threats</span></a></div>
 <div style="text-align:center;margin:32px 0 0;padding:24px 0;border-top:1px solid var(--border2);">
   <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text3);margin-bottom:10px;">STAY UPDATED</div>
   <div style="font-size:15px;font-weight:700;color:#0d1526;margin-bottom:6px;">Get notified when Microsoft AI security changes</div>
-  <div style="font-size:13px;color:#2e3d5e;margin-bottom:14px;">Monthly updates on new controls, GA announcements, and critical gaps — direct to your inbox.</div>
-  <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#ffffff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;padding:12px 24px;border-radius:8px;text-decoration:none;transition:opacity 0.15s;" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">
-    Subscribe to updates →
-  </a>
-  <div style="font-size:11px;color:var(--text3);margin-top:10px;font-family:'JetBrains Mono',monospace;">aiagentsecurity.substack.com · Free · No spam</div>
+  <div style="font-size:13px;color:#2e3d5e;margin-bottom:14px;">Monthly updates — free, no spam.</div>
+  <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#ffffff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;padding:12px 24px;border-radius:8px;text-decoration:none;">Subscribe to updates →</a>
 </div>
+
 <div class="footer">
-  SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  Last updated: April 16, 2026 · Analysis covers publicly announced Microsoft security capabilities only
+  SOURCES: Microsoft Agent 365 documentation · Cloudpartner.fi Defender + Agent 365 integration (April 2026) · Microsoft RSAC 2026 announcements<br>
+  Last updated: April 17, 2026
 </div>
 </div>
 
@@ -540,32 +646,16 @@ document.addEventListener('DOMContentLoaded', function(){
   var btn = document.getElementById('hamburgerBtn');
   var drawer = document.getElementById('mobileDrawer');
   var overlay = document.getElementById('drawerOverlay');
-  if(!btn || !drawer || !overlay) return;
-  function closeMenu(){
-    btn.classList.remove('open');
-    drawer.classList.remove('open');
-    overlay.classList.remove('open');
-  }
-  btn.addEventListener('click', function(){
-    var isOpen = drawer.classList.contains('open');
-    if(isOpen){ closeMenu(); } else {
-      btn.classList.add('open');
-      drawer.classList.add('open');
-      overlay.classList.add('open');
-    }
+  if(!btn||!drawer||!overlay) return;
+  function closeMenu(){btn.classList.remove('open');drawer.classList.remove('open');overlay.classList.remove('open');}
+  btn.addEventListener('click',function(){
+    var isOpen=drawer.classList.contains('open');
+    if(isOpen){closeMenu();}else{btn.classList.add('open');drawer.classList.add('open');overlay.classList.add('open');}
   });
-  overlay.addEventListener('click', closeMenu);
-  drawer.querySelectorAll('a').forEach(function(a){
-    a.addEventListener('click', closeMenu);
-  });
+  overlay.addEventListener('click',closeMenu);
+  drawer.querySelectorAll('a').forEach(function(a){a.addEventListener('click',closeMenu);});
 });
 </script>
-
-
-
-
-
-
 <!-- AI CHAT WIDGET -->
 <style>
 #aisec-chat-btn{position:fixed;bottom:28px;right:28px;z-index:9999;
