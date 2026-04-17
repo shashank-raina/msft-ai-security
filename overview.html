@@ -759,6 +759,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
 
+
 <!-- AI CHAT WIDGET -->
 <style>
 #aisec-chat-btn{position:fixed;bottom:28px;right:28px;z-index:9999;
@@ -770,7 +771,6 @@ document.addEventListener('DOMContentLoaded', function(){
   transition:background 0.15s,transform 0.15s;}
 #aisec-chat-btn:hover{background:#005fa3;transform:translateY(-2px);}
 
-/* Panel — normal and fullscreen modes */
 #aisec-chat-panel{position:fixed;bottom:88px;right:28px;z-index:9998;
   width:400px;max-width:calc(100vw - 40px);
   max-height:calc(100vh - 110px);
@@ -783,22 +783,33 @@ document.addEventListener('DOMContentLoaded', function(){
 #aisec-chat-panel.open{display:flex;}
 #aisec-chat-panel.fullscreen{
   top:16px;left:16px;right:16px;bottom:16px;
-  width:auto;max-width:none;border-radius:16px;
+  width:auto;max-width:none;max-height:none;border-radius:16px;
   box-shadow:0 16px 60px rgba(0,0,0,0.3);}
 
-#aisec-chat-header{background:#0d1526;padding:14px 18px;
-  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-#aisec-chat-header-left{display:flex;align-items:center;gap:10px;}
-#aisec-chat-header-logo{width:22px;height:22px;display:grid;grid-template-columns:1fr 1fr;gap:2px;flex-shrink:0;}
+/* Header */
+#aisec-chat-header{background:#0d1526;padding:12px 16px;
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:10px;}
+#aisec-chat-header-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0;}
+#aisec-chat-header-logo{width:20px;height:20px;display:grid;grid-template-columns:1fr 1fr;gap:2px;flex-shrink:0;}
 #aisec-chat-header-logo div:nth-child(1){background:#f25022;border-radius:1px;}
 #aisec-chat-header-logo div:nth-child(2){background:#7fba00;border-radius:1px;}
 #aisec-chat-header-logo div:nth-child(3){background:#00a4ef;border-radius:1px;}
 #aisec-chat-header-logo div:nth-child(4){background:#ffb900;border-radius:1px;}
-#aisec-chat-title{color:#ffffff;font-size:13px;font-weight:700;}
-#aisec-chat-subtitle{color:#8a9abc;font-size:10px;font-family:'JetBrains Mono',monospace;letter-spacing:0.04em;}
-.aisec-header-btns{display:flex;align-items:center;gap:6px;}
+#aisec-chat-title{color:#ffffff;font-size:13px;font-weight:700;white-space:nowrap;}
+#aisec-chat-subtitle{color:#8a9abc;font-size:9px;font-family:'JetBrains Mono',monospace;letter-spacing:0.04em;white-space:nowrap;}
+
+/* Mode toggle — hidden until unlocked */
+#aisec-mode-toggle{display:none;background:#1e2d42;border-radius:20px;
+  padding:3px;gap:2px;flex-shrink:0;}
+#aisec-mode-toggle.visible{display:flex;}
+.aisec-mode-btn{border:none;border-radius:16px;padding:4px 10px;cursor:pointer;
+  font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;
+  letter-spacing:0.04em;transition:all 0.15s;background:transparent;color:#8a9abc;}
+.aisec-mode-btn.active{background:#0078d4;color:#ffffff;}
+
+.aisec-header-btns{display:flex;align-items:center;gap:4px;flex-shrink:0;}
 #aisec-chat-expand,#aisec-chat-close{background:none;border:none;color:#8a9abc;
-  font-size:16px;cursor:pointer;padding:4px 6px;line-height:1;border-radius:4px;
+  font-size:15px;cursor:pointer;padding:4px 6px;line-height:1;border-radius:4px;
   transition:color 0.12s,background 0.12s;}
 #aisec-chat-expand:hover,#aisec-chat-close:hover{color:#ffffff;background:rgba(255,255,255,0.1);}
 
@@ -822,22 +833,28 @@ document.addEventListener('DOMContentLoaded', function(){
 #aisec-chat-body{display:none;flex-direction:column;flex:1;min-height:0;}
 #aisec-chat-body.unlocked{display:flex;}
 
-/* Suggestions — scrollable row */
+/* Mode indicator bar */
+#aisec-mode-bar{padding:6px 14px;font-size:10px;font-family:'JetBrains Mono',monospace;
+  letter-spacing:0.06em;font-weight:700;text-align:center;flex-shrink:0;transition:all 0.2s;}
+#aisec-mode-bar.technical{background:rgba(0,120,212,0.08);color:#004a9e;border-bottom:1px solid rgba(0,120,212,0.15);}
+#aisec-mode-bar.business{background:rgba(16,124,16,0.07);color:#0a5a20;border-bottom:1px solid rgba(16,124,16,0.15);}
+
+/* Suggestions */
 #aisec-chat-suggestions{padding:10px 14px 8px;
   display:flex;gap:6px;overflow-x:auto;flex-shrink:0;background:#f5f7fc;}
 #aisec-chat-suggestions::-webkit-scrollbar{height:3px;}
-#aisec-chat-suggestions::-webkit-scrollbar-track{background:transparent;}
 #aisec-chat-suggestions::-webkit-scrollbar-thumb{background:#c0cce0;border-radius:2px;}
 .aisec-suggestion{background:#ffffff;border:1px solid #d0d8ec;border-radius:20px;
   padding:5px 12px;font-size:11px;color:#0078d4;cursor:pointer;white-space:nowrap;
   font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;flex-shrink:0;
   transition:background 0.12s,border-color 0.12s;}
 .aisec-suggestion:hover{background:#e8f0fc;border-color:#0078d4;}
+.aisec-suggestion.business-chip{color:#107c10;border-color:rgba(16,124,16,0.3);}
+.aisec-suggestion.business-chip:hover{background:rgba(16,124,16,0.07);border-color:#107c10;}
 
 /* Messages */
 #aisec-chat-messages{flex:1;overflow-y:auto;padding:14px;
-  display:flex;flex-direction:column;gap:10px;background:#f5f7fc;
-  min-height:120px;max-height:none;}
+  display:flex;flex-direction:column;gap:10px;background:#f5f7fc;min-height:120px;}
 .aisec-msg{max-width:88%;font-size:13px;line-height:1.6;padding:10px 14px;border-radius:12px;}
 .aisec-msg.user{background:#0078d4;color:#ffffff;align-self:flex-end;border-radius:12px 12px 3px 12px;}
 .aisec-msg.assistant{background:#ffffff;color:#0d1526;align-self:flex-start;
@@ -848,7 +865,7 @@ document.addEventListener('DOMContentLoaded', function(){
   font-family:'JetBrains Mono',monospace;font-size:11px;}
 .aisec-msg.user code{background:rgba(255,255,255,0.2);}
 
-/* Input row */
+/* Input */
 #aisec-chat-input-row{display:flex;gap:8px;padding:10px 12px;
   border-top:1px solid #d0d8ec;background:#ffffff;flex-shrink:0;}
 #aisec-chat-input{flex:1;border:1px solid #d0d8ec;border-radius:8px;
@@ -884,9 +901,14 @@ document.addEventListener('DOMContentLoaded', function(){
         <div id="aisec-chat-subtitle">POWERED BY CLAUDE · INTERNAL ONLY</div>
       </div>
     </div>
+    <!-- Mode toggle — shown after unlock -->
+    <div id="aisec-mode-toggle">
+      <button class="aisec-mode-btn active" id="btn-technical" onclick="setMode('technical')">🔧 Technical</button>
+      <button class="aisec-mode-btn" id="btn-business" onclick="setMode('business')">💼 Business</button>
+    </div>
     <div class="aisec-header-btns">
-      <button id="aisec-chat-expand" aria-label="Expand to full screen" title="Full screen">⛶</button>
-      <button id="aisec-chat-close" aria-label="Close chat">✕</button>
+      <button id="aisec-chat-expand" aria-label="Expand" title="Full screen">⛶</button>
+      <button id="aisec-chat-close" aria-label="Close">✕</button>
     </div>
   </div>
 
@@ -899,22 +921,16 @@ document.addEventListener('DOMContentLoaded', function(){
     <button id="aisec-pw-btn">Unlock →</button>
   </div>
 
-  <!-- Chat (shown after unlock) -->
+  <!-- Chat body -->
   <div id="aisec-chat-body">
+    <div id="aisec-mode-bar" class="technical">🔧 TECHNICAL MODE — security architects</div>
+
     <div id="aisec-chat-suggestions">
-      <button class="aisec-suggestion" data-q="What should I set up on Day 1?">Day 1 setup</button>
-      <button class="aisec-suggestion" data-q="Does CA for Agents apply to Copilot Studio?">CA for Agents?</button>
-      <button class="aisec-suggestion" data-q="What's the difference between Classic and Modern agents?">Classic vs Modern</button>
-      <button class="aisec-suggestion" data-q="Does maker credentials risk apply to Security Copilot custom agents?">Maker creds + Security Copilot</button>
-      <button class="aisec-suggestion" data-q="How do I detect orphaned agents in my tenant?">Detect orphaned agents</button>
-      <button class="aisec-suggestion" data-q="What KQL query detects no-auth agents?">No-auth KQL</button>
-      <button class="aisec-suggestion" data-q="Is Entra Agent ID generally available yet?">Entra Agent ID GA?</button>
-      <button class="aisec-suggestion" data-q="What are the EU AI Act and Colorado AI Act deadlines?">EU AI Act deadlines</button>
-      <button class="aisec-suggestion" data-q="How do I set up logging for Microsoft Foundry?">Foundry logging</button>
-      <button class="aisec-suggestion" data-q="What are the biggest gaps in Microsoft AI security today?">Key gaps</button>
+      <!-- populated by JS based on mode -->
     </div>
+
     <div id="aisec-chat-messages">
-      <div class="aisec-msg assistant">
+      <div class="aisec-msg assistant" id="aisec-welcome-msg">
         Hi! I can answer questions about Microsoft AI security based on this site's content — auth patterns, product coverage, gaps, KQL queries, playbooks, and more. What would you like to know?
       </div>
     </div>
@@ -928,24 +944,97 @@ document.addEventListener('DOMContentLoaded', function(){
 
 <script>
 (function(){
-  const btn      = document.getElementById('aisec-chat-btn');
-  const panel    = document.getElementById('aisec-chat-panel');
-  const closeBtn = document.getElementById('aisec-chat-close');
-  const expandBtn= document.getElementById('aisec-chat-expand');
-  const pwGate   = document.getElementById('aisec-pw-gate');
-  const pwInput  = document.getElementById('aisec-pw-input');
-  const pwBtn    = document.getElementById('aisec-pw-btn');
-  const pwError  = document.getElementById('aisec-pw-error');
-  const chatBody = document.getElementById('aisec-chat-body');
-  const input    = document.getElementById('aisec-chat-input');
-  const sendBtn  = document.getElementById('aisec-chat-send');
-  const messages = document.getElementById('aisec-chat-messages');
-  const suggestions = document.querySelectorAll('.aisec-suggestion');
+  const CHIPS = {
+    technical: [
+      {q:'What should I set up on Day 1?', label:'Day 1 setup'},
+      {q:'Does CA for Agents apply to Copilot Studio?', label:'CA for Agents?'},
+      {q:"What's the difference between Classic and Modern agents?", label:'Classic vs Modern'},
+      {q:'Does maker credentials risk apply to Security Copilot custom agents?', label:'Maker creds + Security Copilot'},
+      {q:'How do I detect orphaned agents in my tenant?', label:'Detect orphaned agents'},
+      {q:'What KQL query detects no-auth agents?', label:'No-auth KQL'},
+      {q:'Is Entra Agent ID generally available yet?', label:'Entra Agent ID GA?'},
+      {q:'What are the EU AI Act and Colorado AI Act deadlines?', label:'EU AI Act deadlines'},
+      {q:'How do I set up logging for Microsoft Foundry?', label:'Foundry logging'},
+      {q:'What are the biggest gaps in Microsoft AI security today?', label:'Key gaps'},
+    ],
+    business: [
+      {q:"We're rolling out Microsoft Copilot — what are the main security risks we should know about?", label:'Copilot risks'},
+      {q:"What's the biggest mistake organisations make when deploying AI agents?", label:'Biggest mistakes'},
+      {q:'What do we need to do on day one before anything else?', label:'Day one priority'},
+      {q:'What could go wrong if we deploy Copilot without any security controls?', label:'What if we do nothing?'},
+      {q:'How long does it take to secure AI agents properly?', label:'How long does it take?'},
+      {q:'What licences do we need to secure our AI agents?', label:'Licences needed'},
+      {q:'Can you explain the Classic vs Modern agent problem in simple terms?', label:'Classic vs Modern (simple)'},
+      {q:'What should a CISO prioritise in the first 90 days of Copilot deployment?', label:'CISO 90-day plan'},
+      {q:'Are there any compliance or regulatory deadlines we should be aware of?', label:'Compliance deadlines'},
+      {q:'How do I explain AI security risk to my board or leadership team?', label:'Explaining to the board'},
+    ]
+  };
+
+  const WELCOME = {
+    technical: "Hi! I can answer questions about Microsoft AI security based on this site's content — auth patterns, product coverage, gaps, KQL queries, playbooks, and more. What would you like to know?",
+    business: "Hi! I can help explain Microsoft AI security in plain English — the key risks, what to prioritise, licence implications, and what good looks like. No jargon. What would you like to know?"
+  };
+
+  const btn       = document.getElementById('aisec-chat-btn');
+  const panel     = document.getElementById('aisec-chat-panel');
+  const closeBtn  = document.getElementById('aisec-chat-close');
+  const expandBtn = document.getElementById('aisec-chat-expand');
+  const pwGate    = document.getElementById('aisec-pw-gate');
+  const pwInput   = document.getElementById('aisec-pw-input');
+  const pwBtn     = document.getElementById('aisec-pw-btn');
+  const pwError   = document.getElementById('aisec-pw-error');
+  const chatBody  = document.getElementById('aisec-chat-body');
+  const modeToggle= document.getElementById('aisec-mode-toggle');
+  const modeBar   = document.getElementById('aisec-mode-bar');
+  const sugBox    = document.getElementById('aisec-chat-suggestions');
+  const messages  = document.getElementById('aisec-chat-messages');
+  const input     = document.getElementById('aisec-chat-input');
+  const sendBtn   = document.getElementById('aisec-chat-send');
+  const welcomeMsg= document.getElementById('aisec-welcome-msg');
 
   let history = [];
   let isOpen = false;
   let isFullscreen = false;
   let sessionPassword = null;
+  let currentMode = 'technical';
+
+  window.setMode = function(mode) {
+    currentMode = mode;
+    document.getElementById('btn-technical').classList.toggle('active', mode==='technical');
+    document.getElementById('btn-business').classList.toggle('active', mode==='business');
+    modeBar.className = 'technical' === mode ? 'technical' : 'business';
+    modeBar.innerHTML = mode==='technical'
+      ? '🔧 TECHNICAL MODE — security architects'
+      : '💼 BUSINESS MODE — plain English, risk-first';
+    // Update placeholder
+    input.placeholder = mode==='technical'
+      ? 'Ask about auth patterns, gaps, KQL...'
+      : 'Ask about risks, priorities, licences...';
+    // Rebuild chips
+    renderChips(mode);
+    // Update welcome message
+    welcomeMsg.textContent = WELCOME[mode];
+    // Clear history on mode switch
+    while(messages.children.length > 1) messages.removeChild(messages.lastChild);
+    history = [];
+  };
+
+  function renderChips(mode) {
+    sugBox.innerHTML = '';
+    sugBox.style.display = 'flex';
+    CHIPS[mode].forEach(c => {
+      const b = document.createElement('button');
+      b.className = 'aisec-suggestion' + (mode==='business' ? ' business-chip' : '');
+      b.textContent = c.label;
+      b.addEventListener('click', () => {
+        input.value = c.q;
+        sugBox.style.display = 'none';
+        sendMessage();
+      });
+      sugBox.appendChild(b);
+    });
+  }
 
   function togglePanel() {
     isOpen = !isOpen;
@@ -959,77 +1048,66 @@ document.addEventListener('DOMContentLoaded', function(){
     panel.classList.toggle('fullscreen', isFullscreen);
     expandBtn.textContent = isFullscreen ? '⊡' : '⛶';
     expandBtn.title = isFullscreen ? 'Exit full screen' : 'Full screen';
-    if (isFullscreen) input.focus();
   }
 
   btn.addEventListener('click', togglePanel);
   closeBtn.addEventListener('click', () => {
-    if (isFullscreen) { isFullscreen = false; panel.classList.remove('fullscreen'); expandBtn.textContent = '⛶'; }
-    isOpen = false; panel.classList.remove('open');
+    if(isFullscreen){isFullscreen=false;panel.classList.remove('fullscreen');expandBtn.textContent='⛶';}
+    isOpen=false;panel.classList.remove('open');
   });
   expandBtn.addEventListener('click', toggleFullscreen);
-
-  // ESC to exit fullscreen
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && isFullscreen) toggleFullscreen();
-    else if (e.key === 'Escape' && isOpen) togglePanel();
+    if(e.key==='Escape'&&isFullscreen) toggleFullscreen();
+    else if(e.key==='Escape'&&isOpen) togglePanel();
   });
 
-  // Unlock flow
   async function attemptUnlock() {
     const pw = pwInput.value.trim();
-    if (!pw) return;
+    if(!pw) return;
     pwBtn.textContent = 'Checking...';
     pwBtn.disabled = true;
     pwError.style.display = 'none';
     try {
       const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({password: pw, messages: [{role:'user', content:'hello'}]})
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({password:pw, mode:'technical', messages:[{role:'user',content:'hello'}]})
       });
-      if (res.status === 401) {
-        pwError.style.display = 'block';
-        pwInput.value = '';
+      if(res.status===401){
+        pwError.style.display='block';
+        pwInput.value='';
         pwInput.focus();
-      } else if (res.ok) {
+      } else if(res.ok){
         sessionPassword = pw;
         pwGate.style.display = 'none';
         chatBody.classList.add('unlocked');
+        modeToggle.classList.add('visible');
+        renderChips('technical');
         input.focus();
       } else {
-        pwError.textContent = 'Connection error — please try again.';
-        pwError.style.display = 'block';
+        pwError.textContent='Connection error — please try again.';
+        pwError.style.display='block';
       }
-    } catch(e) {
-      pwError.textContent = 'Connection error — please try again.';
-      pwError.style.display = 'block';
+    } catch(e){
+      pwError.textContent='Connection error — please try again.';
+      pwError.style.display='block';
     }
-    pwBtn.textContent = 'Unlock →';
-    pwBtn.disabled = false;
+    pwBtn.textContent='Unlock →';
+    pwBtn.disabled=false;
   }
 
   pwBtn.addEventListener('click', attemptUnlock);
-  pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') attemptUnlock(); });
-
-  // Suggestions
-  suggestions.forEach(s => {
-    s.addEventListener('click', () => {
-      input.value = s.dataset.q;
-      document.getElementById('aisec-chat-suggestions').style.display = 'none';
-      sendMessage();
-    });
-  });
+  pwInput.addEventListener('keydown', e=>{ if(e.key==='Enter') attemptUnlock(); });
 
   function addMessage(role, text) {
     const div = document.createElement('div');
     div.className = 'aisec-msg ' + role;
-    text = text.replace(/```(\w*)\n?([\s\S]*?)```/g, (_,lang,code) =>
-      '<pre style="background:rgba(0,0,0,0.06);padding:8px;border-radius:6px;overflow-x:auto;font-family:JetBrains Mono,monospace;font-size:10px;margin:4px 0;white-space:pre;">' + code.trim() + '</pre>'
+    text = text.replace(/```(\w*)\n?([\s\S]*?)```/g,(_,lang,code)=>
+      '<pre style="background:rgba(0,0,0,0.06);padding:8px;border-radius:6px;overflow-x:auto;font-family:JetBrains Mono,monospace;font-size:10px;margin:4px 0;white-space:pre;">'+code.trim()+'</pre>'
     );
-    text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
-    text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-    text = text.replace(/\n/g, '<br>');
+    text = text.replace(/`([^`]+)`/g,'<code>$1</code>');
+    text = text.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+    text = text.replace(/\n/g,'<br>');
     div.innerHTML = text;
     messages.appendChild(div);
     messages.scrollTop = messages.scrollHeight;
@@ -1038,48 +1116,49 @@ document.addEventListener('DOMContentLoaded', function(){
 
   async function sendMessage() {
     const text = input.value.trim();
-    if (!text || !sessionPassword) return;
-    input.value = '';
-    input.style.height = 'auto';
-    sendBtn.disabled = true;
+    if(!text || !sessionPassword) return;
+    input.value='';
+    input.style.height='auto';
+    sendBtn.disabled=true;
     addMessage('user', text);
     history.push({role:'user', content:text});
-    const thinking = addMessage('thinking', '...');
+    const thinking = addMessage('thinking','...');
     try {
       const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({messages: history, password: sessionPassword})
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({messages:history, password:sessionPassword, mode:currentMode})
       });
       const data = await res.json();
       thinking.remove();
-      if (res.status === 401) {
-        sessionPassword = null;
+      if(res.status===401){
+        sessionPassword=null;
         chatBody.classList.remove('unlocked');
-        pwGate.style.display = '';
-        addMessage('assistant', 'Session expired — please re-enter the passphrase.');
-      } else if (data.reply) {
+        modeToggle.classList.remove('visible');
+        pwGate.style.display='';
+        addMessage('assistant','Session expired — please re-enter the passphrase.');
+      } else if(data.reply){
         addMessage('assistant', data.reply);
         history.push({role:'assistant', content:data.reply});
-        if (history.length > 20) history = history.slice(-20);
+        if(history.length>20) history=history.slice(-20);
       } else {
-        addMessage('assistant', 'Something went wrong — please try again.');
+        addMessage('assistant','Something went wrong — please try again.');
       }
-    } catch(e) {
+    } catch(e){
       thinking.remove();
-      addMessage('assistant', 'Connection error — please try again.');
+      addMessage('assistant','Connection error — please try again.');
     }
-    sendBtn.disabled = false;
+    sendBtn.disabled=false;
     input.focus();
   }
 
   sendBtn.addEventListener('click', sendMessage);
-  input.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  input.addEventListener('keydown', e=>{
+    if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}
   });
-  input.addEventListener('input', () => {
-    input.style.height = 'auto';
-    input.style.height = Math.min(input.scrollHeight, 100) + 'px';
+  input.addEventListener('input',()=>{
+    input.style.height='auto';
+    input.style.height=Math.min(input.scrollHeight,100)+'px';
   });
 })();
 </script>

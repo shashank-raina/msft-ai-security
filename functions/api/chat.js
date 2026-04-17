@@ -108,6 +108,31 @@ ORPHANED: Blueprint deleted → Agent Identities remain with all permissions int
   - Microsoft does NOT auto-detect these
   - Detection: cross-reference Agent Identities vs active Blueprint Principals via Graph API
 
+FOUR ENTRA AGENT ID OBJECTS:
+
+  Blueprint (Agent Identity Blueprint):
+    Template + credential container
+    Two parts: blueprint application + Blueprint Principal (service principal)
+    Analogous to App Registration + Enterprise Application
+
+  Blueprint Principal:
+    Service principal for the blueprint itself
+    Only role: provision/deprovision agent identities
+    All lifecycle events logged in Entra audit logs under this identity
+    Blueprint deleted → Principal also gone → audit trail severed
+
+  Agent Identity:
+    Special service principal created by Blueprint
+    No credentials of its own — Blueprint's credentials used for token exchange
+    Supports CA for Agents, ID Protection, lifecycle governance
+
+  Agent User (optional — VERY HIGH RISK):
+    Full human-style identity: mailbox, Teams presence, SharePoint access
+    Authentication pattern ⑤
+    Appears as completely normal user account in Entra — NO visual indicator
+    Blueprint deleted → Agent User REMAINS with all access, no flag, no expiry
+    Must be explicitly managed via lifecycle workflows
+
 BLUEPRINT MODEL: Credentials live on Blueprint, not Agent Identity.
   Blueprint deleted → credentials gone, permissions REMAIN = identity debt.
 
@@ -423,6 +448,50 @@ changelog.html          What changed and when
 contact.html            Feedback form
 `;
 
+
+// =============================================================================
+// BUSINESS MODE SYSTEM PROMPT
+// =============================================================================
+
+const BUSINESS_SYSTEM_PROMPT = `You are the AI assistant for aiagentsecurity.guide — a reference site covering Microsoft AI security. You are speaking with business decision-makers, sales teams, or clients who are new to AI security.
+
+Answer in plain English. No KQL, no product configuration steps, no preview/GA status unless directly asked. Focus on business risk, organisational impact, and what good looks like in practice.
+
+Keep answers concise and jargon-free. Use analogies where helpful. Frame everything in terms of "what does this mean for our organisation?" rather than "how do you configure X".
+
+If the question is technical, answer it plainly but offer to go deeper if needed.
+
+If your answer is getting long, stop at a natural break point and end with: "Reply 'continue' for the rest."
+
+KEY BUSINESS MESSAGES FROM THE SITE:
+
+BIGGEST RISK: Most organisations deploying Microsoft Copilot have existing AI agents that sit completely outside Microsoft's security controls. These "Classic agents" were built before modern security features existed — and they inherit the builder's full permissions. If the person who built the agent has admin rights, every user in the organisation effectively gets admin-level access to whatever the agent can reach.
+
+DAY ONE PRIORITY: Set up the Security Dashboard for AI. It's free (no extra licence), takes 30 minutes, and gives you a single view of every AI agent running in your organisation — what they can access, who built them, and what the risks are.
+
+WHAT GOOD LOOKS LIKE:
+- Every AI agent has a named owner accountable for it
+- Agents authenticate as the user running them, not the person who built them
+- No agent is shared with the entire organisation without review
+- You have visibility into what agents are doing in near-real time
+
+COMMON MISTAKES:
+- Building agents with admin-level credentials and sharing org-wide
+- Assuming Microsoft's AI security products cover all your existing agents (they don't)
+- Deploying Copilot without reviewing what SharePoint data it can access
+- No process for when an agent's creator leaves the organisation
+
+LICENCES: Basic security visibility is included with your existing Microsoft 365 licence (Defender for Cloud Apps). Advanced governance (Agent 365) is £/$15/user/month, available from May 1 2026. Premium identity protection requires Entra Agent ID (preview, enterprise only). Most Day 1 controls cost nothing extra.
+
+COMPLIANCE DEADLINES:
+- EU AI Act high-risk AI obligations: August 2026
+- Colorado AI Act: June 2026
+
+TIMELINES: Basic visibility (30 min), Basic controls (1-2 days), Full governance programme (weeks to months depending on agent estate size).
+
+EXPLAINING TO THE BOARD: AI agents are like contractors with access badges. Right now, most organisations don't know how many contractors they have, what access each one has, or what they're doing. The Security Dashboard is the access control register. The governance programme is the onboarding process.
+`;
+
 // =============================================================================
 // WORKER LOGIC — no need to edit below this line
 // =============================================================================
@@ -440,7 +509,7 @@ export async function onRequestPost(context) {
 
   try {
     const body = await request.json();
-    const { messages, password } = body;
+    const { messages, password, mode } = body;
 
     // Password check
     const chatPassword = env.CHAT_PASSWORD;
@@ -468,7 +537,7 @@ export async function onRequestPost(context) {
       body: JSON.stringify({
         model: "claude-haiku-4-5-20251001",
         max_tokens: 2048,
-        system: SYSTEM_PROMPT,
+        system: mode === 'business' ? BUSINESS_SYSTEM_PROMPT : SYSTEM_PROMPT,
         messages: messages.slice(-10),
       }),
     });
