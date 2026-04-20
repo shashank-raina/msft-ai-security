@@ -391,6 +391,38 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 
 
+
+<div class="section-label" style="margin-top:40px;">APRIL 20, 2026 (2)</div>
+<h2>CA for Agent ID Preview · ID Protection for Agents · Agent Segmentation</h2>
+
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag blue">🆕 Updated</span></td>
+<td><strong>Conditional Access for Agent ID (Preview)</strong> — CA now applies to Modern agents (Agent Identities + Agent Users) as first-class identities. Updated scope table: Modern Copilot Studio (Entra Agent ID), Foundry, MS-built Security Copilot agents all covered. Classic Copilot Studio agents remain excluded. CA carve-outs documented: Blueprint creation flows and T1 token exchange are excluded by design. Source: Microsoft Learn.</td>
+<td>identity.html, product-map.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>ID Protection for Agents (Preview)</strong> — six risk detections documented: unfamiliar resource access, sign-in spike, failed access attempt, sign-in by risky user, confirmed compromised, threat intelligence. Risk signals feed into CA for Agent ID policies (auto-block on High risk). Roles required: Security Administrator/Operator/Reader for reports, CA Administrator for policies. Graph API: riskyAgents and agentRiskDetections collections. Requires Entra P2.</td>
+<td>identity.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Agent segmentation with custom security attributes</strong> — recommended CA governance model. Assign custom security attributes to agents (e.g. AgentApprovalStatus) and resources (e.g. Department). CA policies target attribute combinations — enables scalable, precise agent access governance without managing object IDs. Source: Microsoft Learn CA for Agent ID.</td>
+<td>identity.html</td></tr>
+
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Sources</div>
+  <p>
+    <a href="https://learn.microsoft.com/entra/identity/conditional-access/agent-id" target="_blank" style="color:var(--blue);">Microsoft Learn — Conditional Access for Agent ID (Preview)</a> ·
+    <a href="https://learn.microsoft.com/entra/id-protection/concept-risky-agents" target="_blank" style="color:var(--blue);">Microsoft Learn — ID Protection for Agents (Preview)</a>
+  </p>
+  <p style="margin-top:8px;font-size:11px;color:#5a6a8a;">Identified by content monitor · GitHub Issue #2 · 2026-04-20</p>
+</div>
+
 <div class="section-label" style="margin-top:40px;">APRIL 20, 2026</div>
 <h2>Registry Convergence · Two-Portal Model · AI Reader / AI Administrator Roles</h2>
 

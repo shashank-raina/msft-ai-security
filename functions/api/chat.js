@@ -1,6 +1,6 @@
 // =============================================================================
 // SYSTEM PROMPT — UPDATE THIS SECTION WHEN SITE CONTENT CHANGES
-// Last updated: April 20, 2026
+// Last updated: April 20, 2026 (2)
 // =============================================================================
 
 const SYSTEM_PROMPT = `\
@@ -75,20 +75,33 @@ AGENTS WITH NO IDENTITIES (third category):
 - In Agent Registry, no Entra ID, not even a service principal
 - Invisible to all security tooling
 
-// ── CONDITIONAL ACCESS FOR AGENTS ────────────────────────────────────────────
+// ── CONDITIONAL ACCESS FOR AGENT ID (Preview, April 2026) ────────────────────────
 
-APPLIES TO:
+CA for Agent ID applies to MODERN agents (Entra Agent ID constructs):
+  ✅ Modern Copilot Studio agents (Entra Agent ID / Frontier programme)
   ✅ Microsoft Foundry agents (OAuth 2.0 Agent ID)
-  ✅ Microsoft-built Security Copilot agents only
-     (Phishing Triage, Threat Intel Briefing, Vulnerability Remediation, etc.)
+  ✅ Microsoft-built Security Copilot agents
 
-DOES NOT APPLY TO:
-  ❌ ANY Copilot Studio agents — this is absolute, regardless of auth pattern
-  ❌ Custom/partner Security Copilot agents
-     → use "Connect with existing user account"
-     → agent runs using configuring user's credentials
-     → if Global Admin configured it: admin-level Sentinel/Defender/Entra access
-       available to every user who runs the agent (maker credentials risk, elevated)
+DOES NOT APPLY:
+  ❌ Classic Copilot Studio agents (OBO, maker credentials, service principal auth)
+  ❌ Custom/partner Security Copilot agents ("Connect with existing user account")
+
+CA CARVE-OUTS (excluded by design):
+  - Blueprint token acquisition for creating agent identities (T1/creation)
+  - Intermediate token exchange flows (T1 phase)
+  These are excluded intentionally — agentic task flows (T2) ARE protected
+
+POLICY TARGETING OPTIONS:
+  - All agent identities in tenant
+  - Specific agents by object ID
+  - Agents by custom security attribute (recommended for scale)
+  - Agents grouped by Blueprint
+  - All Agent Users
+
+AGENT SEGMENTATION — custom security attributes (recommended governance model):
+  Assign attributes to agents (e.g. AgentApprovalStatus: HR_Approved, IT_Approved)
+  Assign attributes to resources (e.g. Department: HR, Finance)
+  CA policy targets attribute combinations — no manual object ID management needed
 
 // ── FIVE COPILOT STUDIO AUTH PATTERNS ────────────────────────────────────────
 
@@ -174,6 +187,30 @@ BLUEPRINT GRAPH API SCOPES:
 
 BLUEPRINT MODEL: Credentials live on Blueprint, not Agent Identity.
   Blueprint deleted → credentials gone, permissions REMAIN = identity debt.
+
+// ── ID PROTECTION FOR AGENTS (Preview) ────────────────────────────────────────────
+
+Applies to: Modern agents with Entra Agent ID only
+Licence: Entra P2 (included in preview)
+Roles: Security Admin/Operator/Reader (view reports), CA Admin (configure policies)
+Graph API: riskyAgents and agentRiskDetections collections
+
+SIX RISK DETECTIONS:
+  unfamiliarResourceAccess — agent accessed resources it doesn't usually access
+  signInSpike             — abnormally high sign-in frequency (automation abuse indicator)
+  failedAccessAttempt     — repeated failures to access unauthorised resources (token replay)
+  riskyUserSignIn         — agent signed in on behalf of risky user (compromised credentials)
+  adminConfirmedAgentCompromised — admin confirmed; auto-sets risk High, triggers CA block
+  threatIntelligenceAccount — matches known attack patterns from Microsoft threat intel
+
+ACTIONS ON RISKY AGENTS:
+  Confirm compromise → sets risk High, triggers CA block policies
+  Confirm safe       → false positive, clears risk, prevents similar flagging
+  Dismiss risk       → no longer relevant, continues monitoring
+  Disable            → blocks all agent sign-ins across Entra and connected apps
+
+INTEGRATION: ID Protection risk signals feed into CA for Agent ID policies
+  CA condition: Agent Risk (high/medium/low) — auto-block on High agent risk
 
 // ── SHAREPOINT ADVANCED MANAGEMENT (SAM) ─────────────────────────────────────
 

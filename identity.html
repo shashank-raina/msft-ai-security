@@ -564,8 +564,20 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </table>
 
 <div class="callout callout-warn" style="margin-top:20px;">
-  <div class="callout-title">⚠️ Critical Correction — Conditional Access for Agents does NOT apply to Copilot Studio</div>
-  <p>CA for Agents and ID Protection for Agents are triggered only during <strong>modern Agent ID authentication</strong> (OAuth 2.0). This applies to <strong>Microsoft-built Security Copilot agents</strong> and <strong>Microsoft Foundry agents</strong> that use Agent ID. Copilot Studio agents authenticate via OBO (pattern ①), maker credentials (pattern ②), or service principal (patterns ③ and ④) — <strong>none of which trigger CA for Agents</strong>.</p><p><strong>Critical nuance — Security Copilot custom agents:</strong> Security Copilot offers two identity options when building agents. Microsoft-built agents use a dedicated Entra Agent ID (modern, CA for Agents applies). Custom and partner agents use the <em>"Connect with existing user account"</em> option — the agent runs using the configuring user's credentials, inheriting their access and permissions. This is functionally identical to Copilot Studio's Agent's User Account pattern (⑤) — CA for Agents does <strong>not</strong> apply to these agents. This distinction is not prominently documented by Microsoft.</p>
+  <div class="callout-title">⚠️ Critical Correction — CA for Agents scope: Modern agents only, NOT Classic Copilot Studio</div>
+  <p><strong>Updated April 2026:</strong> <a href="https://learn.microsoft.com/entra/identity/conditional-access/agent-id" target="_blank" style="color:inherit;text-decoration:underline;">Conditional Access for Agent ID (Preview)</a> extends CA controls to AI agents as first-class identities. It applies when an <strong>Agent Identity</strong> or <strong>Agent User</strong> (both Entra Agent ID constructs) requests a token for any resource.</p>
+  <table style="margin:12px 0;font-size:12px;">
+  <thead><tr><th>Agent type</th><th>CA for Agent ID applies?</th></tr></thead>
+  <tbody>
+  <tr><td><strong>Modern Copilot Studio agents</strong> (Entra Agent ID, Frontier)</td><td><span class="green-inline">✓ Yes — Agent Identity and Agent User token flows protected</span></td></tr>
+  <tr><td><strong>Microsoft Foundry agents</strong> (OAuth 2.0 Agent ID)</td><td><span class="green-inline">✓ Yes</span></td></tr>
+  <tr><td><strong>Microsoft-built Security Copilot agents</strong></td><td><span class="green-inline">✓ Yes</span></td></tr>
+  <tr><td><strong>Classic Copilot Studio agents</strong> (service principals, OBO, maker credentials)</td><td><span class="severity-critical">❌ No — none of patterns ①②③④ trigger CA for Agent ID</span></td></tr>
+  <tr><td><strong>Custom/partner Security Copilot agents</strong> ("Connect with existing user account")</td><td><span class="severity-critical">❌ No — uses configuring user's credentials, not Agent ID</span></td></tr>
+  </tbody>
+  </table>
+  <p>Note: CA for Agent ID does NOT apply when the Agent Identity Blueprint acquires a token for Microsoft Graph to create agents, or during intermediate token exchange flows (T1 phase). These carve-outs are by design — agentic task flows (T2) are protected.</p>
+  <p><strong>Critical nuance — Security Copilot custom agents:</strong> Custom and partner Security Copilot agents use the <em>"Connect with existing user account"</em> option — the agent runs using the configuring user's credentials, inheriting their access and permissions. This is functionally identical to Copilot Studio's maker credentials risk (pattern ②) but with a much higher blast radius.</p>
 <div class="callout callout-warn" style="margin-top:16px;">
   <div class="callout-title">⚠️ Security Copilot custom agents — a maker credentials problem in disguise</div>
   <p>When building a custom or partner Security Copilot agent, the "Connect with existing user account" option stores the <strong>configuring user's credentials</strong> and uses them every time the agent runs — regardless of who triggers it. This is structurally identical to Copilot Studio's maker credentials risk (pattern ②) but with a much higher blast radius.</p>
@@ -752,6 +764,54 @@ Disconnect-MgGraph</pre>
 </tr>
 </tbody>
 </table>
+
+
+<div class="section-label" style="margin-top:32px;">ID Protection for Agents</div>
+<h2>Risk detection for agent identities</h2>
+<p>Source: <a href="https://learn.microsoft.com/entra/id-protection/concept-risky-agents" target="_blank" style="color:var(--blue);">Microsoft Learn — ID Protection for Agents (Preview)</a></p>
+<p>Microsoft Entra ID Protection now includes agent-specific risk detection. It establishes a baseline for each agent's normal activity, then flags anomalies as risky agent detections. Risk signals feed directly into <a href="https://learn.microsoft.com/entra/identity/conditional-access/agent-id" target="_blank" style="color:var(--blue);">Conditional Access for Agent ID</a> — a CA policy can automatically block access when an agent's risk level hits High.</p>
+
+<p><strong>Licence:</strong> Entra P2 (included during preview). <strong>Applies to:</strong> Modern agents with Entra Agent ID only.</p>
+
+<h3 style="margin-top:16px;">Six risk detections</h3>
+<table>
+<thead><tr><th>Detection</th><th>What it means</th><th>riskEventType</th></tr></thead>
+<tbody>
+<tr><td><strong>Unfamiliar resource access</strong></td><td>Agent targeted resources it doesn't usually access — potential attacker accessing sensitive resources beyond agent's intended scope</td><td><code>unfamiliarResourceAccess</code></td></tr>
+<tr><td><strong>Sign-in spike</strong></td><td>Abnormally high sign-in frequency — indicator of automation abuse or attacker toolkit</td><td><code>signInSpike</code></td></tr>
+<tr><td><strong>Failed access attempt</strong></td><td>Agent attempted resources it's not authorised for — possible token replay attack against unauthorised resource</td><td><code>failedAccessAttempt</code></td></tr>
+<tr><td><strong>Sign-in by risky user</strong></td><td>Agent signed in on behalf of a risky user (delegated auth) — attacker may be using compromised credentials to exploit the agent</td><td><code>riskyUserSignIn</code></td></tr>
+<tr><td><strong>Confirmed compromised</strong></td><td>Admin manually confirmed compromise — automatically sets risk to High, triggers CA block policies</td><td><code>adminConfirmedAgentCompromised</code></td></tr>
+<tr><td><strong>Threat intelligence</strong></td><td>Activity matching known attack patterns from Microsoft threat intelligence</td><td><code>threatIntelligenceAccount</code></td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:12px;">
+  <div class="callout-title">📌 Roles required</div>
+  <p>
+    View Risky Agents report: Security Administrator, Security Operator, or Security Reader<br>
+    Configure CA risk policies: Conditional Access Administrator<br>
+    Graph API: <code>riskyAgents</code> and <code>agentRiskDetections</code> collections via ID Protection APIs
+  </p>
+</div>
+
+<h3 style="margin-top:16px;">Actions on risky agents</h3>
+<p>From the Risky Agents report in Entra ID Protection:</p>
+<table>
+<thead><tr><th>Action</th><th>What it does</th></tr></thead>
+<tbody>
+<tr><td><strong>Confirm compromise</strong></td><td>Sets risk to High, creates risk detection event, triggers CA block policies — use in incident response</td></tr>
+<tr><td><strong>Confirm safe</strong></td><td>Marks as false positive, clears risk state, prevents similar flagging</td></tr>
+<tr><td><strong>Dismiss risk</strong></td><td>Risk no longer relevant but system continues monitoring similar behaviour</td></tr>
+<tr><td><strong>Disable</strong></td><td>Blocks all sign-ins for the agent across Entra and connected apps</td></tr>
+</tbody>
+</table>
+
+<h3 style="margin-top:16px;">Agent segmentation with custom security attributes</h3>
+<p>Source: <a href="https://learn.microsoft.com/entra/identity/conditional-access/agent-id" target="_blank" style="color:var(--blue);">Microsoft Learn — CA for Agent ID (Preview)</a></p>
+<p>The recommended approach for CA policy scoping is to use <strong>custom security attributes</strong> assigned to agents and resources. This enables precise, scalable policy targeting without manually managing object IDs.</p>
+<p>Example pattern: create an attribute set <code>AgentAttributes</code> with attribute <code>AgentApprovalStatus</code> (values: New, In_Review, HR_Approved, Finance_Approved, IT_Approved). Assign attributes to agents and resources. CA policy: block all agents EXCEPT those tagged <code>HR_Approved</code> from accessing resources tagged <code>HR</code>. This is the governance model for agent segmentation at scale.</p>
+<p>CA policies can scope agents by: all agent identities in tenant, specific agent identities by object ID, agents by custom security attribute, agents grouped by their Blueprint, or all Agent Users.</p>
 
 <div class="section-label" style="margin-top:32px;">Blueprint Authentication — T1/T2 Flow</div>
 <h2>How Blueprint credentials work — and why FIC is the right choice</h2>
