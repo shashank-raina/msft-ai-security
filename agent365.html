@@ -439,7 +439,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <div class="a365-what-card">
     <div class="a365-what-icon">🪪</div>
     <div class="a365-what-title">Entra-backed Agent Identity</div>
-    <div class="a365-what-desc">Each agent gets its own identity in Microsoft Entra ID — including a dedicated mailbox and user resources for secure authentication. Enables Conditional Access, ID Protection, and lifecycle governance per agent.</div>
+    <div class="a365-what-desc">Each agent gets its own identity in Microsoft Entra ID — including a dedicated mailbox and user resources for secure authentication. Enables Conditional Access, ID Protection, and lifecycle governance per agent. Blueprint credentials use a two-phase flow: T1 (trust) → T2 (authorisation). Recommended credential type: <strong>Federated Identity Credentials (FIC)</strong> — no stored secrets, trust-based, short-lived OIDC tokens. See <a href="identity.html" style="color:var(--blue);">Identity page</a> for full T1/T2 detail.</div>
   </div>
   <div class="a365-what-card">
     <div class="a365-what-icon">🔌</div>
@@ -524,6 +524,65 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
       <p style="font-size:11px;margin:0;"><strong>💡 When E7 makes sense:</strong> If you're buying M365 Copilot + E5 + Entra Suite anyway, E7 likely costs less than the sum of parts. Run the numbers — the break-even depends on your existing licence baseline.</p>
     </div>
   </div>
+</div>
+
+<div class="section-label" style="margin-top:48px;">Registry Convergence</div>
+<h2>Two portals — one for inventory, one for identity</h2>
+<p>Agent visibility was previously split across the Entra admin center and the M365 admin center. Microsoft has converged the registry under Agent 365 as the single control plane. Each portal now has a distinct role:</p>
+
+<table class="a365-coverage-table">
+<thead><tr>
+  <th>Portal</th>
+  <th>What you do here</th>
+  <th>Agent visibility</th>
+  <th>Role required</th>
+</tr></thead>
+<tbody>
+<tr>
+  <td><strong>Microsoft 365 admin center</strong><br><code style="font-size:9px;">admin.microsoft.com → Agents → All agents</code></td>
+  <td>Comprehensive agent inventory — discover and manage all agents in the organisation, monitor operational activity</td>
+  <td><span class="green-inline">✓ ALL agents</span><br>Including agents without Entra Agent ID</td>
+  <td><strong>AI Administrator</strong> or <strong>AI Reader</strong> (least-privilege)<br><span style="font-size:10px;color:#5a6a8a;">No licence required for inventory view</span></td>
+</tr>
+<tr>
+  <td><strong>Microsoft Entra admin center</strong><br><code style="font-size:9px;">entra.microsoft.com</code></td>
+  <td>Agent identity and access management — blueprints, permissions, Conditional Access, identity governance, security signals</td>
+  <td><span class="caution-inline">⚠ Agents with Entra Agent ID only</span></td>
+  <td><strong>Agent ID Administrator</strong><br><span style="font-size:10px;color:#5a6a8a;">Entra Agent ID licence required for security controls</span></td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout callout-warn" style="margin-top:12px;">
+  <div class="callout-title">⚠️ Identity admins need both portals for full coverage</div>
+  <p>The Entra admin center only shows agents that have a Microsoft Entra Agent ID. Agents without an identity — including most Classic Copilot Studio agents — are invisible there. For a complete picture, identity admins should use Agent 365 (M365 admin center) for inventory and the Entra admin center for identity governance controls.</p>
+</div>
+
+<h3 style="margin-top:20px;">Roles for agent visibility</h3>
+<table class="a365-coverage-table">
+<thead><tr><th>Role</th><th>What it gives you</th><th>Portal</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>AI Reader</strong></td>
+  <td>Read-only view of all agents in the organisation. Recommended least-privilege role for inventory access.</td>
+  <td>M365 admin center (Agent 365)</td>
+</tr>
+<tr>
+  <td><strong>AI Administrator</strong></td>
+  <td>Full management of all agents in Agent 365 including governance controls.</td>
+  <td>M365 admin center (Agent 365)</td>
+</tr>
+<tr>
+  <td><strong>Agent ID Administrator</strong></td>
+  <td>Manage agent identities, blueprints, permissions, CA policies in Entra. Required for Blueprint write operations.</td>
+  <td>Entra admin center</td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:12px;">
+  <div class="callout-title">💡 No licence needed for basic inventory</div>
+  <p>Viewing all agents in the M365 admin center (Agent 365) requires no specific product licence — just the AI Administrator or AI Reader role. Applying security and governance controls (Conditional Access, identity governance policies) requires the appropriate Entra Agent ID licence.</p>
 </div>
 
 <div class="section-label" style="margin-top:48px;">Access & Preview</div>
@@ -637,7 +696,7 @@ AIAgentsInfo
 
 <div class="footer">
   SOURCES: Microsoft Agent 365 documentation · Cloudpartner.fi Defender + Agent 365 integration (April 2026) · Microsoft RSAC 2026 announcements<br>
-  Last updated: April 17, 2026
+  Last updated: April 20, 2026
 </div>
 </div>
 

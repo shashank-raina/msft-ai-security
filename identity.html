@@ -672,6 +672,13 @@ directActions
 <h2 style="margin-top:24px;">Detecting Ownerless &amp; Orphaned Modern Agents (Graph API)</h2>
 <p>AIAgentsInfo KQL covers Copilot Studio agents (Classic and Modern) and Foundry, marketplace, and LOB agents registered with Agent 365. Use the <code>RegistrySource</code> column to distinguish: <code>RegistrySource == "PowerPlatform"</code> for Copilot Studio agents via the Power Platform connector; <code>RegistrySource == "A365"</code> for Agent 365-registered agents. Most existing KQL queries on this page target Copilot Studio (PowerPlatform) — see Playbook 01 Step 8 for A365-specific queries. For Modern agent Owner/Sponsor checks, use PowerShell via Microsoft Graph (Agent ID Administrator role required — Global Reader returns 403).</p>
 
+<div class="callout callout-info" style="margin-top:8px;margin-bottom:16px;">
+  <div class="callout-title">📌 Two portals — different agent visibility</div>
+  <p><strong>M365 admin center → Agents → All agents (Agent 365):</strong> comprehensive inventory of ALL agents including those without Entra Agent ID. Requires AI Administrator or AI Reader role. No licence needed for inventory view only.<br><br>
+  <strong>Entra admin center:</strong> shows only agents with a Microsoft Entra Agent ID. Use for identity governance, CA policies, blueprint management. Requires Agent ID Administrator role for write operations.<br><br>
+  Identity admins need both portals for complete coverage — the Entra admin center alone misses Classic agents and any agent without an Entra identity.</p>
+</div>
+
 <div style="background:#f0f4fb;border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-top:8px;overflow-x:auto;">
 <pre style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#0d1526;line-height:1.8;margin:0;white-space:pre;">
 # Find Modern agents missing Owner or Sponsor
@@ -714,7 +721,7 @@ Disconnect-MgGraph</pre>
 
 <div class="callout callout-info" style="margin-top:12px;">
   <div class="callout-title">📌 Blueprint credential model</div>
-  <p>Agent Identities do not have credentials of their own. Credentials are configured on the Blueprint. When an agent authenticates, it uses the Blueprint's credentials to request an access token from Entra ID. This means: if a Blueprint is deleted, the credentials are gone but all permissions assigned to the Agent Identities remain — creating orphaned permission assignments with no authentication path.</p>
+  <p>Agent Identities do not have credentials of their own. Credentials are configured on the Blueprint and used in the T1 (Exchange Token) phase of authentication. When an agent authenticates, the Blueprint's credential proves trust to Entra (T1), then the Agent Identity's permissions determine what the token can access (T2). If a Blueprint is deleted, the credentials are gone but all permissions assigned to the Agent Identities remain — creating orphaned permission assignments with no authentication path. See the T1/T2 section below for full detail.</p>
 </div>
 
 <h2 style="margin-top:24px;">The Four Entra Agent ID Objects</h2>
@@ -746,6 +753,80 @@ Disconnect-MgGraph</pre>
 </tbody>
 </table>
 
+<div class="section-label" style="margin-top:32px;">Blueprint Authentication — T1/T2 Flow</div>
+<h2>How Blueprint credentials work — and why FIC is the right choice</h2>
+<p>Source: <a href="https://derkvanderwoude.medium.com/entra-agent-id-federated-identity-credentials-fic-deep-dive-472d1b5a66e2" target="_blank" style="color:var(--blue);">Derk van der Woude — Entra Agent ID FIC Deep-Dive (April 2026)</a></p>
+
+<p>When an agent authenticates, it goes through a two-phase flow:</p>
+
+<table>
+<thead><tr><th>Phase</th><th>Name</th><th>What happens</th><th>What controls it</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>T1</strong></td>
+  <td>Exchange Token (trust phase)</td>
+  <td>The Blueprint presents a credential to Entra to prove it is trusted. Entra verifies this and issues a token to proceed.</td>
+  <td><strong>Blueprint credential type</strong> — secrets/certs or FIC</td>
+</tr>
+<tr>
+  <td><strong>T2</strong></td>
+  <td>Access Token (authorisation phase)</td>
+  <td>Agent Identity inherits permissions from the Blueprint. Entra issues an Access Token used to access resources (Graph API, Azure RBAC, etc.).</td>
+  <td><strong>Agent Identity permissions</strong> — what roles and scopes are assigned</td>
+</tr>
+</tbody>
+</table>
+
+<p style="margin-top:16px;">T1 controls <em>who is trusted</em> to get a token. T2 controls <em>what they are allowed to do</em> once trusted. These are governed independently — you can have tightly scoped T2 permissions on a Blueprint that uses weak T1 credentials, or vice versa.</p>
+
+<h3 style="margin-top:20px;">Two Blueprint credential types (T1)</h3>
+<p>A Blueprint can use one of two credential types to complete T1:</p>
+
+<table>
+<thead><tr><th>Type</th><th>How it works</th><th>Security posture</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>Secrets / Certificates</strong></td>
+  <td>Static credential — a client secret or certificate stored somewhere. Presented to Entra at authentication.</td>
+  <td><span class="severity-critical">Higher risk</span> — must be stored somewhere. Risk of theft, reuse, or misuse. Requires rotation. Same risks as service principal secrets today.</td>
+</tr>
+<tr>
+  <td><strong>Federated Identity Credentials (FIC)</strong></td>
+  <td>No stored secret. An external identity (e.g. Azure Managed Identity) presents a short-lived OIDC token that Entra verifies dynamically against trust rules.</td>
+  <td><span class="green-inline">Recommended</span> — no secret ever leaves the workload's hosting platform. Entra never sees a password. OIDC token is short-lived (minutes) and signed by a key the workload cannot extract.</td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:12px;">
+  <div class="callout-title">📌 How FIC trust works</div>
+  <p>Every FIC is defined by three properties that must exactly match claims in the inbound token. The match is <strong>case-sensitive</strong> — a mismatch on any of these will silently fail authentication:</p>
+  <ul style="margin:8px 0 0 16px;font-size:13px;color:#2e3d5e;line-height:1.8;">
+    <li><strong>issuer</strong> — URL of the external identity provider; must match the <code>iss</code> claim. For an Azure Managed Identity: <code>https://login.microsoftonline.com/&lt;tenantId&gt;/v2.0</code></li>
+    <li><strong>subject</strong> — identifier of the external workload; must match the <code>sub</code> claim. For an MI: the MI's principal ID (GUID)</li>
+    <li><strong>audiences</strong> — must match the <code>aud</code> claim. For Entra token exchange: <code>api://AzureADTokenExchange</code></li>
+  </ul>
+</div>
+
+<h3 style="margin-top:20px;">Graph API scopes for Blueprint operations</h3>
+<p>Blueprint creation and credential management requires specific scopes beyond the read-only <code>AgentIdentity.Read.All</code> scope used for inventory queries:</p>
+
+<table>
+<thead><tr><th>Operation</th><th>Required scope</th></tr></thead>
+<tbody>
+<tr><td>Create an Agent Identity Blueprint</td><td><code>AgentIdentityBlueprint.Create</code></td></tr>
+<tr><td>Add or remove Blueprint credentials (secrets, certs, FIC)</td><td><code>AgentIdentityBlueprint.AddRemoveCreds.All</code></td></tr>
+<tr><td>Create the Blueprint Principal (service principal)</td><td><code>AgentIdentityBlueprintPrincipal.Create</code></td></tr>
+<tr><td>Create Agent Identities from a Blueprint</td><td><code>AgentIdentity.ReadWrite.All</code></td></tr>
+<tr><td>Read Agent Identities (inventory/audit)</td><td><code>AgentIdentity.Read.All</code></td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-warn" style="margin-top:12px;">
+  <div class="callout-title">⚠️ Role requirement for Blueprint operations</div>
+  <p>Creating blueprints and managing credentials requires the <strong>Agent ID Administrator</strong> role (or Global Admin for lab/testing). Global Reader returns 403 on all Blueprint and AgentIdentity write endpoints. This is a separate role from standard Entra admin roles — it must be explicitly assigned.</p>
+</div>
+
 
 <h2>Practical Controls — Ranked by Availability</h2>
 <table>
@@ -775,7 +856,7 @@ Disconnect-MgGraph</pre>
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  Last updated: April 16, 2026 · Analysis covers publicly announced Microsoft security capabilities only
+  Last updated: April 20, 2026 · Analysis covers publicly announced Microsoft security capabilities only
 </div>
 </div>
 

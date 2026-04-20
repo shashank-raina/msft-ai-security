@@ -389,6 +389,62 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 
 
+
+
+<div class="section-label" style="margin-top:40px;">APRIL 20, 2026</div>
+<h2>Registry Convergence · Two-Portal Model · AI Reader / AI Administrator Roles</h2>
+
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Registry convergence documented</strong> — Agent 365 (M365 admin center) is now the single control plane for comprehensive agent inventory. Entra admin center focuses on identity and access management only. Two-portal model added with clear table showing what each portal does, what agents are visible, and which roles are needed.</td>
+<td>agent365.html, identity.html, product-map.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>AI Administrator and AI Reader roles documented</strong> — two new roles for Agent 365 inventory. AI Reader is the recommended least-privilege role for agent visibility in M365 admin center. Distinct from Agent ID Administrator (Entra admin center). No licence required for inventory-only access.</td>
+<td>agent365.html, identity.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 Clarified</span></td>
+<td><strong>No licence needed for basic agent inventory</strong> — viewing all agents in M365 admin center (Agent 365) requires no product licence, only the AI Administrator or AI Reader role. Licence required only when applying security controls (CA, identity governance).</td>
+<td>agent365.html</td></tr>
+
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Source</div>
+  <p><a href="https://learn.microsoft.com/en-us/entra/agent-id/agent-registry-convergence" target="_blank" style="color:var(--blue);">Microsoft Learn — Agent Registry convergence with Microsoft Agent 365 (April 2026)</a></p>
+</div>
+
+<div class="section-label" style="margin-top:40px;">APRIL 19, 2026</div>
+<h2>T1/T2 Authentication Flow · Federated Identity Credentials · Blueprint Scopes</h2>
+
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>T1/T2 authentication flow documented</strong> — Blueprint authentication uses two phases: T1 (Exchange Token / trust phase, controlled by Blueprint credential type) and T2 (Access Token / authorisation phase, controlled by Agent Identity permissions). These govern independently — a critical conceptual gap in our previous documentation. Source: Derk van der Woude (April 2026).</td>
+<td>identity.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Federated Identity Credentials (FIC) documented</strong> — FIC is the recommended Blueprint credential type. No stored secrets — uses trust against an external identity provider (e.g. Azure Managed Identity). Three required properties: issuer, subject, audiences. Critical gotcha: match is case-sensitive. OIDC tokens are short-lived (minutes). Added to Blueprint credential model section with comparison table against secrets/certificates.</td>
+<td>identity.html, agent365.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Blueprint Graph API scopes documented</strong> — AgentIdentityBlueprint.Create, AgentIdentityBlueprint.AddRemoveCreds.All, AgentIdentityBlueprintPrincipal.Create, AgentIdentity.ReadWrite.All. Previously only read scope (AgentIdentity.Read.All) was documented. Full scope table added for Blueprint lifecycle operations.</td>
+<td>identity.html</td></tr>
+
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Source</div>
+  <p><a href="https://derkvanderwoude.medium.com/entra-agent-id-federated-identity-credentials-fic-deep-dive-472d1b5a66e2" target="_blank" style="color:var(--blue);">Derk van der Woude — Entra Agent ID → Federated Identity Credentials (FIC) deep-dive (April 2026)</a></p>
+</div>
+
 <div class="section-label" style="margin-top:40px;">APRIL 17, 2026</div>
 <h2>New Page: Agent 365 · Contact + Privacy merged · Nav restructured</h2>
 
@@ -1173,7 +1229,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  Last updated: April 16, 2026 · Analysis covers publicly announced Microsoft security capabilities only
+  Last updated: April 20, 2026 · Analysis covers publicly announced Microsoft security capabilities only
 </div>
 </div>
 

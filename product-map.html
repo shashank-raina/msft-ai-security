@@ -392,8 +392,8 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <div class="card-grid">
   <a href="https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-agent-id" target="_blank" class="card-link"><div class="card" style="border-color:rgba(0,120,212,0.15);">
     <div class="card-name">Entra Agent ID <span style="color:var(--blue);font-size:11px;">↗</span></div>
-    <div class="card-desc">Register agents as non-human identities. Human sponsor required. Lifecycle automation. <strong>Currently limited preview — frontier/large enterprise only.</strong> Agents still use OBO flow underneath. <strong>Only applies to Modern Agents</strong> — most existing Copilot Studio agents are Classic Agents (Service Principals) and receive no Entra Agent ID protection. Migration tool from Classic to Modern does not yet exist. Agent names do not sync on rename — original "Agent #" name persists in Entra.</div>
-    <div class="tag-row"><span class="tag warn">⚠ Preview · Frontier Only</span><span class="tag warn">⚠ Modern Agents only</span><span class="tag warn">⚠ Name sync bug</span><span class="tag warn">⚠ OBO underneath</span></div>
+    <div class="card-desc">Register agents as non-human identities. Human sponsor required. Lifecycle automation. <strong>Currently limited preview — frontier/large enterprise only.</strong> Agents still use OBO flow underneath. <strong>Only applies to Modern Agents</strong> — most existing Copilot Studio agents are Classic Agents (Service Principals) and receive no Entra Agent ID protection. Migration tool from Classic to Modern does not yet exist. Agent names do not sync on rename — original "Agent #" name persists in Entra.<br><br><strong>Registry convergence (April 2026):</strong> The Entra admin center now focuses on identity and access management only — it shows agents with Entra Agent ID only. For comprehensive inventory of all agents (including those without an identity), use Agent 365 via M365 admin center → Agents → All agents. Roles: Agent ID Administrator for Entra operations; AI Administrator or AI Reader for Agent 365 inventory (no licence required for inventory view).</div>
+    <div class="tag-row"><span class="tag warn">⚠ Preview · Frontier Only</span><span class="tag warn">⚠ Modern Agents only</span><span class="tag warn">⚠ Name sync bug</span><span class="tag">AI Reader = least-privilege inventory role</span></div>
   <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
   <a href="https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-workload-id" target="_blank" class="card-link"><div class="card" style="border-color:rgba(0,120,212,0.15);">
     <div class="card-name">Entra Workload Identity <span style="color:var(--blue);font-size:11px;">↗</span></div>
@@ -616,7 +616,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  Last updated: April 16, 2026 · Analysis covers publicly announced Microsoft security capabilities only
+  Last updated: April 20, 2026 · Analysis covers publicly announced Microsoft security capabilities only
 </div>
 </div>
 

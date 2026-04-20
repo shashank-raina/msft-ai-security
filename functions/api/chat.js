@@ -1,6 +1,6 @@
 // =============================================================================
 // SYSTEM PROMPT — UPDATE THIS SECTION WHEN SITE CONTENT CHANGES
-// Last updated: April 17, 2026
+// Last updated: April 20, 2026
 // =============================================================================
 
 const SYSTEM_PROMPT = `\
@@ -140,6 +140,37 @@ FOUR ENTRA AGENT ID OBJECTS:
     Appears as completely normal user account in Entra — NO visual indicator
     Blueprint deleted → Agent User REMAINS with all access, no flag, no expiry
     Must be explicitly managed via lifecycle workflows
+
+BLUEPRINT T1/T2 AUTHENTICATION FLOW:
+  T1 (Exchange Token / trust phase):
+    Blueprint presents credential to Entra → Entra verifies trust → issues exchange token
+    Controlled by: Blueprint credential type (secrets/certs OR FIC)
+  T2 (Access Token / authorisation phase):
+    Agent Identity inherits Blueprint permissions → Entra issues Access Token
+    Controlled by: Agent Identity permissions (Graph API roles, Azure RBAC, etc.)
+  T1 and T2 are governed INDEPENDENTLY
+
+TWO BLUEPRINT CREDENTIAL TYPES (T1):
+  Secrets / Certificates — static, must be stored somewhere, risk of theft/reuse
+  Federated Identity Credentials (FIC) — RECOMMENDED:
+    No stored secret anywhere
+    External identity (e.g. Azure Managed Identity) presents short-lived OIDC token
+    Entra verifies against three FIC properties (all case-sensitive):
+      issuer   = URL of external IdP; must match iss claim
+                 For Azure MI: https://login.microsoftonline.com/<tenantId>/v2.0
+      subject  = workload identifier; must match sub claim
+                 For Azure MI: the MI's principal ID (GUID)
+      audiences = must match aud claim; use api://AzureADTokenExchange
+    OIDC token is short-lived (minutes), signed by key workload cannot extract
+    Entra never sees a password
+
+BLUEPRINT GRAPH API SCOPES:
+  AgentIdentityBlueprint.Create            — create a blueprint
+  AgentIdentityBlueprint.AddRemoveCreds.All — add/remove credentials (FIC, secrets)
+  AgentIdentityBlueprintPrincipal.Create   — create blueprint service principal
+  AgentIdentity.ReadWrite.All              — create agent identities from blueprint
+  AgentIdentity.Read.All                   — read/inventory (existing queries)
+  Agent ID Administrator role required for all write operations (not Global Reader)
 
 BLUEPRINT MODEL: Credentials live on Blueprint, not Agent Identity.
   Blueprint deleted → credentials gone, permissions REMAIN = identity debt.
@@ -305,6 +336,29 @@ Real-world incident CW1226324 (January 2026):
   those locations had no label check
 - Fix: deployed February 2026 + DLP expanded to all storage locations April-May 2026
 - Structural lesson: AI indexes content autonomously; DLP was designed for user actions
+
+// ── AGENT REGISTRY CONVERGENCE (April 2026) ──────────────────────────────────────────
+
+TWO PORTALS — DIFFERENT AGENT VISIBILITY:
+
+  M365 admin center → Agents → All agents (Agent 365):
+    Shows: ALL agents — including those without Entra Agent ID
+    Role needed: AI Administrator OR AI Reader (least-privilege, recommended)
+    Licence needed: NONE for inventory view only
+    Use for: comprehensive discovery, operational monitoring
+
+  Entra admin center:
+    Shows: ONLY agents with a Microsoft Entra Agent ID
+    Role needed: Agent ID Administrator for write operations
+    Use for: identity governance, CA policies, blueprint management, security signals
+
+  CRITICAL: Identity admins using only the Entra admin center MISS Classic agents
+  and any agent without an Entra identity. Must use BOTH portals for full coverage.
+
+THREE ROLES FOR AGENT VISIBILITY:
+  AI Reader            — read-only, all agents, M365 admin center, no licence needed
+  AI Administrator     — full management, all agents, M365 admin center
+  Agent ID Administrator — Entra admin center, blueprint write operations, identity governance
 
 // ── AGENT 365 — WHAT IT IS ───────────────────────────────────────────────────────────
 
@@ -550,6 +604,9 @@ COMPLIANCE DEADLINES:
 - Colorado AI Act: June 2026
 
 TIMELINES: Basic visibility (30 min), Basic controls (1-2 days), Full governance programme (weeks to months depending on agent estate size).
+
+HOW TO SEE ALL YOUR AGENTS (no licence needed):
+Go to M365 admin center → Agents → All agents. You need the AI Administrator or AI Reader role. No additional licence required — this is inventory visibility only. You will see ALL agents regardless of whether they have been secured or registered with Entra. This is the starting point before any governance work.
 
 EXPLAINING TO THE BOARD: AI agents are like contractors with access badges. Right now, most organisations don't know how many contractors they have, what access each one has, or what they're doing. The Security Dashboard is the access control register. The governance programme is the onboarding process.
 
