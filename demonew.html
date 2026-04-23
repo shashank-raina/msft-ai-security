@@ -319,6 +319,126 @@ body {
 .step-path { display: block; font-family: 'Courier New', monospace; font-size: 11px; background: #faf9f8; border: 1px solid #e1dfdd; padding: 7px 12px; color: #0078d4; margin-bottom: 8px; }
 .step-warn { font-size: 11px; color: #ca5010; display: flex; gap: 5px; }
 .kql-block { font-family: 'Courier New', monospace; font-size: 11px; background: #1e1e1e; color: #9cdcfe; padding: 12px 14px; border-radius: 3px; margin-top: 8px; line-height: 1.7; }
+
+/* ─── MODAL / DETAIL DRAWER ─── */
+#modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 2000;
+}
+#modal-overlay.open { display: block; }
+
+#modal-drawer {
+  position: fixed;
+  top: 48px;
+  right: -520px;
+  bottom: 0;
+  width: 500px;
+  background: white;
+  box-shadow: -4px 0 20px rgba(0,0,0,0.15);
+  z-index: 2001;
+  overflow-y: auto;
+  transition: right 0.25s ease;
+}
+#modal-drawer.open { right: 0; }
+
+#modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  border-bottom: 1px solid #e1dfdd;
+  background: #faf9f8;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+#modal-title { font-size: 16px; font-weight: 700; }
+#modal-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #605e5c;
+  padding: 4px 8px;
+}
+#modal-close:hover { background: #f3f2f1; border-radius: 2px; }
+#modal-body { padding: 22px; }
+
+.modal-section { margin-bottom: 22px; }
+.modal-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #605e5c;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #e1dfdd;
+}
+.modal-metric {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #faf9f8;
+  border: 1px solid #e1dfdd;
+  border-radius: 3px;
+  margin-bottom: 8px;
+}
+.modal-metric-icon { font-size: 20px; flex-shrink: 0; }
+.modal-metric-label { font-size: 13px; font-weight: 500; flex: 1; }
+.modal-metric-val { font-size: 22px; font-weight: 700; }
+.modal-metric-val.red { color: #a4262c; }
+.modal-metric-val.blue { color: #0078d4; }
+.modal-metric-val.orange { color: #ca5010; }
+
+.modal-source-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f3f2f1;
+  font-size: 13px;
+}
+.modal-source-row:last-child { border-bottom: none; }
+.modal-source-icon { font-size: 14px; flex-shrink: 0; margin-top: 2px; }
+.modal-source-text { flex: 1; }
+.modal-source-detail { font-size: 11px; color: #a19f9d; margin-top: 2px; }
+
+.modal-action-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid;
+  border-radius: 3px;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+.modal-action-item.do { background: #dff6dd; border-color: #9de59b; }
+.modal-action-item.do .modal-action-num { background: #107c10; color: white; }
+.modal-action-item.warn { background: #fff4ce; border-color: #f9d24d; }
+.modal-action-item.warn .modal-action-num { background: #ca5010; color: white; }
+.modal-action-num {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+  flex-shrink: 0; margin-top: 1px;
+}
+.modal-action-body { flex: 1; }
+.modal-action-title { font-weight: 600; margin-bottom: 3px; }
+.modal-action-desc { font-size: 12px; color: #605e5c; line-height: 1.5; }
+.modal-kql { font-family: 'Courier New', monospace; font-size: 11px; background: #1e1e1e; color: #9cdcfe; padding: 10px 12px; border-radius: 3px; line-height: 1.7; margin-top: 6px; }
+.modal-link { font-size: 12px; color: #0078d4; display: block; margin-top: 10px; }
+
+.stat-card { cursor: pointer; }
+.rec-item { cursor: pointer; }
+.rec-item:hover { background: rgba(0,120,212,0.04); }
+
 </style>
 </head>
 <body>
@@ -355,17 +475,17 @@ body {
   <div class="page-sub"><span class="live-dot"></span> Last refreshed 4 minutes ago · Contoso Corporation</div>
 
   <div class="stat-row">
-    <div class="stat-card blue" onclick="showPage('inventory', document.querySelectorAll('.nav-item')[1])">
+    <div class="stat-card blue" onclick="openModal('assets')" title="Click for details">
       <div class="stat-label">AI Assets discovered</div>
       <div class="stat-num">147</div>
       <div class="stat-detail">84 agents · 31 models · 18 MCP servers · 14 other apps</div>
     </div>
-    <div class="stat-card red" onclick="showPage('risk', document.querySelectorAll('.nav-item')[2])">
+    <div class="stat-card red" onclick="openModal('misconfig')" title="Click for details">
       <div class="stat-label">Misconfigurations &amp; attack paths</div>
       <div class="stat-num">23</div>
       <div class="stat-detail">7 high · 11 medium · 5 low</div>
     </div>
-    <div class="stat-card orange" onclick="showPage('inventory', document.querySelectorAll('.nav-item')[1])">
+    <div class="stat-card orange" onclick="openModal('sensitive')" title="Click for details">
       <div class="stat-label">Agents with sensitive interactions</div>
       <div class="stat-num">12</div>
       <div class="stat-detail">Agents accessing sensitivity-labelled content</div>
@@ -398,12 +518,12 @@ body {
       <span class="rec-chevron" id="r-entra-arrow">▼</span>
     </div>
     <div class="rec-body" id="r-entra">
-      <div class="rec-item">
+      <div class="rec-item" onclick="openModal('id-protection')" title="Click for details">
         <span class="rec-item-icon">✅</span>
         <div><div class="rec-item-title">Enable ID Protection for Agents</div><div class="rec-item-desc">Automatically detects and flags risky agent behaviour. Enabled by default with Entra P2 / M365 E5 licence.</div></div>
         <span class="rec-badge badge-ok">Complete</span>
       </div>
-      <div class="rec-item">
+      <div class="rec-item" onclick="openModal('ca-agents')" title="Click for details">
         <span class="rec-item-icon">⚠️</span>
         <div><div class="rec-item-title">Enable Conditional Access for Agents</div><div class="rec-item-desc">Create a CA policy to block high-risk agents. Template: aka.ms/CreateAgentRiskPolicy — Modern agents only.</div></div>
         <span class="rec-badge badge-fail">Action required</span>
@@ -426,19 +546,19 @@ body {
       <span class="rec-chevron" id="r-purview-arrow">▼</span>
     </div>
     <div class="rec-body" id="r-purview">
-      <div class="rec-item">
+      <div class="rec-item" onclick="openModal('purview-audit')" title="Click for details">
         <span class="rec-item-icon">❌</span>
         <div><div class="rec-item-title">Enable Microsoft Purview Audit</div><div class="rec-item-desc">Required for all agent activity logging. Purview portal → Audit → Start recording.</div></div>
         <span class="rec-badge badge-fail">Not configured</span>
         <span class="rec-action">Enable →</span>
       </div>
-      <div class="rec-item">
+      <div class="rec-item" onclick="openModal('dlp')" title="Click for details">
         <span class="rec-item-icon">❌</span>
         <div><div class="rec-item-title">Turn on Data Loss Prevention (DLP)</div><div class="rec-item-desc">Requires policy: "Default DLP policy — Protect sensitive M365 Copilot interactions".</div></div>
         <span class="rec-badge badge-fail">Not configured</span>
         <span class="rec-action">Create →</span>
       </div>
-      <div class="rec-item">
+      <div class="rec-item" onclick="openModal('comm-compliance')" title="Click for details">
         <span class="rec-item-icon">❌</span>
         <div><div class="rec-item-title">Enable Communication Compliance &amp; Insider Risk Management</div><div class="rec-item-desc">Requires: "DSPM for AI — Unethical behavior in AI apps" policy + AI-category IRM policy.</div></div>
         <span class="rec-badge badge-fail">Not configured</span>
@@ -471,7 +591,7 @@ body {
         <div><div class="rec-item-title">Enable Microsoft 365 Connector</div><div class="rec-item-desc">Required for Copilot Studio agent activity data to flow into Defender.</div></div>
         <span class="rec-badge badge-ok">Connected</span>
       </div>
-      <div class="rec-item">
+      <div class="rec-item" onclick="openModal('cloud-discovery')" title="Click for details">
         <span class="rec-item-icon">⚠️</span>
         <div><div class="rec-item-title">Configure cloud apps discovery</div><div class="rec-item-desc">Shadow AI visibility — GenAI apps, model providers, MCP servers. Known bug: may show disabled even when correctly configured.</div></div>
         <span class="rec-badge badge-bug">⚠ Display bug — verify via API</span>
@@ -481,7 +601,7 @@ body {
         <div><div class="rec-item-title">Enable Defender for AI Services</div><div class="rec-item-desc">Azure Defender for Cloud → Enable AI services plan. Protects Foundry agents.</div></div>
         <span class="rec-badge badge-ok">Enabled</span>
       </div>
-      <div class="rec-item">
+      <div class="rec-item" onclick="openModal('app-governance')" title="Click for details">
         <span class="rec-item-icon">❌</span>
         <div><div class="rec-item-title">Enable App Governance</div><div class="rec-item-desc">Detects high-privilege risky cloud apps. Security posture management for Agent IDs.</div></div>
         <span class="rec-badge badge-fail">Not enabled</span>
@@ -741,5 +861,233 @@ function showInv(tab, el) {
   el.classList.add('active');
 }
 </script>
+
+<!-- MODAL DRAWER -->
+<div id="modal-overlay" onclick="closeModal()"></div>
+<div id="modal-drawer">
+  <div id="modal-header">
+    <div id="modal-title">Detail</div>
+    <button id="modal-close" onclick="closeModal()">✕</button>
+  </div>
+  <div id="modal-body"></div>
+</div>
+
+<script>
+var MODAL_CONTENT = {
+
+  'assets': {
+    title: '📦 AI Assets Discovered — How it\'s calculated',
+    html: `
+      <div class="modal-section">
+        <div class="modal-section-title">What counts as an AI asset</div>
+        <div class="modal-source-row"><span class="modal-source-icon">🤖</span><div><div class="modal-source-text"><strong>AI Agents (84)</strong></div><div class="modal-source-detail">Copilot Studio agents via Power Platform connector (RegistrySource = PowerPlatform) + Agent 365-registered agents (RegistrySource = A365). Sourced from AIAgentsInfo Advanced Hunting table.</div></div></div>
+        <div class="modal-source-row"><span class="modal-source-icon">🧠</span><div><div class="modal-source-text"><strong>AI Models (31)</strong></div><div class="modal-source-detail">Azure OpenAI deployments, Foundry model registrations, and third-party model API usage detected via Defender for Cloud Apps shadow AI discovery.</div></div></div>
+        <div class="modal-source-row"><span class="modal-source-icon">🔌</span><div><div class="modal-source-text"><strong>MCP Servers (18)</strong></div><div class="modal-source-detail">Model Context Protocol servers detected via Sentinel MCP Entity Analyzer and Defender Cloud Apps. Includes Microsoft catalog and unverified external servers.</div></div></div>
+        <div class="modal-source-row"><span class="modal-source-icon">💻</span><div><div class="modal-source-text"><strong>Other AI Apps (14)</strong></div><div class="modal-source-detail">Third-party GenAI apps (ChatGPT, Gemini, Claude.ai) detected via Entra Internet Access shadow AI detection. Shows who is using unsanctioned AI on corporate devices.</div></div></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">What needs to be configured for this to show</div>
+        <div class="modal-action-item do"><div class="modal-action-num">1</div><div class="modal-action-body"><div class="modal-action-title">Enable AI Agent Inventory (Defender + Power Platform)</div><div class="modal-action-desc">Settings → Security for AI agents → Enable. Then Power Platform Admin → Security → Threat Detection → Enable. Dual admin setup — required for agent count.</div></div></div>
+        <div class="modal-action-item do"><div class="modal-action-num">2</div><div class="modal-action-body"><div class="modal-action-title">Enable Defender for Cloud Apps discovery</div><div class="modal-action-desc">Required for MCP servers and third-party AI apps to appear. Defender → Settings → Cloud Apps → Connected apps. Enable Defender for Endpoint integration.</div></div></div>
+        <div class="modal-action-item do"><div class="modal-action-num">3</div><div class="modal-action-body"><div class="modal-action-title">Enable Entra Internet Access</div><div class="modal-action-desc">Shadow AI Detection (GA March 2026) — detects unsanctioned GenAI apps on corporate network. Required for the "Other AI apps" count.</div></div></div>
+      </div>`
+  },
+
+  'misconfig': {
+    title: '⚠️ Misconfigurations & Attack Paths — How it\'s calculated',
+    html: `
+      <div class="modal-section">
+        <div class="modal-section-title">What drives this number (23)</div>
+        <div class="modal-source-row"><span class="modal-source-icon">🔴</span><div><div class="modal-source-text"><strong>7 agents with No Authentication</strong></div><div class="modal-source-detail">Publicly reachable — anyone with the URL can interact with the agent and all its tools. Detected via: AIAgentsInfo | where UserAuthenticationType == "None"</div></div></div>
+        <div class="modal-source-row"><span class="modal-source-icon">🔴</span><div><div class="modal-source-text"><strong>11 agents with Maker Credentials + Org-wide sharing</strong></div><div class="modal-source-detail">Agent authenticates as builder — if builder is admin, every user gets admin-level access. Detected via AgentToolsDetails.mode == "Maker" + OrgWideSharing = true.</div></div></div>
+        <div class="modal-source-row"><span class="modal-source-icon">🟡</span><div><div class="modal-source-text"><strong>5 agents with no Owner assigned</strong></div><div class="modal-source-detail">No accountable person for incidents, credential rotation, or decommissioning. Detected via isempty(OwnerAccountUpns).</div></div></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">KQL to replicate this in your tenant</div>
+        <div class="modal-kql">// No-auth agents<br>AIAgentsInfo<br>| summarize arg_max(Timestamp, *) by AIAgentId<br>| where AgentStatus == "Published"<br>| where UserAuthenticationType == "None"<br>| project AIAgentName, CreatorAccountUpn, OwnerAccountUpns</div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">To remediate</div>
+        <div class="modal-action-item do"><div class="modal-action-num">1</div><div class="modal-action-body"><div class="modal-action-title">Set all agents to require authentication</div><div class="modal-action-desc">Copilot Studio → Agent → Settings → Security → Authentication → Authenticate with Microsoft. Must be done per agent.</div></div></div>
+        <div class="modal-action-item do"><div class="modal-action-num">2</div><div class="modal-action-body"><div class="modal-action-title">Replace maker credentials with end-user credentials</div><div class="modal-action-desc">Change connector authentication from Maker-provided to End user credentials. Agent then acts as the invoking user, not the builder.</div></div></div>
+        <div class="modal-action-item warn"><div class="modal-action-num">!</div><div class="modal-action-body"><div class="modal-action-title">Save the change-detection KQL as a Sentinel Analytics Rule</div><div class="modal-action-desc">Any tenant user can change auth type to None regardless of ownership. The rule alerts you the moment this happens.</div></div></div>
+      </div>`
+  },
+
+  'sensitive': {
+    title: '🔒 Agents with Sensitive Interactions — How it\'s calculated',
+    html: `
+      <div class="modal-section">
+        <div class="modal-section-title">What this counts</div>
+        <div class="modal-source-row"><span class="modal-source-icon">📂</span><div><div class="modal-source-text"><strong>12 agents accessed sensitivity-labelled content</strong></div><div class="modal-source-detail">Sourced from Microsoft Purview DSPM for AI Activity Explorer. Tracks when agents ground their responses in files or emails labelled Confidential, Highly Confidential, or custom sensitivity labels.</div></div></div>
+        <div class="modal-source-row"><span class="modal-source-icon">⚠️</span><div><div class="modal-source-text"><strong>This is a data risk, not just an identity risk</strong></div><div class="modal-source-detail">The Finance Data Summariser accessed 847 Confidential files in the last 30 days. If that agent uses Maker credentials shared org-wide, every employee can now ask questions about those files.</div></div></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">What needs to be configured for this to show</div>
+        <div class="modal-action-item do"><div class="modal-action-num">1</div><div class="modal-action-body"><div class="modal-action-title">Enable DSPM for AI</div><div class="modal-action-desc">Microsoft Purview → Data Security Posture Management for AI. Required for agent-level activity tracking and sensitive content access visibility.</div></div></div>
+        <div class="modal-action-item do"><div class="modal-action-num">2</div><div class="modal-action-body"><div class="modal-action-title">Apply sensitivity labels to your content</div><div class="modal-action-desc">This count only works if files and emails have Purview sensitivity labels applied. Without labels, DSPM cannot detect when sensitive content is accessed by agents.</div></div></div>
+        <div class="modal-action-item do"><div class="modal-action-num">3</div><div class="modal-action-body"><div class="modal-action-title">Enable Purview Audit</div><div class="modal-action-desc">Purview portal → Audit → Start recording user and admin activity. Required for agent interaction logs to flow into DSPM.</div></div></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">How to reduce exposure</div>
+        <div class="modal-action-item do"><div class="modal-action-num">1</div><div class="modal-action-body"><div class="modal-action-title">Apply SharePoint Advanced Management Restricted Content Discovery (RCD)</div><div class="modal-action-desc">Excludes specific SharePoint sites from Copilot grounding entirely. SAM is included with your M365 Copilot licence — no extra cost. Apply to sensitive sites immediately while longer remediation is underway.</div></div></div>
+        <div class="modal-action-item do"><div class="modal-action-num">2</div><div class="modal-action-body"><div class="modal-action-title">Create a DLP policy for Copilot</div><div class="modal-action-desc">Purview DLP → Create policy → M365 Copilot location → Block label-bearing content from being used in agent grounding. Requires: "Default DLP policy — Protect sensitive M365 Copilot interactions".</div></div></div>
+      </div>`
+  },
+
+  'id-protection': {
+    title: '✅ Enable ID Protection for Agents',
+    html: `
+      <div class="modal-section">
+        <div class="modal-section-title">What it does</div>
+        <p style="font-size:13px;color:#605e5c;line-height:1.6;">Entra ID Protection continuously monitors agent identity behaviour and flags anomalies. Builds a baseline of normal activity per agent, then detects deviations that could indicate compromise or misuse.</p>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Six risk detections</div>
+        <div class="modal-source-row"><span class="modal-source-icon">🔍</span><div><div class="modal-source-text"><strong>Unfamiliar resource access</strong></div><div class="modal-source-detail">Agent accessed resources it doesn\'t usually access — possible attacker pivoting via the agent</div></div></div>
+        <div class="modal-source-row"><span class="modal-source-icon">📈</span><div><div class="modal-source-text"><strong>Sign-in spike</strong></div><div class="modal-source-detail">Abnormally high sign-in frequency — possible automation abuse or attacker toolkit</div></div></div>
+        <div class="modal-source-row"><span class="modal-source-icon">❌</span><div><div class="modal-source-text"><strong>Failed access attempt</strong></div><div class="modal-source-detail">Repeated failures to access unauthorised resources — possible token replay attack</div></div></div>
+        <div class="modal-source-row"><span class="modal-source-icon">👤</span><div><div class="modal-source-text"><strong>Sign-in by risky user</strong></div><div class="modal-source-detail">Agent signed in on behalf of a risky user — compromised credentials being exploited</div></div></div>
+        <div class="modal-source-row"><span class="modal-source-icon">🚨</span><div><div class="modal-source-text"><strong>Confirmed compromised</strong></div><div class="modal-source-detail">Admin confirmed — automatically sets risk to High and triggers CA block policies</div></div></div>
+        <div class="modal-source-row"><span class="modal-source-icon">🛡️</span><div><div class="modal-source-text"><strong>Threat intelligence</strong></div><div class="modal-source-detail">Activity matching known attack patterns from Microsoft threat intelligence</div></div></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Status in this tenant</div>
+        <div class="modal-action-item do"><div class="modal-action-num">✓</div><div class="modal-action-body"><div class="modal-action-title">Already enabled</div><div class="modal-action-desc">ID Protection for Agents is enabled by default when you have an Entra P2 or M365 E5 licence. No admin action needed. Check Entra admin center → ID Protection → Risky Agents for current flagged agents.</div></div></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Limitation</div>
+        <div class="modal-action-item warn"><div class="modal-action-num">!</div><div class="modal-action-body"><div class="modal-action-title">Modern agents only</div><div class="modal-action-desc">ID Protection for Agents only applies to agents with Entra Agent ID (Modern agents). Classic Copilot Studio agents — the majority in most tenants — are not monitored. Migration to Modern agents is the prerequisite.</div></div></div>
+      </div>`
+  },
+
+  'ca-agents': {
+    title: '⚠️ Enable Conditional Access for Agents',
+    html: `
+      <div class="modal-section">
+        <div class="modal-section-title">What it does</div>
+        <p style="font-size:13px;color:#605e5c;line-height:1.6;">CA for Agent ID extends Zero Trust Conditional Access policies to AI agents as first-class identities. Agents are evaluated the same way as users — access can be blocked based on risk level, resource type, custom security attributes, or Blueprint.</p>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Where it applies</div>
+        <div class="modal-source-row"><span class="modal-source-icon">✅</span><div><div class="modal-source-text"><strong>Modern Copilot Studio agents (Entra Agent ID)</strong></div><div class="modal-source-detail">Frontier programme only — most tenants not yet eligible</div></div></div>
+        <div class="modal-source-row"><span class="modal-source-icon">✅</span><div><div class="modal-source-text"><strong>Microsoft Foundry agents</strong></div><div class="modal-source-detail">OAuth 2.0 Agent ID — fully supported</div></div></div>
+        <div class="modal-source-row"><span class="modal-source-icon">✅</span><div><div class="modal-source-text"><strong>Microsoft-built Security Copilot agents</strong></div><div class="modal-source-detail">Phishing Triage, Threat Intel Briefing etc.</div></div></div>
+        <div class="modal-source-row"><span class="modal-source-icon">❌</span><div><div class="modal-source-text"><strong>Classic Copilot Studio agents</strong></div><div class="modal-source-detail">These use OBO or service principal auth — CA for Agent ID does not apply. This covers most existing production agents.</div></div></div>
+        <div class="modal-source-row"><span class="modal-source-icon">❌</span><div><div class="modal-source-text"><strong>Custom Security Copilot agents</strong></div><div class="modal-source-detail">"Connect with existing user account" = maker credentials risk with admin blast radius. CA does not apply.</div></div></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">How to configure</div>
+        <div class="modal-action-item do"><div class="modal-action-num">1</div><div class="modal-action-body"><div class="modal-action-title">Use the Microsoft template</div><div class="modal-action-desc">Go to aka.ms/CreateAgentRiskPolicy — pre-built template to block agents with High risk level (from ID Protection). One-click deployment.</div></div></div>
+        <div class="modal-action-item do"><div class="modal-action-num">2</div><div class="modal-action-body"><div class="modal-action-title">Assign custom security attributes for agent segmentation</div><div class="modal-action-desc">Create attribute set AgentAttributes → attribute AgentApprovalStatus. Tag agents as HR_Approved, Finance_Approved etc. CA policy can then allow only approved agents to access specific resources — scalable governance without managing object IDs.</div></div></div>
+        <div class="modal-action-item warn"><div class="modal-action-num">!</div><div class="modal-action-body"><div class="modal-action-title">Requires Entra P2 licence and Modern agents</div><div class="modal-action-desc">CA for Agent ID is Preview. You need Frontier programme access for Copilot Studio agents. For Foundry agents it is generally available.</div></div></div>
+      </div>`
+  },
+
+  'dlp': {
+    title: '❌ Turn on Data Loss Prevention (DLP)',
+    html: `
+      <div class="modal-section">
+        <div class="modal-section-title">Why the dashboard flags this</div>
+        <p style="font-size:13px;color:#605e5c;line-height:1.6;">The dashboard checks for a specific DLP policy by name. It won\'t go green until this exact policy exists in your tenant.</p>
+        <div class="modal-source-row"><span class="modal-source-icon">🔍</span><div><div class="modal-source-text"><strong>Required policy name (exact)</strong></div><div class="modal-source-detail">"Default DLP policy — Protect sensitive M365 Copilot interactions" — the dashboard verifies this policy exists via Graph API call to DlpCompliancePolicy.</div></div></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">What this policy does</div>
+        <p style="font-size:13px;color:#605e5c;line-height:1.6;">Prevents Copilot and Copilot Chat from using sensitive information types (credit card numbers, passports, SSNs etc.) in prompts. Also prevents sensitive labelled files from being used as grounding data.</p>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">How to configure</div>
+        <div class="modal-action-item do"><div class="modal-action-num">1</div><div class="modal-action-body"><div class="modal-action-title">Go to Microsoft Purview → Data Loss Prevention</div><div class="modal-action-desc">Create a new policy. Choose the M365 Copilot and Copilot Chat location. Name it exactly: "Default DLP policy — Protect sensitive M365 Copilot interactions".</div></div></div>
+        <div class="modal-action-item do"><div class="modal-action-num">2</div><div class="modal-action-body"><div class="modal-action-title">Configure two rules</div><div class="modal-action-desc">Rule 1: Block sensitivity-labelled files from being grounded (applies to Word, Excel, PowerPoint — now covers all storage locations as of April 2026). Rule 2 (Preview→GA June 2026): Block prompts containing sensitive information types.</div></div></div>
+        <div class="modal-action-item warn"><div class="modal-action-num">!</div><div class="modal-action-body"><div class="modal-action-title">Two rules cannot be combined in one policy</div><div class="modal-action-desc">The label-blocking rule and the SIT prompt-blocking rule must be in separate policies — a known limitation of the current DLP engine.</div></div></div>
+      </div>`
+  },
+
+  'purview-audit': {
+    title: '❌ Enable Microsoft Purview Audit',
+    html: `
+      <div class="modal-section">
+        <div class="modal-section-title">Why it\'s needed</div>
+        <p style="font-size:13px;color:#605e5c;line-height:1.6;">Purview Audit is the foundation. Without it, none of the other Purview-based recommendations can populate data — no agent activity logs, no sensitive content tracking, no IRM signals.</p>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">How to enable</div>
+        <div class="modal-action-item do"><div class="modal-action-num">1</div><div class="modal-action-body"><div class="modal-action-title">Sign in to Microsoft Purview portal</div><div class="modal-action-desc">Go to purview.microsoft.com → Audit → Start recording user and admin activity → Confirm. Takes up to 60 minutes to begin capturing events.</div></div></div>
+        <div class="modal-action-item do"><div class="modal-action-num">2</div><div class="modal-action-body"><div class="modal-action-title">Verify it\'s working</div><div class="modal-action-desc">After 60 minutes, search for Copilot-related events: AiCopilotQuery, AiCopilotResponse. These should start appearing once audit is enabled and agents are in use.</div></div></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Licence note</div>
+        <p style="font-size:12px;color:#605e5c;">Basic audit is included with M365 E3. Advanced audit (90+ day retention, longer search) requires M365 E5 or Purview Audit Premium.</p>
+      </div>`
+  },
+
+  'comm-compliance': {
+    title: '❌ Communication Compliance & Insider Risk Management',
+    html: `
+      <div class="modal-section">
+        <div class="modal-section-title">What the dashboard checks (exactly)</div>
+        <div class="modal-source-row"><span class="modal-source-icon">🔍</span><div><div class="modal-source-text"><strong>Communication Compliance — exact policy required</strong></div><div class="modal-source-detail">"DSPM for AI — Unethical behavior in AI apps" — the dashboard verifies this specific policy exists via API call. Create it from DSPM for AI templates or Communication Compliance templates.</div></div></div>
+        <div class="modal-source-row"><span class="modal-source-icon">🔍</span><div><div class="modal-source-text"><strong>Insider Risk Management — any AI-category policy</strong></div><div class="modal-source-detail">Policy must have PolicyCategory = ApplicableToAI. Use the "Detect risky interactions in AI apps (preview)" template from DSPM for AI recommendations.</div></div></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">How to configure</div>
+        <div class="modal-action-item do"><div class="modal-action-num">1</div><div class="modal-action-body"><div class="modal-action-title">Use DSPM for AI templates (easiest)</div><div class="modal-action-desc">Purview → Data Security Posture Management for AI → Recommendations. Both Communication Compliance and IRM templates are available here with one-click creation.</div></div></div>
+        <div class="modal-action-item warn"><div class="modal-action-num">!</div><div class="modal-action-body"><div class="modal-action-title">Data Lifecycle (Retention) has a cost risk</div><div class="modal-action-desc">AI-related retention policies require an Azure pay-as-you-go subscription. Costs are usage-based and unpredictable. Enable with caution and set a budget alert in Azure Cost Management before activating.</div></div></div>
+      </div>`
+  },
+
+  'app-governance': {
+    title: '❌ Enable App Governance',
+    html: `
+      <div class="modal-section">
+        <div class="modal-section-title">What it does</div>
+        <p style="font-size:13px;color:#605e5c;line-height:1.6;">App Governance is a Defender for Cloud Apps feature that detects and can automatically disable high-privilege or risky cloud applications registered in Entra ID — including AI agents. It provides security posture management for Agent IDs.</p>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">How to enable</div>
+        <div class="modal-action-item do"><div class="modal-action-num">1</div><div class="modal-action-body"><div class="modal-action-title">Enable in Defender for Cloud Apps</div><div class="modal-action-desc">Defender portal → Cloud Apps → App Governance → Get started. Requires Defender for Cloud Apps licence (included with M365 E5 Security or purchased separately).</div></div></div>
+        <div class="modal-action-item do"><div class="modal-action-num">2</div><div class="modal-action-body"><div class="modal-action-title">Create policies for agent-specific risks</div><div class="modal-action-desc">Set policies to alert on: agents with excessive Graph API permissions, agents with no owner, agents with high-privilege delegated scopes. App Governance can auto-disable apps that violate policies.</div></div></div>
+      </div>`
+  },
+
+  'cloud-discovery': {
+    title: '⚠️ Configure Cloud Apps Discovery',
+    html: `
+      <div class="modal-section">
+        <div class="modal-section-title">What it discovers</div>
+        <div class="modal-source-row"><span class="modal-source-icon">🤖</span><div><div class="modal-source-text"><strong>GenAI apps (sanctioned and shadow)</strong></div><div class="modal-source-detail">M365 Copilot, ChatGPT, Gemini, Claude.ai — any GenAI app accessed from corporate devices. Shadow AI: apps not approved by IT.</div></div></div>
+        <div class="modal-source-row"><span class="modal-source-icon">🔌</span><div><div class="modal-source-text"><strong>AI model providers</strong></div><div class="modal-source-detail">Anthropic API, OpenAI API, Azure OpenAI — direct API calls from developer machines or applications.</div></div></div>
+        <div class="modal-source-row"><span class="modal-source-icon">🧩</span><div><div class="modal-source-text"><strong>MCP servers</strong></div><div class="modal-source-detail">Model Context Protocol servers connected to agents — both Microsoft catalog and unverified external servers.</div></div></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">⚠️ Known bug in this dashboard</div>
+        <div class="modal-action-item warn"><div class="modal-action-num">!</div><div class="modal-action-body"><div class="modal-action-title">Display bug — always shows "disabled" even when working</div><div class="modal-action-desc">This recommendation shows as not configured even when cloud discovery is correctly set up. Verified by Derk van der Woude (Microsoft Security MVP) via F12 API inspection — the underlying API returns connectionStatus: Connected but the dashboard UI displays the wrong status. Verify your actual status via Defender → Cloud Apps → Cloud discovery settings.</div></div></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">How to configure properly</div>
+        <div class="modal-action-item do"><div class="modal-action-num">1</div><div class="modal-action-body"><div class="modal-action-title">Enable Defender for Cloud Apps in Defender for Endpoint</div><div class="modal-action-desc">Defender → Settings → Endpoints → Advanced features → Microsoft Defender for Cloud Apps → On.</div></div></div>
+        <div class="modal-action-item do"><div class="modal-action-num">2</div><div class="modal-action-body"><div class="modal-action-title">Enable Defender for Endpoint in Cloud Apps</div><div class="modal-action-desc">Defender → Cloud Apps → Settings → Cloud discovery → Automatic log upload → Microsoft Defender for Endpoint → On.</div></div></div>
+      </div>`
+  }
+};
+
+function openModal(key) {
+  var content = MODAL_CONTENT[key];
+  if (!content) return;
+  document.getElementById('modal-title').textContent = content.title;
+  document.getElementById('modal-body').innerHTML = content.html;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.getElementById('modal-drawer').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.getElementById('modal-drawer').classList.remove('open');
+}
+
+document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeModal(); });
+</script>
+
 </body>
 </html>
