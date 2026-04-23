@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security Dashboard for AI · Demo</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 14px;
+  color: #201f1e;
+  background: #f3f2f1;
+}
+
+/* ─── TOPBAR ─── */
+#topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 48px;
+  background: #0078d4;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 12px;
+  z-index: 1000;
+}
+.msft-logo { width: 18px; height: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 2px; flex-shrink: 0; }
+.msft-logo span:nth-child(1){background:#f25022;}
+.msft-logo span:nth-child(2){background:#7fba00;}
+.msft-logo span:nth-child(3){background:#00a4ef;}
+.msft-logo span:nth-child(4){background:#ffb900;}
+#topbar-brand { font-size: 15px; font-weight: 600; color: white; }
+#topbar-sep { color: rgba(255,255,255,0.5); font-size: 13px; }
+#topbar-sub { font-size: 13px; color: rgba(255,255,255,0.85); }
+#topbar-url { font-size: 11px; color: rgba(255,255,255,0.5); font-family: monospace; margin-left: 4px; }
+#demo-badge {
+  margin-left: auto;
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.4);
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.05em;
+}
+
+/* ─── SIDENAV ─── */
+#sidenav {
+  position: fixed;
+  top: 48px;
+  left: 0;
+  bottom: 0;
+  width: 220px;
+  background: white;
+  border-right: 1px solid #e1dfdd;
+  overflow-y: auto;
+  padding: 8px 0;
+}
+.nav-section {
+  font-size: 10px;
+  font-weight: 700;
+  color: #a19f9d;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 12px 16px 4px;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  font-size: 13px;
+  color: #605e5c;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+}
+.nav-item:hover { background: #f3f2f1; color: #201f1e; }
+.nav-item.active { background: rgba(0,120,212,0.08); color: #0078d4; border-left-color: #0078d4; font-weight: 600; }
+.nav-icon { font-size: 15px; width: 18px; text-align: center; }
+
+/* ─── MAIN CONTENT ─── */
+#main {
+  position: fixed;
+  top: 48px;
+  left: 220px;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+  background: #f3f2f1;
+}
+
+/* ─── PAGES ─── */
+.page { display: none; padding: 28px 32px; }
+.page.active { display: block; }
+
+/* ─── PAGE HEADER ─── */
+.breadcrumb { font-size: 11px; color: #a19f9d; margin-bottom: 6px; }
+.page-title { font-size: 24px; font-weight: 600; margin-bottom: 6px; }
+.page-sub { font-size: 13px; color: #605e5c; display: flex; align-items: center; gap: 6px; margin-bottom: 24px; }
+.live-dot { width: 7px; height: 7px; background: #107c10; border-radius: 50%; display: inline-block; animation: blink 2s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+/* ─── STAT CARDS ─── */
+.stat-row { display: flex; gap: 14px; margin-bottom: 24px; flex-wrap: wrap; }
+.stat-card {
+  background: white;
+  border: 1px solid #e1dfdd;
+  border-radius: 4px;
+  padding: 18px 22px;
+  min-width: 200px;
+  flex: 1;
+  cursor: pointer;
+}
+.stat-card:hover { border-color: #0078d4; }
+.stat-label { font-size: 13px; color: #605e5c; margin-bottom: 8px; font-weight: 500; }
+.stat-num { font-size: 36px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+.stat-card.red .stat-num { color: #a4262c; }
+.stat-card.blue .stat-num { color: #0078d4; }
+.stat-card.orange .stat-num { color: #ca5010; }
+.stat-detail { font-size: 12px; color: #a19f9d; }
+
+/* ─── ALERTS ─── */
+.alert {
+  border-radius: 4px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  display: flex;
+  gap: 10px;
+  line-height: 1.5;
+}
+.alert.red { background: #fde7e9; border: 1px solid #f4abab; }
+.alert.orange { background: #fff4ce; border: 1px solid #f9d24d; }
+.alert-icon { flex-shrink: 0; font-size: 15px; }
+.alert strong { display: block; margin-bottom: 3px; }
+.alert.red strong { color: #a4262c; }
+.alert.orange strong { color: #7a4f00; }
+
+/* ─── SECTION TITLE ─── */
+.section-title { font-size: 15px; font-weight: 600; margin: 24px 0 12px; }
+.section-sub { font-size: 13px; color: #605e5c; margin-bottom: 16px; }
+
+/* ─── RECOMMENDATION PANELS ─── */
+.rec-panel { background: white; border: 1px solid #e1dfdd; border-radius: 4px; margin-bottom: 12px; overflow: hidden; }
+.rec-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  cursor: pointer;
+}
+.rec-header:hover { background: #f3f2f1; }
+.rec-header-left { display: flex; align-items: center; gap: 12px; flex: 1; }
+.rec-icon { font-size: 20px; }
+.rec-title { font-size: 14px; font-weight: 600; }
+.rec-sub { font-size: 12px; color: #605e5c; }
+.rec-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+.badge-ok { background: #dff6dd; color: #107c10; }
+.badge-warn { background: #fff4ce; color: #7a4f00; }
+.badge-fail { background: #fde7e9; color: #a4262c; }
+.badge-bug { background: #f3f2f1; color: #605e5c; border: 1px solid #e1dfdd; }
+.rec-chevron { color: #a19f9d; font-size: 12px; }
+
+.rec-body { border-top: 1px solid #e1dfdd; }
+.rec-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 18px 11px 50px;
+  border-bottom: 1px solid #f3f2f1;
+  font-size: 13px;
+}
+.rec-item:last-child { border-bottom: none; }
+.rec-item-icon { font-size: 14px; flex-shrink: 0; }
+.rec-item-title { font-weight: 500; flex: 1; }
+.rec-item-desc { font-size: 11px; color: #a19f9d; margin-top: 2px; }
+.rec-action { font-size: 12px; color: #0078d4; cursor: pointer; white-space: nowrap; margin-left: 8px; }
+
+/* ─── TABLES ─── */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border: 1px solid #e1dfdd;
+  border-radius: 4px;
+  overflow: hidden;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+.data-table th {
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #605e5c;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: #faf9f8;
+  border-bottom: 1px solid #e1dfdd;
+}
+.data-table td {
+  padding: 11px 14px;
+  border-bottom: 1px solid #f3f2f1;
+  vertical-align: middle;
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: rgba(0,120,212,0.03); }
+.agent-name { font-weight: 600; }
+.agent-sub { font-size: 11px; color: #a19f9d; font-family: monospace; }
+
+/* ─── PILLS ─── */
+.pill { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 12px; }
+.pill-red { background: #fde7e9; color: #a4262c; }
+.pill-orange { background: #fff4ce; color: #7a4f00; }
+.pill-green { background: #dff6dd; color: #107c10; }
+.pill-blue { background: #deecf9; color: #0078d4; }
+.pill-purple { background: #f4f0fa; color: #5c2d91; }
+.pill-grey { background: #f3f2f1; color: #605e5c; }
+
+/* ─── RISK PAGE ─── */
+.risk-grid { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 20px; }
+.risk-card {
+  background: white;
+  border: 1px solid #e1dfdd;
+  border-radius: 4px;
+  padding: 18px;
+  min-width: 220px;
+  flex: 1;
+}
+.risk-card-title { font-size: 13px; font-weight: 600; color: #605e5c; margin-bottom: 6px; }
+.risk-num { font-size: 32px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+.risk-num.red { color: #a4262c; }
+.risk-num.orange { color: #ca5010; }
+.risk-num.green { color: #107c10; }
+.risk-sub { font-size: 12px; color: #a19f9d; margin-bottom: 12px; }
+.risk-finding { font-size: 12px; padding: 6px 0; border-bottom: 1px solid #f3f2f1; display: flex; gap: 6px; align-items: flex-start; }
+.risk-finding:last-child { border-bottom: none; }
+.risk-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+.risk-text-wrap { flex: 1; }
+.risk-fix { font-size: 11px; color: #0078d4; cursor: pointer; margin-left: auto; white-space: nowrap; }
+
+/* ─── INV TABS ─── */
+.inv-tabs { display: flex; gap: 0; border-bottom: 1px solid #e1dfdd; margin-bottom: 16px; }
+.inv-tab {
+  padding: 8px 18px;
+  font-size: 13px;
+  color: #605e5c;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+.inv-tab:hover { color: #201f1e; }
+.inv-tab.active { color: #0078d4; border-bottom-color: #0078d4; font-weight: 600; }
+.inv-count { font-size: 10px; background: #deecf9; color: #0078d4; border-radius: 10px; padding: 1px 7px; margin-left: 5px; }
+.inv-panel { display: none; }
+.inv-panel.active { display: block; }
+
+.toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.search-input { border: 1px solid #c8c6c4; border-radius: 2px; padding: 5px 10px; font-size: 13px; font-family: inherit; width: 240px; outline: none; }
+.search-input:focus { border-color: #0078d4; box-shadow: 0 0 0 1px #0078d4; }
+.btn { padding: 6px 14px; font-size: 13px; border: 1px solid #8a8886; background: white; color: #201f1e; border-radius: 2px; cursor: pointer; font-family: inherit; }
+.btn:hover { background: #f3f2f1; }
+.btn-primary { background: #0078d4; color: white; border-color: #0078d4; }
+.btn-primary:hover { background: #005a9e; }
+
+/* ─── ENTRA PAGE ─── */
+.concept-grid { display: flex; gap: 14px; flex-wrap: wrap; margin: 16px 0; }
+.concept-card {
+  background: white;
+  border: 1px solid #e1dfdd;
+  border-top: 3px solid;
+  border-radius: 4px;
+  padding: 18px;
+  min-width: 220px;
+  flex: 1;
+}
+.concept-card.blueprint { border-top-color: #0078d4; }
+.concept-card.principal { border-top-color: #5c2d91; }
+.concept-card.identity { border-top-color: #107c10; }
+.concept-card.user { border-top-color: #a4262c; }
+.concept-icon { font-size: 24px; margin-bottom: 8px; }
+.concept-title { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+.concept-type { font-size: 10px; font-weight: 700; color: #a19f9d; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+.concept-desc { font-size: 12px; color: #605e5c; line-height: 1.6; }
+.concept-risk { margin-top: 10px; display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 10px; border-radius: 2px; }
+
+.flow-row { display: flex; align-items: center; gap: 8px; background: #faf9f8; border: 1px solid #e1dfdd; border-radius: 4px; padding: 16px; margin: 14px 0; flex-wrap: wrap; }
+.flow-box { background: white; border: 1px solid #c8c6c4; border-radius: 3px; padding: 10px 16px; text-align: center; }
+.flow-box-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; color: #a19f9d; font-weight: 700; margin-bottom: 3px; }
+.flow-box-val { font-size: 13px; font-weight: 700; }
+.flow-box-note { font-size: 10px; color: #a19f9d; margin-top: 2px; }
+.flow-box.t1 { border-color: #0078d4; }
+.flow-box.t2 { border-color: #107c10; }
+.flow-arrow { color: #a19f9d; font-size: 18px; }
+
+.info-box { background: #deecf9; border: 1px solid #b3d7f0; border-radius: 3px; padding: 12px 14px; font-size: 12px; color: #005a9e; margin: 10px 0; line-height: 1.6; }
+.warn-box { background: #fde7e9; border: 1px solid #f4abab; border-radius: 3px; padding: 12px 14px; font-size: 12px; color: #a4262c; margin: 10px 0; line-height: 1.6; }
+
+/* ─── SETUP PAGE ─── */
+.setup-step { display: flex; gap: 16px; padding: 18px 0; border-bottom: 1px solid #e1dfdd; }
+.setup-step:last-child { border-bottom: none; }
+.step-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+.step-num.blue { background: #deecf9; color: #0078d4; border: 2px solid #b3d7f0; }
+.step-num.purple { background: #f4f0fa; color: #5c2d91; border: 2px solid #c8b8ec; }
+.step-num.green { background: #dff6dd; color: #107c10; border: 2px solid #9de59b; }
+.step-role { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 2px; margin-bottom: 6px; }
+.sr-defender { background: #deecf9; color: #0078d4; }
+.sr-ppAdmin { background: #f4f0fa; color: #5c2d91; }
+.step-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.step-desc { font-size: 12px; color: #605e5c; line-height: 1.7; margin-bottom: 6px; }
+.step-path { display: block; font-family: 'Courier New', monospace; font-size: 11px; background: #faf9f8; border: 1px solid #e1dfdd; padding: 7px 12px; color: #0078d4; margin-bottom: 8px; }
+.step-warn { font-size: 11px; color: #ca5010; display: flex; gap: 5px; }
+.kql-block { font-family: 'Courier New', monospace; font-size: 11px; background: #1e1e1e; color: #9cdcfe; padding: 12px 14px; border-radius: 3px; margin-top: 8px; line-height: 1.7; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div id="topbar">
+  <div class="msft-logo"><span></span><span></span><span></span><span></span></div>
+  <span id="topbar-brand">Microsoft Security</span>
+  <span id="topbar-sep">›</span>
+  <span id="topbar-sub">Security Dashboard for AI</span>
+  <span id="topbar-url">ai.security.microsoft.com</span>
+  <div id="demo-badge">DEMO · FICTIONAL DATA</div>
+</div>
+
+<!-- SIDENAV -->
+<div id="sidenav">
+  <div class="nav-section">Dashboard</div>
+  <div class="nav-item active" onclick="showPage('overview', this)"><span class="nav-icon">🏠</span>Overview</div>
+  <div class="nav-item" onclick="showPage('inventory', this)"><span class="nav-icon">📦</span>AI Inventory</div>
+  <div class="nav-item" onclick="showPage('risk', this)"><span class="nav-icon">⚠️</span>AI Risk</div>
+  <div style="height:1px;background:#e1dfdd;margin:6px 0;"></div>
+  <div class="nav-section">Learn More</div>
+  <div class="nav-item" onclick="showPage('entra', this)"><span class="nav-icon">🪪</span>Entra Agent ID</div>
+  <div class="nav-item" onclick="showPage('setup', this)"><span class="nav-icon">⚙️</span>Setup walkthrough</div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+
+<!-- ══ OVERVIEW ══ -->
+<div id="page-overview" class="page active">
+  <div class="breadcrumb">Security Dashboard for AI › Overview</div>
+  <div class="page-title">Overview</div>
+  <div class="page-sub"><span class="live-dot"></span> Last refreshed 4 minutes ago · Contoso Corporation</div>
+
+  <div class="stat-row">
+    <div class="stat-card blue" onclick="showPage('inventory', document.querySelectorAll('.nav-item')[1])">
+      <div class="stat-label">AI Assets discovered</div>
+      <div class="stat-num">147</div>
+      <div class="stat-detail">84 agents · 31 models · 18 MCP servers · 14 other apps</div>
+    </div>
+    <div class="stat-card red" onclick="showPage('risk', document.querySelectorAll('.nav-item')[2])">
+      <div class="stat-label">Misconfigurations &amp; attack paths</div>
+      <div class="stat-num">23</div>
+      <div class="stat-detail">7 high · 11 medium · 5 low</div>
+    </div>
+    <div class="stat-card orange" onclick="showPage('inventory', document.querySelectorAll('.nav-item')[1])">
+      <div class="stat-label">Agents with sensitive interactions</div>
+      <div class="stat-num">12</div>
+      <div class="stat-detail">Agents accessing sensitivity-labelled content</div>
+    </div>
+  </div>
+
+  <div class="alert red">
+    <div class="alert-icon">🚨</div>
+    <div><strong>3 agents changed to No Authentication in the last 24 hours</strong>Any tenant user can change an agent's auth type regardless of ownership. Enable the change-detection Sentinel Analytics Rule immediately.</div>
+  </div>
+  <div class="alert orange">
+    <div class="alert-icon">⚠️</div>
+    <div><strong>61 of 84 agents are Classic agents — zero Entra security coverage</strong>These agents were created before Entra Agent ID and receive no Conditional Access, ID Protection, or lifecycle governance.</div>
+  </div>
+
+  <div class="section-title">Security recommendations</div>
+  <div class="section-sub">Implement these recommendations to improve your AI security posture. Select a recommendation to view details and delegate to a team member.</div>
+
+  <!-- ENTRA -->
+  <div class="rec-panel">
+    <div class="rec-header" onclick="toggleRec('r-entra')">
+      <div class="rec-header-left">
+        <span class="rec-icon">🔐</span>
+        <div>
+          <div class="rec-title">Prevent agent sprawl and unauthorized access</div>
+          <div class="rec-sub">Microsoft Entra · Identity governance for agents</div>
+        </div>
+      </div>
+      <span class="rec-badge badge-warn">1 of 2 complete</span>
+      <span class="rec-chevron" id="r-entra-arrow">▼</span>
+    </div>
+    <div class="rec-body" id="r-entra">
+      <div class="rec-item">
+        <span class="rec-item-icon">✅</span>
+        <div><div class="rec-item-title">Enable ID Protection for Agents</div><div class="rec-item-desc">Automatically detects and flags risky agent behaviour. Enabled by default with Entra P2 / M365 E5 licence.</div></div>
+        <span class="rec-badge badge-ok">Complete</span>
+      </div>
+      <div class="rec-item">
+        <span class="rec-item-icon">⚠️</span>
+        <div><div class="rec-item-title">Enable Conditional Access for Agents</div><div class="rec-item-desc">Create a CA policy to block high-risk agents. Template: aka.ms/CreateAgentRiskPolicy — Modern agents only.</div></div>
+        <span class="rec-badge badge-fail">Action required</span>
+        <span class="rec-action">Configure →</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PURVIEW -->
+  <div class="rec-panel">
+    <div class="rec-header" onclick="toggleRec('r-purview')">
+      <div class="rec-header-left">
+        <span class="rec-icon">🔒</span>
+        <div>
+          <div class="rec-title">Prevent data leaks and oversharing</div>
+          <div class="rec-sub">Microsoft Purview · Data protection for AI</div>
+        </div>
+      </div>
+      <span class="rec-badge badge-fail">0 of 4 complete</span>
+      <span class="rec-chevron" id="r-purview-arrow">▼</span>
+    </div>
+    <div class="rec-body" id="r-purview">
+      <div class="rec-item">
+        <span class="rec-item-icon">❌</span>
+        <div><div class="rec-item-title">Enable Microsoft Purview Audit</div><div class="rec-item-desc">Required for all agent activity logging. Purview portal → Audit → Start recording.</div></div>
+        <span class="rec-badge badge-fail">Not configured</span>
+        <span class="rec-action">Enable →</span>
+      </div>
+      <div class="rec-item">
+        <span class="rec-item-icon">❌</span>
+        <div><div class="rec-item-title">Turn on Data Loss Prevention (DLP)</div><div class="rec-item-desc">Requires policy: "Default DLP policy — Protect sensitive M365 Copilot interactions".</div></div>
+        <span class="rec-badge badge-fail">Not configured</span>
+        <span class="rec-action">Create →</span>
+      </div>
+      <div class="rec-item">
+        <span class="rec-item-icon">❌</span>
+        <div><div class="rec-item-title">Enable Communication Compliance &amp; Insider Risk Management</div><div class="rec-item-desc">Requires: "DSPM for AI — Unethical behavior in AI apps" policy + AI-category IRM policy.</div></div>
+        <span class="rec-badge badge-fail">Not configured</span>
+        <span class="rec-action">Configure →</span>
+      </div>
+      <div class="rec-item">
+        <span class="rec-item-icon">⚠️</span>
+        <div><div class="rec-item-title">Data Lifecycle Management (Retention)</div><div class="rec-item-desc">AI-related retention policy required. Note: Azure pay-as-you-go needed — unpredictable extra cost.</div></div>
+        <span class="rec-badge badge-warn">Optional · Cost risk</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEFENDER -->
+  <div class="rec-panel">
+    <div class="rec-header" onclick="toggleRec('r-defender')">
+      <div class="rec-header-left">
+        <span class="rec-icon">🛡️</span>
+        <div>
+          <div class="rec-title">Address AI risk and vulnerabilities</div>
+          <div class="rec-sub">Microsoft Defender · Threat protection and posture management</div>
+        </div>
+      </div>
+      <span class="rec-badge badge-warn">2 of 4 complete</span>
+      <span class="rec-chevron" id="r-defender-arrow">▼</span>
+    </div>
+    <div class="rec-body" id="r-defender">
+      <div class="rec-item">
+        <span class="rec-item-icon">✅</span>
+        <div><div class="rec-item-title">Enable Microsoft 365 Connector</div><div class="rec-item-desc">Required for Copilot Studio agent activity data to flow into Defender.</div></div>
+        <span class="rec-badge badge-ok">Connected</span>
+      </div>
+      <div class="rec-item">
+        <span class="rec-item-icon">⚠️</span>
+        <div><div class="rec-item-title">Configure cloud apps discovery</div><div class="rec-item-desc">Shadow AI visibility — GenAI apps, model providers, MCP servers. Known bug: may show disabled even when correctly configured.</div></div>
+        <span class="rec-badge badge-bug">⚠ Display bug — verify via API</span>
+      </div>
+      <div class="rec-item">
+        <span class="rec-item-icon">✅</span>
+        <div><div class="rec-item-title">Enable Defender for AI Services</div><div class="rec-item-desc">Azure Defender for Cloud → Enable AI services plan. Protects Foundry agents.</div></div>
+        <span class="rec-badge badge-ok">Enabled</span>
+      </div>
+      <div class="rec-item">
+        <span class="rec-item-icon">❌</span>
+        <div><div class="rec-item-title">Enable App Governance</div><div class="rec-item-desc">Detects high-privilege risky cloud apps. Security posture management for Agent IDs.</div></div>
+        <span class="rec-badge badge-fail">Not enabled</span>
+        <span class="rec-action">Enable →</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ INVENTORY ══ -->
+<div id="page-inventory" class="page">
+  <div class="breadcrumb">Security Dashboard for AI › AI Inventory</div>
+  <div class="page-title">AI Inventory</div>
+  <div class="page-sub">147 AI assets discovered across Microsoft and third-party platforms</div>
+
+  <div class="inv-tabs">
+    <div class="inv-tab active" onclick="showInv('agents', this)">AI agents <span class="inv-count">84</span></div>
+    <div class="inv-tab" onclick="showInv('models', this)">AI models <span class="inv-count">31</span></div>
+    <div class="inv-tab" onclick="showInv('mcp', this)">MCP servers <span class="inv-count">18</span></div>
+    <div class="inv-tab" onclick="showInv('apps', this)">Other AI apps <span class="inv-count">14</span></div>
+  </div>
+
+  <div id="inv-agents" class="inv-panel active">
+    <div class="toolbar">
+      <input class="search-input" placeholder="🔍  Search agents...">
+      <button class="btn">Filter ▾</button>
+      <button class="btn btn-primary" style="margin-left:auto;">⬇ Export</button>
+    </div>
+    <table class="data-table">
+      <thead><tr><th>Agent</th><th>Auth type</th><th>Registry</th><th>Owner</th><th>Sharing</th><th>Risk</th></tr></thead>
+      <tbody>
+        <tr><td><div class="agent-name">HR Onboarding Assistant</div><div class="agent-sub">adm.johnson@contoso.com · 14 Jan 2026</div></td><td><span class="pill pill-red">None</span></td><td><span class="pill pill-blue">PowerPlatform</span></td><td><span class="pill pill-red">Missing</span></td><td><span class="pill pill-orange">Org-wide</span></td><td><span class="pill pill-red">High</span></td></tr>
+        <tr><td><div class="agent-name">Finance Data Summariser</div><div class="agent-sub">sarah.chen@contoso.com · 22 Jan 2026</div></td><td><span class="pill pill-orange">Maker</span></td><td><span class="pill pill-blue">PowerPlatform</span></td><td><span class="pill pill-green">sarah.chen</span></td><td><span class="pill pill-orange">Org-wide</span></td><td><span class="pill pill-red">High</span></td></tr>
+        <tr><td><div class="agent-name">Sales Pipeline Agent</div><div class="agent-sub">alice.wang@contoso.com · 5 Feb 2026</div></td><td><span class="pill pill-green">OBO</span></td><td><span class="pill pill-purple">A365</span></td><td><span class="pill pill-green">alice.wang</span></td><td><span class="pill pill-green">Team</span></td><td><span class="pill pill-green">Low</span></td></tr>
+        <tr><td><div class="agent-name">IT Helpdesk Bot</div><div class="agent-sub">mark.obi@contoso.com · 3 Mar 2026</div></td><td><span class="pill pill-red">None</span></td><td><span class="pill pill-blue">PowerPlatform</span></td><td><span class="pill pill-red">Missing</span></td><td><span class="pill pill-orange">Org-wide</span></td><td><span class="pill pill-red">High</span></td></tr>
+        <tr><td><div class="agent-name">Document Summariser</div><div class="agent-sub">james.patel@contoso.com · 10 Mar 2026</div></td><td><span class="pill pill-green">OBO</span></td><td><span class="pill pill-blue">PowerPlatform</span></td><td><span class="pill pill-green">james.patel</span></td><td><span class="pill pill-green">Personal</span></td><td><span class="pill pill-green">Low</span></td></tr>
+      </tbody>
+    </table>
+    <div style="text-align:center;padding:10px;font-size:12px;color:#a19f9d;">Showing 5 of 84 agents</div>
+  </div>
+
+  <div id="inv-models" class="inv-panel">
+    <table class="data-table">
+      <thead><tr><th>Model</th><th>Provider</th><th>Deployment</th><th>Agents using</th><th>Risk</th></tr></thead>
+      <tbody>
+        <tr><td><div class="agent-name">GPT-4o</div></td><td>Azure OpenAI</td><td><span class="pill pill-green">Managed</span></td><td>34</td><td><span class="pill pill-green">Low</span></td></tr>
+        <tr><td><div class="agent-name">claude-sonnet-4-6</div></td><td>Anthropic (3rd party)</td><td><span class="pill pill-orange">External API</span></td><td>3</td><td><span class="pill pill-orange">Medium</span></td></tr>
+        <tr><td><div class="agent-name">Gemini Pro</div></td><td>Google (3rd party)</td><td><span class="pill pill-orange">External API</span></td><td>1</td><td><span class="pill pill-orange">Medium</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="inv-mcp" class="inv-panel">
+    <table class="data-table">
+      <thead><tr><th>MCP Server</th><th>Type</th><th>Agents connected</th><th>Auth</th><th>Risk</th></tr></thead>
+      <tbody>
+        <tr><td><div class="agent-name">Microsoft Graph MCP</div><div class="agent-sub">graph.microsoft.com/mcp</div></td><td><span class="pill pill-green">Microsoft</span></td><td>12</td><td><span class="pill pill-green">OAuth</span></td><td><span class="pill pill-green">Low</span></td></tr>
+        <tr><td><div class="agent-name">Unverified external MCP</div><div class="agent-sub">api.unknown-vendor.io/mcp</div></td><td><span class="pill pill-red">External · Unverified</span></td><td>2</td><td><span class="pill pill-red">API Key</span></td><td><span class="pill pill-red">High</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="inv-apps" class="inv-panel">
+    <table class="data-table">
+      <thead><tr><th>Application</th><th>Category</th><th>Users</th><th>Sanctioned</th><th>Risk</th></tr></thead>
+      <tbody>
+        <tr><td><div class="agent-name">Microsoft 365 Copilot</div></td><td>GenAI Assistant</td><td>850</td><td><span class="pill pill-green">Yes</span></td><td><span class="pill pill-green">Low</span></td></tr>
+        <tr><td><div class="agent-name">ChatGPT (OpenAI)</div></td><td>GenAI Assistant</td><td>234</td><td><span class="pill pill-orange">Partial</span></td><td><span class="pill pill-orange">Medium</span></td></tr>
+        <tr><td><div class="agent-name">Google Gemini</div></td><td>GenAI Assistant</td><td>87</td><td><span class="pill pill-red">No</span></td><td><span class="pill pill-orange">Medium</span></td></tr>
+        <tr><td><div class="agent-name">Claude.ai (Shadow AI)</div></td><td>GenAI Assistant</td><td>42</td><td><span class="pill pill-red">No</span></td><td><span class="pill pill-orange">Medium</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══ RISK ══ -->
+<div id="page-risk" class="page">
+  <div class="breadcrumb">Security Dashboard for AI › AI Risk</div>
+  <div class="page-title">AI Risk</div>
+  <div class="page-sub">Consolidated AI-related security risks — prioritised for action</div>
+
+  <div class="risk-grid">
+    <div class="risk-card">
+      <div class="risk-card-title">🔐 Identity &amp; access risk</div>
+      <div class="risk-num red">9</div>
+      <div class="risk-sub">High — immediate action needed</div>
+      <div class="risk-finding"><div class="risk-dot" style="background:#a4262c;"></div><div class="risk-text-wrap"><div>7 agents with No Authentication</div><div style="font-size:11px;color:#a19f9d;">Publicly reachable by anyone</div></div><span class="risk-fix">Remediate</span></div>
+      <div class="risk-finding"><div class="risk-dot" style="background:#a4262c;"></div><div class="risk-text-wrap"><div>2 risky agent sign-ins (ID Protection)</div><div style="font-size:11px;color:#a19f9d;">Unfamiliar resource access detected</div></div><span class="risk-fix">Investigate</span></div>
+    </div>
+    <div class="risk-card">
+      <div class="risk-card-title">📂 Data security risk</div>
+      <div class="risk-num orange">6</div>
+      <div class="risk-sub">Medium — review required</div>
+      <div class="risk-finding"><div class="risk-dot" style="background:#ca5010;"></div><div class="risk-text-wrap"><div>12 agents accessed labelled content</div><div style="font-size:11px;color:#a19f9d;">Finance Summariser: 847 Confidential files</div></div><span class="risk-fix">Review</span></div>
+      <div class="risk-finding"><div class="risk-dot" style="background:#ca5010;"></div><div class="risk-text-wrap"><div>No DLP policy protecting Copilot</div><div style="font-size:11px;color:#a19f9d;">Sensitive data can leak via prompts</div></div><span class="risk-fix">Create policy</span></div>
+    </div>
+    <div class="risk-card">
+      <div class="risk-card-title">🗺️ Misconfigurations</div>
+      <div class="risk-num red">4</div>
+      <div class="risk-sub">High — attack paths identified</div>
+      <div class="risk-finding"><div class="risk-dot" style="background:#a4262c;"></div><div class="risk-text-wrap"><div>Maker credentials + Admin builder + Org-wide</div><div style="font-size:11px;color:#a19f9d;">Finance Summariser — Global Admin blast radius</div></div><span class="risk-fix">Remediate</span></div>
+      <div class="risk-finding"><div class="risk-dot" style="background:#ca5010;"></div><div class="risk-text-wrap"><div>23 agents with no owner</div><div style="font-size:11px;color:#a19f9d;">No lifecycle accountability</div></div><span class="risk-fix">Assign owners</span></div>
+    </div>
+    <div class="risk-card">
+      <div class="risk-card-title">☁️ Cloud security risk</div>
+      <div class="risk-num orange">4</div>
+      <div class="risk-sub">Medium — investigation needed</div>
+      <div class="risk-finding"><div class="risk-dot" style="background:#ca5010;"></div><div class="risk-text-wrap"><div>1 unverified external MCP server</div><div style="font-size:11px;color:#a19f9d;">api.unknown-vendor.io/mcp · 2 agents connected</div></div><span class="risk-fix">Investigate</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ENTRA ══ -->
+<div id="page-entra" class="page">
+  <div class="page-title">Entra Agent ID — Concept</div>
+  <div class="page-sub">What it is, why it matters, how Classic vs Modern agents differ</div>
+
+  <div class="warn-box">🚨 <strong>The problem today:</strong> Most Copilot Studio agents in production are "Classic" — registered as ordinary service principals with zero agent-specific security controls. No CA for Agents, no ID Protection, no lifecycle governance. Entra Agent ID fixes this — but it's Preview, Frontier programme only, and only covers agents created after enabling it.</div>
+  <div class="info-box">💡 <strong>Plain English:</strong> Today most agents share the builder's identity badge. Entra Agent ID gives each agent its own badge — with its own permissions, risk detection, and owner accountability. The Security Dashboard only gets rich data for agents with their own badge (Modern agents).</div>
+
+  <div class="section-title">The four identity objects</div>
+  <div class="concept-grid">
+    <div class="concept-card blueprint">
+      <div class="concept-icon">📋</div>
+      <div class="concept-title">Agent Identity Blueprint</div>
+      <div class="concept-type">Template + Credential Container</div>
+      <div class="concept-desc">Defines how agents are created. Holds credentials (FIC recommended — no stored secret). If deleted: credentials gone but all downstream permissions remain. Blueprint count is a security boundary decision — compromise affects all child agents.</div>
+      <span class="concept-risk" style="background:#fff4ce;color:#7a4f00;">⚠ Protect credentials here</span>
+    </div>
+    <div class="concept-card principal">
+      <div class="concept-icon">🔑</div>
+      <div class="concept-title">Blueprint Principal</div>
+      <div class="concept-type">Audit Identity</div>
+      <div class="concept-desc">Service principal created when blueprint is added to tenant. One job: create/deprovision agent identities. All lifecycle events logged under this identity in Entra audit logs. Deleted = audit trail severed.</div>
+      <span class="concept-risk" style="background:#f4f0fa;color:#5c2d91;">⚠ Deletion breaks audit trail</span>
+    </div>
+    <div class="concept-card identity">
+      <div class="concept-icon">🤖</div>
+      <div class="concept-title">Agent Identity</div>
+      <div class="concept-type">The Agent's Service Principal</div>
+      <div class="concept-desc">No credentials of its own — Blueprint performs token exchange via impersonation model. No one in the tenant including Global Admins can generate agent identity tokens. Tokens tenant-bound. Full Entra security stack applies.</div>
+      <span class="concept-risk" style="background:#dff6dd;color:#107c10;">✓ Full Entra security applies</span>
+    </div>
+    <div class="concept-card user">
+      <div class="concept-icon">👤</div>
+      <div class="concept-title">Agent User</div>
+      <div class="concept-type">Optional — Full Human Identity</div>
+      <div class="concept-desc">Some agents get a full user account (mailbox, Teams, SharePoint). Appears as a normal user in Entra with no indicator it's an agent. Survives Blueprint deletion — remains active with all permissions and no flag.</div>
+      <span class="concept-risk" style="background:#fde7e9;color:#a4262c;">🚨 Survives Blueprint deletion</span>
+    </div>
+  </div>
+
+  <div class="section-title">Authentication — T1 and T2</div>
+  <div class="flow-row">
+    <div class="flow-box t1"><div class="flow-box-label">T1 — Trust phase</div><div class="flow-box-val">Blueprint credential</div><div class="flow-box-note">Who is trusted?</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="border-color:#5c2d91;"><div class="flow-box-label">Verification</div><div class="flow-box-val">FIC recommended</div><div class="flow-box-note">No stored secret</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box t2"><div class="flow-box-label">T2 — Authorisation</div><div class="flow-box-val">Agent permissions</div><div class="flow-box-note">What can it access?</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="border-color:#107c10;"><div class="flow-box-label">Result</div><div class="flow-box-val">Access token</div><div class="flow-box-note">CA enforced here</div></div>
+  </div>
+  <div class="warn-box">⚠️ <strong>Classic agents skip all of this.</strong> They authenticate as ordinary service principals — none of T1/T2/CA/ID Protection applies. Most production agents today are Classic.</div>
+</div>
+
+<!-- ══ SETUP ══ -->
+<div id="page-setup" class="page">
+  <div class="page-title">Setting Up Copilot Monitoring</div>
+  <div class="page-sub">Dual-admin setup — Defender admin and Power Platform admin must work together</div>
+
+  <div class="alert orange"><div class="alert-icon">⚠️</div><div><strong>Two admins required — neither can complete this alone</strong>The Power Platform admin needs a URL that only the Defender admin can generate. Coordinate before starting.</div></div>
+
+  <div class="setup-step">
+    <div class="step-num blue">1</div>
+    <div>
+      <div class="step-title">Enable Security for AI agents in Defender</div>
+      <span class="step-role sr-defender">🔵 Defender Admin</span>
+      <span class="step-path">Defender portal → Settings → Security for AI agents → Enable toggle</span>
+      <div class="step-desc">Turns on the Security for AI feature and creates the integration point Copilot Studio registers with. Previously at Settings → Cloud Apps → AI Agents — navigation moved April 2026.</div>
+    </div>
+  </div>
+  <div class="setup-step">
+    <div class="step-num blue">2</div>
+    <div>
+      <div class="step-title">Connect Microsoft 365</div>
+      <span class="step-role sr-defender">🔵 Defender Admin</span>
+      <span class="step-path">Settings → Security for AI agents → Connect Microsoft 365</span>
+      <div class="step-desc">Enables Copilot agent telemetry to flow into Defender. Without this you get inventory but no alerts or behavioural data.</div>
+    </div>
+  </div>
+  <div class="setup-step">
+    <div class="step-num blue">3</div>
+    <div>
+      <div class="step-title">Copy the webhook URL</div>
+      <span class="step-role sr-defender">🔵 Defender Admin</span>
+      <span class="step-path">Security for AI agents → Copilot Studio AI Agents → Copy URL</span>
+      <div class="step-desc">Defender generates a unique tenant-specific URL. Pass this to the Power Platform admin — they need it for Step 4.</div>
+    </div>
+  </div>
+  <div class="setup-step">
+    <div class="step-num purple">4</div>
+    <div>
+      <div class="step-title">Enable Defender in Power Platform</div>
+      <span class="step-role sr-ppAdmin">🟣 Power Platform Admin</span>
+      <span class="step-path">admin.powerplatform.com → Security → Threat Detection → Microsoft Defender → Enable</span>
+      <div class="step-desc">Paste the webhook URL from Step 3. This tells Copilot Studio to send agent telemetry to Defender.</div>
+      <div class="step-warn">⚠️ Requires Power Platform Admin role — Defender Admin cannot do this step.</div>
+    </div>
+  </div>
+  <div class="setup-step">
+    <div class="step-num blue">5</div>
+    <div>
+      <div class="step-title">Enable Real-Time Protection</div>
+      <span class="step-role sr-defender">🔵 Defender Admin</span>
+      <span class="step-path">Settings → Security for AI agents → Real-time protection → Enable</span>
+      <div class="step-desc">Enables Defender to evaluate and block tool invocations before execution.</div>
+      <div class="step-warn">⚠️ 1-second timeout — fast tool calls may execute before a block decision is returned.</div>
+    </div>
+  </div>
+  <div class="setup-step">
+    <div class="step-num green">✓</div>
+    <div>
+      <div class="step-title">Verify — run KQL in Advanced Hunting</div>
+      <span class="step-role sr-defender">🔵 Defender Admin</span>
+      <div class="step-desc">Allow 30–60 minutes after setup for first agents to appear.</div>
+      <div class="kql-block">AIAgentsInfo<br>| summarize arg_max(Timestamp, *) by AIAgentId<br>| where AgentStatus == "Published"<br>| project AIAgentName, UserAuthenticationType, OwnerAccountUpns<br>| order by AgentCreationTime desc</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- main -->
+
+<script>
+function showPage(id, navEl) {
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.nav-item').forEach(function(n){ n.classList.remove('active'); });
+  document.getElementById('page-' + id).classList.add('active');
+  if (navEl) navEl.classList.add('active');
+}
+
+function toggleRec(id) {
+  var el = document.getElementById(id);
+  var arrow = document.getElementById(id + '-arrow');
+  if (el.style.display === 'none') {
+    el.style.display = 'block';
+    if (arrow) arrow.textContent = '▼';
+  } else {
+    el.style.display = 'none';
+    if (arrow) arrow.textContent = '▶';
+  }
+}
+
+function showInv(tab, el) {
+  document.querySelectorAll('.inv-panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.inv-tab').forEach(function(t){ t.classList.remove('active'); });
+  document.getElementById('inv-' + tab).classList.add('active');
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>
