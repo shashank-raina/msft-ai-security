@@ -392,6 +392,74 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 
 
+
+
+
+<div class="section-label" style="margin-top:40px;">APRIL 22, 2026 (2)</div>
+<h2>Agent Identity — Three Critical Security Properties</h2>
+
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Three critical Agent Identity security properties documented</strong> — (1) No admin token generation: no one in the tenant including Global Admins can generate agent identity tokens — Microsoft controls the Blueprint and authentication mechanism, preventing lateral movement via token theft. (2) Tenant-bound: agent identity tokens only valid in their home tenant, cannot access other tenants. (3) Impersonation model: Blueprint performs token exchange, Agent Identity appears as client in audit logs — a Blueprint credential compromise affects all child agent identities. Sources: Microsoft Learn + Copilot Studio documentation.</td>
+<td>identity.html</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Sources</div>
+  <p>
+    <a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/requirements-certificates-configuration-values" target="_blank" style="color:var(--blue);">Microsoft Learn — App registration, agent identities and authentication (Copilot Studio)</a> ·
+    <a href="https://learn.microsoft.com/en-us/entra/agent-id/identity-platform/agent-service-principals" target="_blank" style="color:var(--blue);">Microsoft Learn — Agent identities, service principals and applications</a>
+  </p>
+  <p style="margin-top:8px;font-size:11px;color:#5a6a8a;">Identified by content monitor · GitHub Issue #4 · 2026-04-22</p>
+</div>
+
+<div class="section-label" style="margin-top:40px;">APRIL 22, 2026</div>
+<h2>Copilot Studio Automatic Security Scan · Agent Runtime Protection Status</h2>
+
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Copilot Studio automatic security scan</strong> — pre-publish scan warns makers when three secure defaults are changed: authentication set to None, maker-provided credentials selected, agent shared org-wide. Advisory only — maker can proceed. Does not detect all misconfigurations (e.g. App Reg Application Permissions not flagged). Added to identity page runtime protection section and threat scenario 1 controls.</td>
+<td>identity.html, threats.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Agent runtime protection status column</strong> — Copilot Studio Agents page now shows Protection Status per published agent: Protected (🛡), Needs review (⚠), Unknown (?). Three underlying categories: Authentication, Policies, Content Moderation. Security Analytics shows blocked message trends at 7/14/30 day intervals. All published agents have threat detection active by default.</td>
+<td>identity.html</td></tr>
+
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Sources</div>
+  <p>
+    <a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/security-scan" target="_blank" style="color:var(--blue);">Microsoft Learn — Automatic security scan in Copilot Studio</a> ·
+    <a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/security-agent-runtime-view" target="_blank" style="color:var(--blue);">Microsoft Learn — Agent runtime protection status</a>
+  </p>
+  <p style="margin-top:8px;font-size:11px;color:#5a6a8a;">Identified by content monitor · GitHub Issue #3 · 2026-04-21</p>
+</div>
+
+<div class="section-label" style="margin-top:40px;">APRIL 21, 2026</div>
+<h2>M365 Copilot Automated Readiness Assessment (ARA) — Open Source Tool</h2>
+
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>M365 Copilot Automated Readiness Assessment (ARA)</strong> — new open-source Microsoft tool for pre-deployment Copilot readiness. Queries tenant APIs (Graph, Defender, Exchange Online, Power Platform) across six domains: M365 licensing, Entra identity, Defender security, Purview compliance, Power Platform governance, Copilot Studio. 200+ feature evaluations. Outputs prioritised CSV/Excel reports with remediation links. Read-only permissions, no data egress, free. Added to product map alongside Agent Governance Toolkit, referenced in Playbook 01 as a pre-audit step, and as an automated gap discovery tool on the gaps page.</td>
+<td>product-map.html, playbooks.html, gaps.html</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Source</div>
+  <p><a href="https://techcommunity.microsoft.com/blog/microsoft365copilotblog/accelerating-microsoft-365-copilot-adoption-with-automated-readiness-assessment/4488879" target="_blank" style="color:var(--blue);">Microsoft Tech Community — Accelerating M365 Copilot Adoption with Automated Readiness Assessment (January 2026)</a> · GitHub: <a href="https://github.com/microsoft/m365-copilot-automated-readiness-assessment" target="_blank" style="color:var(--blue);">microsoft/m365-copilot-automated-readiness-assessment</a></p>
+</div>
+
 <div class="section-label" style="margin-top:40px;">APRIL 20, 2026 (2)</div>
 <h2>CA for Agent ID Preview · ID Protection for Agents · Agent Segmentation</h2>
 
@@ -1261,7 +1329,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  Last updated: April 20, 2026 · Analysis covers publicly announced Microsoft security capabilities only
+  Last updated: April 22, 2026 · Analysis covers publicly announced Microsoft security capabilities only
 </div>
 </div>
 

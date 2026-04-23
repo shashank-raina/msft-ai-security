@@ -453,6 +453,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
       </div>
       <div>
         <div class="threat-col-title">Controls</div>
+        <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>Copilot Studio automatic security scan</strong> — warns makers at publish time when authentication is set to None, maker credentials are selected, or agent is shared org-wide. Advisory only — maker can proceed. Visible in the Protection Status column on the Agents page.</div></div>
         <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>Enforce end-user authentication per agent</strong> — Power Platform admin can require user auth, breaking the no-auth + maker creds combination</div></div>
         <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>Managed Environments sharing limits</strong> — restrict org-wide sharing to named security groups or numerical limits</div></div>
         <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>AIAgentsInfo KQL</strong> — detect no-auth agents: <code>AIAgentsInfo | where UserAuthenticationType == "None"</code></div></div>
@@ -615,7 +616,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  Last updated: April 20, 2026
+  Last updated: April 22, 2026
 <script>
 document.addEventListener('DOMContentLoaded', function(){
   var btn = document.getElementById('hamburgerBtn');

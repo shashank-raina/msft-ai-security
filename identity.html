@@ -480,6 +480,39 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 
 
+
+<div class="callout callout-info" style="margin-top:12px;">
+  <div class="callout-title">📌 Copilot Studio automatic security scan — pre-publish warnings</div>
+  <p>Source: <a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/security-scan" target="_blank" style="color:var(--blue);">Microsoft Learn — Automatic security scan in Copilot Studio</a></p>
+  <p>Before a maker can publish an agent, Copilot Studio automatically runs a security scan and surfaces warnings when any of the following secure defaults have been changed:</p>
+  <table style="margin:8px 0;font-size:12px;border-collapse:collapse;width:100%;">
+  <thead><tr style="border-bottom:1px solid var(--border2);"><th style="padding:6px 8px;text-align:left;">What was changed</th><th style="padding:6px 8px;text-align:left;">Default</th><th style="padding:6px 8px;text-align:left;">Risk</th></tr></thead>
+  <tbody>
+  <tr style="border-bottom:1px solid var(--border2);"><td style="padding:6px 8px;">Authentication set to <strong>No authentication</strong></td><td style="padding:6px 8px;color:var(--green2);">Authenticate with Microsoft</td><td style="padding:6px 8px;">Anyone with the link can interact with agent and all its tools</td></tr>
+  <tr style="border-bottom:1px solid var(--border2);"><td style="padding:6px 8px;"><strong>Maker-provided credentials</strong> selected for connectors/flows</td><td style="padding:6px 8px;color:var(--green2);">End user credentials</td><td style="padding:6px 8px;">Agent authenticates as builder — maker credentials blast radius</td></tr>
+  <tr><td style="padding:6px 8px;">Agent <strong>shared with everyone in the organisation</strong></td><td style="padding:6px 8px;color:var(--green2);">Shared with no one</td><td style="padding:6px 8px;">Org-wide exposure of all tools and data the agent can access</td></tr>
+  </tbody>
+  </table>
+  <p style="margin-top:6px;font-size:12px;">These are warnings — not hard blocks. A maker can acknowledge and proceed. The scan fires at publish time, not continuously. It does not detect all misconfigurations — for example, it does not warn on App Registration Application Permissions (auth pattern ④) which is very high risk.</p>
+</div>
+
+
+<div class="callout callout-info" style="margin-top:12px;">
+  <div class="callout-title">📌 Agent runtime protection status — Copilot Studio Agents page</div>
+  <p>Source: <a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/security-agent-runtime-view" target="_blank" style="color:var(--blue);">Microsoft Learn — Agent runtime protection status</a></p>
+  <p>The Copilot Studio Agents page now shows a <strong>Protection status</strong> column for every published agent with one of three values:</p>
+  <table style="margin:8px 0;font-size:12px;border-collapse:collapse;width:100%;">
+  <thead><tr style="border-bottom:1px solid var(--border2);"><th style="padding:6px 8px;">Status</th><th style="padding:6px 8px;">Meaning</th><th style="padding:6px 8px;">Action</th></tr></thead>
+  <tbody>
+  <tr style="border-bottom:1px solid var(--border2);"><td style="padding:6px 8px;"><span style="color:var(--green2);font-weight:700;">🛡 Protected</span></td><td style="padding:6px 8px;">Threat detection active, authentication and policies compliant</td><td style="padding:6px 8px;">No immediate action required</td></tr>
+  <tr style="border-bottom:1px solid var(--border2);"><td style="padding:6px 8px;"><span style="color:var(--warn-text);font-weight:700;">⚠ Needs review</span></td><td style="padding:6px 8px;">Policy violation OR inadequate authentication detected</td><td style="padding:6px 8px;">Drill into summary to see which category failed</td></tr>
+  <tr><td style="padding:6px 8px;"><span style="color:var(--text3);font-weight:700;">? Unknown</span></td><td style="padding:6px 8px;">Protection state cannot be determined</td><td style="padding:6px 8px;">Check Defender connection and Power Platform setup</td></tr>
+  </tbody>
+  </table>
+  <p style="margin-top:6px;font-size:12px;"><strong>Three categories in the summary dialog:</strong> Authentication (is auth required?), Policies (are Power Platform DLP policies complied with?), Content Moderation (content safety levels). Clicking the status opens Security Analytics showing blocked message trends over 7/14/30 days, broken down by threat detection, authentication issues, and policy violations.</p>
+  <p style="font-size:12px;margin-top:6px;"><strong>Note:</strong> All published agents automatically have threat detection enabled and show the Active label — this is independent of whether the full Defender RT protection setup has been completed.</p>
+</div>
+
 <div class="callout callout-info" style="margin-top:12px;">
   <div class="callout-title">📌 Two protection layers — different messages, different triggers</div>
   <p><strong>Responsible AI content filtering</strong> — always active, operates at conversational level. Message shown: "The content was filtered due to Responsible AI restrictions." Evaluates the nature of the conversation — harmful content, jailbreak attempts, prompt injection in input, copyright infringement.</p>
@@ -754,7 +787,12 @@ Disconnect-MgGraph</pre>
 </tr>
 <tr>
   <td><strong>Agent Identity</strong><br><span style="font-family:'JetBrains Mono',monospace;font-size:9px;">The agent's service principal</span></td>
-  <td>A special service principal in Entra created by the Blueprint. Has no credentials of its own — the Blueprint's credentials are used for token exchange. Supports CA for Agents, ID Protection, lifecycle governance. Can be assigned an Owner (technical) and Sponsor (business accountable).</td>
+  <td>A special service principal in Entra created by the Blueprint. Has no credentials of its own — the Blueprint's credentials are used for token exchange via an impersonation model: the Blueprint performs the actual token exchange but the Agent Identity appears as the client in the resulting token and in audit logs.<br><br>
+  <strong>Three critical security properties (Modern agents only):</strong><br>
+  ① <strong>No admin token generation:</strong> No one in the tenant — including Global Admins — can generate tokens using the agent identity. Microsoft fully controls the Blueprint and authentication mechanism. This prevents lateral movement via agent identity token theft.<br>
+  ② <strong>Tenant-bound:</strong> Agent identity tokens can only be issued in the tenant where the agent was created. They cannot access resources or APIs in other tenants — no cross-tenant token movement.<br>
+  ③ <strong>Impersonation model:</strong> Blueprint holds credentials and performs token exchange. Agent Identity holds permissions and appears as the client in audit logs. A compromise of Blueprint credentials affects all agent identities under it — Blueprint count is a security boundary decision.<br><br>
+  Supports CA for Agents, ID Protection, lifecycle governance. Can be assigned Owner (technical) and Sponsor (business accountable).</td>
   <td>The identity Entra security products see and enforce against. Must be Modern (Blueprint-backed) — Classic agents are standard service principals with none of this governance.</td>
 </tr>
 <tr>
@@ -916,7 +954,7 @@ Disconnect-MgGraph</pre>
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  Last updated: April 20, 2026 · Analysis covers publicly announced Microsoft security capabilities only
+  Last updated: April 22, 2026 · Analysis covers publicly announced Microsoft security capabilities only
 </div>
 </div>
 

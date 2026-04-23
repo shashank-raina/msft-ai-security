@@ -1,6 +1,6 @@
 // =============================================================================
 // SYSTEM PROMPT — UPDATE THIS SECTION WHEN SITE CONTENT CHANGES
-// Last updated: April 20, 2026 (2)
+// Last updated: April 22, 2026 (2)
 // =============================================================================
 
 const SYSTEM_PROMPT = `\
@@ -143,8 +143,16 @@ FOUR ENTRA AGENT ID OBJECTS:
     Blueprint deleted → Principal also gone → audit trail severed
 
   Agent Identity:
-    Special service principal created by Blueprint
-    No credentials of its own — Blueprint's credentials used for token exchange
+    Special service principal created by Blueprint — "agent" subtype
+    Impersonation model: Blueprint performs token exchange, Agent Identity appears
+      as client in resulting token AND in audit logs
+    THREE CRITICAL SECURITY PROPERTIES (Modern agents only):
+      ① No admin token generation: NO ONE including Global Admins can generate
+        agent identity tokens — Microsoft controls Blueprint + auth mechanism
+        → prevents lateral movement via agent identity token theft
+      ② Tenant-bound: tokens only valid in home tenant — no cross-tenant access
+      ③ Blueprint compromise scope: Blueprint credential compromise affects ALL
+        child agent identities — Blueprint count = security boundary decision
     Supports CA for Agents, ID Protection, lifecycle governance
 
   Agent User (optional — VERY HIGH RISK):
@@ -468,6 +476,25 @@ AGENT 365 IS PLATFORM-AGNOSTIC:
 
 PORTAL DIRECT URL: security.microsoft.com/securitysettings/security_for_ai
 
+// ── COPILOT STUDIO BUILT-IN SECURITY FEATURES ────────────────────────────────────
+
+AUTOMATIC SECURITY SCAN (pre-publish, advisory only):
+  Warns makers when secure defaults are changed before publishing:
+  1. Authentication set to None (default: Authenticate with Microsoft)
+  2. Maker-provided credentials selected for connectors (default: End user credentials)
+  3. Agent shared with everyone in org (default: shared with no one)
+  These are warnings — maker can proceed. Not hard blocks.
+  Does NOT detect: App Reg Application Permissions (very high risk), MCP tool risks
+
+AGENT RUNTIME PROTECTION STATUS (Copilot Studio Agents page):
+  Protection Status column shows per-agent status:
+    🛡 Protected     = threat detection active, auth + policies compliant
+    ⚠ Needs review  = policy violation OR inadequate authentication
+    ? Unknown       = protection state undetermined (check Defender connection)
+  Three categories in summary dialog: Authentication, Policies, Content Moderation
+  Security Analytics: blocked message trends at 7/14/30 days
+  All published agents have threat detection active by default (regardless of full Defender RT setup)
+
 // ── FIVE PLAYBOOKS ────────────────────────────────────────────────────────────
 
 PB01 — Audit Copilot Studio estate (~30 min, KQL only)
@@ -545,6 +572,29 @@ ACCESS FABRIC (Microsoft concept):
 REGULATORY DEADLINES:
   EU AI Act high-risk: August 2026
   Colorado AI Act: June 2026
+
+// ── M365 COPILOT AUTOMATED READINESS ASSESSMENT (ARA) ────────────────────────────
+
+Open-source Microsoft tool for PRE-DEPLOYMENT Copilot readiness assessment
+GitHub: microsoft/m365-copilot-automated-readiness-assessment
+Licence: MIT · Released January 2026 · Free, no licensing fees
+
+HOW IT WORKS:
+  Queries tenant APIs directly: Microsoft Graph, Defender, Exchange Online, Power Platform
+  Six service domains assessed in one run:
+    M365 licensing, Entra identity protection, Defender security posture,
+    Purview compliance, Power Platform governance, Copilot Studio readiness
+  200+ feature evaluations with Copilot-specific risk context
+  Output: CSV + Excel reports, High/Medium/Low priority, remediation doc links
+  Runs locally — read-only permissions, no data leaves tenant
+
+USAGE:
+  git clone https://github.com/microsoft/m365-copilot-automated-readiness-assessment
+  python main.py
+  (Requires Python 3.8+, Microsoft 365 admin roles, network access to APIs)
+
+DISTINCT FROM Agent Governance Toolkit (which is RUNTIME governance)
+ARA is a PRE-DEPLOYMENT assessment — run it before manual KQL audits
 
 // ── AGENT GOVERNANCE TOOLKIT ─────────────────────────────────────────────────
 
@@ -641,6 +691,14 @@ COMPLIANCE DEADLINES:
 - Colorado AI Act: June 2026
 
 TIMELINES: Basic visibility (30 min), Basic controls (1-2 days), Full governance programme (weeks to months depending on agent estate size).
+
+HOW TO CHECK IF YOU'RE READY FOR COPILOT (free tool):
+Before deploying Microsoft 365 Copilot, run the open-source Automated Readiness Assessment (ARA).
+It queries your tenant and checks your security, compliance, and governance configuration
+across six areas: licensing, identity, Defender, Purview, Power Platform, and Copilot Studio.
+Takes minutes. Free. Read-only — no data leaves your tenant.
+GitHub: microsoft/m365-copilot-automated-readiness-assessment
+Gives you a prioritised list of what to fix before deploying — much faster than manual checks.
 
 HOW TO SEE ALL YOUR AGENTS (no licence needed):
 Go to M365 admin center → Agents → All agents. You need the AI Administrator or AI Reader role. No additional licence required — this is inventory visibility only. You will see ALL agents regardless of whether they have been secured or registered with Entra. This is the starting point before any governance work.
