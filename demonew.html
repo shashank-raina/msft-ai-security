@@ -462,6 +462,8 @@ body {
   <div style="height:1px;background:#e1dfdd;margin:6px 0;"></div>
   <div class="nav-section">Learn More</div>
   <div class="nav-item" onclick="showPage('entra', this)"><span class="nav-icon">🪪</span>Entra Agent ID</div>
+  <div class="nav-item" onclick="showPage('agent365', this)"><span class="nav-icon">🤖</span>Agent 365 (concept)</div>
+  <div class="nav-item" onclick="showPage('a365portal', this)"><span class="nav-icon">🖥️</span>Agent 365 Portal</div>
   <div class="nav-item" onclick="showPage('setup', this)"><span class="nav-icon">⚙️</span>Setup walkthrough</div>
 </div>
 
@@ -719,8 +721,33 @@ body {
   <div class="page-title">Entra Agent ID — Concept</div>
   <div class="page-sub">What it is, why it matters, how Classic vs Modern agents differ</div>
 
-  <div class="warn-box">🚨 <strong>The problem today:</strong> Most Copilot Studio agents in production are "Classic" — registered as ordinary service principals with zero agent-specific security controls. No CA for Agents, no ID Protection, no lifecycle governance. Entra Agent ID fixes this — but it's Preview, Frontier programme only, and only covers agents created after enabling it.</div>
+  <div class="warn-box">🚨 <strong>The problem today:</strong> Most Copilot Studio agents in production are "Classic" — registered as ordinary service principals with zero agent-specific security controls. No CA for Agents, no ID Protection, no lifecycle governance. Entra Agent ID fixes this — but it is Preview, Frontier programme only, and only covers agents created after enabling it.</div>
   <div class="info-box">💡 <strong>Plain English:</strong> Today most agents share the builder's identity badge. Entra Agent ID gives each agent its own badge — with its own permissions, risk detection, and owner accountability. The Security Dashboard only gets rich data for agents with their own badge (Modern agents).</div>
+
+  <div class="section-title">Classic vs Modern — the split that matters most</div>
+  <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+    <div style="flex:1;min-width:200px;background:#fde7e9;border:1px solid #f4abab;border-radius:4px;padding:16px;">
+      <div style="font-size:13px;font-weight:700;color:#a4262c;margin-bottom:8px;">⚠ Classic Agents (majority)</div>
+      <div style="font-size:12px;color:#605e5c;line-height:1.7;">Registered as ordinary service principals. No CA for Agents, no ID Protection, no lifecycle governance. Use OBO, maker credentials, or App Registration patterns. Most existing Copilot Studio production agents are Classic. Migration tool does not exist yet.</div>
+    </div>
+    <div style="flex:1;min-width:200px;background:#dff6dd;border:1px solid #9de59b;border-radius:4px;padding:16px;">
+      <div style="font-size:13px;font-weight:700;color:#107c10;margin-bottom:8px;">✓ Modern Agents (Entra Agent ID)</div>
+      <div style="font-size:12px;color:#605e5c;line-height:1.7;">Purpose-scoped identity per agent. Full security stack: CA for Agents, ID Protection, lifecycle governance (Owner + Sponsor). Requires Frontier programme. New agents only — existing Classic agents need manual migration.</div>
+    </div>
+  </div>
+
+  <div class="section-title">The five Copilot Studio auth patterns</div>
+  <table class="data-table" style="margin-bottom:20px;">
+    <thead><tr><th>#</th><th>Pattern</th><th>Who authenticates</th><th>Risk</th><th>CA for Agents?</th></tr></thead>
+    <tbody>
+      <tr><td style="font-weight:700;">①</td><td>End User Credentials (OBO)</td><td>Invoking user — agent acts on their behalf</td><td><span class="pill pill-green">Low</span></td><td><span class="pill pill-red">No (Classic)</span></td></tr>
+      <tr><td style="font-weight:700;">②</td><td>Maker-Provided Credentials</td><td>Agent builder — everyone gets builder's permissions</td><td><span class="pill pill-red">Very High</span></td><td><span class="pill pill-red">No (Classic)</span></td></tr>
+      <tr><td style="font-weight:700;">③</td><td>App Reg — Delegated</td><td>App registration (delegated, user context)</td><td><span class="pill pill-green">Low</span></td><td><span class="pill pill-red">No (Classic)</span></td></tr>
+      <tr><td style="font-weight:700;">④</td><td>App Reg — Application Permissions</td><td>App registration (no user context, own permissions)</td><td><span class="pill pill-red">Very High</span></td><td><span class="pill pill-red">No (Classic)</span></td></tr>
+      <tr><td style="font-weight:700;">⑤</td><td>Agent User Account</td><td>Full Entra user account assigned to agent</td><td><span class="pill pill-red">Very High</span></td><td><span class="pill pill-green">Yes (Modern)</span></td></tr>
+    </tbody>
+  </table>
+  <div class="warn-box" style="margin-bottom:20px;">⚠️ <strong>Critical correction:</strong> CA for Agents does NOT apply to Classic Copilot Studio agents regardless of auth pattern. Patterns ①②③④ are all Classic. Only agents with Entra Agent ID (Modern) get CA for Agents coverage — and even then only if in the Frontier programme.</div>
 
   <div class="section-title">The four identity objects</div>
   <div class="concept-grid">
@@ -728,43 +755,393 @@ body {
       <div class="concept-icon">📋</div>
       <div class="concept-title">Agent Identity Blueprint</div>
       <div class="concept-type">Template + Credential Container</div>
-      <div class="concept-desc">Defines how agents are created. Holds credentials (FIC recommended — no stored secret). If deleted: credentials gone but all downstream permissions remain. Blueprint count is a security boundary decision — compromise affects all child agents.</div>
+      <div class="concept-desc">Defines how agents are created. Holds credentials (FIC recommended — no stored secret). One Blueprint can create many Agent Identities. Blueprint count is a security boundary decision — a single credential compromise affects all child agents. If deleted: all child agents lose auth but permissions remain.</div>
       <span class="concept-risk" style="background:#fff4ce;color:#7a4f00;">⚠ Protect credentials here</span>
     </div>
     <div class="concept-card principal">
       <div class="concept-icon">🔑</div>
       <div class="concept-title">Blueprint Principal</div>
       <div class="concept-type">Audit Identity</div>
-      <div class="concept-desc">Service principal created when blueprint is added to tenant. One job: create/deprovision agent identities. All lifecycle events logged under this identity in Entra audit logs. Deleted = audit trail severed.</div>
+      <div class="concept-desc">Service principal created when blueprint is added to tenant. One job only: create/deprovision agent identities. All lifecycle events (creation, deletion) are logged under this identity in Entra audit logs. If deleted: the audit trail for all agents it created is severed.</div>
       <span class="concept-risk" style="background:#f4f0fa;color:#5c2d91;">⚠ Deletion breaks audit trail</span>
     </div>
     <div class="concept-card identity">
       <div class="concept-icon">🤖</div>
       <div class="concept-title">Agent Identity</div>
       <div class="concept-type">The Agent's Service Principal</div>
-      <div class="concept-desc">No credentials of its own — Blueprint performs token exchange via impersonation model. No one in the tenant including Global Admins can generate agent identity tokens. Tokens tenant-bound. Full Entra security stack applies.</div>
-      <span class="concept-risk" style="background:#dff6dd;color:#107c10;">✓ Full Entra security applies</span>
+      <div class="concept-desc">No credentials of its own — Blueprint performs token exchange via impersonation model. Blueprint appears in logs during T1; Agent Identity appears as client in T2 access tokens and all downstream audit logs.<br><br><strong>3 security guarantees:</strong><br>① No admin token generation — not even Global Admins can generate agent identity tokens. Microsoft controls the Blueprint.<br>② Tenant-bound — tokens only valid in home tenant.<br>③ Impersonation model — Blueprint compromise scope is bounded by Blueprint count.</div>
+      <span class="concept-risk" style="background:#dff6dd;color:#107c10;">✓ Full Entra security stack applies</span>
     </div>
     <div class="concept-card user">
       <div class="concept-icon">👤</div>
       <div class="concept-title">Agent User</div>
       <div class="concept-type">Optional — Full Human Identity</div>
-      <div class="concept-desc">Some agents get a full user account (mailbox, Teams, SharePoint). Appears as a normal user in Entra with no indicator it's an agent. Survives Blueprint deletion — remains active with all permissions and no flag.</div>
-      <span class="concept-risk" style="background:#fde7e9;color:#a4262c;">🚨 Survives Blueprint deletion</span>
+      <div class="concept-desc">Some agents get a full Entra user account — mailbox, Teams presence, SharePoint access, MFA settings. Appears as a completely normal user with no visual indicator it belongs to an agent. Very high risk: if Blueprint is deleted, Agent User remains active with all permissions and no flag indefinitely.</div>
+      <span class="concept-risk" style="background:#fde7e9;color:#a4262c;">🚨 Survives Blueprint deletion silently</span>
     </div>
   </div>
 
-  <div class="section-title">Authentication — T1 and T2</div>
+  <div class="section-title">Authentication flow — T1 (trust) and T2 (authorisation)</div>
   <div class="flow-row">
-    <div class="flow-box t1"><div class="flow-box-label">T1 — Trust phase</div><div class="flow-box-val">Blueprint credential</div><div class="flow-box-note">Who is trusted?</div></div>
+    <div class="flow-box t1"><div class="flow-box-label">T1 — Trust phase</div><div class="flow-box-val">Blueprint credential</div><div class="flow-box-note">FIC / secret / cert</div></div>
     <div class="flow-arrow">→</div>
-    <div class="flow-box" style="border-color:#5c2d91;"><div class="flow-box-label">Verification</div><div class="flow-box-val">FIC recommended</div><div class="flow-box-note">No stored secret</div></div>
+    <div class="flow-box" style="border-color:#5c2d91;"><div class="flow-box-label">Token exchange</div><div class="flow-box-val">AAD Exchange endpoint</div><div class="flow-box-note">Blueprint appears in logs</div></div>
     <div class="flow-arrow">→</div>
-    <div class="flow-box t2"><div class="flow-box-label">T2 — Authorisation</div><div class="flow-box-val">Agent permissions</div><div class="flow-box-note">What can it access?</div></div>
+    <div class="flow-box t2"><div class="flow-box-label">T2 — Authorisation</div><div class="flow-box-val">Agent Identity</div><div class="flow-box-note">Agent appears as client</div></div>
     <div class="flow-arrow">→</div>
-    <div class="flow-box" style="border-color:#107c10;"><div class="flow-box-label">Result</div><div class="flow-box-val">Access token</div><div class="flow-box-note">CA enforced here</div></div>
+    <div class="flow-box" style="border-color:#107c10;"><div class="flow-box-label">Protected</div><div class="flow-box-val">Access token</div><div class="flow-box-note">CA + ID Protection enforced</div></div>
   </div>
-  <div class="warn-box">⚠️ <strong>Classic agents skip all of this.</strong> They authenticate as ordinary service principals — none of T1/T2/CA/ID Protection applies. Most production agents today are Classic.</div>
+  <div class="info-box">📌 CA carve-outs by design: Blueprint token acquisition during T1 (creation flows) and intermediate token exchange at AAD Token Exchange Endpoint are excluded from CA evaluation. Only T2 (agentic task flows) is protected — this is intentional.</div>
+  <div class="warn-box">⚠️ <strong>Classic agents skip all of this.</strong> They authenticate as ordinary service principals using OBO or maker credentials — none of T1/T2/CA/ID Protection applies. Most production agents today are Classic.</div>
+
+  <div class="section-title">Agent segmentation — custom security attributes</div>
+  <div style="background:#faf9f8;border:1px solid #e1dfdd;border-radius:4px;padding:16px;font-size:13px;line-height:1.7;">
+    The recommended approach for CA policy scoping at scale. Instead of managing object IDs, assign custom security attributes to agents and target them in CA policies.<br><br>
+    <strong>Example pattern:</strong> Create attribute set <code style="background:#f3f2f1;padding:1px 5px;border-radius:2px;">AgentAttributes</code> with attribute <code style="background:#f3f2f1;padding:1px 5px;border-radius:2px;">AgentApprovalStatus</code> (values: New, In_Review, HR_Approved, Finance_Approved, IT_Approved). Tag agents with their approval status. CA policy: block all agents <em>except</em> those tagged HR_Approved from accessing HR resources. Scales to hundreds of agents without per-object configuration.
+  </div>
+</div>
+
+<!-- ══ AGENT 365 PORTAL ══ -->
+<div id="page-a365portal" class="page">
+  <div class="breadcrumb">Microsoft 365 Admin Center › Agents › Overview</div>
+  <div class="page-title">Agent 365 — Admin Center Portal</div>
+  <div class="page-sub" style="margin-bottom:20px;">How it looks at admin.cloud.microsoft · Agents section</div>
+
+  <!-- M365 Admin Center mockup -->
+  <div style="border:1px solid #e1dfdd;border-radius:6px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.1);margin-bottom:24px;">
+
+    <!-- Admin center topbar -->
+    <div style="background:#111827;height:44px;display:flex;align-items:center;padding:0 16px;gap:12px;">
+      <div style="width:18px;height:18px;display:grid;grid-template-columns:1fr 1fr;gap:2px;flex-shrink:0;">
+        <span style="background:#f25022;"></span><span style="background:#7fba00;"></span>
+        <span style="background:#00a4ef;"></span><span style="background:#ffb900;"></span>
+      </div>
+      <span style="font-size:13px;font-weight:600;color:white;">Microsoft 365 admin center</span>
+      <span style="font-size:11px;color:rgba(255,255,255,0.4);margin-left:4px;font-family:monospace;">admin.cloud.microsoft</span>
+      <div style="margin-left:auto;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);padding:2px 10px;font-size:10px;font-weight:700;color:white;letter-spacing:0.05em;">DEMO · FICTIONAL DATA</div>
+    </div>
+
+    <!-- Body -->
+    <div style="display:flex;min-height:580px;">
+
+      <!-- Left nav -->
+      <div style="width:200px;background:#1f2937;padding:8px 0;flex-shrink:0;">
+        <div style="font-size:10px;font-weight:700;color:#6b7280;letter-spacing:0.1em;text-transform:uppercase;padding:10px 14px 4px;">Agents</div>
+        <div id="a365-nav-overview" style="display:flex;align-items:center;gap:8px;padding:7px 14px;font-size:12px;color:white;background:#374151;border-left:3px solid #2899e8;cursor:pointer;" onclick="switchA365Tab('overview', this)">
+          <span>📊</span>Overview
+        </div>
+        <div id="a365-nav-all" style="display:flex;align-items:center;gap:8px;padding:7px 14px;font-size:12px;color:#9ca3af;cursor:pointer;" onclick="switchA365Tab('all', this)">
+          <span>📋</span>All agents
+        </div>
+        <div id="a365-nav-registry" style="display:flex;align-items:center;gap:8px;padding:7px 14px;font-size:12px;color:#9ca3af;cursor:pointer;" onclick="switchA365Tab('registry', this)">
+          <span>📦</span>Registry
+        </div>
+      </div>
+
+      <!-- Content area -->
+      <div style="flex:1;background:#f9fafb;padding:24px;overflow-y:auto;">
+
+        <!-- OVERVIEW TAB -->
+        <div id="a365-tab-overview">
+          <div style="font-size:20px;font-weight:700;margin-bottom:4px;">Overview</div>
+          <div style="font-size:12px;color:#6b7280;margin-bottom:20px;">Last 30 days · Contoso Corporation</div>
+
+          <!-- Hero metrics -->
+          <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
+            <div style="background:white;border:1px solid #e5e7eb;border-radius:6px;padding:14px 18px;flex:1;min-width:110px;">
+              <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Agent Registry</div>
+              <div style="font-size:28px;font-weight:700;color:#111827;">84</div>
+              <div style="font-size:11px;color:#6b7280;">total agents</div>
+            </div>
+            <div style="background:white;border:1px solid #e5e7eb;border-radius:6px;padding:14px 18px;flex:1;min-width:110px;">
+              <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Active Users</div>
+              <div style="font-size:28px;font-weight:700;color:#111827;">312</div>
+              <div style="font-size:11px;color:#6b7280;">↑ 18% vs last month</div>
+            </div>
+            <div style="background:white;border:1px solid #e5e7eb;border-radius:6px;padding:14px 18px;flex:1;min-width:110px;">
+              <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Total Sessions</div>
+              <div style="font-size:28px;font-weight:700;color:#111827;">4,821</div>
+              <div style="font-size:11px;color:#6b7280;">agent invocations</div>
+            </div>
+            <div style="background:white;border:1px solid #e5e7eb;border-radius:6px;padding:14px 18px;flex:1;min-width:110px;">
+              <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Exception Rate</div>
+              <div style="font-size:28px;font-weight:700;color:#ca5010;">8.3%</div>
+              <div style="font-size:11px;color:#6b7280;">sessions with errors</div>
+            </div>
+            <div style="background:white;border:1px solid #e5e7eb;border-radius:6px;padding:14px 18px;flex:1;min-width:110px;">
+              <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Agent Runtime</div>
+              <div style="font-size:28px;font-weight:700;color:#111827;">847h</div>
+              <div style="font-size:11px;color:#6b7280;">agent-assisted time</div>
+            </div>
+          </div>
+
+          <!-- Governance actions -->
+          <div style="font-size:14px;font-weight:700;margin-bottom:12px;">Governance actions</div>
+          <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
+            <div style="background:white;border:1px solid #fca5a5;border-radius:6px;padding:14px 18px;flex:1;min-width:180px;">
+              <div style="font-size:11px;font-weight:700;color:#991b1b;margin-bottom:6px;">🚨 Pending Requests</div>
+              <div style="font-size:24px;font-weight:700;color:#111827;margin-bottom:4px;">7 <span style="font-size:12px;font-weight:400;color:#6b7280;">requests</span></div>
+              <div style="font-size:11px;color:#6b7280;margin-bottom:10px;">Oldest: HR Automation Agent (14 days)</div>
+              <div style="background:#2563eb;color:white;font-size:11px;font-weight:600;padding:5px 12px;border-radius:3px;display:inline-block;cursor:pointer;">Manage requests</div>
+            </div>
+            <div style="background:white;border:1px solid #fde68a;border-radius:6px;padding:14px 18px;flex:1;min-width:180px;">
+              <div style="font-size:11px;font-weight:700;color:#92400e;margin-bottom:6px;">⚠️ Ownerless Agents</div>
+              <div style="font-size:24px;font-weight:700;color:#111827;margin-bottom:4px;">23 <span style="font-size:12px;font-weight:400;color:#6b7280;">agents</span></div>
+              <div style="font-size:11px;color:#6b7280;margin-bottom:10px;">No owner assigned — no accountability</div>
+              <div style="background:#2563eb;color:white;font-size:11px;font-weight:600;padding:5px 12px;border-radius:3px;display:inline-block;cursor:pointer;">Assign owners</div>
+            </div>
+          </div>
+
+          <!-- Agent analytics -->
+          <div style="font-size:14px;font-weight:700;margin-bottom:12px;">Agent analytics</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <div style="background:white;border:1px solid #e5e7eb;border-radius:6px;padding:14px 18px;flex:1;min-width:180px;">
+              <div style="font-size:12px;font-weight:600;color:#374151;margin-bottom:10px;">Agents by publisher</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                <div style="height:10px;background:#2563eb;border-radius:2px;" class="bar-org"></div>
+                <span style="font-size:11px;color:#374151;">Your organisation (61)</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="height:10px;background:#93c5fd;border-radius:2px;width:20px;"></div>
+                <span style="font-size:11px;color:#374151;">External partners (23)</span>
+              </div>
+            </div>
+            <div style="background:white;border:1px solid #e5e7eb;border-radius:6px;padding:14px 18px;flex:1;min-width:180px;">
+              <div style="font-size:12px;font-weight:600;color:#374151;margin-bottom:10px;">Agents by platform</div>
+              <div style="font-size:11px;color:#374151;line-height:2;">
+                <div>Copilot Studio <span style="color:#6b7280;">(48)</span></div>
+                <div>Azure AI Foundry <span style="color:#6b7280;">(19)</span></div>
+                <div>External platforms <span style="color:#6b7280;">(17)</span></div>
+              </div>
+            </div>
+            <div style="background:white;border:1px solid #e5e7eb;border-radius:6px;padding:14px 18px;flex:1;min-width:220px;">
+              <div style="font-size:12px;font-weight:600;color:#374151;margin-bottom:10px;">Active users (30 days)</div>
+              <!-- Simple sparkline bars -->
+              <div style="display:flex;align-items:flex-end;gap:3px;height:40px;">
+                <div style="background:#bfdbfe;flex:1;height:50%;border-radius:2px 2px 0 0;"></div>
+                <div style="background:#bfdbfe;flex:1;height:60%;border-radius:2px 2px 0 0;"></div>
+                <div style="background:#bfdbfe;flex:1;height:45%;border-radius:2px 2px 0 0;"></div>
+                <div style="background:#93c5fd;flex:1;height:70%;border-radius:2px 2px 0 0;"></div>
+                <div style="background:#93c5fd;flex:1;height:65%;border-radius:2px 2px 0 0;"></div>
+                <div style="background:#60a5fa;flex:1;height:80%;border-radius:2px 2px 0 0;"></div>
+                <div style="background:#60a5fa;flex:1;height:75%;border-radius:2px 2px 0 0;"></div>
+                <div style="background:#3b82f6;flex:1;height:90%;border-radius:2px 2px 0 0;"></div>
+                <div style="background:#3b82f6;flex:1;height:85%;border-radius:2px 2px 0 0;"></div>
+                <div style="background:#2563eb;flex:1;height:100%;border-radius:2px 2px 0 0;"></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:10px;color:#9ca3af;margin-top:4px;"><span>Mar 24</span><span>Apr 23</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ALL AGENTS TAB -->
+        <div id="a365-tab-all" style="display:none;">
+          <div style="font-size:20px;font-weight:700;margin-bottom:4px;">All agents</div>
+          <div style="font-size:12px;color:#6b7280;margin-bottom:16px;">84 agents across your organisation</div>
+
+          <div style="display:flex;gap:8px;margin-bottom:14px;">
+            <input style="border:1px solid #d1d5db;border-radius:3px;padding:5px 10px;font-size:13px;width:220px;font-family:inherit;" placeholder="🔍 Search agents...">
+            <select style="border:1px solid #d1d5db;border-radius:3px;padding:5px 10px;font-size:12px;font-family:inherit;color:#374151;">
+              <option>All platforms</option>
+              <option>Copilot Studio</option>
+              <option>Azure AI Foundry</option>
+            </select>
+            <select style="border:1px solid #d1d5db;border-radius:3px;padding:5px 10px;font-size:12px;font-family:inherit;color:#374151;">
+              <option>All statuses</option>
+              <option>Published</option>
+              <option>Ownerless</option>
+            </select>
+            <button style="margin-left:auto;background:#2563eb;color:white;border:none;border-radius:3px;padding:5px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">⬇ Export</button>
+          </div>
+
+          <table style="width:100%;border-collapse:collapse;font-size:12px;background:white;border:1px solid #e5e7eb;border-radius:4px;overflow:hidden;">
+            <thead><tr style="background:#f9fafb;">
+              <th style="text-align:left;padding:9px 12px;font-size:10px;color:#6b7280;border-bottom:1px solid #e5e7eb;letter-spacing:0.05em;text-transform:uppercase;">Agent name</th>
+              <th style="text-align:left;padding:9px 12px;font-size:10px;color:#6b7280;border-bottom:1px solid #e5e7eb;letter-spacing:0.05em;text-transform:uppercase;">Platform</th>
+              <th style="text-align:left;padding:9px 12px;font-size:10px;color:#6b7280;border-bottom:1px solid #e5e7eb;letter-spacing:0.05em;text-transform:uppercase;">Owner</th>
+              <th style="text-align:left;padding:9px 12px;font-size:10px;color:#6b7280;border-bottom:1px solid #e5e7eb;letter-spacing:0.05em;text-transform:uppercase;">Auth type</th>
+              <th style="text-align:left;padding:9px 12px;font-size:10px;color:#6b7280;border-bottom:1px solid #e5e7eb;letter-spacing:0.05em;text-transform:uppercase;">Status</th>
+              <th style="text-align:left;padding:9px 12px;font-size:10px;color:#6b7280;border-bottom:1px solid #e5e7eb;letter-spacing:0.05em;text-transform:uppercase;">Risk</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid #f3f4f6;">
+                <td style="padding:9px 12px;"><div style="font-weight:600;color:#111827;">HR Onboarding Assistant</div><div style="font-size:10px;color:#9ca3af;">adm.johnson@contoso.com</div></td>
+                <td style="padding:9px 12px;"><span style="background:#dbeafe;color:#1d4ed8;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">Copilot Studio</span></td>
+                <td style="padding:9px 12px;"><span style="background:#fee2e2;color:#991b1b;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">None</span></td>
+                <td style="padding:9px 12px;"><span style="background:#fee2e2;color:#991b1b;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">No Auth</span></td>
+                <td style="padding:9px 12px;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">Published</span></td>
+                <td style="padding:9px 12px;"><span style="background:#fee2e2;color:#991b1b;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">High</span></td>
+              </tr>
+              <tr style="border-bottom:1px solid #f3f4f6;">
+                <td style="padding:9px 12px;"><div style="font-weight:600;color:#111827;">Finance Data Summariser</div><div style="font-size:10px;color:#9ca3af;">sarah.chen@contoso.com</div></td>
+                <td style="padding:9px 12px;"><span style="background:#dbeafe;color:#1d4ed8;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">Copilot Studio</span></td>
+                <td style="padding:9px 12px;"><span style="font-size:11px;color:#374151;">sarah.chen</span></td>
+                <td style="padding:9px 12px;"><span style="background:#fef3c7;color:#92400e;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">Maker</span></td>
+                <td style="padding:9px 12px;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">Published</span></td>
+                <td style="padding:9px 12px;"><span style="background:#fee2e2;color:#991b1b;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">High</span></td>
+              </tr>
+              <tr style="border-bottom:1px solid #f3f4f6;">
+                <td style="padding:9px 12px;"><div style="font-weight:600;color:#111827;">Sales Pipeline Agent</div><div style="font-size:10px;color:#9ca3af;">alice.wang@contoso.com</div></td>
+                <td style="padding:9px 12px;"><span style="background:#f3e8ff;color:#6b21a8;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">Agent 365 SDK</span></td>
+                <td style="padding:9px 12px;"><span style="font-size:11px;color:#374151;">alice.wang</span></td>
+                <td style="padding:9px 12px;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">OBO</span></td>
+                <td style="padding:9px 12px;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">Published</span></td>
+                <td style="padding:9px 12px;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">Low</span></td>
+              </tr>
+              <tr>
+                <td style="padding:9px 12px;"><div style="font-weight:600;color:#111827;">IT Helpdesk Bot</div><div style="font-size:10px;color:#9ca3af;">mark.obi@contoso.com</div></td>
+                <td style="padding:9px 12px;"><span style="background:#dbeafe;color:#1d4ed8;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">Copilot Studio</span></td>
+                <td style="padding:9px 12px;"><span style="background:#fee2e2;color:#991b1b;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">None</span></td>
+                <td style="padding:9px 12px;"><span style="background:#fee2e2;color:#991b1b;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">No Auth</span></td>
+                <td style="padding:9px 12px;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">Published</span></td>
+                <td style="padding:9px 12px;"><span style="background:#fee2e2;color:#991b1b;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">High</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="text-align:center;padding:10px;font-size:11px;color:#9ca3af;">Showing 4 of 84 agents</div>
+        </div>
+
+        <!-- REGISTRY TAB -->
+        <div id="a365-tab-registry" style="display:none;">
+          <div style="font-size:20px;font-weight:700;margin-bottom:4px;">Registry</div>
+          <div style="font-size:12px;color:#6b7280;margin-bottom:16px;">Centralised agent catalogue — approved, pending, and custom agents</div>
+
+          <div style="display:flex;gap:0;border-bottom:1px solid #e5e7eb;margin-bottom:16px;">
+            <div style="padding:7px 16px;font-size:12px;color:#2563eb;border-bottom:2px solid #2563eb;font-weight:600;cursor:pointer;">All agents (84)</div>
+            <div style="padding:7px 16px;font-size:12px;color:#6b7280;cursor:pointer;">Requests (7)</div>
+            <div style="padding:7px 16px;font-size:12px;color:#6b7280;cursor:pointer;">Ownerless (23)</div>
+          </div>
+
+          <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:4px;padding:12px 14px;font-size:12px;color:#92400e;margin-bottom:14px;">
+            ⚠️ <strong>7 agent requests pending approval</strong> for more than 7 days. Oldest request: HR Automation Agent from j.smith@contoso.com (submitted 14 days ago).
+            <span style="color:#1d4ed8;cursor:pointer;margin-left:8px;">Review →</span>
+          </div>
+
+          <div style="background:#fee2e2;border:1px solid #fca5a5;border-radius:4px;padding:12px 14px;font-size:12px;color:#991b1b;margin-bottom:14px;">
+            🚨 <strong>23 agents have no assigned owner.</strong> These agents have no accountable person for security incidents, credential rotation, or decommissioning.
+            <span style="color:#1d4ed8;cursor:pointer;margin-left:8px;">Assign owners →</span>
+          </div>
+
+          <div style="background:white;border:1px solid #e5e7eb;border-radius:4px;padding:14px;">
+            <div style="font-size:12px;font-weight:600;color:#374151;margin-bottom:10px;">Registry breakdown</div>
+            <div style="font-size:12px;color:#374151;line-height:2.2;">
+              <div style="display:flex;justify-content:space-between;border-bottom:1px solid #f3f4f6;padding:3px 0;"><span>Microsoft-built agents</span><span style="font-weight:600;">12</span></div>
+              <div style="display:flex;justify-content:space-between;border-bottom:1px solid #f3f4f6;padding:3px 0;"><span>Organisation-built (Copilot Studio)</span><span style="font-weight:600;">48</span></div>
+              <div style="display:flex;justify-content:space-between;border-bottom:1px solid #f3f4f6;padding:3px 0;"><span>Agent 365 SDK (custom)</span><span style="font-weight:600;">7</span></div>
+              <div style="display:flex;justify-content:space-between;border-bottom:1px solid #f3f4f6;padding:3px 0;"><span>Azure AI Foundry</span><span style="font-weight:600;">14</span></div>
+              <div style="display:flex;justify-content:space-between;padding:3px 0;"><span>Partner / marketplace</span><span style="font-weight:600;">3</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box">📌 <strong>Access path:</strong> admin.cloud.microsoft → left nav → Show all → Agents → Overview. Requires AI Administrator or AI Reader role. No product licence needed to view the registry — only to apply security controls.</div>
+</div>
+
+<!-- ══ AGENT 365 ══ -->
+<div id="page-agent365" class="page">
+  <div class="page-title">Microsoft Agent 365</div>
+  <div class="page-sub">The enterprise control plane for AI agents — GA May 1, 2026</div>
+
+  <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
+    <span style="background:#dff6dd;color:#107c10;border:1px solid #9de59b;border-radius:12px;padding:4px 12px;font-size:12px;font-weight:700;">✅ GA May 1, 2026</span>
+    <span style="background:#deecf9;color:#0078d4;border:1px solid #b3d7f0;border-radius:12px;padding:4px 12px;font-size:12px;font-weight:700;">$15/user/month standalone</span>
+    <span style="background:#fff4ce;color:#7a4f00;border:1px solid #f9d24d;border-radius:12px;padding:4px 12px;font-size:12px;font-weight:700;">Included in M365 E7 ($99/user/mo)</span>
+  </div>
+
+  <div class="info-box">💡 <strong>What Agent 365 actually is:</strong> Not an agent builder. Not a hosting platform. It is a management and security layer that wraps agents you have already built — regardless of which platform they run on. Copilot Studio, Foundry, LangChain, OpenAI SDK, AWS Bedrock, GCP Vertex AI — once an agent is onboarded, it gets enterprise controls it did not have before.</div>
+
+  <div class="section-title">Four things Agent 365 adds to any agent</div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;">
+    <div style="flex:1;min-width:200px;background:white;border:1px solid #e1dfdd;border-top:3px solid #0078d4;border-radius:4px;padding:16px;">
+      <div style="font-size:20px;margin-bottom:8px;">🪪</div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px;">Entra Identity</div>
+      <div style="font-size:12px;color:#605e5c;line-height:1.6;">Every onboarded agent gets an Entra Agent ID. Enables CA policies, ID Protection risk detection, lifecycle governance (Owner + Sponsor). SDK handles Entra registration automatically.</div>
+    </div>
+    <div style="flex:1;min-width:200px;background:white;border:1px solid #e1dfdd;border-top:3px solid #107c10;border-radius:4px;padding:16px;">
+      <div style="font-size:20px;margin-bottom:8px;">🛡️</div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px;">ATG Real-Time Protection</div>
+      <div style="font-size:12px;color:#605e5c;line-height:1.6;">Agent Tooling Gateway — evaluates every tool invocation before execution. Blocks unsafe actions in real time via Defender. Critical limitation: ATG only inspects the tool execution path, not model reasoning between tool calls.</div>
+    </div>
+    <div style="flex:1;min-width:200px;background:white;border:1px solid #e1dfdd;border-top:3px solid #5c2d91;border-radius:4px;padding:16px;">
+      <div style="font-size:20px;margin-bottom:8px;">📊</div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px;">Observability</div>
+      <div style="font-size:12px;color:#605e5c;line-height:1.6;">OpenTelemetry instrumentation via Agent 365 SDK. All inference events, tool usage, and interactions routed to M365 audit logs. Visible in Defender Advanced Hunting via AIAgentsInfo table with RegistrySource = "A365".</div>
+    </div>
+    <div style="flex:1;min-width:200px;background:white;border:1px solid #e1dfdd;border-top:3px solid #ca5010;border-radius:4px;padding:16px;">
+      <div style="font-size:20px;margin-bottom:8px;">📋</div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px;">Governance Registry</div>
+      <div style="font-size:12px;color:#605e5c;line-height:1.6;">All agents appear in M365 admin center → Agents → All agents. Roles: AI Administrator, AI Reader. No licence needed to view inventory — just the role. RegistrySource = "A365" in AIAgentsInfo.</div>
+    </div>
+  </div>
+
+  <div class="section-title">Platform support — fully platform-agnostic</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">
+    <span style="background:#faf9f8;border:1px solid #e1dfdd;border-radius:4px;padding:6px 12px;font-size:12px;">🤖 Copilot Studio</span>
+    <span style="background:#faf9f8;border:1px solid #e1dfdd;border-radius:4px;padding:6px 12px;font-size:12px;">🏭 Microsoft Foundry</span>
+    <span style="background:#faf9f8;border:1px solid #e1dfdd;border-radius:4px;padding:6px 12px;font-size:12px;">🔗 LangChain SDK</span>
+    <span style="background:#faf9f8;border:1px solid #e1dfdd;border-radius:4px;padding:6px 12px;font-size:12px;">🤖 OpenAI Agents SDK</span>
+    <span style="background:#faf9f8;border:1px solid #e1dfdd;border-radius:4px;padding:6px 12px;font-size:12px;">🦾 Claude Code SDK</span>
+    <span style="background:#faf9f8;border:1px solid #e1dfdd;border-radius:4px;padding:6px 12px;font-size:12px;">⚙️ Microsoft Agent Framework</span>
+    <span style="background:#faf9f8;border:1px solid #e1dfdd;border-radius:4px;padding:6px 12px;font-size:12px;">☁️ AWS Bedrock</span>
+    <span style="background:#faf9f8;border:1px solid #e1dfdd;border-radius:4px;padding:6px 12px;font-size:12px;">🌐 GCP Vertex AI</span>
+  </div>
+  <div class="info-box" style="margin-bottom:20px;">You add the Agent 365 SDK to your agent code. The SDK handles Entra identity registration, OpenTelemetry event emission, and ATG integration automatically. You do not rewrite your agent — you add a governance layer around it. Works on Azure, AWS, GCP, or your own infrastructure.</div>
+
+  <div class="section-title">Registry convergence — where to find agents</div>
+  <table class="data-table" style="margin-bottom:20px;">
+    <thead><tr><th>Where to look</th><th>What you see</th><th>Role needed</th><th>Licence needed</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>M365 admin center</strong><br><span style="font-size:11px;color:#a19f9d;">Agents → All agents</span></td>
+        <td>ALL agents — Copilot Studio + Agent 365 + third-party</td>
+        <td><span class="pill pill-blue">AI Administrator</span> or <span class="pill pill-blue">AI Reader</span></td>
+        <td><span class="pill pill-green">No licence needed</span></td>
+      </tr>
+      <tr>
+        <td><strong>Entra admin center</strong><br><span style="font-size:11px;color:#a19f9d;">Agent ID section</span></td>
+        <td>Entra Agent ID agents only (Modern agents)</td>
+        <td><span class="pill pill-blue">Agent ID Administrator</span></td>
+        <td><span class="pill pill-orange">Entra P2 / E5</span></td>
+      </tr>
+      <tr>
+        <td><strong>Defender Advanced Hunting</strong><br><span style="font-size:11px;color:#a19f9d;">AIAgentsInfo table</span></td>
+        <td>All agents with RegistrySource column: "A365" or "PowerPlatform"</td>
+        <td><span class="pill pill-blue">Security Reader</span></td>
+        <td><span class="pill pill-orange">Defender P2</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">ATG — the critical limitation</div>
+  <div class="warn-box">⚠️ <strong>ATG only operates on the tool execution path.</strong> It evaluates tool invocations (what the agent tries to DO) but does NOT inspect model reasoning between tool calls. An agent can reason about malicious instructions, decide to act on them, and only get caught at the moment it tries to execute a tool — if Defender responds within 1 second. Attacker-crafted inputs targeting the reasoning layer (prompt injection, XPIA) are not directly blocked by ATG.</div>
+
+  <div class="section-title">Licensing — two options</div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;">
+    <div style="flex:1;min-width:220px;background:white;border:2px solid #b3d7f0;border-radius:4px;padding:18px;">
+      <div style="font-size:12px;font-weight:700;color:#0078d4;margin-bottom:4px;">STANDALONE</div>
+      <div style="font-size:26px;font-weight:700;margin-bottom:6px;">$15<span style="font-size:13px;font-weight:400;color:#605e5c;">/user/month</span></div>
+      <div style="font-size:12px;color:#605e5c;line-height:1.7;">Agent 365 governance + Entra Agent ID + ATG + observability. Add-on to existing M365 plan.</div>
+    </div>
+    <div style="flex:1;min-width:220px;background:white;border:2px solid #f9d24d;border-radius:4px;padding:18px;">
+      <div style="font-size:12px;font-weight:700;color:#7a4f00;margin-bottom:4px;">M365 E7 BUNDLE</div>
+      <div style="font-size:26px;font-weight:700;margin-bottom:6px;">$99<span style="font-size:13px;font-weight:400;color:#605e5c;">/user/month</span></div>
+      <div style="font-size:12px;color:#605e5c;line-height:1.7;">Everything in E5 + Agent 365 + Entra Agent ID + Copilot + advanced compliance. The "Frontier suite" for AI-first enterprises. Not the old Skype-era E7 — this is a new 2026 bundle.</div>
+    </div>
+  </div>
+
+  <div class="section-title">How to get started (Frontier programme)</div>
+  <div style="background:#faf9f8;border:1px solid #e1dfdd;border-radius:4px;padding:16px;font-size:13px;line-height:1.8;">
+    Before GA (May 1, 2026) and for advanced preview features, access is via the <strong>Microsoft Frontier programme</strong>.<br>
+    Enrol at: <strong>adoption.microsoft.com/copilot/frontier-program</strong><br><br>
+    Once enrolled: onboard Copilot Studio agents automatically → instrument custom agents with Agent 365 SDK → agents appear in AIAgentsInfo with RegistrySource = "A365".
+  </div>
+
+  <div class="section-title" style="margin-top:20px;">KQL — querying Agent 365 agents</div>
+  <div class="kql-block">// All Agent 365 registered agents<br>AIAgentsInfo<br>| summarize arg_max(Timestamp, *) by AIAgentId<br>| where RegistrySource == "A365"<br>| project AIAgentName, AgentStatus, UserAuthenticationType, OwnerAccountUpns<br><br>// A365 agents with no instructions (potential sprawl risk)<br>AIAgentsInfo<br>| where RegistrySource == "A365"<br>| where isempty(AgentInstructions)<br>| project AIAgentName, CreatorAccountUpn, AgentCreationTime</div>
 </div>
 
 <!-- ══ SETUP ══ -->
@@ -852,6 +1229,20 @@ function toggleRec(id) {
     el.style.display = 'none';
     if (arrow) arrow.textContent = '▶';
   }
+}
+
+function switchA365Tab(tab, el) {
+  ['overview','all','registry'].forEach(function(t){
+    document.getElementById('a365-tab-'+t).style.display = t===tab?'block':'none';
+    var nav = document.getElementById('a365-nav-'+t);
+    if (nav) {
+      if (t===tab) {
+        nav.style.background='#374151'; nav.style.color='white'; nav.style.borderLeft='3px solid #2899e8';
+      } else {
+        nav.style.background=''; nav.style.color='#9ca3af'; nav.style.borderLeft='3px solid transparent';
+      }
+    }
+  });
 }
 
 function showInv(tab, el) {
