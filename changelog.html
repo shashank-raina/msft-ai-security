@@ -395,6 +395,89 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 
 
+
+
+<div class="section-label" style="margin-top:40px;">APRIL 23, 2026 (2)</div>
+<h2>ATG SOC-ready alerts · AI model lifecycle five-stage framework</h2>
+
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+<tr><td><span class="tag blue">🆕 Updated</span></td>
+<td><strong>ATG SOC-ready alerts</strong> — every ATG block generates a comprehensive alert explaining what was stopped, why it was risky, and which agent/user/tool were involved. Blocks occur before tool invocation. Alerts flow into Defender XDR SOC workflows. Added to ATG descriptions on product map and agent365.</td>
+<td>product-map.html, agent365.html</td></tr>
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>AI model lifecycle — five-stage control framework</strong> — supply chain → development → pre-deployment → production → end of life. Each stage requires specific controls. "If a model hasn't been scanned, it shouldn't be pushed." Added to Threat Scenario 6 (AI Model Supply Chain).</td>
+<td>threats.html</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Source</div>
+  <p><a href="https://techcommunity.microsoft.com/blog/microsoftdefendercloudblog/defending-the-ai-era-new-microsoft-capabilities-to-protect-ai/4503885" target="_blank" style="color:var(--blue);">Microsoft Defender for Cloud Blog — Defending the AI Era (March 2026)</a></p>
+</div>
+
+<div class="section-label" style="margin-top:40px;">APRIL 23, 2026</div>
+<h2>AI Red Teaming Agent · Agentic Risk Categories · Agent Map · Orphaned Agents · Stateful Agents</h2>
+
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>AI Red Teaming Agent (Foundry Preview) + PyRIT</strong> — automated adversarial testing for AI models and agents. Generates Attack Success Rate (ASR) metrics and deployment scorecard. Three agentic-specific risk categories (cloud-only): prohibited actions (3-tier taxonomy), sensitive data leakage via tool calls, task adherence. Built on PyRIT open-source framework. Added to product map.</td>
+<td>product-map.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Threat Scenario 8b — Agentic Risk: Prohibited Actions, Data Leakage &amp; Task Deviation</strong> — three-tier prohibited actions taxonomy (Prohibited/High-risk/Irreversible), sensitive data leakage via agent tool calls, task adherence failure dimensions. Purple environment concept for pre-deployment red teaming. Controls: AI Red Teaming Agent, ATG, human-in-the-loop gates.</td>
+<td>threats.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Agent Map</strong> — visual risk intelligence in Agent 365 portal. Shows agent-to-resource connections and cross-pillar risk signals. One-click block from map view. Added to agent365.html with KQL for ownerless agent detection.</td>
+<td>agent365.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 Updated</span></td>
+<td><strong>Orphaned agents — two scenarios documented</strong> — Scenario A (Blueprint deleted, Entra) was already on site. Added Scenario B: agents built by employees who left the company, still running with full permissions and no owner. Most common real-world scenario. Updated gaps register with both scenarios.</td>
+<td>agent365.html, gaps.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Stateful agents / Dataverse memory</strong> — Agent 365 agents retain long-term memory via Dataverse across sessions. Persistent memory accumulates sensitive context and requires governance: access controls, retention policies, Purview DLP inclusion. Not automatically covered by existing M365 data policies.</td>
+<td>agent365.html</td></tr>
+
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Sources</div>
+  <p>
+    <a href="https://learn.microsoft.com/en-us/azure/foundry/concepts/ai-red-teaming-agent" target="_blank" style="color:var(--blue);">Microsoft Learn — AI Red Teaming Agent (Preview)</a> ·
+    <a href="https://www.devoteam.com/expert-view/microsoft-agent-365/" target="_blank" style="color:var(--blue);">Devoteam — Microsoft Agent 365</a> ·
+    <a href="https://www.devoteam.com/expert-view/microsoft-ai-tour-paris-ai-agents-and-governance/" target="_blank" style="color:var(--blue);">Devoteam — AI Tour Paris (March 2026)</a>
+  </p>
+</div>
+
+
+<div class="section-label" style="margin-top:40px;">APRIL 23, 2026</div>
+<h2>Agent 365 — Work IQ, partner ecosystem, Ignite 2025 context</h2>
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Work IQ</strong> — contextual intelligence engine that grounds agents in org knowledge (collaboration graph, project context, delegation patterns). Agents grounded via Work IQ inherit sensitivity label governance automatically. Announced Microsoft AI Tour Paris March 2026, now available as standalone agentic building block.</td>
+<td>agent365.html</td></tr>
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Partner ecosystem</strong> — enterprise partners already integrating with Agent 365 at GA: Adobe, SAP, ServiceNow, Workday, Databricks, NVIDIA, Glean, n8n, Cognition, Genspark, Kasisto, Manus. Open-source: LangChain, OpenAI Agents SDK, Anthropic SDK, Crew.ai, Cursor, Perplexity, Vercel. Source: Microsoft 365 Blog.</td>
+<td>agent365.html</td></tr>
+<tr><td><span class="tag blue">🆕 Updated</span></td>
+<td><strong>Timeline context</strong> — Agent 365 announced at Microsoft Ignite November 2025. Added to hero badge and intro.</td>
+<td>agent365.html</td></tr>
+</tbody>
+</table>
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Sources</div>
+  <p><a href="https://www.microsoft.com/en-us/microsoft-365/blog/2025/11/18/microsoft-agent-365-the-control-plane-for-ai-agents/" target="_blank" style="color:var(--blue);">Microsoft 365 Blog — Agent 365 control plane (Nov 2025)</a> · <a href="https://www.devoteam.com/expert-view/microsoft-ai-tour-paris-ai-agents-and-governance/" target="_blank" style="color:var(--blue);">Devoteam — AI Tour Paris (March 2026)</a></p>
+</div>
+
 <div class="section-label" style="margin-top:40px;">APRIL 22, 2026 (2)</div>
 <h2>Agent Identity — Three Critical Security Properties</h2>
 
@@ -1329,7 +1412,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  Last updated: April 22, 2026 · Analysis covers publicly announced Microsoft security capabilities only
+  Last updated: April 23, 2026 · Analysis covers publicly announced Microsoft security capabilities only
 </div>
 </div>
 

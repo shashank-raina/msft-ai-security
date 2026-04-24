@@ -1,6 +1,6 @@
 // =============================================================================
 // SYSTEM PROMPT — UPDATE THIS SECTION WHEN SITE CONTENT CHANGES
-// Last updated: April 22, 2026 (2)
+// Last updated: April 23, 2026 (2)
 // =============================================================================
 
 const SYSTEM_PROMPT = `\
@@ -220,6 +220,30 @@ ACTIONS ON RISKY AGENTS:
 INTEGRATION: ID Protection risk signals feed into CA for Agent ID policies
   CA condition: Agent Risk (high/medium/low) — auto-block on High agent risk
 
+// ── ORPHANED AGENTS — TWO SCENARIOS ──────────────────────────────────────────────
+
+Scenario A — Blueprint deleted (Entra/Modern agents):
+  Agent Identities remain with all permissions but can no longer authenticate
+  Agent Users remain as normal Entra accounts with no flag
+
+Scenario B — Builder left the company (most common in practice):
+  Copilot Studio agents built by employees who left continue running
+  Full permissions, full tool access, no accountable owner
+  Not detected automatically — requires KQL + HR cross-reference
+  Detection: AIAgentsInfo | where isempty(OwnerAccountUpns)
+
+AGENT MAP (Agent 365 portal):
+  Visual view of agent-to-resource connections
+  Risk signals from Entra, Purview, Defender overlaid
+  One-click block of flagged agents
+  Surfaces ownerless agents including "left the company" scenario
+
+STATEFUL AGENTS (Dataverse memory):
+  Agent 365 agents retain long-term memory across sessions via Dataverse
+  Persistent memory = sensitive data store (preferences, project context, escalation history)
+  Needs governance: access controls, retention policies, Purview DLP inclusion
+  NOT automatically covered by existing M365 data policies
+
 // ── SHAREPOINT ADVANCED MANAGEMENT (SAM) ─────────────────────────────────────
 
 Included with M365 Copilot licences — no extra cost.
@@ -311,6 +335,29 @@ RUNTIME:
 SECOPS:
   Microsoft Sentinel           ✅ GA · MCP Entity Analyzer GA April 2026
   Security Copilot             ✅ GA · included in E5 (400 SCU/1K users/mo)
+
+// ── CLOUDAPPEVENTS TABLE ───────────────────────────────────────────────────────
+
+Advanced Hunting table in Defender XDR + Sentinel. Captures all M365 Copilot and Security
+Copilot audit activity, agent lifecycle events, DLP rule matches.
+Populated by Defender for Cloud Apps.
+
+PREREQUISITE: Settings → Cloud Apps → App connectors → M365 → "Microsoft 365 activities" checkbox.
+Without this: CloudAppEvents queries return NO results.
+
+KEY ACTIONTYPES: CopilotInteraction, UpdateCopilotAgent, CopilotForSecurityTrigger, DLPRuleMatch
+
+LIMITATION: Metadata only — no prompt or response content.
+For prompt content: Purview DSPM for AI Activity Explorer.
+
+IN SENTINEL: Enable Defender raw event logs → CloudAppEvents flows in automatically.
+No separate connector needed. Enables cross-table correlation.
+
+"DEFENDER FOR AI" = umbrella term covering:
+  Defender for Cloud Apps (CASB + CloudAppEvents)
+  Security for AI portal (AIAgentsInfo + ATG)
+  Defender for Cloud AI Workloads (Azure AI Foundry)
+  NOT a standalone product.
 
 // ── KEY KQL QUERIES ───────────────────────────────────────────────────────────
 
@@ -572,6 +619,26 @@ ACCESS FABRIC (Microsoft concept):
 REGULATORY DEADLINES:
   EU AI Act high-risk: August 2026
   Colorado AI Act: June 2026
+
+// ── AI RED TEAMING AGENT + PyRIT ────────────────────────────────────────────────────
+
+AI Red Teaming Agent (Foundry Preview): automated adversarial testing for models and agents
+Built on PyRIT (open-source Python Risk Identification Tool, github.com/Azure/PyRIT)
+Key metric: Attack Success Rate (ASR) = % of successful attacks
+
+THREE AGENTIC-SPECIFIC RISK CATEGORIES (cloud-only, Foundry agents):
+  Prohibited actions — three-tier taxonomy:
+    Prohibited (never): facial recognition, emotion inference, social scoring
+    High-risk (human-in-loop): financial transactions, medical decisions
+    Irreversible (disclosure+confirm): file deletion, system resets
+  Sensitive data leakage — financial/medical/personal from knowledge bases via tool calls
+  Task adherence — goal achievement, rule compliance, procedural discipline
+
+Also tests: XPIA via synthetic mock tool outputs
+
+Purple environment: non-production with production-like resources for red teaming
+Run before deployment — "shift left" from reactive incidents to proactive testing
+Limitation: Foundry hosted agents + Azure tool calls only. Copilot Studio not supported.
 
 // ── M365 COPILOT AUTOMATED READINESS ASSESSMENT (ARA) ────────────────────────────
 

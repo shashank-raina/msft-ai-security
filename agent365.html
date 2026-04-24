@@ -419,7 +419,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 
 <div class="hero">
-  <div class="a365-hero-badge">✅ GA May 1, 2026 · $15/user/month</div>
+  <div class="a365-hero-badge">✅ GA May 1, 2026 · $15/user/month · Announced Microsoft Ignite 2025</div>
   <h1>Microsoft<br><span>Agent 365</span></h1>
   <p style="color:#2e3d5e;font-size:17px;font-weight:400;max-width:600px;line-height:1.7;">
     The enterprise control plane for AI agents. Agent 365 doesn't build or host agents — it wraps agents you've already built in enterprise-grade identity, governance, observability, and security controls.
@@ -444,7 +444,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <div class="a365-what-card">
     <div class="a365-what-icon">🔌</div>
     <div class="a365-what-title">Governed MCP Tool Access</div>
-    <div class="a365-what-desc">Agents invoke MCP servers under admin control via the Agent Tooling Gateway (ATG). Tool invocations are evaluated by Defender before execution — unsafe actions blocked in real time. No open-ended permissions.</div>
+    <div class="a365-what-desc">Agents invoke MCP servers under admin control via the Agent Tooling Gateway (ATG). Tool invocations are evaluated by Defender <strong>before execution</strong> — unsafe actions blocked before any data access or harm can occur. When ATG blocks an action, it generates a SOC-ready alert explaining what was stopped, why it was risky, and which agent, user, and tool were involved. Alerts flow directly into Defender XDR. No open-ended permissions.<br><br><strong>Critical limitation:</strong> ATG only inspects the tool execution path — not model reasoning between tool calls.</div>
   </div>
   <div class="a365-what-card">
     <div class="a365-what-icon">📊</div>
@@ -487,6 +487,37 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <div class="callout-title">📌 What "platform-agnostic" means in practice</div>
   <p>You add the Agent 365 SDK to your agent code. Once instrumented, the agent registers with Agent 365 regardless of where it runs — Azure, AWS, GCP, or your own infrastructure. The SDK handles the Entra identity registration, OpenTelemetry event emission, and ATG integration automatically. You don't rewrite your agent; you add a governance layer around it.</p>
 </div>
+
+
+<div class="section-label" style="margin-top:48px;">Partner Ecosystem</div>
+<h2>Enterprise partners and open-source frameworks already integrated</h2>
+<p>Agent 365 is not a closed Microsoft system. At GA, a growing ecosystem of external agents and frameworks are certified to integrate with Agent 365 — inheriting the same identity, governance, and security controls.</p>
+<h3 style="margin-top:16px;font-size:14px;">Enterprise partners</h3>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 16px;">
+  <span style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-size:13px;">Adobe</span>
+  <span style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-size:13px;">SAP</span>
+  <span style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-size:13px;">ServiceNow</span>
+  <span style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-size:13px;">Workday</span>
+  <span style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-size:13px;">Databricks</span>
+  <span style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-size:13px;">NVIDIA</span>
+  <span style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-size:13px;">Glean</span>
+  <span style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-size:13px;">n8n</span>
+  <span style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-size:13px;">Cognition</span>
+  <span style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-size:13px;">Genspark</span>
+  <span style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-size:13px;">Kasisto</span>
+  <span style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-size:13px;">Manus</span>
+</div>
+<h3 style="font-size:14px;">Open-source / community</h3>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 16px;">
+  <span style="background:rgba(92,45,145,0.08);border:1px solid rgba(92,45,145,0.2);border-radius:8px;padding:6px 14px;font-size:13px;color:#5c2d91;">LangChain</span>
+  <span style="background:rgba(92,45,145,0.08);border:1px solid rgba(92,45,145,0.2);border-radius:8px;padding:6px 14px;font-size:13px;color:#5c2d91;">OpenAI Agents SDK</span>
+  <span style="background:rgba(92,45,145,0.08);border:1px solid rgba(92,45,145,0.2);border-radius:8px;padding:6px 14px;font-size:13px;color:#5c2d91;">Anthropic SDK</span>
+  <span style="background:rgba(92,45,145,0.08);border:1px solid rgba(92,45,145,0.2);border-radius:8px;padding:6px 14px;font-size:13px;color:#5c2d91;">Crew.ai</span>
+  <span style="background:rgba(92,45,145,0.08);border:1px solid rgba(92,45,145,0.2);border-radius:8px;padding:6px 14px;font-size:13px;color:#5c2d91;">Cursor</span>
+  <span style="background:rgba(92,45,145,0.08);border:1px solid rgba(92,45,145,0.2);border-radius:8px;padding:6px 14px;font-size:13px;color:#5c2d91;">Perplexity</span>
+  <span style="background:rgba(92,45,145,0.08);border:1px solid rgba(92,45,145,0.2);border-radius:8px;padding:6px 14px;font-size:13px;color:#5c2d91;">Vercel</span>
+</div>
+<p style="font-size:12px;color:var(--text3);">Source: <a href="https://www.microsoft.com/en-us/microsoft-365/blog/2025/11/18/microsoft-agent-365-the-control-plane-for-ai-agents/" target="_blank" style="color:var(--blue);">Microsoft 365 Blog — Agent 365: The control plane for AI agents (Nov 2025)</a></p>
 
 <div class="section-label" style="margin-top:48px;">Licensing</div>
 <h2>Two ways to get Agent 365</h2>
@@ -652,6 +683,40 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </tbody>
 </table>
 
+
+
+<div class="section-label" style="margin-top:48px;">Work IQ</div>
+<h2>The intelligence layer that grounds agents in your organisation</h2>
+<p>Work IQ is the contextual intelligence engine that powers Microsoft 365 Copilot and Agent 365. It understands your organisation's work patterns — who collaborates with whom, what projects are active, how work is delegated — and makes this context available to agents securely. Announced at Microsoft AI Tour Paris (March 2026) as a standalone agentic building block.</p>
+<div class="callout callout-info" style="margin-top:12px;">
+  <div class="callout-title">📌 Why Work IQ matters for security</div>
+  <p>Agents grounded via Work IQ inherit your organisation's data governance automatically. Sensitivity labels travel with the data — an agent cannot surface Confidential content to a user without the right permissions. Work IQ enforces this at the grounding layer, not just at output. This structural compliance makes Microsoft-native agents contextually superior and inherently more governable than ungoverned third-party alternatives using direct API calls.</p>
+</div>
+
+<div class="section-label" style="margin-top:48px;">Agent Map</div>
+<h2>Visual risk intelligence across your agent estate</h2>
+<p>The Agent Map is a dynamic visual in the Agent 365 portal showing which agents communicate with which resources, what access they use, and what risk signals are surfacing from Entra, ID Protection, Purview, and Defender — all in one view. Source: <a href="https://www.devoteam.com/expert-view/microsoft-ai-tour-paris-ai-agents-and-governance/" target="_blank" style="color:var(--blue);">Devoteam — Microsoft AI Tour Paris (March 2026)</a></p>
+<p>From the Agent Map, administrators can: block a flagged agent with a single click pending security review, approve or reject new agent deployment requests, see risk signals cross-referenced across identity and data signals, and identify orphaned agents with no current owner.</p>
+
+<div class="callout callout-warn" style="margin-top:12px;">
+  <div class="callout-title">⚠️ Orphaned agents — employees who left the company</div>
+  <p>The most common real-world orphaned agent scenario is not Blueprint deletion (the Entra identity case) — it is employees who built agents in Copilot Studio and then left the organisation. Those agents continue running with the builder's original permissions, full access to the tools and data they were connected to, and no accountable owner. Microsoft does not detect or flag these automatically. The Agent 365 portal surfaces them in the Ownerless Agents view and the Agent Map.</p>
+  <p><strong>Detection KQL:</strong></p>
+  <pre style="background:var(--code-bg);border:1px solid var(--border2);border-radius:4px;padding:12px;font-size:11px;color:#9cdcfe;overflow-x:auto;">AIAgentsInfo
+| summarize arg_max(Timestamp, *) by AIAgentId
+| where AgentStatus == "Published"
+| where isempty(OwnerAccountUpns)
+| project AIAgentName, CreatorAccountUpn, AgentCreationTime, UserAuthenticationType</pre>
+</div>
+
+<div class="section-label" style="margin-top:48px;">Stateful Agents</div>
+<h2>Long-term memory — a data governance concern</h2>
+<p>Agent 365 agents are stateful — powered by Dataverse, they retain memory across sessions. This allows agents to remember user preferences, project details, team roles, and conversation context from previous interactions.</p>
+<div class="callout callout-warn" style="margin-top:12px;">
+  <div class="callout-title">⚠️ Persistent memory is a sensitive data store</div>
+  <p>The Dataverse memory store accumulates sensitive context over weeks or months of agent interactions — meeting summaries, project decisions, user preferences, escalation history. This persistent store needs the same governance controls as any other sensitive data repository: access controls, retention policies, and inclusion in Purview DLP scope. It is not automatically covered by existing M365 data governance policies.</p>
+</div>
+
 <div class="section-label" style="margin-top:48px;">Key KQL — Agent 365 Agents</div>
 <h2>Essential Advanced Hunting queries</h2>
 <p>Use <code>RegistrySource == "A365"</code> to target Agent 365-registered agents specifically. See <a href="playbooks.html" style="color:var(--blue);">Playbook 01 Step 8</a> for the full query set.</p>
@@ -696,7 +761,7 @@ AIAgentsInfo
 
 <div class="footer">
   SOURCES: Microsoft Agent 365 documentation · Cloudpartner.fi Defender + Agent 365 integration (April 2026) · Microsoft RSAC 2026 announcements<br>
-  Last updated: April 22, 2026
+  Last updated: April 23, 2026
 </div>
 </div>
 

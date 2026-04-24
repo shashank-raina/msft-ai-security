@@ -700,7 +700,44 @@ Disconnect-MgGraph</div>
   </div>
 
   <div class="pb-section">
-    <div class="pb-section-label">STEP 8 — AUDIT AGENT 365 REGISTERED AGENTS (KQL)</div>
+    
+    <div class="pb-section-label">CLOUDAPPEVENTS — COPILOT AUDIT HUNTING</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">The CloudAppEvents table captures Copilot and agent activity from the M365 Unified Audit Log via Defender for Cloud Apps. Requires: Settings → Cloud Apps → App connectors → M365 activities enabled. Metadata only — no prompt content.</p>
+
+    <div class="kql-label">Agent changes — all Copilot agent create/update/delete events</div>
+    <div class="kql-block"><pre style="margin:0;white-space:pre;">CloudAppEvents
+| where Timestamp > ago(7d)
+| where ActionType startswith "CopilotAgent" or ActionType startswith "UpdateCopilot"
+| project Timestamp, ActionType, AccountDisplayName,
+          AgentName = tostring(RawEventData.CopilotAgentName),
+          ChangeDetail = tostring(RawEventData)
+| order by Timestamp desc</pre></div>
+
+    <div class="kql-label">Cross-correlation — agent change followed by suspicious email (same account)</div>
+    <div class="kql-block"><pre style="margin:0;white-space:pre;">CloudAppEvents
+| where Timestamp > ago(7d)
+| where ActionType startswith "UpdateCopilotAgent"
+| project CopilotActionTime = Timestamp,
+          AdminAccount = AccountDisplayName,
+          AgentName = tostring(RawEventData.CopilotAgentName),
+          Action = ActionType
+| join kind=inner (
+    EmailEvents
+    | where Timestamp > ago(7d)
+    | where Subject has_any ("confidential","restricted","sensitive")
+) on $left.AdminAccount == $right.SenderFromAddress
+| project CopilotActionTime, AdminAccount, AgentName, Action,
+          EmailTime = Timestamp1, EmailSubject = Subject</pre></div>
+
+    <div class="kql-label">Security Copilot audit — all triggering events</div>
+    <div class="kql-block"><pre style="margin:0;white-space:pre;">CloudAppEvents
+| where Timestamp > ago(30d)
+| where ActionType == "CopilotForSecurityTrigger"
+| summarize TriggerCount = count(), UniqueUsers = dcount(AccountObjectId)
+    by ActionType, Application, bin(Timestamp, 1d)
+| order by Timestamp desc</pre></div>
+
+<div class="pb-section-label">STEP 8 — AUDIT AGENT 365 REGISTERED AGENTS (KQL)</div>
     <div class="step">
       <div class="step-num">8</div>
       <div class="step-body">
@@ -1256,7 +1293,7 @@ AppRequests      → inbound requests (if agent exposed via HTTP)</div>
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Learn · Field research from Microsoft Security professionals<br>
-  Last updated: April 22, 2026 · Playbooks reflect publicly announced Microsoft capabilities only
+  Last updated: April 23, 2026 · Playbooks reflect publicly announced Microsoft capabilities only
 </div>
 </div>
 <script>

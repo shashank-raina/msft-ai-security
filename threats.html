@@ -541,6 +541,20 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
         <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>CLI integration + CI/CD gating</strong> — in-pipeline scanning of model artifacts during build. Gating capability blocks unsafe models from reaching a registry if scan fails.</div></div>
         <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>GitHub Advanced Security</strong> — supply chain scanning for ML dependencies (TensorFlow, PyTorch, Langchain) via Defender for Cloud DevOps security integration.</div></div>
         <div class="threat-step"><div class="threat-step-num" style="background:rgba(252,225,0,0.2);color:var(--caution-text);">⚠</div><div class="threat-step-text"><strong>Gap</strong>: Training data provenance and poisoning detection remain limited in current tooling. Model scanning covers the artifact — not the quality or integrity of training data before it enters the pipeline.</div></div>
+        <div class="callout callout-info" style="margin-top:12px;">
+          <div class="callout-title">📌 AI model lifecycle — five stages requiring controls</div>
+          <p>Source: <a href="https://techcommunity.microsoft.com/blog/microsoftdefendercloudblog/defending-the-ai-era-new-microsoft-capabilities-to-protect-ai/4503885" target="_blank" style="color:var(--blue);">Microsoft Defender for Cloud Blog, March 2026</a> — organisations that treat model security as a continuous discipline build the foundation to scale AI securely.</p>
+          <table style="font-size:12px;width:100%;border-collapse:collapse;margin:8px 0;">
+          <thead><tr><th style="text-align:left;padding:6px 8px;border-bottom:1px solid var(--border2);font-size:10px;text-transform:uppercase;">Stage</th><th style="text-align:left;padding:6px 8px;border-bottom:1px solid var(--border2);font-size:10px;text-transform:uppercase;">Control required</th></tr></thead>
+          <tbody>
+          <tr><td style="padding:6px 8px;border-bottom:1px solid var(--border2);font-weight:600;">1. Supply chain</td><td style="padding:6px 8px;border-bottom:1px solid var(--border2);">Verify provenance of pretrained models, datasets, ML frameworks before ingestion</td></tr>
+          <tr><td style="padding:6px 8px;border-bottom:1px solid var(--border2);font-weight:600;">2. Development</td><td style="padding:6px 8px;border-bottom:1px solid var(--border2);">Artifact validation — CLI scanning of model files during build process</td></tr>
+          <tr><td style="padding:6px 8px;border-bottom:1px solid var(--border2);font-weight:600;">3. Pre-deployment</td><td style="padding:6px 8px;border-bottom:1px solid var(--border2);">CI/CD gating — if a model has not been scanned, it should not be pushed to registry</td></tr>
+          <tr><td style="padding:6px 8px;border-bottom:1px solid var(--border2);font-weight:600;">4. Production</td><td style="padding:6px 8px;border-bottom:1px solid var(--border2);">Runtime threat detection — AI Model Scanning recurring scans + Defender XDR alerts</td></tr>
+          <tr><td style="padding:6px 8px;font-weight:600;">5. End of life</td><td style="padding:6px 8px;">Discovery and cleanup — decommission models no longer in active use</td></tr>
+          </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -604,6 +618,54 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   </div>
 </div>
 
+
+<div class="threat-block">
+  <div class="threat-header">
+    <div class="threat-icon">🚫</div>
+    <div><div class="threat-name">8b — Agentic Risk: Prohibited Actions, Data Leakage & Task Deviation</div></div>
+    <div class="threat-category" style="background:rgba(216,59,1,0.15);color:var(--warn-text);border:1px solid rgba(216,59,1,0.25);">HIGH · AGENTIC-SPECIFIC · PRE-DEPLOYMENT TESTING</div>
+  </div>
+  <div class="threat-body">
+    <p>Source: <a href="https://learn.microsoft.com/en-us/azure/foundry/concepts/ai-red-teaming-agent" target="_blank" style="color:var(--blue);">Microsoft Learn — AI Red Teaming Agent (Preview)</a></p>
+    <p>Three risk categories unique to agentic AI — distinct from model-level risks. These are only detectable by testing agent behaviour, not model outputs alone. Microsoft's AI Red Teaming Agent (Foundry, Preview) provides automated testing for all three.</p>
+    <div class="threat-cols">
+      <div>
+        <div class="threat-section-label">RISK 1 — PROHIBITED ACTIONS</div>
+        <p>Agents perform actions that should never be allowed, require human authorisation, or are irreversible. The three-tier taxonomy:</p>
+        <table style="font-size:12px;width:100%;border-collapse:collapse;margin:8px 0;">
+          <thead><tr><th style="text-align:left;padding:6px 8px;border-bottom:1px solid var(--border2);font-size:10px;text-transform:uppercase;letter-spacing:0.06em;">Tier</th><th style="padding:6px 8px;border-bottom:1px solid var(--border2);font-size:10px;text-transform:uppercase;letter-spacing:0.06em;text-align:left;">Examples</th><th style="padding:6px 8px;border-bottom:1px solid var(--border2);font-size:10px;text-transform:uppercase;letter-spacing:0.06em;text-align:left;">Rule</th></tr></thead>
+          <tbody>
+          <tr><td style="padding:6px 8px;border-bottom:1px solid var(--border2);font-weight:600;">Prohibited</td><td style="padding:6px 8px;border-bottom:1px solid var(--border2);">Facial recognition, emotion inference, social scoring</td><td style="padding:6px 8px;border-bottom:1px solid var(--border2);"><span class="severity-critical">❌ Never allowed</span></td></tr>
+          <tr><td style="padding:6px 8px;border-bottom:1px solid var(--border2);font-weight:600;">High-risk</td><td style="padding:6px 8px;border-bottom:1px solid var(--border2);">Financial transactions, medical decisions, HR actions</td><td style="padding:6px 8px;border-bottom:1px solid var(--border2);"><span class="caution-inline">⚠ Human-in-the-loop required</span></td></tr>
+          <tr><td style="padding:6px 8px;font-weight:600;">Irreversible</td><td style="padding:6px 8px;">File deletions, system resets, account closures</td><td style="padding:6px 8px;"><span class="caution-inline">⚠ Disclosure + confirmation</span></td></tr>
+          </tbody>
+        </table>
+
+        <div class="threat-section-label" style="margin-top:12px;">RISK 2 — SENSITIVE DATA LEAKAGE (AGENTIC)</div>
+        <p>Agent leaks financial, medical, or personal data from internal knowledge bases and tool calls. Distinct from general data leakage — the agent actively retrieves and exposes sensitive data through tool execution, not just by processing user inputs. Attack Success Rate (ASR) is measured using synthetic PII and financial datasets injected into mock tool outputs.</p>
+
+        <div class="threat-section-label" style="margin-top:12px;">RISK 3 — TASK ADHERENCE FAILURE</div>
+        <p>Agent deviates from its assigned task — failing to achieve the user's goal, violating policy guardrails, or using tools in incorrect order/sequence. Three test dimensions: goal achievement, rule compliance, procedural discipline. Adversarial probing generates both representative and edge-case agentic trajectories to test ordinary and stress scenarios.</p>
+      </div>
+      <div>
+        <div class="threat-section-label">CONTROLS</div>
+        <div class="threat-controls">
+          <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>AI Red Teaming Agent (Foundry Preview)</strong> — automated testing for all three agentic risk categories before deployment. Run in a "purple environment" — non-production with production-like resources and tools.</div></div>
+          <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>Agent Tooling Gateway (ATG)</strong> — blocks tool invocations matching prohibited action patterns at runtime. Only covers the tool execution path, not reasoning.</div></div>
+          <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>Define prohibited actions taxonomy before deployment</strong> — create explicit policy/taxonomy of what the agent cannot do. Feed this into ATG policy rules and AI Red Teaming Agent tests. Align with EU AI Act prohibited practices for high-risk systems.</div></div>
+          <div class="threat-step"><div class="threat-step-num" style="background:rgba(84,176,84,0.2);color:var(--green2);">✓</div><div class="threat-step-text"><strong>Human-in-the-loop gates for high-risk and irreversible actions</strong> — require explicit human confirmation before agent executes financial transactions, medical decisions, or any action that cannot be undone.</div></div>
+          <div class="threat-step"><div class="threat-step-num" style="background:rgba(216,59,1,0.2);color:var(--warn-text);">⚠</div><div class="threat-step-text"><strong>Foundry-hosted agents only</strong> — AI Red Teaming Agent currently only supports Foundry prompt and container agents with Azure tool calls. Copilot Studio, non-Azure tools, and browser/computer-use tool calls are not supported.</div></div>
+        </div>
+
+        <div class="callout callout-info" style="margin-top:12px;">
+          <div class="callout-title">📌 Purple environment concept</div>
+          <p>Run red teaming exercises in a non-production environment configured with production-like resources — same tools, same data shapes, same integrations, but isolated from live systems. This ensures agentic risk testing reflects real behaviour without exposing production data to adversarial test inputs. Microsoft redacts harmful inputs from red teaming results to protect developers from exposure to generated attack content.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="page-nav"><a href="mcp.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">MCP</span></a><a href="frameworks.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Frameworks</span></a></div>
 <div style="text-align:center;margin:32px 0 0;padding:24px 0;border-top:1px solid var(--border2);">
   <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text3);margin-bottom:10px;">STAY UPDATED</div>
@@ -616,7 +678,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  Last updated: April 22, 2026
+  Last updated: April 23, 2026
 <script>
 document.addEventListener('DOMContentLoaded', function(){
   var btn = document.getElementById('hamburgerBtn');
