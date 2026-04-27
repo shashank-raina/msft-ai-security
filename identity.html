@@ -322,6 +322,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="gaps.html" class="">Gaps</a>
 <a href="playbooks.html" class="">Playbooks</a>
 <a href="copilot-vs-foundry.html" class="">CS vs Foundry</a>
+<a href="strategy.html" class="">Strategy</a>
 <a href="changelog.html" class="">Changelog</a>
 <a href="contact.html" class="">Contact</a>
 </div>
@@ -341,6 +342,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="gaps.html" class="">Gaps</a>
 <a href="playbooks.html" class="">Playbooks</a>
 <a href="copilot-vs-foundry.html" class="">CS vs Foundry</a>
+<a href="strategy.html" class="">Strategy</a>
 <a href="changelog.html" class="">Changelog</a>
 <a href="contact.html" class="">Contact</a>
 </div>
@@ -787,7 +789,7 @@ Disconnect-MgGraph</pre>
 </tr>
 <tr>
   <td><strong>Agent Identity</strong><br><span style="font-family:'JetBrains Mono',monospace;font-size:9px;">The agent's service principal</span></td>
-  <td>A special service principal in Entra created by the Blueprint. Has no credentials of its own — the Blueprint's credentials are used for token exchange via an impersonation model: the Blueprint performs the actual token exchange but the Agent Identity appears as the client in the resulting token and in audit logs.<br><br>
+  <td>A special service principal in Entra created by the Blueprint. Has a unique characteristic: the <strong>Object ID and App ID always share the same value</strong> — making agent identities reliably identifiable for authorization decisions without ambiguity. Has no credentials of its own — the Blueprint's credentials are used for token exchange via an impersonation model: the Blueprint performs the actual token exchange but the Agent Identity appears as the client in the resulting token and in audit logs.<br><br>
   <strong>Three critical security properties (Modern agents only):</strong><br>
   ① <strong>No admin token generation:</strong> No one in the tenant — including Global Admins — can generate tokens using the agent identity. Microsoft fully controls the Blueprint and authentication mechanism. This prevents lateral movement via agent identity token theft.<br>
   ② <strong>Tenant-bound:</strong> Agent identity tokens can only be issued in the tenant where the agent was created. They cannot access resources or APIs in other tenants — no cross-tenant token movement.<br>
@@ -875,26 +877,50 @@ Disconnect-MgGraph</pre>
 </tbody>
 </table>
 
+
+<div class="callout callout-info" style="margin-top:12px;">
+  <div class="callout-title">📌 Updated terminology — April 2026 (Carlos Suarez, Microsoft)</div>
+  <p>Microsoft has standardised on new naming for agent access models:</p>
+  <table style="margin:8px 0;font-size:12px;">
+  <thead><tr><th>New name</th><th>Former name</th><th>What it means</th></tr></thead>
+  <tbody>
+  <tr><td><strong>Agents with delegated access</strong></td><td>OBO agents</td><td>Agent acts on behalf of a signed-in user using delegated permissions. User tokens. Standard OAuth 2.0 OBO flow.</td></tr>
+  <tr><td><strong>Agents with own access (Autonomous)</strong></td><td>Non-OBO agents</td><td>Agent acts under its own identity, no user context. App-only permissions, admin-granted. Agent tokens.</td></tr>
+  <tr><td><strong>Agent's User Account</strong></td><td>No change</td><td>One-to-one pairing for systems requiring a user object (Exchange Online mailbox, Teams channel). Three-stage credential chain: Blueprint → Identity → User Account.</td></tr>
+  </tbody>
+  </table>
+</div>
+
 <p style="margin-top:16px;">T1 controls <em>who is trusted</em> to get a token. T2 controls <em>what they are allowed to do</em> once trusted. These are governed independently — you can have tightly scoped T2 permissions on a Blueprint that uses weak T1 credentials, or vice versa.</p>
 
-<h3 style="margin-top:20px;">Two Blueprint credential types (T1)</h3>
-<p>A Blueprint can use one of two credential types to complete T1:</p>
+<h3 style="margin-top:20px;">Blueprint credential types (T1) — preferred to least preferred</h3>
+<p>A Blueprint can use one of three credential types to complete T1. Source: <a href="https://contosec.com/articles/EntraAgentID/" target="_blank" style="color:var(--blue);">Carlos Suarez (Microsoft) — Entra Agent ID Architecture</a>.</p>
 
 <table>
 <thead><tr><th>Type</th><th>How it works</th><th>Security posture</th></tr></thead>
 <tbody>
 <tr>
-  <td><strong>Secrets / Certificates</strong></td>
-  <td>Static credential — a client secret or certificate stored somewhere. Presented to Entra at authentication.</td>
-  <td><span class="severity-critical">Higher risk</span> — must be stored somewhere. Risk of theft, reuse, or misuse. Requires rotation. Same risks as service principal secrets today.</td>
+  <td><strong>Managed Identity (via FIC)</strong></td>
+  <td>Azure Managed Identity token serves as the FIC credential for the Blueprint. The managed identity token is platform-issued — no secret to store, rotate, or leak. Standard MSI protocols apply for credential acquisition.</td>
+  <td><span class="green-inline">Most preferred</span> — Microsoft-recommended for production. No stored secret anywhere. Platform handles credential lifecycle entirely.</td>
 </tr>
 <tr>
   <td><strong>Federated Identity Credentials (FIC)</strong></td>
-  <td>No stored secret. An external identity (e.g. Azure Managed Identity) presents a short-lived OIDC token that Entra verifies dynamically against trust rules.</td>
-  <td><span class="green-inline">Recommended</span> — no secret ever leaves the workload's hosting platform. Entra never sees a password. OIDC token is short-lived (minutes) and signed by a key the workload cannot extract.</td>
+  <td>No stored secret. An external identity presents a short-lived OIDC token that Entra verifies dynamically against trust rules (issuer, subject, audiences — case-sensitive). Broader than Managed Identity — any OIDC-capable IdP can be used.</td>
+  <td><span class="green-inline">Preferred</span> — no secret ever leaves the workload's hosting platform. Use when Azure Managed Identity is not available (e.g. GitHub Actions, external platforms).</td>
+</tr>
+<tr>
+  <td><strong>Secrets / Certificates</strong></td>
+  <td>Static credential — a client secret or certificate stored somewhere. Presented to Entra at authentication.</td>
+  <td><span class="severity-critical">Least preferred</span> — must be stored, rotated, and protected. Risk of theft, reuse, or exfiltration. Acceptable only for dev/test scenarios.</td>
 </tr>
 </tbody>
 </table>
+
+<div class="callout callout-info" style="margin-top:8px;">
+  <div class="callout-title">📌 Additional authentication constraints (Carlos Suarez, Microsoft)</div>
+  <p>Agent entities authenticate as <strong>confidential clients only</strong> — none use redirect URIs or the <code>/authorize</code> endpoint. There is no browser-based OAuth flow for agents. Supported grant types for delegated access: <code>client_credentials</code>, <code>jwt-bearer</code>, <code>refresh_token</code>.</p>
+</div>
 
 <div class="callout callout-info" style="margin-top:12px;">
   <div class="callout-title">📌 How FIC trust works</div>
@@ -926,6 +952,75 @@ Disconnect-MgGraph</pre>
 </div>
 
 
+
+<div class="section-label" style="margin-top:48px;">Seven Governance Pillars</div>
+<h2>Securing agent identities at enterprise scale</h2>
+<p>Source: <a href="https://contosec.com/articles/EntraAgentID/" target="_blank" style="color:var(--blue);">Carlos Suarez (Microsoft) — Entra Agent ID Govern and Secure (April 2026)</a></p>
+<p>Agent identities are subject to the same governance and security controls as human identities. Microsoft Entra provides seven pillars for agent governance — each addressing a distinct layer of the identity security stack.</p>
+
+<table>
+<thead><tr><th>#</th><th>Pillar</th><th>What it does for agents</th><th>Key detail</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>1</strong></td>
+  <td><strong>Conditional Access</strong></td>
+  <td>Evaluates agent token requests — same Zero Trust enforcement as human users. Applies when an agent identity or agent user account requests a token for any resource.</td>
+  <td>Does NOT apply to Blueprint token exchanges or Blueprint-to-Graph flows for creating agent identities. Scope by object ID, custom security attributes, Blueprint, or all agent identities.</td>
+</tr>
+<tr>
+  <td><strong>2</strong></td>
+  <td><strong>ID Governance</strong></td>
+  <td>Lifecycle management for agent identities — access reviews, owner/sponsor assignment, entitlement management, deprovisioning.</td>
+  <td>Sponsor is required to request or approve Access Packages on behalf of the agent. Without a Sponsor, lifecycle reviews have no accountable party.</td>
+</tr>
+<tr>
+  <td><strong>3</strong></td>
+  <td><strong>Access Packages</strong></td>
+  <td>Time-bound, reviewable permission grants for agent identities via Entra ID Governance. Define what permissions an agent holds, for how long, and who must approve renewals.</td>
+  <td>Prevents permanent over-permissioning. Access packages enforce the least privilege principle at the entitlement layer — not just at assignment time but throughout the agent's lifecycle via scheduled reviews.</td>
+</tr>
+<tr>
+  <td><strong>4</strong></td>
+  <td><strong>ID Protection</strong></td>
+  <td>Automated risk detection across six detection types. Generates Risky Agents report. Risk signals feed directly into CA policies for auto-block on High risk.</td>
+  <td>Applies to Modern agents (Entra Agent ID) only. Requires Entra P2.</td>
+</tr>
+<tr>
+  <td><strong>5</strong></td>
+  <td><strong>Network Controls</strong></td>
+  <td>Named locations, compliant network conditions, and Entra Internet Access prompt injection protection at the network layer.</td>
+  <td>Entra Internet Access prompt injection protection GA March 31 2026 — blocks malicious prompts across apps and agents at the network layer before they reach the model.</td>
+</tr>
+<tr>
+  <td><strong>6</strong></td>
+  <td><strong>Sign-in &amp; Audit Logs</strong></td>
+  <td>All authentication and actions performed by agent identities are logged in Microsoft Entra ID and viewable in the admin center. Blueprint Principal appears in T1 logs; Agent Identity appears in T2 access token logs.</td>
+  <td>Deletion of Blueprint Principal severs the audit trail for all child agent identities. Export to Sentinel via Diagnostic Settings for long-term retention and cross-signal correlation.</td>
+</tr>
+<tr>
+  <td><strong>7</strong></td>
+  <td><strong>Consent &amp; Sign-in</strong></td>
+  <td>Standard OAuth 2.0 consent framework applies. Users control which delegated permissions they grant to agent identities. Admin consent covers application permissions.</td>
+  <td>Agent entities authenticate as confidential clients only — no redirect URIs, no browser-based flows. Certain high-privilege Graph permissions are blocked for agents by design.</td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:12px;">
+  <div class="callout-title">📌 Access Packages — the governance layer above CA</div>
+  <p>CA policies control <em>whether</em> an agent can access a resource at a given moment. Access Packages control <em>what permissions</em> the agent holds over time. An agent can pass every CA check and still hold excessive permissions if no Access Package policy governs its entitlements. Use both: CA for real-time access decisions, Access Packages for lifecycle and periodic review of what the agent is authorised to do.</p>
+</div>
+
+<div class="callout callout-info" style="margin-top:8px;">
+  <div class="callout-title">📌 InheritDelegatedPermissions property</div>
+  <p>When the <code>InheritDelegatedPermissions</code> property is enabled on an Agent Identity, it can inherit permissions from its parent Blueprint — but <strong>within tenant boundaries only</strong>. This enables simpler permission management at scale (set permissions once at Blueprint level, all child identities inherit) but increases the blast radius of a compromised Blueprint. Disabled by default. Consider carefully before enabling in production.</p>
+</div>
+
+<div class="callout callout-info" style="margin-top:8px;">
+  <div class="callout-title">📌 Single-tenant enforcement — even when Blueprint supports multi-tenancy</div>
+  <p>Agent identities are always single-tenant, even when the parent Blueprint supports multi-tenancy. Each agent identity belongs to exactly one Blueprint and can only be issued tokens in the tenant where it was created. This is a hard constraint — it cannot be overridden by Blueprint configuration. A multi-tenant Blueprint can create agent identities in multiple tenants, but each identity operates entirely within its own tenant boundary.</p>
+</div>
+
 <h2>Practical Controls — Ranked by Availability</h2>
 <table>
 <thead><tr><th>Control</th><th>What It Does</th><th>Status</th><th>Limitation</th></tr></thead>
@@ -954,7 +1049,7 @@ Disconnect-MgGraph</pre>
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  Last updated: April 23, 2026 · Analysis covers publicly announced Microsoft security capabilities only
+  Last updated: April 24, 2026 · Analysis covers publicly announced Microsoft security capabilities only
 </div>
 </div>
 

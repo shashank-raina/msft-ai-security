@@ -417,6 +417,24 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <p><a href="https://techcommunity.microsoft.com/blog/microsoftdefendercloudblog/defending-the-ai-era-new-microsoft-capabilities-to-protect-ai/4503885" target="_blank" style="color:var(--blue);">Microsoft Defender for Cloud Blog — Defending the AI Era (March 2026)</a></p>
 </div>
 
+
+<div class="section-label" style="margin-top:40px;">APRIL 23, 2026 (2)</div>
+<h2>Agent Model Inventory KQL — EUDB Compliance Gap</h2>
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Agent model inventory with EUDB compliance status</strong> — new KQL query that extracts <code>modelNameHint</code> from <code>RawAgentInfo</code> to identify which AI model each Copilot Studio agent uses (Anthropic, OpenAI, environment default). Flags EU Data Boundary status per agent — Anthropic models (Sonnet/Haiku/Opus) process data outside EUDB regardless of tenant geo. Source: Blue161616/Agent-Identity on GitHub.</td>
+<td>playbooks.html</td></tr>
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>EUDB compliance gap added</strong> — no native visibility or policy to prevent makers selecting out-of-EUDB models. Model selection buried in RawAgentInfo, not surfaced in any admin UI. High severity for EU organisations.</td>
+<td>gaps.html</td></tr>
+</tbody>
+</table>
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Source</div>
+  <p><a href="https://github.com/Blue161616/Agent-Identity/blob/main/CopilotStudioAgentModelInfo.KQL" target="_blank" style="color:var(--blue);">GitHub — Blue161616/Agent-Identity/CopilotStudioAgentModelInfo.KQL</a></p>
+</div>
 <div class="section-label" style="margin-top:40px;">APRIL 23, 2026</div>
 <h2>AI Red Teaming Agent · Agentic Risk Categories · Agent Map · Orphaned Agents · Stateful Agents</h2>
 
@@ -1412,7 +1430,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  Last updated: April 23, 2026 · Analysis covers publicly announced Microsoft security capabilities only
+  Last updated: April 24, 2026 · Analysis covers publicly announced Microsoft security capabilities only
 </div>
 </div>
 

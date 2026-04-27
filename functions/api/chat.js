@@ -165,25 +165,49 @@ FOUR ENTRA AGENT ID OBJECTS:
 BLUEPRINT T1/T2 AUTHENTICATION FLOW:
   T1 (Exchange Token / trust phase):
     Blueprint presents credential to Entra → Entra verifies trust → issues exchange token
-    Controlled by: Blueprint credential type (secrets/certs OR FIC)
+    Controlled by: Blueprint credential type
+    Agent entities authenticate as CONFIDENTIAL CLIENTS ONLY — no redirect URIs, no /authorize endpoint
+    Supported grant types: client_credentials, jwt-bearer, refresh_token
   T2 (Access Token / authorisation phase):
     Agent Identity inherits Blueprint permissions → Entra issues Access Token
     Controlled by: Agent Identity permissions (Graph API roles, Azure RBAC, etc.)
   T1 and T2 are governed INDEPENDENTLY
 
-TWO BLUEPRINT CREDENTIAL TYPES (T1):
-  Secrets / Certificates — static, must be stored somewhere, risk of theft/reuse
-  Federated Identity Credentials (FIC) — RECOMMENDED:
-    No stored secret anywhere
-    External identity (e.g. Azure Managed Identity) presents short-lived OIDC token
-    Entra verifies against three FIC properties (all case-sensitive):
-      issuer   = URL of external IdP; must match iss claim
-                 For Azure MI: https://login.microsoftonline.com/<tenantId>/v2.0
-      subject  = workload identifier; must match sub claim
-                 For Azure MI: the MI's principal ID (GUID)
-      audiences = must match aud claim; use api://AzureADTokenExchange
-    OIDC token is short-lived (minutes), signed by key workload cannot extract
-    Entra never sees a password
+UPDATED NAMING (Carlos Suarez, Microsoft — April 2026):
+  "Agents with delegated access" = formerly OBO agents
+    Acts on behalf of signed-in user, delegated permissions, user tokens
+  "Agents with own access (Autonomous)" = formerly non-OBO agents
+    Acts under own identity, app-only permissions, agent tokens, no user context
+  "Agent's User Account" = unchanged
+    Three-stage chain: Blueprint → Identity → User Account
+    For systems requiring user object (Exchange Online mailbox, Teams)
+
+BLUEPRINT CREDENTIAL TYPES — PREFERENCE ORDER (source: Carlos Suarez, Microsoft):
+  1. Managed Identity (via FIC) — MOST PREFERRED for production
+     Azure platform issues and manages the MI token as Blueprint credential
+     No stored secret anywhere, platform handles lifecycle
+  2. Federated Identity Credentials (FIC) — PREFERRED when MI not available
+     No stored secret; external OIDC IdP; short-lived tokens; case-sensitive issuer/subject/audiences
+     For Azure MI: issuer=https://login.microsoftonline.com/<tenantId>/v2.0
+                   subject=MI principal ID (GUID)
+                   audiences=api://AzureADTokenExchange
+  3. Secrets / Certificates — LEAST PREFERRED, dev/test only
+     Static credential, must be stored/rotated, risk of theft/reuse
+
+SEVEN GOVERNANCE PILLARS (Carlos Suarez, Microsoft):
+  1. Conditional Access — evaluates agent token requests (NOT Blueprint exchanges)
+  2. ID Governance — lifecycle, access reviews, owner/sponsor assignment
+  3. Access Packages — TIME-BOUND permission grants; use alongside CA for full lifecycle governance
+  4. ID Protection — six risk detections, Risky Agents, feeds into CA auto-block on High risk
+  5. Network Controls — named locations, Entra Internet Access prompt injection (GA Mar 31 2026)
+  6. Sign-in & Audit Logs — Blueprint Principal in T1, Agent Identity in T2 access tokens
+  7. Consent & Sign-in — OAuth 2.0 consent, confidential clients, blocked high-privilege permissions
+
+KEY ARCHITECTURAL FACTS:
+  Object ID = App ID: always same value for agent identities (distinguishes from regular service principals)
+  Single-tenant enforcement: ALWAYS single-tenant even if Blueprint supports multi-tenancy
+  InheritDelegatedPermissions: when enabled, identity inherits from Blueprint within tenant only (disabled by default)
+
 
 BLUEPRINT GRAPH API SCOPES:
   AgentIdentityBlueprint.Create            — create a blueprint
@@ -358,6 +382,17 @@ No separate connector needed. Enables cross-table correlation.
   Security for AI portal (AIAgentsInfo + ATG)
   Defender for Cloud AI Workloads (Azure AI Foundry)
   NOT a standalone product.
+
+// ── AGENT MODEL INVENTORY + EUDB COMPLIANCE ────────────────────────────────────
+
+KQL: extract modelNameHint from RawAgentInfo in AIAgentsInfo table
+Providers: Anthropic (sonnet/haiku/opus), OpenAI (gpt/o1/o3), Environment default
+EUDB status:
+  Anthropic → OUT OF EUDB — cross-geo (even if tenant is in EU geo)
+  OpenAI (Microsoft-hosted) → In EUDB if environment is EU
+  Environment default → depends on tenant default — verify
+HIGH SEVERITY GAP: no native admin UI shows model selection, no policy prevents out-of-EUDB model use.
+Source: github.com/Blue161616/Agent-Identity/CopilotStudioAgentModelInfo.KQL
 
 // ── KEY KQL QUERIES ───────────────────────────────────────────────────────────
 

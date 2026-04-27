@@ -322,6 +322,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="gaps.html" class="">Gaps</a>
 <a href="playbooks.html" class=" active">Playbooks</a>
 <a href="copilot-vs-foundry.html" class="">CS vs Foundry</a>
+<a href="strategy.html" class="">Strategy</a>
 <a href="changelog.html" class="">Changelog</a>
 <a href="contact.html" class="">Contact</a>
 </div>
@@ -341,6 +342,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="gaps.html" class="">Gaps</a>
 <a href="playbooks.html" class=" active">Playbooks</a>
 <a href="copilot-vs-foundry.html" class="">CS vs Foundry</a>
+<a href="strategy.html" class="">Strategy</a>
 <a href="changelog.html" class="">Changelog</a>
 <a href="contact.html" class="">Contact</a>
 </div>
@@ -736,6 +738,36 @@ Disconnect-MgGraph</div>
 | summarize TriggerCount = count(), UniqueUsers = dcount(AccountObjectId)
     by ActionType, Application, bin(Timestamp, 1d)
 | order by Timestamp desc</pre></div>
+
+
+    <div class="pb-section-label">AGENT MODEL INVENTORY — EUDB COMPLIANCE</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Identifies which AI model each Copilot Studio agent is using by extracting <code>modelNameHint</code> from <code>RawAgentInfo</code>. Flags EU Data Boundary (EUDB) compliance status per agent — critical for EU organisations where Anthropic-hosted models process data outside the EUDB. Source: <a href="https://github.com/Blue161616/Agent-Identity/blob/main/CopilotStudioAgentModelInfo.KQL" target="_blank" style="color:var(--blue);">Blue161616/Agent-Identity</a>.</p>
+
+    <div class="kql-label">Agent model inventory with EUDB status</div>
+    <div class="kql-block"><pre style="margin:0;white-space:pre;">AIAgentsInfo
+| summarize arg_max(Timestamp, *) by AIAgentId
+| where Platform == "Copilot Studio" and AgentStatus != "Deleted"
+| extend ModelNameHint = extract(@"modelNameHint:\s*([A-Za-z0-9_\-\.]+)", 1, RawAgentInfo)
+| extend HintLower = tolower(ModelNameHint)
+| extend Provider = case(
+    HintLower startswith "sonnet" or HintLower startswith "haiku" or HintLower startswith "opus", "Anthropic",
+    HintLower startswith "gpt" or HintLower startswith "o1" or HintLower startswith "o3", "OpenAI (Microsoft-hosted)",
+    isempty(ModelNameHint), "Environment default",
+    "Other"
+)
+| extend EUDB_Status = case(
+    Provider == "Anthropic", "OUT OF EUDB — cross-geo processing",
+    Provider == "OpenAI (Microsoft-hosted)", "In EUDB (if environment is in EU)",
+    Provider == "Environment default", "Depends on tenant default — verify",
+    "Verify"
+)
+| project AIAgentName, Provider, ModelNameHint, EUDB_Status,
+          EnvironmentId, CreatorAccountUpn, OwnerAccountUpns, LastModifiedTime
+| sort by Provider asc, AIAgentName asc</pre></div>
+
+    <div style="background:rgba(248,81,73,0.06);border:1px solid rgba(248,81,73,0.2);border-radius:4px;padding:10px 14px;font-size:12px;margin-top:8px;line-height:1.6;">
+      ⚠️ <strong>EUDB implication:</strong> Copilot Studio agents using Anthropic models (Sonnet, Haiku, Opus) process data outside the EU Data Boundary regardless of your tenant's geo. This is a compliance risk for EU organisations subject to GDPR or contractual data residency requirements. Run this query to identify affected agents before a data residency audit.
+    </div>
 
 <div class="pb-section-label">STEP 8 — AUDIT AGENT 365 REGISTERED AGENTS (KQL)</div>
     <div class="step">
@@ -1293,7 +1325,7 @@ AppRequests      → inbound requests (if agent exposed via HTTP)</div>
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Learn · Field research from Microsoft Security professionals<br>
-  Last updated: April 23, 2026 · Playbooks reflect publicly announced Microsoft capabilities only
+  Last updated: April 24, 2026 · Playbooks reflect publicly announced Microsoft capabilities only
 </div>
 </div>
 <script>
