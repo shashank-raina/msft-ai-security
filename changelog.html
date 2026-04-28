@@ -397,6 +397,97 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 
 
+
+
+<div class="section-label" style="margin-top:40px;">APRIL 27, 2026</div>
+<h2>Secure Web and AI Gateway · Foundry Auto-Provisioning · App Service Agent ID · Frontier Path</h2>
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Secure Web and AI Gateway for Agents (Preview)</strong> — Global Secure Access network security controls extended to Copilot Studio agent outbound traffic. Covers HTTP Node, Custom connectors, and MCP Server Connector traffic. Configured in Power Platform Admin Center. Applies web content filtering, threat intelligence, and network file filtering to agent traffic before it reaches external resources. Source: Microsoft Learn.</td>
+<td>identity.html, product-map.html</td></tr>
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Foundry auto-provisioning of agent identities</strong> — Microsoft Foundry automatically provisions Blueprint and Agent Identity when first agent is created in a project. Publishing an agent creates a dedicated Blueprint and Agent Identity. Foundry supports Agent ID for MCP and A2A tool authentication. Source: Microsoft Learn ID Governance for Agents.</td>
+<td>identity.html</td></tr>
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>App Service and Azure Functions Agent ID support</strong> — existing serverless workloads can use Entra Agent Identity Platform to connect as agents without rebuilding. Source: Microsoft Learn App Service Agent Identity.</td>
+<td>identity.html</td></tr>
+<tr><td><span class="tag blue">🆕 Updated</span></td>
+<td><strong>Frontier programme path</strong> — specific navigation: M365 admin center → Copilot → Settings → User access → Copilot Frontier. Requires M365 Copilot licence.</td>
+<td>identity.html</td></tr>
+</tbody>
+</table>
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Sources</div>
+  <p>
+    <a href="https://learn.microsoft.com/en-us/entra/global-secure-access/concept-secure-web-ai-gateway-agents" target="_blank" style="color:var(--blue);">Microsoft Learn — Secure Web and AI Gateway for Copilot Studio agents (Preview)</a> ·
+    <a href="https://learn.microsoft.com/en-us/entra/id-governance/agent-id-governance-overview" target="_blank" style="color:var(--blue);">Microsoft Learn — Governing Agent Identities (Preview)</a>
+  </p>
+  <p style="margin-top:8px;font-size:11px;color:#5a6a8a;">Identified by content monitor · GitHub Issue · 2026-04-27</p>
+</div>
+
+<div class="section-label" style="margin-top:40px;">APRIL 24, 2026</div>
+<h2>Entra Agent ID Deep-Dive · Strategy Page · RSAC 2026 · Copilot Data Connector</h2>
+
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Strategy page — eight-pillar agentic AI defense framework</strong> — new page covering Visibility &amp; Inventory, Identity, Data Security, Endpoints &amp; Cloud, Zero Trust for AI, Agents in Security Workflows, Agentic SIEM Platform, and Technical &amp; Governance Partners. Each pillar maps controls, products, and honest gaps. Includes maturity model, summary table, and consultant service packaging guide. Source: Microsoft RSAC 2026 / Vasu Jakkal.</td>
+<td>strategy.html (new)</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Seven governance pillars for Entra Agent ID</strong> — CA, ID Governance, Access Packages, ID Protection, Network Controls, Sign-in &amp; Audit Logs, Consent &amp; Sign-in. New sections: Access Packages as the governance layer above CA (permission lifecycle, time-bound grants), InheritDelegatedPermissions property (disabled by default, increases Blueprint blast radius when enabled), single-tenant enforcement (agent identities always single-tenant even when Blueprint supports multi-tenancy), Object ID = App ID for agent identities. Source: Carlos Suarez (Microsoft Senior Security Solution Engineer) — contosec.com/articles/EntraAgentID.</td>
+<td>identity.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 Updated</span></td>
+<td><strong>Blueprint credential preference order corrected</strong> — updated from "FIC recommended" to three-tier preference: (1) Managed Identity via FIC (most preferred for production — platform manages lifecycle), (2) FIC (preferred when MI not available), (3) Secrets/Certificates (dev/test only). Source: Carlos Suarez (Microsoft).</td>
+<td>identity.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 Updated</span></td>
+<td><strong>Updated agent access model terminology</strong> — Microsoft has standardised new names: "Agents with delegated access" (formerly OBO agents), "Agents with own access / Autonomous" (formerly non-OBO agents). Agent entities authenticate as confidential clients only — no redirect URIs, no /authorize endpoint. Source: Carlos Suarez (Microsoft).</td>
+<td>identity.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Copilot Data Connector (Sentinel) — full details</strong> — 21 record types with event numbers, source confirmed as Purview UAL (default enabled), single-tenant only caveat, Content Hub deployment path, Global/Security Admin required. Includes CloudAppEvents table card with key ActionTypes, prerequisite M365 activities checkbox, metadata-only limitation, and "Defender for AI" umbrella term clarification. Source: Microsoft Sentinel Blog Feb 3 2026.</td>
+<td>product-map.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Agent model inventory KQL — EUDB compliance</strong> — new KQL query extracting modelNameHint from RawAgentInfo to identify which AI model each Copilot Studio agent uses (Anthropic, OpenAI, environment default) with EU Data Boundary compliance status per agent. Anthropic models process outside EUDB regardless of tenant geo — high severity compliance gap. Source: Blue161616/Agent-Identity (GitHub).</td>
+<td>playbooks.html, gaps.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Work IQ and partner ecosystem added to Agent 365</strong> — Work IQ contextual intelligence engine (AI Tour Paris March 2026) grounds agents in org knowledge with sensitivity label inheritance. Partner ecosystem: Adobe, SAP, ServiceNow, Workday, Databricks, NVIDIA, Glean, n8n + open-source LangChain, OpenAI SDK, Anthropic SDK, Crew.ai, Cursor, Perplexity, Vercel. Ignite 2025 announcement context added.</td>
+<td>agent365.html, demonew.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Sentinel + Defender combined coverage table</strong> — callout on products page showing how Sentinel and Defender work together for AI agent security: real-time blocking vs correlation, CloudAppEvents vs CopilotActivity, 90-day vs long-term retention, SOAR automation. GDAP + unified RBAC for cross-tenant Sentinel management (Preview, RSAC 2026) added for MSSP scenarios.</td>
+<td>product-map.html, gaps.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Defender Predictive Shielding</strong> (Preview, RSAC 2026) — dynamically adjusts identity and access policies during active attacks, reducing exposure and limiting impact. Added to Threat Detection section.</td>
+<td>product-map.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>"Frontier Firms" framing</strong> added to overview — Microsoft's term for AI-native enterprises anchored in intelligence and trust. Microsoft scale stats added: 100 trillion daily signals, 1.6M customers, 1B identities, 24B Copilot interactions.</td>
+<td>overview.html</td></tr>
+
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Sources</div>
+  <p>
+    <a href="https://contosec.com/articles/EntraAgentID/" target="_blank" style="color:var(--blue);">Carlos Suarez (Microsoft) — Entra Agent ID Architecture (April 2026)</a> ·
+    <a href="https://www.microsoft.com/en-us/security/blog/2026/03/20/secure-agentic-ai-end-to-end/" target="_blank" style="color:var(--blue);">Microsoft Security Blog — Secure Agentic AI End-to-End (RSAC 2026)</a> ·
+    <a href="https://techcommunity.microsoft.com/blog/microsoftsentinelblog/the-microsoft-copilot-data-connector-for-microsoft-sentinel-is-now-in-public-pre/4491986" target="_blank" style="color:var(--blue);">Microsoft Sentinel Blog — Copilot Data Connector (Feb 2026)</a> ·
+    <a href="https://github.com/Blue161616/Agent-Identity/blob/main/CopilotStudioAgentModelInfo.KQL" target="_blank" style="color:var(--blue);">Blue161616/Agent-Identity — EUDB Model Inventory KQL</a> ·
+    <a href="https://www.devoteam.com/uk/expert-view/microsoft-agent-365/" target="_blank" style="color:var(--blue);">Devoteam — Microsoft Agent 365</a>
+  </p>
+</div>
+
 <div class="section-label" style="margin-top:40px;">APRIL 23, 2026 (2)</div>
 <h2>ATG SOC-ready alerts · AI model lifecycle five-stage framework</h2>
 

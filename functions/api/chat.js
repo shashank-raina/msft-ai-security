@@ -698,6 +698,47 @@ USAGE:
 DISTINCT FROM Agent Governance Toolkit (which is RUNTIME governance)
 ARA is a PRE-DEPLOYMENT assessment — run it before manual KQL audits
 
+// ── SECURE WEB AND AI GATEWAY FOR AGENTS (Preview) ──────────────────────────────
+
+Global Secure Access network controls extended to Copilot Studio agent outbound traffic.
+Traffic types: HTTP Node, Custom connectors, MCP Server Connector
+Configure: Power Platform Admin Center → per-environment or per-environment-group
+Policy via: Global Secure Access baseline profile (tenant-level)
+Prerequisite: Entra Agent ID (Frontier) + M365 Copilot licence
+
+FRONTIER PROGRAMME PATH: M365 admin center → Copilot → Settings → User access → Copilot Frontier
+Requires M365 Copilot licence. Verify toggle is enabled for users.
+
+FOUNDRY AUTO-PROVISIONING: Foundry automatically creates Blueprint + Agent Identity when
+first agent in a project is created. Publishing creates dedicated Blueprint + Agent Identity per agent.
+Foundry supports Agent ID for MCP and A2A tool authentication.
+
+APP SERVICE / AZURE FUNCTIONS: Can use Entra Agent Identity Platform without rebuilding.
+Existing serverless workloads gain Agent ID governance automatically.
+
+// ── SECURE WEB AND AI GATEWAY FOR AGENTS (Preview) ──────────────────────────────
+
+Global Secure Access network controls extended to Copilot Studio agent outbound traffic.
+Traffic types covered: HTTP Node traffic, Custom connectors, MCP Server Connector
+Configure in: Power Platform Admin Center → per-environment or per-environment-group
+Policy via: Global Secure Access baseline profile (tenant-level)
+Prerequisite: Entra Agent ID (Frontier programme) + M365 Copilot licence
+Source: learn.microsoft.com/en-us/entra/global-secure-access/concept-secure-web-ai-gateway-agents
+
+FRONTIER PROGRAMME PATH (verified April 2026):
+  M365 admin center → Copilot → Settings → User access → Copilot Frontier
+  Requires M365 Copilot licence. Billing Administrator role to check.
+
+FOUNDRY AUTO-PROVISIONING OF AGENT IDENTITIES:
+  First agent created in Foundry project → default Blueprint + Agent Identity provisioned automatically
+  Publishing an agent → dedicated Blueprint + Agent Identity created per agent
+  Foundry supports Agent ID for MCP and A2A tool authentication
+  Source: learn.microsoft.com/en-us/entra/id-governance/agent-id-governance-overview
+
+APP SERVICE / AZURE FUNCTIONS AGENT ID:
+  Existing serverless workloads can use Entra Agent Identity Platform without rebuilding
+  Source: learn.microsoft.com/en-us/azure/app-service/overview-agent-identity
+
 // ── AGENT GOVERNANCE TOOLKIT ─────────────────────────────────────────────────
 
 GitHub: microsoft/agent-governance-toolkit · MIT licence · April 2, 2026

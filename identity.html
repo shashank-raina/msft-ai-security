@@ -1021,6 +1021,35 @@ Disconnect-MgGraph</pre>
   <p>Agent identities are always single-tenant, even when the parent Blueprint supports multi-tenancy. Each agent identity belongs to exactly one Blueprint and can only be issued tokens in the tenant where it was created. This is a hard constraint — it cannot be overridden by Blueprint configuration. A multi-tenant Blueprint can create agent identities in multiple tenants, but each identity operates entirely within its own tenant boundary.</p>
 </div>
 
+
+<div class="section-label" style="margin-top:48px;">Secure Web and AI Gateway for Agents</div>
+<h2>Network-level security controls for Copilot Studio agent traffic</h2>
+<p>Source: <a href="https://learn.microsoft.com/en-us/entra/global-secure-access/concept-secure-web-ai-gateway-agents" target="_blank" style="color:var(--blue);">Microsoft Learn — Secure Web and AI Gateway for Copilot Studio agents (Preview)</a></p>
+
+<p>Global Secure Access for agents extends the same network security policies you apply to users to Copilot Studio agent traffic — web content filtering, threat intelligence filtering, and network file filtering. Agent traffic is forwarded to Global Secure Access's globally distributed proxy service and evaluated against your security policies before reaching external resources.</p>
+
+<div class="callout callout-info" style="margin-top:12px;">
+  <div class="callout-title">📌 Traffic types covered</div>
+  <p>Agent traffic forwarding applies to: HTTP Node traffic, Custom connectors, and MCP Server Connector traffic. This means all three of the most common Copilot Studio external connectivity patterns are in scope — including MCP tool calls.</p>
+</div>
+
+<table>
+<thead><tr><th>Configuration</th><th>Detail</th></tr></thead>
+<tbody>
+<tr><td><strong>Where to configure</strong></td><td>Power Platform Admin Center — per-environment or per-environment-group basis</td></tr>
+<tr><td><strong>Policy applied via</strong></td><td>Global Secure Access baseline profile — applies at tenant level, consistent across all agent traffic</td></tr>
+<tr><td><strong>Prerequisite</strong></td><td>Microsoft Entra Agent ID (Frontier programme) + M365 Copilot licence</td></tr>
+<tr><td><strong>Relationship to Entra Internet Access</strong></td><td>Global Secure Access is the underlying platform for Entra Internet Access — this extends those controls to agent-initiated outbound traffic, not just user browser traffic</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:12px;">
+  <div class="callout-title">📌 Foundry and App Service auto-provisioning</div>
+  <p><strong>Microsoft Foundry:</strong> Automatically provisions agent identities throughout the agent lifecycle. When the first agent in a Foundry project is created, Foundry provisions a default Blueprint and Agent Identity for the project — agents authenticate via the shared project identity. Publishing an agent automatically creates a dedicated Blueprint and Agent Identity for that agent. Foundry supports Agent ID for authentication in both MCP and A2A tools. Source: <a href="https://learn.microsoft.com/en-us/entra/id-governance/agent-id-governance-overview" target="_blank" style="color:var(--blue);">Microsoft Learn — ID Governance for Agents</a>.</p>
+  <p style="margin-top:8px;"><strong>Azure App Service / Azure Functions:</strong> Can be configured to use the Entra Agent Identity Platform to securely connect to resources as an agent. This means existing serverless workloads can gain Agent ID governance without rebuilding. Source: <a href="https://learn.microsoft.com/en-us/azure/app-service/overview-agent-identity" target="_blank" style="color:var(--blue);">Microsoft Learn — Agent Identity in App Service and Azure Functions</a>.</p>
+  <p style="margin-top:8px;"><strong>Copilot Studio auto-assignment:</strong> Agents created in Copilot Studio can be configured to automatically be assigned to an agent identity. When an agent identity is first created in a Power Platform environment after enabling this setting, a Copilot Studio agent identity Blueprint and Blueprint Principal are automatically created. Path: <a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/admin-use-entra-agent-identities" target="_blank" style="color:var(--blue);">Microsoft Learn — Automatically create Entra agent identities for Copilot Studio agents (Preview)</a>.</p>
+</div>
+
 <h2>Practical Controls — Ranked by Availability</h2>
 <table>
 <thead><tr><th>Control</th><th>What It Does</th><th>Status</th><th>Limitation</th></tr></thead>
@@ -1049,7 +1078,7 @@ Disconnect-MgGraph</pre>
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  Last updated: April 24, 2026 · Analysis covers publicly announced Microsoft security capabilities only
+  Last updated: April 27, 2026 · Analysis covers publicly announced Microsoft security capabilities only
 </div>
 </div>
 
