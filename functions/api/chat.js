@@ -739,6 +739,33 @@ APP SERVICE / AZURE FUNCTIONS AGENT ID:
   Existing serverless workloads can use Entra Agent Identity Platform without rebuilding
   Source: learn.microsoft.com/en-us/azure/app-service/overview-agent-identity
 
+// ── PYRIT — PRE-DEPLOYMENT AI RED TEAMING (Open Source, Microsoft) ─────────────────
+
+GitHub: github.com/microsoft/PyRIT · MIT licence · 3800+ stars
+pip install pyrit
+
+WHAT IT DOES: Automated adversarial testing of AI agents before deployment
+Battle-tested on 100+ Microsoft products including Copilot
+
+53+ adversarial datasets: AIRT, HarmBench, AdvBench, XSTest
+70+ prompt converters: Base64, ROT13, Leetspeak, translation, multimodal injection (stack)
+6 attack strategies: PromptSendingAttack, CrescendoAttack (gradual escalation), TAP, multi-turn
+20+ scorers: LLM-as-judge, Azure AI Content Safety, true/false, Likert
+10+ targets: Azure OpenAI, OpenAI, HuggingFace, HTTP endpoints, Playwright
+
+TWO RISK SURFACES (test both):
+  1. Security vulnerabilities: prompt injection, data exfiltration, system prompt leakage
+  2. Responsible AI harms: bias, toxicity, manipulation, stereotyping
+
+OWASP LLM TOP 10 (2025) — distinct from OWASP Agentic AI Top 10:
+  LLM01 Prompt Injection · LLM02 Sensitive Info · LLM03 Supply Chain
+  LLM04 Data Poisoning · LLM05 Improper Output Handling · LLM06 Excessive Agency
+  LLM07 System Prompt Leakage · LLM08 Vector Weaknesses
+  LLM09 Misinformation · LLM10 Unbounded Consumption
+
+CI/CD INTEGRATION: Config-driven YAML scanner, exit code 0 (pass) / 1 (fail)
+  Quick scan on every merge, full scan pre-release
+
 // ── AGENT GOVERNANCE TOOLKIT ─────────────────────────────────────────────────
 
 GitHub: microsoft/agent-governance-toolkit · MIT licence · April 2, 2026

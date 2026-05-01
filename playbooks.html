@@ -1312,6 +1312,125 @@ AppRequests      → inbound requests (if agent exposed via HTTP)</div>
   </div>
 </div>
 
+<!-- ═══════════════ PLAYBOOK 6 — PyRIT ═══════════════ -->
+<div class="pb-panel" id="pb6" style="margin-top:40px;">
+  <div class="pb-header" style="background:linear-gradient(135deg,#6a0000 0%,#a4262c 100%);">
+    <div class="pb-header-eyebrow">PLAYBOOK 06</div>
+    <div class="pb-header-title">Pre-Deployment AI Agent Red Teaming with PyRIT</div>
+    <div class="pb-header-sub">Test your AI agents for OWASP LLM Top 10 vulnerabilities before they ship. Microsoft's PyRIT framework automates adversarial testing across 53+ datasets, 70+ converters, and 6 attack strategies — with CI/CD release gate integration. Source: <a href="https://techcommunity.microsoft.com/blog/appsonazureblog/securing-your-ai-agents-before-they-ship-red-teaming-with-microsoft-pyrit/4515514" target="_blank" style="color:rgba(255,255,255,0.85);">Microsoft Tech Community — PyRIT for AI Agent Security (Apr 28, 2026)</a></div>
+    <div class="pb-meta-row">
+      <span class="pb-meta-item green">✓ Open Source · MIT · github.com/microsoft/PyRIT</span>
+      <span class="pb-meta-item green">✓ Battle-tested on 100+ Microsoft products including Copilot</span>
+      <span class="pb-meta-item warn">⚠ Pre-deployment only — not a runtime control</span>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">PREREQUISITE — INSTALL PYRIT</div>
+    <div class="kql-label">Install and configure</div>
+    <div class="kql-block"><pre style="margin:0;white-space:pre;">pip install pyrit
+
+# Required env vars (for Azure OpenAI target + scorer)
+export AZURE_OPENAI_API_KEY="your-key"
+export AZURE_OPENAI_ENDPOINT="https://your-instance.openai.azure.com/"
+export AZURE_OPENAI_DEPLOYMENT="gpt-4o"</pre></div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STEP 1 — CREATE YAML SCAN CONFIG</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Config-driven — switch strategies, datasets, or thresholds with no code changes. Point <code>target</code> at your agent entry point.</p>
+    <div class="kql-block"><pre style="margin:0;white-space:pre;"># scan.yaml
+scan:
+  name: "my-agent-security-scan"
+
+  target:
+    module: "my_agent.main"         # Your agent module
+    function: "handle_prompt"       # Your agent entry function
+
+  strategies:
+    - name: "prompt_sending"        # Single-turn baseline
+    - name: "crescendo"             # Gradual escalation
+      max_turns: 5
+    - name: "tap"                   # Tree of Attacks with Pruning
+
+  converters:                       # Stack — applied in order
+    - name: "Base64Converter"
+    - name: "LeetspeakConverter"
+    - name: "TranslationConverter"
+
+  datasets:
+    - "airt_illegal"                # Microsoft AI Red Team dataset
+    - "harmbench"                   # Harm evaluation benchmark
+    - "advbench"                    # Adversarial benchmark
+    - path: "datasets/custom.yaml"  # Your domain-specific prompts
+
+gate:
+  fail_on:
+    critical_findings: 0            # Zero tolerance for critical
+    high_findings: 3
+    max_score: 0.3                  # Defense rate must exceed 70%</pre></div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STEP 2 — FOUR ESCALATING ATTACK PHASES</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Run in sequence — if plain prompts pass, layer evasion. Each phase builds on the previous.</p>
+    <div class="kql-block"><pre style="margin:0;white-space:pre;">Phase 1: Plain prompts
+  → Baseline — establishes what passes without evasion
+  → Catches basic prompt injection and policy violations
+
+Phase 2: Encoded prompts
+  → Base64, ROT13, Leetspeak, Unicode confusables
+  → Tests whether your agent/guardrails decode before evaluating
+
+Phase 3: Semantic attacks
+  → LLM-powered rephrasing, translation, multimodal injection
+  → Converters stack: translate → Base64 → embed in image
+
+Phase 4: Multi-turn dialogue attacks
+  → CrescendoAttack: gradual escalation over 5–10 turns
+  → TreeOfAttacksWithPruning (TAP): branching attack trees
+  → Tests whether context accumulation bypasses initial guardrails</pre></div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STEP 3 — OWASP LLM TOP 10 MAPPING</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Map findings to OWASP LLM Top 10 (2025) for structured risk reporting. Turns PyRIT output into a risk register your security team understands.</p>
+    <div class="kql-block"><pre style="margin:0;white-space:pre;">LLM01 Prompt Injection       → PromptSendingAttack + injection datasets (airt_illegal)
+LLM02 Sensitive Info         → Data exfiltration datasets + PII scorers
+LLM06 Excessive Agency       → Tool-calling attack datasets (advbench)
+LLM07 System Prompt Leakage  → System prompt extraction datasets
+LLM10 Unbounded Consumption  → High-volume automated attack patterns</pre></div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STEP 4 — CI/CD RELEASE GATE</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Integrate into your pipeline. Exit code 0 = pass (deploy), exit code 1 = fail (block). No custom actions needed.</p>
+    <div class="kql-block"><pre style="margin:0;white-space:pre;"># GitHub Actions example
+jobs:
+  security-scan:
+    steps:
+      - name: Run AI security scan
+        run: |
+          pip install pyrit
+          python scanner.py --config scan.yaml --output reports/
+
+      - name: Evaluate release gate
+        run: |
+          python gate.py --report reports/scan_results.json
+          # Exit 1 blocks deployment automatically
+
+# When to run:
+# Every merge to main:  Quick scan only (phases 1–2, ~10 min)
+# Pre-release branch:   Full scan (all 4 phases, architect approval)
+# Weekly scheduled:     Full scan across full agent estate</pre></div>
+
+    <div style="background:rgba(164,38,44,0.06);border:1px solid rgba(164,38,44,0.2);border-radius:4px;padding:12px 16px;font-size:13px;line-height:1.7;margin-top:12px;">
+      <strong>⚠ Two risk surfaces — test both:</strong> PyRIT tests security vulnerabilities (LLM01–LLM10) AND responsible AI harms (bias, toxicity, manipulation) simultaneously. Traditional pen tests focus on only one. Most AI agents ship with neither tested. You wouldn't ship a web app without OWASP ZAP — the same standard should apply to AI agents.
+    </div>
+  </div>
+
+</div>
+
 <div class="page-nav"><a href="gaps.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Gaps</span></a><a href="copilot-vs-foundry.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">CS vs Foundry</span></a></div>
 
 <div style="text-align:center;margin:32px 0 0;padding:24px 0;border-top:1px solid var(--border2);">
@@ -1325,7 +1444,7 @@ AppRequests      → inbound requests (if agent exposed via HTTP)</div>
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Learn · Field research from Microsoft Security professionals<br>
-  Last updated: April 27, 2026 · Playbooks reflect publicly announced Microsoft capabilities only
+  Last updated: April 28, 2026 · Playbooks reflect publicly announced Microsoft capabilities only
 </div>
 </div>
 <script>

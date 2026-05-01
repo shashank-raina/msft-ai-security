@@ -396,6 +396,32 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 
 
+<div class="section-label" style="margin-top:48px;">OWASP LLM Top 10 (2025)</div>
+<h2>Top 10 security risks for LLM applications and AI agents</h2>
+<p>Source: <a href="https://genai.owasp.org/llm-top-10/" target="_blank" style="color:var(--blue);">OWASP — LLM Top 10 for AI Applications (2025)</a></p>
+<p>Distinct from the OWASP Agentic AI Top 10 below — the LLM Top 10 covers the full range of LLM application risks, while the Agentic Top 10 focuses specifically on multi-agent systems. Every AI agent you deploy is exposed to all ten. Use <a href="product-map.html" style="color:var(--blue);">PyRIT</a> to test for them before deployment.</p>
+
+<table>
+<thead><tr><th>#</th><th>Risk</th><th>What it means for AI agents</th><th>Primary control</th></tr></thead>
+<tbody>
+<tr><td><strong>LLM01</strong></td><td><strong>Prompt Injection</strong></td><td>Malicious instructions override agent instructions. Includes XPIA (cross-prompt injection) via documents, emails, or web content the agent retrieves.</td><td>Prompt Shields, ATG, input validation</td></tr>
+<tr><td><strong>LLM02</strong></td><td><strong>Sensitive Information Disclosure</strong></td><td>Agent leaks PII, credentials, system prompts, or proprietary data in responses or via tool outputs.</td><td>Purview DLP, DSPM for AI, output filtering</td></tr>
+<tr><td><strong>LLM03</strong></td><td><strong>Supply Chain</strong></td><td>Compromised model weights, poisoned training data, malicious plugins, or unsafe third-party MCP servers.</td><td>Foundry model governance, MCP server vetting, Agent Governance Toolkit</td></tr>
+<tr><td><strong>LLM04</strong></td><td><strong>Data and Model Poisoning</strong></td><td>Adversarially modified training or fine-tuning data causes model to behave incorrectly or unsafely.</td><td>Foundry evaluation pipelines, model provenance tracking</td></tr>
+<tr><td><strong>LLM05</strong></td><td><strong>Improper Output Handling</strong></td><td>Agent outputs passed unsanitised to downstream systems — SQL injection via agent-generated queries, XSS via agent-generated HTML, command injection via agent-generated scripts.</td><td>Output validation, sandboxed execution, Foundry code execution controls</td></tr>
+<tr><td><strong>LLM06</strong></td><td><strong>Excessive Agency</strong></td><td>Agent has more permissions, tools, or autonomy than needed. Least agency principle violated.</td><td>Minimal connector/tool assignment, ATG tool allowlisting, least-privilege permissions</td></tr>
+<tr><td><strong>LLM07</strong></td><td><strong>System Prompt Leakage</strong></td><td>Agent reveals its system prompt or instructions — exposing business logic and enabling targeted attacks.</td><td>System prompt hardening, Prompt Shields, jailbreak detection</td></tr>
+<tr><td><strong>LLM08</strong></td><td><strong>Vector and Embedding Weaknesses</strong></td><td>Adversarial inputs manipulate RAG retrieval — poisoned documents inserted into knowledge base alter agent behaviour.</td><td>Document ingestion controls, retrieval validation, SAM RCD for SharePoint</td></tr>
+<tr><td><strong>LLM09</strong></td><td><strong>Misinformation</strong></td><td>Agent generates confident but incorrect information — dangerous in compliance, legal, medical, or financial workflows.</td><td>Human-in-the-loop for high-stakes decisions, Foundry evaluation, grounding with verified sources</td></tr>
+<tr><td><strong>LLM10</strong></td><td><strong>Unbounded Consumption</strong></td><td>Agent consumes excessive compute, tokens, or API calls — enabling denial of service or cost-based attacks.</td><td>Rate limiting, token budgets, ATG blocking, Azure AI throttling</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:12px;">
+  <div class="callout-title">📌 Two risk surfaces — test both before deployment</div>
+  <p>AI red teaming requires testing two surfaces simultaneously: <strong>security vulnerabilities</strong> (LLM01–LLM10) and <strong>responsible AI harms</strong> (bias, toxicity, manipulation). Traditional security testing focuses on only one. Microsoft's PyRIT automates testing across both surfaces — see the Products page for details and Playbooks for the pre-deployment workflow.</p>
+</div>
+
 <div class="section-label" style="margin-top:48px;">OWASP Agentic AI</div>
 <h2>OWASP Top 10 for Agentic Applications 2026</h2>
 <p>In December 2025, OWASP published the first formal taxonomy of risks specific to autonomous AI agents. Unlike the existing OWASP Top 10 for LLM applications (which focuses on model-level risks), the Agentic AI Top 10 covers risks that emerge when AI agents act autonomously — making decisions, invoking tools, and interacting with other agents. Microsoft's <a href="https://github.com/microsoft/agent-governance-toolkit" target="_blank" style="color:var(--blue);">Agent Governance Toolkit</a> (open source, April 2026) maps to all 10 risks.</p>
@@ -837,7 +863,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 <div class="footer">
   SOURCES: NIST AI RMF 1.0 · ISO/IEC 42001:2023 · Microsoft Zero Trust Assessment Workshop · Microsoft Entra security for AI overview · RSAC 2026<br>
-  Last updated: April 24, 2026
+  Last updated: April 28, 2026
 </div>
 </div>
 

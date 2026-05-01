@@ -322,6 +322,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="gaps.html" class="">Gaps</a>
 <a href="playbooks.html" class="">Playbooks</a>
 <a href="copilot-vs-foundry.html" class="">CS vs Foundry</a>
+<a href="strategy.html" class="">Strategy</a>
 <a href="changelog.html" class=" active">Changelog</a>
 <a href="contact.html" class="">Contact</a>
 </div>
@@ -341,6 +342,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="gaps.html" class="">Gaps</a>
 <a href="playbooks.html" class="">Playbooks</a>
 <a href="copilot-vs-foundry.html" class="">CS vs Foundry</a>
+<a href="strategy.html" class="">Strategy</a>
 <a href="changelog.html" class=" active">Changelog</a>
 <a href="contact.html" class="">Contact</a>
 </div>
@@ -398,6 +400,31 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 
 
+
+
+<div class="section-label" style="margin-top:40px;">APRIL 28, 2026</div>
+<h2>PyRIT Red Teaming · OWASP LLM Top 10 · Pre-Deployment Testing Gap</h2>
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Microsoft PyRIT</strong> — open-source AI red teaming framework. 53+ adversarial datasets, 70+ converters, 6 attack strategies, 20+ scorers. Battle-tested on 100+ Microsoft products including Copilot. Tests two risk surfaces: security vulnerabilities AND responsible AI harms. MIT licensed. Source: Microsoft Tech Community.</td>
+<td>product-map.html</td></tr>
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>OWASP LLM Top 10 (2025)</strong> — distinct from OWASP Agentic AI Top 10. Full table with 10 risk categories mapped to AI agent controls: LLM01 Prompt Injection, LLM02 Sensitive Info, LLM03 Supply Chain, LLM04 Data Poisoning, LLM05 Improper Output Handling, LLM06 Excessive Agency, LLM07 System Prompt Leakage, LLM08 Vector Weaknesses, LLM09 Misinformation, LLM10 Unbounded Consumption.</td>
+<td>frameworks.html</td></tr>
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Playbook 05b — Pre-Deployment AI Agent Red Teaming with PyRIT</strong> — four escalating attack phases (plain → encoded → semantic → multi-turn), OWASP mapping, CI/CD release gate configuration (YAML config, exit code 0/1). When to run: quick on every merge, full pre-release.</td>
+<td>playbooks.html</td></tr>
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Gap: No pre-deployment security testing for AI agents</strong> — most agents ship with zero adversarial testing. No mandatory security gate in the Microsoft platform equivalent to OWASP ZAP or DAST for web apps. PyRIT + CI/CD integration is the current recommended mitigation.</td>
+<td>gaps.html</td></tr>
+</tbody>
+</table>
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Source</div>
+  <p><a href="https://techcommunity.microsoft.com/blog/appsonazureblog/securing-your-ai-agents-before-they-ship-red-teaming-with-microsoft-pyrit/4515514" target="_blank" style="color:var(--blue);">Microsoft Tech Community — Securing Your AI Agents Before They Ship: Red Teaming with PyRIT (Apr 28, 2026)</a></p>
+</div>
 
 <div class="section-label" style="margin-top:40px;">APRIL 27, 2026</div>
 <h2>Secure Web and AI Gateway · Foundry Auto-Provisioning · App Service Agent ID · Frontier Path</h2>
