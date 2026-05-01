@@ -719,8 +719,153 @@ body {
 
 <!-- ══ ENTRA ══ -->
 <div id="page-entra" class="page">
-  <div class="page-title">Entra Agent ID — Concept</div>
-  <div class="page-sub">What it is, why it matters, how Classic vs Modern agents differ</div>
+  <div class="page-title">Entra Agent ID</div>
+  <div class="page-sub">entra.microsoft.com → Agents → Agent ID (Preview)</div>
+
+  <!-- Real Entra Agent ID portal nav reference -->
+  <div style="background:#f0f6ff;border:1px solid #b3d7f0;border-radius:4px;padding:12px 16px;font-size:12px;margin-bottom:16px;display:flex;gap:20px;flex-wrap:wrap;">
+    <div style="color:#0078d4;font-weight:600;">Real portal left nav:</div>
+    <span style="color:#0078d4;font-weight:500;">Overview (Preview)</span>
+    <span style="color:#555;">→</span>
+    <span style="color:#0078d4;font-weight:500;">Agent identities (Preview)</span>
+    <span style="color:#555;">→</span>
+    <span style="color:#0078d4;font-weight:500;">Agent registry (Preview)</span>
+    <span style="color:#555;">→</span>
+    <span style="color:#0078d4;font-weight:500;">Agent collections (Preview)</span>
+    <span style="color:#555;">→ Activity →</span>
+    <span style="color:#0078d4;font-weight:500;">Sign-in logs (Preview)</span>
+  </div>
+
+  <!-- Entra Overview stats (from real portal) -->
+  <div style="background:#fafafa;border:1px solid #e1dfdd;border-radius:4px;padding:16px;margin-bottom:16px;">
+    <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:#1a1a1a;">Agent ID | Overview (Preview) — what the real portal shows</div>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;">
+      <div style="background:white;border:1px solid #e1dfdd;border-radius:3px;padding:12px 16px;min-width:120px;">
+        <div style="font-size:11px;color:#888;margin-bottom:4px;">Agent identities in tenant</div>
+        <div style="font-size:24px;font-weight:700;color:#1a1a1a;">3</div>
+      </div>
+      <div style="background:white;border:1px solid #e1dfdd;border-radius:3px;padding:12px 16px;min-width:120px;">
+        <div style="font-size:11px;color:#888;margin-bottom:4px;">Recently created (30 days)</div>
+        <div style="font-size:24px;font-weight:700;color:#1a1a1a;">3</div>
+      </div>
+      <div style="background:white;border:1px solid #e1dfdd;border-radius:3px;padding:12px 16px;min-width:120px;">
+        <div style="font-size:11px;color:#888;margin-bottom:4px;">Unmanaged (no owners/sponsors)</div>
+        <div style="font-size:24px;font-weight:700;color:#1a1a1a;">0</div>
+      </div>
+      <div style="background:white;border:1px solid #e1dfdd;border-radius:3px;padding:12px 16px;min-width:120px;">
+        <div style="font-size:11px;color:#888;margin-bottom:4px;">Active (enabled for access)</div>
+        <div style="font-size:24px;font-weight:700;color:#1a1a1a;">3</div>
+      </div>
+      <div style="background:white;border:1px solid #e1dfdd;border-radius:3px;padding:12px 16px;min-width:120px;">
+        <div style="font-size:11px;color:#888;margin-bottom:4px;">Agents' user accounts</div>
+        <div style="font-size:24px;font-weight:700;color:#1a1a1a;">0</div>
+      </div>
+    </div>
+
+    <!-- Real agent identities list -->
+    <div style="margin-top:12px;">
+      <table style="width:100%;border-collapse:collapse;font-size:12px;">
+        <thead><tr style="border-bottom:1px solid #e1dfdd;">
+          <th style="text-align:left;padding:6px 10px;font-size:10px;color:#888;font-weight:600;">Name</th>
+          <th style="text-align:left;padding:6px 10px;font-size:10px;color:#888;font-weight:600;">Created on</th>
+          <th style="text-align:left;padding:6px 10px;font-size:10px;color:#888;font-weight:600;">Status</th>
+          <th style="text-align:left;padding:6px 10px;font-size:10px;color:#888;font-weight:600;">Object ID</th>
+        </tr></thead>
+        <tbody>
+          <tr style="border-bottom:1px solid #f5f5f5;"><td style="padding:7px 10px;"><div style="display:flex;align-items:center;gap:6px;"><div style="width:22px;height:22px;background:#0f6cbd;border-radius:4px;color:white;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;">ZF</div>Zava Finance Agent (Microsoft Copilot St…)</div></td><td style="padding:7px 10px;font-size:11px;color:#555;">04/29/26</td><td><span style="color:#107c10;font-size:11px;">● Active</span></td><td style="font-size:10px;font-family:monospace;color:#888;">ae36…</td></tr>
+          <tr style="border-bottom:1px solid #f5f5f5;"><td style="padding:7px 10px;"><div style="display:flex;align-items:center;gap:6px;"><div style="width:22px;height:22px;background:#1a73e8;border-radius:4px;color:white;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;">ZH</div>Zava HR Assistant (Microsoft Copilot Stud…)</div></td><td style="padding:7px 10px;font-size:11px;color:#555;">04/29/26</td><td><span style="color:#107c10;font-size:11px;">● Active</span></td><td style="font-size:10px;font-family:monospace;color:#888;">bb17…</td></tr>
+          <tr><td style="padding:7px 10px;"><div style="display:flex;align-items:center;gap:6px;"><div style="width:22px;height:22px;background:#c0392b;border-radius:4px;color:white;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;">ZI</div>Zava IT Support Agent (Microsoft Copilot…)</div></td><td style="padding:7px 10px;font-size:11px;color:#555;">04/29/26</td><td><span style="color:#107c10;font-size:11px;">● Active</span></td><td style="font-size:10px;font-family:monospace;color:#888;">fc9fdb…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+    <!-- Agent Identity Detail View - what you see when you click an agent -->
+    <div style="margin-top:16px;font-size:13px;font-weight:600;color:#555;margin-bottom:8px;">↓ Click an agent to see the detail view — example: Zava Finance Agent</div>
+    <div style="background:#fafafa;border:1px solid #e1dfdd;border-radius:4px;overflow:hidden;">
+
+      <!-- Detail page topbar -->
+      <div style="background:#f5f5f5;border-bottom:1px solid #e1dfdd;padding:8px 14px;display:flex;align-items:center;gap:6px;">
+        <span style="font-size:11px;color:#888;">Home › Agent ID › Agent identities (Preview) ›</span>
+        <span style="font-size:11px;color:#0078d4;font-weight:600;">Zava Finance Agent (Microsoft Copilot Studio) | Overview (Preview)</span>
+        <div style="margin-left:auto;display:flex;gap:8px;">
+          <div style="border:1px solid #d0d0d0;background:white;font-size:11px;padding:3px 10px;border-radius:3px;cursor:pointer;color:#333;">⊘ Disable</div>
+          <div style="border:1px solid #d0d0d0;background:white;font-size:11px;padding:3px 10px;border-radius:3px;cursor:pointer;color:#333;">↻ Refresh</div>
+        </div>
+      </div>
+
+      <!-- Detail left nav -->
+      <div style="display:flex;min-height:320px;">
+        <div style="width:190px;background:#f5f5f5;border-right:1px solid #e1dfdd;padding:8px 0;flex-shrink:0;">
+          <div style="padding:6px 14px;font-size:12px;color:#0078d4;font-weight:600;background:#dce6f5;border-left:3px solid #0078d4;">Overview (Preview)</div>
+          <div style="padding:6px 14px;font-size:12px;color:#444;cursor:pointer;">Custom security attributes (Preview)</div>
+          <div style="padding:6px 12px;font-size:10px;font-weight:700;color:#888;letter-spacing:0.06em;text-transform:uppercase;margin-top:8px;">Access</div>
+          <div style="padding:4px 14px;font-size:12px;color:#444;cursor:pointer;">Owners and sponsors (Preview)</div>
+          <div style="padding:4px 14px;font-size:12px;color:#444;cursor:pointer;">Granted permissions (Preview)</div>
+          <div style="padding:6px 12px;font-size:10px;font-weight:700;color:#888;letter-spacing:0.06em;text-transform:uppercase;margin-top:8px;">Activity</div>
+          <div style="padding:4px 14px;font-size:12px;color:#444;cursor:pointer;">Audit logs (Preview)</div>
+          <div style="padding:4px 14px;font-size:12px;color:#444;cursor:pointer;">Sign-in logs (Preview)</div>
+        </div>
+
+        <!-- Detail content -->
+        <div style="flex:1;padding:16px 20px;display:flex;gap:16px;flex-wrap:wrap;">
+
+          <!-- Left: Agent card -->
+          <div style="flex:1;min-width:260px;">
+            <div style="background:white;border:1px solid #e1dfdd;border-radius:4px;padding:16px;">
+              <!-- Agent header -->
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+                <div style="width:48px;height:48px;background:#1a5fb4;border-radius:8px;color:white;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">ZF</div>
+                <div>
+                  <div style="font-size:14px;font-weight:700;color:#1a1a1a;">Zava Finance Agent (Microsoft Copil…)</div>
+                  <span style="background:#0078d4;color:white;font-size:10px;font-weight:600;padding:2px 8px;border-radius:3px;">Agent identity</span>
+                </div>
+              </div>
+              <div style="font-size:12px;color:#888;margin-bottom:12px;font-style:italic;">No description</div>
+
+              <!-- Fields -->
+              <table style="width:100%;font-size:12px;border-collapse:collapse;">
+                <tr style="border-bottom:1px solid #f0f0f0;"><td style="padding:6px 0;color:#555;width:100px;">Status</td><td style="padding:6px 0;"><span style="color:#107c10;">● Active</span></td></tr>
+                <tr style="border-bottom:1px solid #f0f0f0;"><td style="padding:6px 0;color:#555;">Sponsors</td><td style="padding:6px 0;"><div style="display:flex;gap:4px;"><div style="width:22px;height:22px;border-radius:50%;background:#0078d4;color:white;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;">MA</div><div style="width:22px;height:22px;border-radius:50%;background:#107c10;color:white;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;">PF</div><div style="width:22px;height:22px;border-radius:50%;background:#8764b8;color:white;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;">MB</div></div></td></tr>
+                <tr style="border-bottom:1px solid #f0f0f0;"><td style="padding:6px 0;color:#555;">Owners</td><td style="padding:6px 0;color:#0078d4;cursor:pointer;">PF Patti Fernandez</td></tr>
+                <tr style="border-bottom:1px solid #f0f0f0;"><td style="padding:6px 0;color:#555;">Blueprint ID</td><td style="padding:6px 0;font-family:monospace;color:#888;font-size:11px;">25664c89-cea5-4ab6-b924-a54f… <span style="cursor:pointer;">📋</span></td></tr>
+                <tr style="border-bottom:1px solid #f0f0f0;"><td style="padding:6px 0;color:#555;">Object ID</td><td style="padding:6px 0;font-family:monospace;color:#888;font-size:11px;">ae36f478-43df-4cd0-8b89-1582… <span style="cursor:pointer;">📋</span></td></tr>
+                <tr style="border-bottom:1px solid #f0f0f0;"><td style="padding:6px 0;color:#555;">Agent blueprint</td><td style="padding:6px 0;color:#0078d4;cursor:pointer;font-size:11px;">Microsoft Copilot Studio agent identi…</td></tr>
+                <tr><td style="padding:6px 0;color:#555;">Created on</td><td style="padding:6px 0;color:#555;">4/29/2026</td></tr>
+              </table>
+            </div>
+          </div>
+
+          <!-- Right: Access + Governance panels -->
+          <div style="flex:1;min-width:220px;display:flex;flex-direction:column;gap:12px;">
+            <!-- Agent identity's access -->
+            <div style="background:white;border:1px solid #e1dfdd;border-radius:4px;padding:14px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                <div style="font-size:13px;font-weight:600;color:#1a1a1a;">Agent identity's access</div>
+                <div style="font-size:12px;color:#0078d4;cursor:pointer;">View</div>
+              </div>
+              <div style="font-size:12px;color:#555;margin-bottom:10px;">View the permissions and Entra roles this agent identity have been granted.</div>
+              <div style="display:flex;gap:16px;">
+                <div><div style="font-size:11px;color:#888;border-left:2px solid #d0d0d0;padding-left:6px;">Permissions</div><div style="font-size:20px;font-weight:700;color:#1a1a1a;padding-left:6px;">0</div></div>
+                <div><div style="font-size:11px;color:#888;border-left:2px solid #d0d0d0;padding-left:6px;">Entra roles</div><div style="font-size:20px;font-weight:700;color:#1a1a1a;padding-left:6px;">0</div></div>
+              </div>
+            </div>
+
+            <!-- Policies & ID Governance -->
+            <div style="background:white;border:1px solid #e1dfdd;border-radius:4px;padding:14px;">
+              <div style="font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:4px;">Policies & ID Governance</div>
+              <div style="font-size:12px;color:#555;margin-bottom:10px;">Useful links to policies and ID Governance features for this agent identity.</div>
+              <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #f0f0f0;font-size:12px;">
+                <span style="color:#333;">CA policies</span><span style="color:#0078d4;cursor:pointer;">View</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:7px 0;font-size:12px;">
+                <span style="color:#333;">Access packages</span><span style="color:#0078d4;cursor:pointer;">View</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
   <div class="warn-box">🚨 <strong>The problem today:</strong> Most Copilot Studio agents in production are "Classic" — registered as ordinary service principals with zero agent-specific security controls. No CA for Agents, no ID Protection, no lifecycle governance. Entra Agent ID fixes this — but it is Preview, Frontier programme only, and only covers agents created after enabling it.</div>
   <div class="info-box">💡 <strong>Plain English:</strong> Today most agents share the builder's identity badge. Entra Agent ID gives each agent its own badge — with its own permissions, risk detection, and owner accountability. The Security Dashboard only gets rich data for agents with their own badge (Modern agents).</div>
@@ -803,317 +948,234 @@ body {
 </div>
 
 <!-- ══ AGENT 365 PORTAL ══ -->
+<!-- ══ AGENT 365 PORTAL ══ -->
 <div id="page-a365portal" class="page">
-  <div class="breadcrumb">Microsoft 365 Admin Center › Agents › Overview</div>
+  <div class="breadcrumb">admin.cloud.microsoft/?#/agents/overview</div>
   <div class="page-title">Agent 365 — Admin Center Portal</div>
-  <div class="page-sub" style="margin-bottom:20px;">How it looks at admin.cloud.microsoft · Agents section</div>
+  <div class="page-sub" style="margin-bottom:20px;">Live screenshots from a demo environment · May 1, 2026</div>
 
-  <!-- M365 Admin Center mockup -->
-  <div style="border:1px solid #e1dfdd;border-radius:6px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.1);margin-bottom:24px;">
+  <!-- M365 Admin Center mockup - based on real portal screenshots -->
+  <div style="border:1px solid #d0d0d0;border-radius:6px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.12);margin-bottom:24px;">
 
-    <!-- Admin center topbar -->
-    <div style="background:#111827;height:44px;display:flex;align-items:center;padding:0 16px;gap:12px;">
-      <div style="width:18px;height:18px;display:grid;grid-template-columns:1fr 1fr;gap:2px;flex-shrink:0;">
-        <span style="background:#f25022;"></span><span style="background:#7fba00;"></span>
-        <span style="background:#00a4ef;"></span><span style="background:#ffb900;"></span>
+    <!-- Admin center topbar - white/light grey like real portal -->
+    <div style="background:#ffffff;height:44px;display:flex;align-items:center;padding:0 16px;gap:12px;border-bottom:1px solid #e5e5e5;">
+      <div style="width:20px;height:20px;display:grid;grid-template-columns:1fr 1fr;gap:2px;flex-shrink:0;">
+        <span style="background:#f25022;border-radius:1px;"></span><span style="background:#7fba00;border-radius:1px;"></span>
+        <span style="background:#00a4ef;border-radius:1px;"></span><span style="background:#ffb900;border-radius:1px;"></span>
       </div>
-      <span style="font-size:13px;font-weight:600;color:white;">Microsoft 365 admin center</span>
-      <span style="font-size:11px;color:rgba(255,255,255,0.4);margin-left:4px;font-family:monospace;">admin.cloud.microsoft</span>
-      <div style="margin-left:auto;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);padding:2px 10px;font-size:10px;font-weight:700;color:white;letter-spacing:0.05em;">DEMO · FICTIONAL DATA · aiagentsecurity.guide</div>
+      <span style="font-size:13px;font-weight:600;color:#1a1a1a;">Microsoft 365 admin center</span>
+      <span style="font-size:11px;color:#999;margin-left:4px;font-family:monospace;">admin.cloud.microsoft</span>
+      <div style="margin-left:auto;background:#fff3cd;border:1px solid #ffc107;padding:2px 10px;font-size:10px;font-weight:700;color:#856404;letter-spacing:0.05em;border-radius:3px;">DEMO · Contoso</div>
     </div>
 
     <!-- Body -->
-    <div style="display:flex;min-height:580px;">
+    <div style="display:flex;min-height:600px;">
 
-      <!-- Left nav -->
-      <div style="width:200px;background:#1f2937;padding:8px 0;flex-shrink:0;">
-        <div style="font-size:10px;font-weight:700;color:#6b7280;letter-spacing:0.1em;text-transform:uppercase;padding:10px 14px 4px;">Agents</div>
-        <div id="a365-nav-overview" style="display:flex;align-items:center;gap:8px;padding:7px 14px;font-size:12px;color:white;background:#374151;border-left:3px solid #2899e8;cursor:pointer;" onclick="switchA365Tab('overview', this)">
-          <span>📊</span>Overview
-        </div>
-        <div id="a365-nav-all" style="display:flex;align-items:center;gap:8px;padding:7px 14px;font-size:12px;color:#9ca3af;cursor:pointer;" onclick="switchA365Tab('all', this)">
-          <span>📋</span>All agents
-        </div>
-        <div id="a365-nav-registry" style="display:flex;align-items:center;gap:8px;padding:7px 14px;font-size:12px;color:#9ca3af;cursor:pointer;" onclick="switchA365Tab('registry', this)">
-          <span>📦</span>Registry
-        </div>
-        <div id="a365-nav-map" style="display:flex;align-items:center;gap:8px;padding:7px 14px;font-size:12px;color:#9ca3af;cursor:pointer;" onclick="switchA365Tab('map', this)">
-          <span>🗺️</span>Agent Map
-        </div>
+      <!-- Left nav - light grey like real portal -->
+      <div style="width:190px;background:#f5f5f5;padding:0;flex-shrink:0;border-right:1px solid #e5e5e5;">
+        <div style="padding:12px 14px 4px;font-size:11px;font-weight:600;color:#333;">Agents</div>
+        <div id="a365-nav-overview" style="display:flex;align-items:center;gap:8px;padding:7px 14px;font-size:12px;color:#0f6cbd;background:#dce6f5;border-left:3px solid #0f6cbd;cursor:pointer;" onclick="switchA365Tab('overview', this)">Overview</div>
+        <div id="a365-nav-all" style="display:flex;align-items:center;gap:8px;padding:7px 14px;font-size:12px;color:#444;cursor:pointer;" onclick="switchA365Tab('all', this)">All agents</div>
+        <div id="a365-nav-tools" style="display:flex;align-items:center;gap:8px;padding:7px 14px;font-size:12px;color:#444;cursor:pointer;" onclick="switchA365Tab('tools', this)">Tools</div>
+        <div id="a365-nav-settings" style="display:flex;align-items:center;gap:8px;padding:7px 14px;font-size:12px;color:#444;cursor:pointer;" onclick="switchA365Tab('settings', this)">Settings</div>
       </div>
 
-      <!-- Content area -->
-      <div style="flex:1;background:#f9fafb;padding:24px;overflow-y:auto;">
+      <!-- Content area - white background like real portal -->
+      <div style="flex:1;background:#ffffff;padding:24px 28px;overflow-y:auto;">
 
         <!-- OVERVIEW TAB -->
         <div id="a365-tab-overview">
-          <div style="font-size:20px;font-weight:700;margin-bottom:4px;">Overview</div>
-          <div style="font-size:12px;color:#6b7280;margin-bottom:20px;">Last 30 days · Contoso Corporation</div>
+          <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:4px;">
+            <div style="font-size:22px;font-weight:700;color:#1a1a1a;">Agent 365 overview</div>
+            <div style="font-size:12px;color:#888;">Last updated: May 1, 2026 (Last 30 days)</div>
+          </div>
+          <div style="font-size:13px;color:#555;margin-bottom:20px;">Track agent usage across your organization and take steps to improve impact. Adjust settings, manage access, and help teams unlock more value while staying aligned with governance goals.</div>
 
-          <!-- Hero metrics -->
-          <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
-            <div style="background:white;border:1px solid #e5e7eb;border-radius:6px;padding:14px 18px;flex:1;min-width:110px;">
-              <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Agent Registry</div>
-              <div style="font-size:28px;font-weight:700;color:#111827;">84</div>
-              <div style="font-size:11px;color:#6b7280;">total agents</div>
+          <!-- Three metric cards -->
+          <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+            <div style="background:#fafafa;border:1px solid #e5e5e5;border-radius:4px;padding:14px 18px;min-width:150px;flex:1;">
+              <div style="font-size:12px;color:#555;margin-bottom:6px;">Agent registry</div>
+              <div style="font-size:28px;font-weight:700;color:#1a1a1a;margin-bottom:2px;">177</div>
+              <div style="font-size:11px;color:#888;">Total agents in your org</div>
+              <div style="font-size:11px;color:#0f6cbd;cursor:pointer;margin-top:4px;">Explore all agents →</div>
             </div>
-            <div style="background:white;border:1px solid #e5e7eb;border-radius:6px;padding:14px 18px;flex:1;min-width:110px;">
-              <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Active Users</div>
-              <div style="font-size:28px;font-weight:700;color:#111827;">312</div>
-              <div style="font-size:11px;color:#6b7280;">↑ 18% vs last month</div>
+            <div style="background:#fafafa;border:1px solid #e5e5e5;border-radius:4px;padding:14px 18px;min-width:150px;flex:1;">
+              <div style="font-size:12px;color:#555;margin-bottom:6px;">Active users ⓘ</div>
+              <div style="font-size:28px;font-weight:700;color:#1a1a1a;margin-bottom:2px;">0</div>
+              <div style="font-size:11px;color:#888;">No change this week</div>
+              <div style="font-size:11px;color:#888;margin-top:2px;">Unique users interacting with agents</div>
             </div>
-            <div style="background:white;border:1px solid #e5e7eb;border-radius:6px;padding:14px 18px;flex:1;min-width:110px;">
-              <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Total Sessions</div>
-              <div style="font-size:28px;font-weight:700;color:#111827;">4,821</div>
-              <div style="font-size:11px;color:#6b7280;">agent invocations</div>
-            </div>
-            <div style="background:white;border:1px solid #e5e7eb;border-radius:6px;padding:14px 18px;flex:1;min-width:110px;">
-              <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Exception Rate</div>
-              <div style="font-size:28px;font-weight:700;color:#ca5010;">8.3%</div>
-              <div style="font-size:11px;color:#6b7280;">sessions with errors</div>
-            </div>
-            <div style="background:white;border:1px solid #e5e7eb;border-radius:6px;padding:14px 18px;flex:1;min-width:110px;">
-              <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Agent Runtime</div>
-              <div style="font-size:28px;font-weight:700;color:#111827;">847h</div>
-              <div style="font-size:11px;color:#6b7280;">agent-assisted time</div>
+            <div style="background:#fafafa;border:1px solid #e5e5e5;border-radius:4px;padding:14px 18px;min-width:150px;flex:1;opacity:0.6;">
+              <div style="font-size:12px;color:#555;margin-bottom:6px;">Agent run-time 🔒</div>
+              <div style="font-size:20px;font-weight:600;color:#888;margin-bottom:8px;">— — —</div>
+              <div style="background:#0f6cbd;color:white;font-size:10px;font-weight:600;padding:3px 10px;border-radius:3px;display:inline-block;cursor:pointer;">Unlock with Agent 365</div>
             </div>
           </div>
 
-          <!-- Governance actions -->
-          <div style="font-size:14px;font-weight:700;margin-bottom:12px;">Governance actions</div>
-          <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
-            <div style="background:white;border:1px solid #fca5a5;border-radius:6px;padding:14px 18px;flex:1;min-width:180px;">
-              <div style="font-size:11px;font-weight:700;color:#991b1b;margin-bottom:6px;">🚨 Pending Requests</div>
-              <div style="font-size:24px;font-weight:700;color:#111827;margin-bottom:4px;">7 <span style="font-size:12px;font-weight:400;color:#6b7280;">requests</span></div>
-              <div style="font-size:11px;color:#6b7280;margin-bottom:10px;">Oldest: HR Automation Agent (14 days)</div>
-              <div style="background:#2563eb;color:white;font-size:11px;font-weight:600;padding:5px 12px;border-radius:3px;display:inline-block;cursor:pointer;">Manage requests</div>
+          <!-- Top actions -->
+          <div style="font-size:14px;font-weight:600;color:#1a1a1a;margin-bottom:12px;">Top actions for you</div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;">
+            <div style="background:#fafafa;border:1px solid #e5e5e5;border-radius:4px;padding:14px 18px;min-width:160px;flex:1;">
+              <div style="font-size:12px;color:#555;margin-bottom:6px;">Pending requests for agents</div>
+              <div style="font-size:24px;font-weight:700;color:#1a1a1a;margin-bottom:4px;">0</div>
+              <div style="font-size:11px;color:#888;margin-bottom:10px;">Open requests to add specific agents</div>
+              <div style="border:1px solid #d0d0d0;background:white;color:#333;font-size:11px;font-weight:600;padding:4px 12px;border-radius:3px;display:inline-block;cursor:pointer;">Manage requests</div>
             </div>
-            <div style="background:white;border:1px solid #fde68a;border-radius:6px;padding:14px 18px;flex:1;min-width:180px;">
-              <div style="font-size:11px;font-weight:700;color:#92400e;margin-bottom:6px;">⚠️ Ownerless Agents</div>
-              <div style="font-size:24px;font-weight:700;color:#111827;margin-bottom:4px;">23 <span style="font-size:12px;font-weight:400;color:#6b7280;">agents</span></div>
-              <div style="font-size:11px;color:#6b7280;margin-bottom:10px;">No owner assigned — no accountability</div>
-              <div style="background:#2563eb;color:white;font-size:11px;font-weight:600;padding:5px 12px;border-radius:3px;display:inline-block;cursor:pointer;">Assign owners</div>
+            <div style="background:#fafafa;border:1px solid #e5e5e5;border-radius:4px;padding:14px 18px;min-width:160px;flex:1;">
+              <div style="font-size:12px;color:#555;margin-bottom:6px;">Agents without owners ⓘ</div>
+              <div style="font-size:24px;font-weight:700;color:#1a1a1a;margin-bottom:4px;">0</div>
+              <div style="font-size:11px;color:#888;margin-bottom:10px;">Agents whose owner has left the company</div>
+              <div style="border:1px solid #d0d0d0;background:white;color:#333;font-size:11px;font-weight:600;padding:4px 12px;border-radius:3px;display:inline-block;cursor:pointer;">Assign owners</div>
+            </div>
+            <div style="background:#fafafa;border:1px solid #e5e5e5;border-radius:4px;padding:14px 18px;min-width:160px;flex:1;opacity:0.6;">
+              <div style="font-size:12px;color:#555;margin-bottom:6px;">Agents with exceptions 🔒</div>
+              <div style="font-size:20px;font-weight:600;color:#888;margin-bottom:8px;">— — —</div>
+              <div style="background:#0f6cbd;color:white;font-size:10px;font-weight:600;padding:3px 10px;border-radius:3px;display:inline-block;cursor:pointer;">Unlock with Agent 365</div>
             </div>
           </div>
 
           <!-- Agent analytics -->
-          <div style="font-size:14px;font-weight:700;margin-bottom:12px;">Agent analytics</div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;">
-            <div style="background:white;border:1px solid #e5e7eb;border-radius:6px;padding:14px 18px;flex:1;min-width:180px;">
-              <div style="font-size:12px;font-weight:600;color:#374151;margin-bottom:10px;">Agents by publisher</div>
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-                <div style="height:10px;background:#2563eb;border-radius:2px;" class="bar-org"></div>
-                <span style="font-size:11px;color:#374151;">Your organisation (61)</span>
+          <div style="font-size:14px;font-weight:600;color:#1a1a1a;margin-bottom:12px;">Agent analytics</div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <div style="background:#fafafa;border:1px solid #e5e5e5;border-radius:4px;padding:14px 18px;flex:1;min-width:180px;">
+              <div style="font-size:12px;font-weight:600;color:#555;margin-bottom:10px;">Agents by creators</div>
+              <div style="display:flex;align-items:flex-end;gap:3px;height:50px;margin-bottom:6px;">
+                <div style="background:#0f6cbd;flex:1;height:90%;border-radius:2px 2px 0 0;" title="147"></div>
+                <div style="background:#6ba5d7;flex:1;height:95%;border-radius:2px 2px 0 0;" title="148"></div>
+                <div style="background:#a8c8e8;flex:1;height:30%;border-radius:2px 2px 0 0;"></div>
+                <div style="background:#a8c8e8;flex:1;height:20%;border-radius:2px 2px 0 0;"></div>
+                <div style="background:#a8c8e8;flex:1;height:15%;border-radius:2px 2px 0 0;"></div>
               </div>
-              <div style="display:flex;align-items:center;gap:8px;">
-                <div style="height:10px;background:#93c5fd;border-radius:2px;width:20px;"></div>
-                <span style="font-size:11px;color:#374151;">External partners (23)</span>
-              </div>
+              <div style="font-size:10px;color:#888;">Top 2 creators: 147, 148 agents</div>
             </div>
-            <div style="background:white;border:1px solid #e5e7eb;border-radius:6px;padding:14px 18px;flex:1;min-width:180px;">
-              <div style="font-size:12px;font-weight:600;color:#374151;margin-bottom:10px;">Agents by platform</div>
-              <div style="font-size:11px;color:#374151;line-height:2;">
-                <div>Copilot Studio <span style="color:#6b7280;">(48)</span></div>
-                <div>Azure AI Foundry <span style="color:#6b7280;">(19)</span></div>
-                <div>External platforms <span style="color:#6b7280;">(17)</span></div>
+            <div style="background:#fafafa;border:1px solid #e5e5e5;border-radius:4px;padding:14px 18px;flex:1;min-width:180px;">
+              <div style="font-size:12px;font-weight:600;color:#555;margin-bottom:10px;">Top platforms used to build agents</div>
+              <div style="margin-bottom:6px;">
+                <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px;"><span>Other</span><span>174</span></div>
+                <div style="background:#0f6cbd;height:10px;border-radius:2px;width:95%;"></div>
               </div>
-            </div>
-            <div style="background:white;border:1px solid #e5e7eb;border-radius:6px;padding:14px 18px;flex:1;min-width:220px;">
-              <div style="font-size:12px;font-weight:600;color:#374151;margin-bottom:10px;">Active users (30 days)</div>
-              <!-- Simple sparkline bars -->
-              <div style="display:flex;align-items:flex-end;gap:3px;height:40px;">
-                <div style="background:#bfdbfe;flex:1;height:50%;border-radius:2px 2px 0 0;"></div>
-                <div style="background:#bfdbfe;flex:1;height:60%;border-radius:2px 2px 0 0;"></div>
-                <div style="background:#bfdbfe;flex:1;height:45%;border-radius:2px 2px 0 0;"></div>
-                <div style="background:#93c5fd;flex:1;height:70%;border-radius:2px 2px 0 0;"></div>
-                <div style="background:#93c5fd;flex:1;height:65%;border-radius:2px 2px 0 0;"></div>
-                <div style="background:#60a5fa;flex:1;height:80%;border-radius:2px 2px 0 0;"></div>
-                <div style="background:#60a5fa;flex:1;height:75%;border-radius:2px 2px 0 0;"></div>
-                <div style="background:#3b82f6;flex:1;height:90%;border-radius:2px 2px 0 0;"></div>
-                <div style="background:#3b82f6;flex:1;height:85%;border-radius:2px 2px 0 0;"></div>
-                <div style="background:#2563eb;flex:1;height:100%;border-radius:2px 2px 0 0;"></div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px;"><span>Copilot Studio</span><span>3</span></div>
+                <div style="background:#6ba5d7;height:10px;border-radius:2px;width:5%;"></div>
               </div>
-              <div style="display:flex;justify-content:space-between;font-size:10px;color:#9ca3af;margin-top:4px;"><span>Mar 24</span><span>Apr 23</span></div>
             </div>
           </div>
         </div>
 
         <!-- ALL AGENTS TAB -->
         <div id="a365-tab-all" style="display:none;">
-          <div style="font-size:20px;font-weight:700;margin-bottom:4px;">All agents</div>
-          <div style="font-size:12px;color:#6b7280;margin-bottom:16px;">84 agents across your organisation</div>
+          <div style="font-size:22px;font-weight:700;margin-bottom:4px;color:#1a1a1a;">All agents</div>
+          <div style="font-size:13px;color:#555;margin-bottom:16px;">Monitor and manage agents across your organization.</div>
 
-          <div style="display:flex;gap:8px;margin-bottom:14px;">
-            <input style="border:1px solid #d1d5db;border-radius:3px;padding:5px 10px;font-size:13px;width:220px;font-family:inherit;" placeholder="🔍 Search agents...">
-            <select style="border:1px solid #d1d5db;border-radius:3px;padding:5px 10px;font-size:12px;font-family:inherit;color:#374151;">
-              <option>All platforms</option>
-              <option>Copilot Studio</option>
-              <option>Azure AI Foundry</option>
-            </select>
-            <select style="border:1px solid #d1d5db;border-radius:3px;padding:5px 10px;font-size:12px;font-family:inherit;color:#374151;">
-              <option>All statuses</option>
-              <option>Published</option>
-              <option>Ownerless</option>
-            </select>
-            <button style="margin-left:auto;background:#2563eb;color:white;border:none;border-radius:3px;padding:5px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">⬇ Export</button>
+          <!-- Registry / Requests tabs -->
+          <div style="display:flex;gap:0;border-bottom:1px solid #d0d0d0;margin-bottom:14px;">
+            <div style="padding:7px 16px;font-size:13px;color:#0f6cbd;border-bottom:2px solid #0f6cbd;font-weight:600;cursor:pointer;">Registry</div>
+            <div style="padding:7px 16px;font-size:13px;color:#555;cursor:pointer;">Requests</div>
           </div>
 
-          <table style="width:100%;border-collapse:collapse;font-size:12px;background:white;border:1px solid #e5e7eb;border-radius:4px;overflow:hidden;">
-            <thead><tr style="background:#f9fafb;">
-              <th style="text-align:left;padding:9px 12px;font-size:10px;color:#6b7280;border-bottom:1px solid #e5e7eb;letter-spacing:0.05em;text-transform:uppercase;">Agent name</th>
-              <th style="text-align:left;padding:9px 12px;font-size:10px;color:#6b7280;border-bottom:1px solid #e5e7eb;letter-spacing:0.05em;text-transform:uppercase;">Platform</th>
-              <th style="text-align:left;padding:9px 12px;font-size:10px;color:#6b7280;border-bottom:1px solid #e5e7eb;letter-spacing:0.05em;text-transform:uppercase;">Owner</th>
-              <th style="text-align:left;padding:9px 12px;font-size:10px;color:#6b7280;border-bottom:1px solid #e5e7eb;letter-spacing:0.05em;text-transform:uppercase;">Auth type</th>
-              <th style="text-align:left;padding:9px 12px;font-size:10px;color:#6b7280;border-bottom:1px solid #e5e7eb;letter-spacing:0.05em;text-transform:uppercase;">Status</th>
-              <th style="text-align:left;padding:9px 12px;font-size:10px;color:#6b7280;border-bottom:1px solid #e5e7eb;letter-spacing:0.05em;text-transform:uppercase;">Risk</th>
+          <!-- Stats row -->
+          <div style="display:flex;gap:20px;margin-bottom:16px;">
+            <div><div style="font-size:11px;color:#888;">Total agents ⓘ</div><div style="font-size:22px;font-weight:700;color:#1a1a1a;">177</div></div>
+            <div><div style="font-size:11px;color:#888;">Agents without owners ⓘ</div><div style="font-size:22px;font-weight:700;color:#1a1a1a;">0</div></div>
+          </div>
+
+          <!-- Filters -->
+          <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+            <div style="border:1px solid #d0d0d0;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;color:#333;">Status</div>
+            <div style="border:1px solid #d0d0d0;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;color:#333;">Publisher type</div>
+            <div style="border:1px solid #d0d0d0;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;color:#333;">Platform</div>
+            <div style="border:1px solid #d0d0d0;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;color:#333;">Channel</div>
+            <div style="border:1px solid #d0d0d0;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;color:#333;">Data source</div>
+            <input style="border:1px solid #d0d0d0;border-radius:3px;padding:4px 10px;font-size:12px;margin-left:auto;width:160px;" placeholder="🔍 Search">
+          </div>
+
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead><tr style="border-bottom:1px solid #d0d0d0;">
+              <th style="text-align:left;padding:8px 10px;font-size:11px;color:#555;font-weight:600;">Name ↕</th>
+              <th style="text-align:left;padding:8px 10px;font-size:11px;color:#555;font-weight:600;">Status ⓘ</th>
+              <th style="text-align:left;padding:8px 10px;font-size:11px;color:#555;font-weight:600;">Platform</th>
+              <th style="text-align:left;padding:8px 10px;font-size:11px;color:#555;font-weight:600;">Active users 🔒</th>
+              <th style="text-align:left;padding:8px 10px;font-size:11px;color:#555;font-weight:600;">Total sessions</th>
             </tr></thead>
             <tbody>
-              <tr style="border-bottom:1px solid #f3f4f6;">
-                <td style="padding:9px 12px;"><div style="font-weight:600;color:#111827;">HR Onboarding Assistant</div><div style="font-size:10px;color:#9ca3af;">adm.johnson@contoso.com</div></td>
-                <td style="padding:9px 12px;"><span style="background:#dbeafe;color:#1d4ed8;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">Copilot Studio</span></td>
-                <td style="padding:9px 12px;"><span style="background:#fee2e2;color:#991b1b;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">None</span></td>
-                <td style="padding:9px 12px;"><span style="background:#fee2e2;color:#991b1b;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">No Auth</span></td>
-                <td style="padding:9px 12px;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">Published</span></td>
-                <td style="padding:9px 12px;"><span style="background:#fee2e2;color:#991b1b;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">High</span></td>
-              </tr>
-              <tr style="border-bottom:1px solid #f3f4f6;">
-                <td style="padding:9px 12px;"><div style="font-weight:600;color:#111827;">Finance Data Summariser</div><div style="font-size:10px;color:#9ca3af;">sarah.chen@contoso.com</div></td>
-                <td style="padding:9px 12px;"><span style="background:#dbeafe;color:#1d4ed8;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">Copilot Studio</span></td>
-                <td style="padding:9px 12px;"><span style="font-size:11px;color:#374151;">sarah.chen</span></td>
-                <td style="padding:9px 12px;"><span style="background:#fef3c7;color:#92400e;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">Maker</span></td>
-                <td style="padding:9px 12px;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">Published</span></td>
-                <td style="padding:9px 12px;"><span style="background:#fee2e2;color:#991b1b;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">High</span></td>
-              </tr>
-              <tr style="border-bottom:1px solid #f3f4f6;">
-                <td style="padding:9px 12px;"><div style="font-weight:600;color:#111827;">Sales Pipeline Agent</div><div style="font-size:10px;color:#9ca3af;">alice.wang@contoso.com</div></td>
-                <td style="padding:9px 12px;"><span style="background:#f3e8ff;color:#6b21a8;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">Agent 365 SDK</span></td>
-                <td style="padding:9px 12px;"><span style="font-size:11px;color:#374151;">alice.wang</span></td>
-                <td style="padding:9px 12px;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">OBO</span></td>
-                <td style="padding:9px 12px;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">Published</span></td>
-                <td style="padding:9px 12px;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">Low</span></td>
-              </tr>
-              <tr>
-                <td style="padding:9px 12px;"><div style="font-weight:600;color:#111827;">IT Helpdesk Bot</div><div style="font-size:10px;color:#9ca3af;">mark.obi@contoso.com</div></td>
-                <td style="padding:9px 12px;"><span style="background:#dbeafe;color:#1d4ed8;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">Copilot Studio</span></td>
-                <td style="padding:9px 12px;"><span style="background:#fee2e2;color:#991b1b;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">None</span></td>
-                <td style="padding:9px 12px;"><span style="background:#fee2e2;color:#991b1b;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">No Auth</span></td>
-                <td style="padding:9px 12px;"><span style="background:#dcfce7;color:#166534;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">Published</span></td>
-                <td style="padding:9px 12px;"><span style="background:#fee2e2;color:#991b1b;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;">High</span></td>
-              </tr>
+              <tr style="border-bottom:1px solid #f0f0f0;"><td style="padding:9px 10px;color:#0f6cbd;cursor:pointer;">LexisNexis Protégé™ (US)</td><td><span style="color:#107c10;font-size:11px;">● Available</span></td><td style="font-size:11px;color:#555;">—</td><td style="font-size:11px;color:#888;">—</td><td style="font-size:11px;color:#888;">—</td></tr>
+              <tr style="border-bottom:1px solid #f0f0f0;"><td style="padding:9px 10px;color:#0f6cbd;cursor:pointer;">LawVu for Microsoft Teams</td><td><span style="color:#107c10;font-size:11px;">● Available</span></td><td style="font-size:11px;color:#555;">—</td><td style="font-size:11px;color:#888;">—</td><td style="font-size:11px;color:#888;">—</td></tr>
+              <tr style="border-bottom:1px solid #f0f0f0;"><td style="padding:9px 10px;color:#0f6cbd;cursor:pointer;">Sales</td><td><span style="color:#107c10;font-size:11px;">● Available</span></td><td style="font-size:11px;color:#555;">—</td><td style="font-size:11px;color:#888;">—</td><td style="font-size:11px;color:#888;">—</td></tr>
+              <tr style="border-bottom:1px solid #f0f0f0;"><td style="padding:9px 10px;color:#0f6cbd;cursor:pointer;">Workday</td><td><span style="color:#107c10;font-size:11px;">● Available</span></td><td style="font-size:11px;color:#555;">—</td><td style="font-size:11px;color:#888;">—</td><td style="font-size:11px;color:#888;">—</td></tr>
+              <tr style="border-bottom:1px solid #f0f0f0;"><td style="padding:9px 10px;color:#0f6cbd;cursor:pointer;">HR Onboarding Assistant</td><td><span style="color:#107c10;font-size:11px;">● Available</span></td><td style="font-size:11px;color:#555;">Copilot Studio</td><td style="font-size:11px;color:#888;">—</td><td style="font-size:11px;color:#888;">—</td></tr>
             </tbody>
           </table>
-          <div style="text-align:center;padding:10px;font-size:11px;color:#9ca3af;">Showing 4 of 84 agents</div>
+          <div style="text-align:center;padding:10px;font-size:11px;color:#888;">Showing 5 of 177 agents</div>
         </div>
 
-        <!-- REGISTRY TAB -->
-        <div id="a365-tab-registry" style="display:none;">
-          <div style="font-size:20px;font-weight:700;margin-bottom:4px;">Registry</div>
-          <div style="font-size:12px;color:#6b7280;margin-bottom:16px;">Centralised agent catalogue — approved, pending, and custom agents</div>
+        <!-- TOOLS TAB -->
+        <div id="a365-tab-tools" style="display:none;">
+          <div style="font-size:22px;font-weight:700;margin-bottom:4px;color:#1a1a1a;">Tools</div>
+          <div style="font-size:13px;color:#555;margin-bottom:4px;">Tools define how an AI model interacts with user data, tools, and workflows. It ensures requests, responses, and actions are handled consistently, safely, and transparently.</div>
+          <div style="font-size:12px;color:#0f6cbd;cursor:pointer;margin-bottom:16px;">Learn more about tools</div>
 
-          <div style="display:flex;gap:0;border-bottom:1px solid #e5e7eb;margin-bottom:16px;">
-            <div style="padding:7px 16px;font-size:12px;color:#2563eb;border-bottom:2px solid #2563eb;font-weight:600;cursor:pointer;">All agents (84)</div>
-            <div style="padding:7px 16px;font-size:12px;color:#6b7280;cursor:pointer;">Requests (7)</div>
-            <div style="padding:7px 16px;font-size:12px;color:#6b7280;cursor:pointer;">Ownerless (23)</div>
+          <!-- Registry tab -->
+          <div style="border-bottom:1px solid #d0d0d0;margin-bottom:14px;">
+            <div style="display:inline-block;padding:7px 16px;font-size:13px;color:#0f6cbd;border-bottom:2px solid #0f6cbd;font-weight:600;">Registry</div>
+          </div>
+          <div style="font-size:13px;color:#555;margin-bottom:12px;">Find all your tools in one place.</div>
+
+          <!-- MCP stats -->
+          <div style="display:flex;gap:24px;margin-bottom:16px;">
+            <div><div style="font-size:11px;color:#888;font-weight:600;border-left:3px solid #0f6cbd;padding-left:8px;">MCP Servers</div><div style="font-size:24px;font-weight:700;color:#0f6cbd;padding-left:8px;">12</div></div>
+            <div><div style="font-size:11px;color:#888;font-weight:600;border-left:3px solid #ccc;padding-left:8px;">Available</div><div style="font-size:24px;font-weight:700;color:#1a1a1a;padding-left:8px;">12</div></div>
+            <div><div style="font-size:11px;color:#888;font-weight:600;border-left:3px solid #ccc;padding-left:8px;">Blocked</div><div style="font-size:24px;font-weight:700;color:#1a1a1a;padding-left:8px;">0</div></div>
           </div>
 
-          <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:4px;padding:12px 14px;font-size:12px;color:#92400e;margin-bottom:14px;">
-            ⚠️ <strong>7 agent requests pending approval</strong> for more than 7 days. Oldest request: HR Automation Agent from j.smith@contoso.com (submitted 14 days ago).
-            <span style="color:#1d4ed8;cursor:pointer;margin-left:8px;">Review →</span>
+          <!-- Filters -->
+          <div style="display:flex;gap:8px;margin-bottom:12px;">
+            <div style="border:1px solid #d0d0d0;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;color:#333;">Status</div>
+            <div style="border:1px solid #d0d0d0;border-radius:20px;padding:4px 14px;font-size:12px;cursor:pointer;color:#333;">Publisher</div>
           </div>
 
-          <div style="background:#fee2e2;border:1px solid #fca5a5;border-radius:4px;padding:12px 14px;font-size:12px;color:#991b1b;margin-bottom:14px;">
-            🚨 <strong>23 agents have no assigned owner.</strong> These agents have no accountable person for security incidents, credential rotation, or decommissioning.
-            <span style="color:#1d4ed8;cursor:pointer;margin-left:8px;">Assign owners →</span>
-          </div>
-
-          <div style="background:white;border:1px solid #e5e7eb;border-radius:4px;padding:14px;">
-            <div style="font-size:12px;font-weight:600;color:#374151;margin-bottom:10px;">Registry breakdown</div>
-            <div style="font-size:12px;color:#374151;line-height:2.2;">
-              <div style="display:flex;justify-content:space-between;border-bottom:1px solid #f3f4f6;padding:3px 0;"><span>Microsoft-built agents</span><span style="font-weight:600;">12</span></div>
-              <div style="display:flex;justify-content:space-between;border-bottom:1px solid #f3f4f6;padding:3px 0;"><span>Organisation-built (Copilot Studio)</span><span style="font-weight:600;">48</span></div>
-              <div style="display:flex;justify-content:space-between;border-bottom:1px solid #f3f4f6;padding:3px 0;"><span>Agent 365 SDK (custom)</span><span style="font-weight:600;">7</span></div>
-              <div style="display:flex;justify-content:space-between;border-bottom:1px solid #f3f4f6;padding:3px 0;"><span>Azure AI Foundry</span><span style="font-weight:600;">14</span></div>
-              <div style="display:flex;justify-content:space-between;padding:3px 0;"><span>Partner / marketplace</span><span style="font-weight:600;">3</span></div>
-            </div>
-          </div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead><tr style="border-bottom:1px solid #d0d0d0;">
+              <th style="text-align:left;padding:8px 10px;font-size:11px;color:#555;font-weight:600;">Name ↕</th>
+              <th style="text-align:left;padding:8px 10px;font-size:11px;color:#555;font-weight:600;">Status</th>
+              <th style="text-align:left;padding:8px 10px;font-size:11px;color:#555;font-weight:600;">Type</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid #f0f0f0;"><td style="padding:9px 10px;"><div style="display:flex;align-items:center;gap:8px;"><div style="width:24px;height:24px;background:#0b53be;border-radius:4px;flex-shrink:0;"></div>Microsoft SharePoint Lists MCP Server (Frontier)</div></td><td><span style="color:#107c10;font-size:11px;">● Available</span></td><td style="font-size:11px;color:#555;">MCP Server</td></tr>
+              <tr style="border-bottom:1px solid #f0f0f0;"><td style="padding:9px 10px;"><div style="display:flex;align-items:center;gap:8px;"><div style="width:24px;height:24px;background:#0b53be;border-radius:4px;flex-shrink:0;"></div>Microsoft SharePoint and OneDrive MCP Server (Frontier)</div></td><td><span style="color:#107c10;font-size:11px;">● Available</span></td><td style="font-size:11px;color:#555;">MCP Server</td></tr>
+              <tr style="border-bottom:1px solid #f0f0f0;"><td style="padding:9px 10px;"><div style="display:flex;align-items:center;gap:8px;"><div style="width:24px;height:24px;background:#0a7c5c;border-radius:4px;flex-shrink:0;"></div>Work IQ Copilot MCP Server (Frontier)</div></td><td><span style="color:#107c10;font-size:11px;">● Available</span></td><td style="font-size:11px;color:#555;">MCP Server</td></tr>
+              <tr style="border-bottom:1px solid #f0f0f0;"><td style="padding:9px 10px;"><div style="display:flex;align-items:center;gap:8px;"><div style="width:24px;height:24px;background:#0078d4;border-radius:4px;flex-shrink:0;"></div>Microsoft Outlook MCP Server (Frontier)</div></td><td><span style="color:#107c10;font-size:11px;">● Available</span></td><td style="font-size:11px;color:#555;">MCP Server</td></tr>
+              <tr><td style="padding:9px 10px;color:#888;font-size:11px;" colspan="3">... and 8 more MCP servers</td></tr>
+            </tbody>
+          </table>
         </div>
 
+        <!-- SETTINGS TAB -->
+        <div id="a365-tab-settings" style="display:none;">
+          <div style="font-size:22px;font-weight:700;margin-bottom:4px;color:#1a1a1a;">Agent settings</div>
+          <div style="font-size:13px;color:#555;margin-bottom:20px;">Manage everything related to Agents. These settings include controls for data access, user permissions, integration policies, and customization of agent behavior to align with enterprise standards.</div>
 
-        <!-- AGENT MAP TAB -->
-        <div id="a365-tab-map" style="display:none;">
-          <div style="font-size:20px;font-weight:700;margin-bottom:4px;">Agent Map</div>
-          <div style="font-size:12px;color:#6b7280;margin-bottom:16px;">Live view of agent activity, resource access, and risk signals</div>
-
-          <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:4px;padding:10px 14px;font-size:12px;color:#92400e;margin-bottom:14px;">
-            ⚠️ <strong>3 agents flagged</strong> — risk signals detected from Entra ID Protection + Defender. One-click block available.
-          </div>
-
-          <!-- Agent map visual -->
-          <div style="background:white;border:1px solid #e5e7eb;border-radius:6px;padding:16px;margin-bottom:14px;">
-            <div style="font-size:12px;font-weight:600;color:#374151;margin-bottom:12px;">Active agents — resource connections and risk</div>
-
-            <!-- Agents with risk indicators -->
-            <div style="display:flex;flex-direction:column;gap:8px;">
-
-              <div style="display:flex;align-items:center;gap:10px;background:#fef3c7;border:1px solid #fde68a;border-radius:4px;padding:10px 12px;">
-                <span style="font-size:16px;">⚠️</span>
-                <div style="flex:1;">
-                  <div style="font-size:12px;font-weight:700;color:#111827;">Finance Data Summariser</div>
-                  <div style="font-size:11px;color:#6b7280;">Maker credentials · Accessing SharePoint Finance, Exchange, Teams · Entra: sign-in spike detected</div>
-                </div>
-                <div style="display:flex;gap:6px;">
-                  <div style="background:#dc2626;color:white;font-size:10px;font-weight:700;padding:4px 10px;border-radius:3px;cursor:pointer;">🚫 Block</div>
-                  <div style="background:#f3f4f6;color:#374151;font-size:10px;font-weight:600;padding:4px 10px;border-radius:3px;cursor:pointer;">Investigate</div>
-                </div>
-              </div>
-
-              <div style="display:flex;align-items:center;gap:10px;background:#fee2e2;border:1px solid #fca5a5;border-radius:4px;padding:10px 12px;">
-                <span style="font-size:16px;">🚨</span>
-                <div style="flex:1;">
-                  <div style="font-size:12px;font-weight:700;color:#111827;">HR Onboarding Assistant</div>
-                  <div style="font-size:11px;color:#6b7280;">No auth · Org-wide · Accessing SharePoint HR, Dataverse, Power Automate · Owner: adm.johnson (left company 3 months ago)</div>
-                </div>
-                <div style="display:flex;gap:6px;">
-                  <div style="background:#dc2626;color:white;font-size:10px;font-weight:700;padding:4px 10px;border-radius:3px;cursor:pointer;">🚫 Block</div>
-                  <div style="background:#f3f4f6;color:#374151;font-size:10px;font-weight:600;padding:4px 10px;border-radius:3px;cursor:pointer;">Reassign owner</div>
-                </div>
-              </div>
-
-              <div style="display:flex;align-items:center;gap:10px;background:#f0fdf4;border:1px solid #86efac;border-radius:4px;padding:10px 12px;">
-                <span style="font-size:16px;">✅</span>
-                <div style="flex:1;">
-                  <div style="font-size:12px;font-weight:700;color:#111827;">Sales Pipeline Agent</div>
-                  <div style="font-size:11px;color:#6b7280;">OBO · Team only · Accessing Dynamics 365, Exchange · Agent 365 SDK · Owner: alice.wang — no risk signals</div>
-                </div>
-                <div style="background:#f3f4f6;color:#374151;font-size:10px;font-weight:600;padding:4px 10px;border-radius:3px;cursor:pointer;">Details</div>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- Pending deployment requests -->
-          <div style="background:white;border:1px solid #e5e7eb;border-radius:6px;padding:16px;">
-            <div style="font-size:12px;font-weight:600;color:#374151;margin-bottom:10px;">Pending deployment requests (7)</div>
-            <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f3f4f6;font-size:12px;">
-              <div style="flex:1;"><div style="font-weight:600;">HR Automation Agent</div><div style="font-size:11px;color:#6b7280;">j.smith@contoso.com · Requested 14 days ago · Copilot Studio</div></div>
-              <div style="background:#16a34a;color:white;font-size:10px;font-weight:700;padding:4px 10px;border-radius:3px;cursor:pointer;">✓ Approve</div>
-              <div style="background:#dc2626;color:white;font-size:10px;font-weight:700;padding:4px 10px;border-radius:3px;cursor:pointer;">✗ Reject</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;padding:8px 0;font-size:12px;">
-              <div style="flex:1;"><div style="font-weight:600;">Finance Report Builder</div><div style="font-size:11px;color:#6b7280;">t.khan@contoso.com · Requested 8 days ago · Agent 365 SDK</div></div>
-              <div style="background:#16a34a;color:white;font-size:10px;font-weight:700;padding:4px 10px;border-radius:3px;cursor:pointer;">✓ Approve</div>
-              <div style="background:#dc2626;color:white;font-size:10px;font-weight:700;padding:4px 10px;border-radius:3px;cursor:pointer;">✗ Reject</div>
-            </div>
-            <div style="text-align:center;padding:8px;font-size:11px;color:#9ca3af;">Showing 2 of 7 pending requests</div>
-          </div>
+          <table style="width:100%;border-collapse:collapse;font-size:13px;">
+            <thead><tr style="border-bottom:1px solid #d0d0d0;">
+              <th style="text-align:left;padding:8px 10px;font-size:11px;color:#555;font-weight:600;">Name ↕</th>
+              <th style="text-align:left;padding:8px 10px;font-size:11px;color:#555;font-weight:600;">Description</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid #f0f0f0;"><td style="padding:11px 10px;"><div style="display:flex;align-items:center;gap:8px;"><span style="color:#107c10;font-size:16px;">✓</span><span style="color:#0f6cbd;cursor:pointer;font-weight:500;">Allowed agent types</span></div></td><td style="font-size:12px;color:#555;">Specify which categories of AI agents, such as Microsoft agents, partner agents, or custom-built agents, are allowed in your organisation.</td></tr>
+              <tr style="border-bottom:1px solid #f0f0f0;"><td style="padding:11px 10px;"><div style="display:flex;align-items:center;gap:8px;"><span style="color:#d83b01;font-size:14px;">▶</span><span style="color:#0f6cbd;cursor:pointer;font-weight:500;">Sharing</span></div></td><td style="font-size:12px;color:#555;">Manage who can share AI agents within your organisation and control the scope of agent access.</td></tr>
+              <tr style="border-bottom:1px solid #f0f0f0;"><td style="padding:11px 10px;"><div style="display:flex;align-items:center;gap:8px;"><span style="color:#0078d4;font-size:14px;">≡</span><span style="color:#0f6cbd;cursor:pointer;font-weight:500;">Templates</span></div></td><td style="font-size:12px;color:#555;">Create pre-set policies, rules, and allowlists for agent deployment to enforce governance standards.</td></tr>
+              <tr><td style="padding:11px 10px;"><div style="display:flex;align-items:center;gap:8px;"><span style="color:#5c2d91;font-size:14px;">👤</span><span style="color:#0f6cbd;cursor:pointer;font-weight:500;">User access</span></div></td><td style="font-size:12px;color:#555;">Control which users or groups can interact with agents, and manage access permissions at the tenant level.</td></tr>
+            </tbody>
+          </table>
         </div>
 
       </div>
     </div>
   </div>
 
-  <div class="info-box">📌 <strong>Access path:</strong> admin.cloud.microsoft → left nav → Show all → Agents → Overview. Requires AI Administrator or AI Reader role. No product licence needed to view the registry — only to apply security controls.</div>
+  <div class="info-box">📌 <strong>Portal note:</strong> The real portal is at <code>admin.cloud.microsoft/?#/agents/overview</code>. The left nav shows: Overview, All agents, Tools, Settings. "Agent run-time" and "Agents with exceptions" metrics are locked and require the Agent 365 licence ($15/user/month) to unlock.</div>
 </div>
+
+
 
 <!-- ══ AGENT 365 ══ -->
 <div id="page-agent365" class="page">
@@ -1464,14 +1526,15 @@ function toggleRec(id) {
 }
 
 function switchA365Tab(tab, el) {
-  ['overview','all','registry','map'].forEach(function(t){
-    document.getElementById('a365-tab-'+t).style.display = t===tab?'block':'none';
+  ['overview','all','tools','settings'].forEach(function(t){
+    var panel = document.getElementById('a365-tab-'+t);
+    if (panel) panel.style.display = t===tab?'block':'none';
     var nav = document.getElementById('a365-nav-'+t);
     if (nav) {
       if (t===tab) {
-        nav.style.background='#374151'; nav.style.color='white'; nav.style.borderLeft='3px solid #2899e8';
+        nav.style.background='#dce6f5'; nav.style.color='#0f6cbd'; nav.style.borderLeft='3px solid #0f6cbd';
       } else {
-        nav.style.background=''; nav.style.color='#9ca3af'; nav.style.borderLeft='3px solid transparent';
+        nav.style.background=''; nav.style.color='#444'; nav.style.borderLeft='3px solid transparent';
       }
     }
   });
