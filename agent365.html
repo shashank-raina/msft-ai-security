@@ -327,18 +327,17 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="overview.html" class="">Overview</a>
 <a href="risk.html" class="">AI Risk</a>
 <a href="product-map.html" class="">Products</a>
-<a href="agent365.html" class=" active">Agent 365</a>
+<a href="agent365.html" class="active">Agent 365</a>
 <a href="identity.html" class="">Identity</a>
 <a href="mcp.html" class="">MCP</a>
 <a href="threats.html" class="">Threats</a>
 <a href="frameworks.html" class="">Frameworks</a>
 <a href="gaps.html" class="">Gaps</a>
 <a href="playbooks.html" class="">Playbooks</a>
-<a href="copilot-vs-foundry.html" class="">CS vs Foundry</a>
+<a href="foundry.html" class="">Foundry</a>
 <a href="strategy.html" class="">Strategy</a>
-<a href="changelog.html" class="">Changelog</a>
 <a href="contact.html" class="">Contact</a>
-  </div>
+</div>
   <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
   <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" class="substack-nav" style="flex-shrink:0;margin-left:10px;display:flex;align-items:center;gap:5px;background:var(--blue);color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:6px 13px;border-radius:6px;text-decoration:none;white-space:nowrap;letter-spacing:0.03em;">📬 Subscribe</a>
 </nav>
@@ -348,16 +347,15 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="overview.html" class="">Overview</a>
 <a href="risk.html" class="">AI Risk</a>
 <a href="product-map.html" class="">Products</a>
-<a href="agent365.html" class=" active">Agent 365</a>
+<a href="agent365.html" class="active">Agent 365</a>
 <a href="identity.html" class="">Identity</a>
 <a href="mcp.html" class="">MCP</a>
 <a href="threats.html" class="">Threats</a>
 <a href="frameworks.html" class="">Frameworks</a>
 <a href="gaps.html" class="">Gaps</a>
 <a href="playbooks.html" class="">Playbooks</a>
-<a href="copilot-vs-foundry.html" class="">CS vs Foundry</a>
+<a href="foundry.html" class="">Foundry</a>
 <a href="strategy.html" class="">Strategy</a>
-<a href="changelog.html" class="">Changelog</a>
 <a href="contact.html" class="">Contact</a>
 </div>
 <div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
@@ -761,9 +759,286 @@ AIAgentsInfo
   <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#ffffff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;padding:12px 24px;border-radius:8px;text-decoration:none;">Subscribe to updates →</a>
 </div>
 
+
+<div class="section-label" style="margin-top:64px;">Copilot Studio vs Foundry</div>
+<h2>Platform security comparison — which platform are you securing?</h2>
+<p style="font-size:13px;color:var(--text2);margin-bottom:24px;">This section was previously a separate page. It covers the security differences between Copilot Studio and Microsoft Foundry — helping security architects understand which controls apply to each platform and where the gaps are.</p>
+
+<div class="section-label">Platform Overview</div>
+<h2>Which platform are you securing?</h2>
+<p>The security controls, gaps, and runbooks are fundamentally different depending on which platform your agents run on. Start here to make sure you're looking at the right controls.</p>
+
+<div class="platform-grid">
+  <div class="platform-card platform-cs">
+    <div class="platform-header">
+      <div class="platform-icon">🤖</div>
+      <div>
+        <div class="platform-name">Microsoft Copilot Studio</div>
+        <div class="platform-sub">LOW-CODE · POWER PLATFORM · MAKERS</div>
+      </div>
+    </div>
+    <div class="platform-list">
+      <div class="platform-item"><strong>Who uses it:</strong> Makers, Copilot admins, Power Platform teams — people who build agents with low-code tools, not developers writing code</div>
+      <div class="platform-item"><strong>What it produces:</strong> Copilot Studio agents published to Teams, SharePoint, websites — conversational agents connecting to M365 data</div>
+      <div class="platform-item"><strong>Critical distinction:</strong> Classic agents (most existing deployments) sit outside the Entra security perimeter. Modern agents (new) get full Entra coverage</div>
+      <div class="platform-item"><strong>Primary risk surface:</strong> Maker credentials, no-auth agents, org-wide sharing, agent sprawl, any-user-can-change-auth</div>
+      <div class="platform-item"><strong>Primary detection surface:</strong> AIAgentsInfo table in Defender Advanced Hunting</div>
+    </div>
+  </div>
+  <div class="platform-card platform-foundry">
+    <div class="platform-header">
+      <div class="platform-icon">🏭</div>
+      <div>
+        <div class="platform-name">Microsoft Foundry</div>
+        <div class="platform-sub">CODE-FIRST · AZURE · DEVELOPERS</div>
+      </div>
+    </div>
+    <div class="platform-list">
+      <div class="platform-item"><strong>Who uses it:</strong> Developers, solution architects, AI engineers — people building custom AI agents and workloads in Azure using SDKs and code</div>
+      <div class="platform-item"><strong>What it produces:</strong> Custom AI agents, RAG pipelines, multi-agent orchestration, enterprise AI applications — deployed as Azure resources</div>
+      <div class="platform-item"><strong>Critical distinction:</strong> Foundry agents use modern Agent ID (OAuth 2.0) — CA for Agents and ID Protection apply. Much stronger baseline than Classic Copilot Studio agents</div>
+      <div class="platform-item"><strong>Primary risk surface:</strong> Logging gaps (nothing collected by default), content capture governance, RBAC at resource vs project level, supply chain</div>
+      <div class="platform-item"><strong>Primary detection surface:</strong> Azure Monitor Diagnostic Settings, Application Insights, Entra ID sign-in logs</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label">Side-by-Side Comparison</div>
+<h2>Security posture at a glance</h2>
+<table class="compare-table">
+<thead><tr>
+  <th>Security Control</th>
+  <th class="cs-col">Copilot Studio</th>
+  <th class="foundry-col">Microsoft Foundry</th>
+</tr></thead>
+<tbody>
+<tr><td>Entra Agent ID</td><td>⚠️ Modern agents only — most existing deployments are Classic and excluded</td><td>✅ Supported — agents are Entra identities by default</td></tr>
+<tr><td>Conditional Access for Agents</td><td>❌ Does NOT apply to Copilot Studio agents</td><td>✅ Applies to Foundry agents (OAuth 2.0 Agent ID)<br><span style="font-size:11px;color:var(--text3);">⚠️ Security Copilot: applies to Microsoft-built agents only. Custom/partner agents use "Connect with existing user account" — no Agent ID, CA for Agents does not apply.</span></td></tr>
+<tr><td>ID Protection for Agents</td><td>❌ Classic agents only — Modern agents supported</td><td>✅ Supported</td></tr>
+<tr><td>Identity Governance (lifecycle)</td><td>⚠️ Modern agents only</td><td>✅ Supported via Entra ID Governance</td></tr>
+<tr><td>Defender real-time protection</td><td>✅ Copilot Studio agents (Defender for Cloud Apps)</td><td>✅ Defender for Cloud AI security posture</td></tr>
+<tr><td>Sentinel analytics rules</td><td>✅ AIAgentsInfo table queries</td><td>✅ Azure Monitor + App Insights tables</td></tr>
+<tr><td>Prompt Shield / Content Safety</td><td>✅ Built-in via M365 Copilot layer</td><td>✅ Content Safety SDK — opt-in per agent</td></tr>
+<tr><td>DLP / Purview (policy layer)</td><td>✅ DLP for M365 Copilot (GA March 31 2026) — covers Copilot experiences</td><td>✅ Azure data governance applies</td></tr>
+<tr><td>Browser-layer DLP</td><td>✅ Edge for Business inline protection — inspects typed prompts to any GenAI app incl. shadow AI. Works on BYOD if signed into Edge for Business profile</td><td>✅ Same — applies to any browser-based interaction</td></tr>
+<tr><td>Network-layer DLP</td><td>⚠️ Preview — Network Data Security via Global Secure Access. Covers unmanaged devices, desktop apps, API calls</td><td>⚠️ Preview — same coverage</td></tr>
+<tr><td>SharePoint oversharing controls (SAM)</td><td>✅ SharePoint Advanced Management included with Copilot licence — RCD, Site Access Reviews, Content Assessment, RAC. Primary tool for Copilot data exposure remediation.</td><td>⚠️ Not applicable at the same level — Foundry agents access data via explicit connections, not broad SharePoint indexing</td></tr>
+<tr><td>Agentic data governance</td><td>✅ DLP extends to agent-to-human, agent-to-tools, agent-to-agent. Sensitive files blocked from grounding data. Auto-enrolled for audit at creation</td><td>✅ Same — agent instances enrolled as auditable entities</td></tr>
+<tr><td>Inventory / discovery</td><td>✅ Agent 365 + AIAgentsInfo table</td><td>⚠️ Azure Resource Manager + Entra Agent ID — no unified agent-level inventory table equivalent</td></tr>
+<tr><td>Logging — default state</td><td>✅ Some data in AIAgentsInfo automatically</td><td>⚠️ Nothing collected by default — all logging is opt-in</td></tr>
+<tr><td>Red teaming</td><td>⚠️ No native Copilot Studio red teaming tool</td><td>✅ AI Red Teaming Agent in Microsoft Foundry</td></tr>
+<tr><td>Supply chain scanning</td><td>⚠️ Limited — connector risk is the main vector</td><td>✅ Defender for Cloud CSPM, AI model scanning</td></tr>
+</tbody>
+</table>
+
+
+<div class="callout callout-warn" style="margin-top:20px;">
+  <div class="callout-title">⚠️ Security Copilot agent identity — a third distinction</div>
+  <p>Security Copilot agents offer two identity options. <strong>Microsoft-built agents</strong> (Phishing Triage, Threat Intelligence Briefing, Vulnerability Remediation etc.) use a dedicated Entra Agent ID — CA for Agents and ID Protection apply. <strong>Custom and partner agents</strong> use <em>"Connect with existing user account"</em> — the agent runs using the configuring user's credentials, inheriting their full access and permissions.</p>
+  <p><strong>Why this is worse than Copilot Studio maker credentials:</strong> Security Copilot users are typically high-privilege accounts — Security Admins, SOC engineers, Global Admins. A custom agent configured by a Global Admin silently extends Global Admin-level access to Sentinel incidents, Defender signals, Entra identity risk data, and threat intelligence — to every user who runs the agent. The blast radius of a compromised or misconfigured custom Security Copilot agent is significantly larger than a typical Copilot Studio agent.</p>
+  <p><strong>Mitigation:</strong> Use a dedicated low-privilege service account for configuring custom Security Copilot agents. Audit who configures custom agents and what permissions their account holds. Establish an approval gate before production deployment.</p>
+</div>
+<div class="section-label">Copilot Studio — Security Condensed</div>
+<h2>The five authentication patterns — risk at a glance</h2>
+<p>Every Copilot Studio agent uses one of five authentication patterns. The pattern determines the risk level, what controls apply, and how you detect it.</p>
+
+<div class="auth-mini">
+  <div class="auth-row">
+    <div class="auth-num">①</div>
+    <div><div class="auth-name">End User Credentials (OBO)</div><div class="auth-sub">Auth with Microsoft → End user credentials</div></div>
+    <div class="risk-badge risk-low">LOW RISK</div>
+    <code style="font-size:9px;background:#f0f4fb;padding:2px 6px;border-radius:3px;">UserAuthenticationType == "Integrated"</code>
+  </div>
+  <div class="auth-row">
+    <div class="auth-num">②</div>
+    <div><div class="auth-name">Maker-Provided Credentials</div><div class="auth-sub">Auth with Microsoft → Maker-provided credentials</div></div>
+    <div class="risk-badge risk-high">HIGH RISK</div>
+    <code style="font-size:9px;background:#f0f4fb;padding:2px 6px;border-radius:3px;">AgentToolsDetails.mode == "Maker"</code>
+  </div>
+  <div class="auth-row">
+    <div class="auth-num">③</div>
+    <div><div class="auth-name">App Registration — Delegated</div><div class="auth-sub">Authenticate manually → Entra ID V2 (delegated)</div></div>
+    <div class="risk-badge risk-low">LOW RISK</div>
+    <code style="font-size:9px;background:#f0f4fb;padding:2px 6px;border-radius:3px;">HTTP Request + delegated token</code>
+  </div>
+  <div class="auth-row">
+    <div class="auth-num">④</div>
+    <div><div class="auth-name">App Registration — Application Permissions</div><div class="auth-sub">Authenticate manually → Entra ID V2 (application)</div></div>
+    <div class="risk-badge risk-critical">VERY HIGH RISK</div>
+    <code style="font-size:9px;background:#f0f4fb;padding:2px 6px;border-radius:3px;">HTTP to graph.microsoft.com + client creds</code>
+  </div>
+  <div class="auth-row">
+    <div class="auth-num">⑤</div>
+    <div><div class="auth-name">Agent's User Account</div><div class="auth-sub">Full human identity — mailbox, Teams, SharePoint access</div></div>
+    <div class="risk-badge risk-critical">VERY HIGH RISK</div>
+    <code style="font-size:9px;background:#f0f4fb;padding:2px 6px;border-radius:3px;">Entra ID Governance lifecycle required</code>
+  </div>
+</div>
+
+<h2 style="margin-top:28px;">The Classic vs Modern gap — the most important distinction</h2>
+<p>Most existing Copilot Studio deployments are <strong>Classic agents</strong>. They authenticate as service principals or via OBO — not as modern Agent ID identities. This means <strong>CA for Agents, ID Protection for Agents, and Entra lifecycle governance do not apply</strong>. The entire Entra security product stack Microsoft markets for agent security only works with Modern agents.</p>
+
+<div class="callout callout-warn">
+  <div class="callout-title">⚠️ The gap nobody talks about</div>
+  <p>Microsoft does not clearly document this distinction in its product marketing. Most security teams assume that purchasing Entra Agent ID or enabling CA for Agents covers their Copilot Studio estate. It does not — unless agents have been specifically created as Modern agents using the Agent ID framework. Field research confirms this is the default state of most enterprise Copilot Studio deployments.</p>
+</div>
+
+
+<h2 style="margin-top:28px;">Two protection layers — understanding both</h2>
+<table>
+<thead><tr><th>Layer</th><th>What it protects</th><th>Always active?</th><th>Error message</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>Responsible AI<br>content filtering</strong></td>
+  <td>Conversational level — harmful content, jailbreak attempts, prompt injection in user input, copyright. Evaluates what is being discussed.</td>
+  <td><span class="green-inline">✓ Always on — no config needed</span></td>
+  <td><code style="font-size:10px;">"Content filtered due to Responsible AI restrictions"</code></td>
+</tr>
+<tr>
+  <td><strong>Real-time threat protection<br>(Defender for Cloud Apps)</strong></td>
+  <td>Action execution level — tool invocations, data access patterns, privilege escalation through tool chaining, data exfiltration. Evaluates what the agent is about to do.</td>
+  <td><span class="severity-critical">⚠️ Must be configured — off by default</span></td>
+  <td><code style="font-size:10px;">"Blocked by threat protection"</code></td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-warn" style="margin-top:8px;">
+  <div class="callout-title">⚠️ 1-second timeout on real-time protection</div>
+  <p>If Defender for Cloud Apps does not return a block decision within 1 second, the tool invocation proceeds regardless. Fast tool calls on high-latency connections may bypass real-time protection. Treat it as a strong detection and prevention control — not a guaranteed prevention guarantee.</p>
+</div>
+<h2 style="margin-top:28px;">Copilot Studio — 30-minute audit</h2>
+<p>Run these in Defender Advanced Hunting to get immediate visibility. Any result from Query 1 or 2 is a critical finding.</p>
+
+<div class="code-block">// Query 1: No-auth agents (critical — run first)
+AIAgentsInfo
+| summarize arg_max(Timestamp, *) by AIAgentId
+| where AgentStatus == "Published"
+| where UserAuthenticationType == "None"
+| project AIAgentName, CreatorAccountUpn, OwnerAccountUpns, AgentCreationTime</div>
+
+<div class="code-block">// Query 2: Change-detection — auth downgraded to None (use as Sentinel Analytics Rule)
+AIAgentsInfo
+| summarize arg_max(Timestamp, *) by AIAgentId
+| where AgentStatus == "Published"
+| order by AIAgentName
+| extend PreviousAuthType = prev(UserAuthenticationType, 1)
+| where UserAuthenticationType == "None" and PreviousAuthType != "None"
+| project AIAgentName, PreviousAuthType, UserAuthenticationType, ReportId = tostring(AIAgentId), Timestamp</div>
+
+<div class="code-block">// Query 3: Maker credentials (field-validated — checks both Tools and Topics)
+let base = AIAgentsInfo
+| summarize arg_max(Timestamp, *) by AIAgentId
+| where AgentStatus == "Published";
+let directActions = base
+| mv-expand detail = AgentToolsDetails
+| where detail.action.connectionProperties.mode == "Maker"
+| extend ActionType = "FromTools"
+| project-reorder AgentCreationTime, AIAgentId, AIAgentName, UserAuthenticationType, CreatorAccountUpn;
+let topicActions = base
+| mv-expand topic = AgentTopicsDetails
+| extend topicActionsArray = topic.beginDialog.actions
+| mv-expand Action = topicActionsArray
+| where Action.connectionProperties.mode == "Maker"
+| extend ActionType = "FromTopic"
+| project-reorder AgentCreationTime, AIAgentId, AIAgentName, AgentStatus, CreatorAccountUpn, OwnerAccountUpns, Action;
+directActions | union topicActions | sort by AIAgentId, Timestamp desc</div>
+
+<h2 style="margin-top:28px;">Copilot Studio — Critical Gaps</h2>
+<table>
+<thead><tr><th>Gap</th><th>Risk</th><th>Interim Mitigation</th></tr></thead>
+<tbody>
+<tr><td><strong>Classic agents outside Entra perimeter</strong></td><td><span class="severity-critical">⚠️ Critical</span></td><td>Inventory via AIAgentsInfo; enforce end-user auth in Power Platform admin; manually recreate critical agents as Modern</td></tr>
+<tr><td><strong>Any user can change another agent's auth type to None</strong></td><td><span class="severity-critical">⚠️ Critical</span></td><td>Deploy change-detection Sentinel Analytics Rule; restrict Copilot Studio access via Managed Environments</td></tr>
+<tr><td><strong>Maker credentials blast radius</strong></td><td><span class="severity-high">⚠️ High</span></td><td>Enforce end-user auth per agent; PAM hygiene on developers who build agents; audit via Query 3 above</td></tr>
+<tr><td><strong>Portal inventory count inconsistency</strong></td><td><span class="severity-high">⚠️ High</span></td><td>Trust AIAgentsInfo table as primary source; treat portal counts as approximate</td></tr>
+<tr><td><strong>Agent sprawl — no lifecycle enforcement</strong></td><td><span class="severity-high">⚠️ High</span></td><td>Assign owners to all agents; use access packages for time-bound permissions; quarterly AIAgentsInfo audit</td></tr>
+</tbody>
+</table>
+
+<div class="section-label" style="margin-top:48px;">Microsoft Foundry — Security Condensed</div>
+<h2>The Foundry resource model — why it matters for security</h2>
+<p>Microsoft Foundry uses a layered resource model that most teams bolt security onto after deployment — when the decisions that matter most are already harder to change.</p>
+
+<div class="platform-grid" style="margin-top:16px;">
+  <div class="platform-card platform-foundry">
+    <div class="platform-name" style="margin-bottom:10px;">Foundry Resource</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5a6a8a;margin-bottom:10px;">Microsoft.CognitiveServices/accounts</div>
+    <div class="platform-list">
+      <div class="platform-item">Networking · Private endpoints</div>
+      <div class="platform-item">RBAC · Managed identity</div>
+      <div class="platform-item">Encryption keys · Model deployments</div>
+      <div class="platform-item">Service connections</div>
+      <div class="platform-item" style="background:rgba(216,59,1,0.06);"><strong>Security-sensitive:</strong> Management-plane operations (key rotation, RBAC changes, project creation) all originate here</div>
+    </div>
+  </div>
+  <div class="platform-card platform-foundry">
+    <div class="platform-name" style="margin-bottom:10px;">Foundry Projects (one-to-many)</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5a6a8a;margin-bottom:10px;">Microsoft.CognitiveServices/accounts/projects</div>
+    <div class="platform-list">
+      <div class="platform-item">Inherit resource networking + encryption</div>
+      <div class="platform-item">Agent builds · Evaluations · Prompt flows</div>
+      <div class="platform-item">Application Insights connection</div>
+      <div class="platform-item" style="background:rgba(216,59,1,0.06);"><strong>Critical:</strong> Diagnostic Settings do NOT cascade from resource to projects — each project needs its own separate configuration</div>
+    </div>
+  </div>
+</div>
+
+<h2 style="margin-top:28px;">Microsoft Foundry — the four logging layers</h2>
+<p>Foundry generates telemetry across four distinct layers. The Activity Log is the only one that requires no configuration. <strong>Everything else is opt-in and off by default.</strong></p>
+
+<table class="log-table">
+<thead><tr><th>Layer</th><th>What it captures</th><th>Default state</th><th>SecOps priority</th></tr></thead>
+<tbody>
+<tr><td>Layer 1 · Activity Log</td><td>Resource CRUD, RBAC changes, key rotation, network config, model deployments</td><td>✅ Automatic</td><td>⭐⭐⭐ Essential — route to Sentinel</td></tr>
+<tr><td>Layer 2a · Diagnostic Settings (Resource)</td><td>Audit (data plane access), RequestResponse (inference metadata — no prompt content), AzureOpenAIRequestUsage, Trace</td><td>❌ Off by default — explicit opt-in per resource</td><td>⭐⭐⭐ Enable Audit + RequestResponse for SecOps</td></tr>
+<tr><td>Layer 2b · Diagnostic Settings (Project)</td><td>Audit (agent operations — runs, file uploads, evaluations), Trace, AllMetrics</td><td>❌ Off by default — separate config per project</td><td>⭐⭐⭐ Enable Audit per project — does NOT inherit from resource</td></tr>
+<tr><td>Layer 3 · Application Insights</td><td>Full agent runtime traces, tool call chains, prompt + completion content (if enabled), exceptions, dependencies</td><td>❌ Off by default — SDK connection per project</td><td>⭐⭐ Enable for agent-level behavioural visibility</td></tr>
+<tr><td>Identity · Entra ID logs</td><td>Non-interactive sign-ins, service principal sign-ins, agent lifecycle events</td><td>❌ Tenant-level diagnostic setting — separate config</td><td>⭐⭐⭐ Required — without this, agent auth plane is a blind spot</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-warn" style="margin-top:16px;">
+  <div class="callout-title">⚠️ Two critical Foundry logging gotchas</div>
+  <p><strong>1. Diagnostic Settings don't cascade.</strong> Settings configured at the Foundry resource level do NOT apply to projects. Every new project needs its own separate Diagnostic Settings configuration — or you accept the gap silently.<br><br>
+  <strong>2. RequestResponse does not contain prompt content.</strong> By design. If investigation requires content-level visibility, Application Insights with content capture enabled is the only source — but enabling <code>AZURE_TRACING_GEN_AI_CONTENT_RECORDING_ENABLED</code> creates direct responsibility for storage, access controls, and retention of potentially sensitive data (PII, secrets, business data).</p>
+</div>
+
+<h2 style="margin-top:28px;">Microsoft Foundry — what to enable for SecOps</h2>
+
+<div class="quick-grid">
+  <div class="quick-card" style="border-color:rgba(16,124,16,0.3);">
+    <div class="quick-card-label" style="color:#0a5a20;">✅ ENABLE FOR SECOPS</div>
+    <div class="quick-card-title">Priority logging sources</div>
+    <div class="quick-card-items">
+      <div class="quick-card-item">Activity Log → route to Sentinel workspace</div>
+      <div class="quick-card-item">Entra ID sign-in + audit logs (tenant-level)</div>
+      <div class="quick-card-item">Diagnostic Settings Audit — at resource AND each project</div>
+      <div class="quick-card-item">Diagnostic Settings RequestResponse — at resource level</div>
+      <div class="quick-card-item">Application Insights — workspace-based, linked to same LAW as Sentinel</div>
+    </div>
+  </div>
+  <div class="quick-card" style="border-color:rgba(216,59,1,0.3);">
+    <div class="quick-card-label" style="color:#8a2000;">⚠️ FOUNDRY-SPECIFIC GAPS</div>
+    <div class="quick-card-title">What to watch</div>
+    <div class="quick-card-items">
+      <div class="quick-card-item">No logging by default — data never collected cannot be recovered</div>
+      <div class="quick-card-item">New projects don't inherit logging config — governance process required</div>
+      <div class="quick-card-item">Content capture governance must precede enabling prompt logging</div>
+      <div class="quick-card-item">App Insights must be workspace-based for Sentinel to query it</div>
+      <div class="quick-card-item">RBAC at resource scope cascades to projects — least-privilege may require project-level assignments</div>
+    </div>
+  </div>
+</div>
+
+<div class="callout callout-info" style="margin-top:16px;">
+  <div class="callout-title">📌 Sources</div>
+  <p>Copilot Studio content: field research by Derk van der Woude (Microsoft Security MVP) · Microsoft Entra security for AI overview (April 2026) · Microsoft Zero Trust Assessment Workshop AI section.<br>
+  Microsoft Foundry logging: <a href="https://www.cyphora.io/blog/microsoft-foundry/microsoft-foundry-logging-overview/" target="_blank" style="color:var(--blue);">Cyphora.io — Microsoft Foundry Logging (April 2026)</a> · Microsoft Learn documentation.</p>
+</div>
+
 <div class="footer">
   SOURCES: Microsoft Agent 365 documentation · Cloudpartner.fi Defender + Agent 365 integration (April 2026) · Microsoft RSAC 2026 announcements<br>
-  Last updated: April 27, 2026
+  <a href="changelog.html" style="color:var(--text3);">Changelog</a> · Last updated: May 1, 2026
 </div>
 </div>
 

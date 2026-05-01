@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Overview — Securing AI with Microsoft</title>
+<title>Frameworks & Standards — Securing AI with Microsoft</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -269,8 +269,11 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 @media(max-width:700px){
   .topnav{padding:0 16px;}
   .page{padding:32px 20px 80px;}
+  .threat-cols{grid-template-columns:1fr;}
+  .nist-grid{grid-template-columns:1fr;}
+  .flow{flex-direction:column;}
+  .flow-arrow{display:none;}
   h1{font-size:26px;}
-  .form-grid{grid-template-columns:1fr !important;}
 }
 
 /* HAMBURGER */
@@ -297,6 +300,34 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   .nav-links{display:none !important;}
   .hamburger{display:flex;}
 }
+
+/* ZT-specific styles */
+.zt-principle{background:#ffffff;border:1.5px solid var(--border);border-radius:12px;padding:24px;margin-bottom:12px;}
+.zt-principle-header{display:flex;align-items:center;gap:14px;margin-bottom:12px;}
+.zt-principle-icon{font-size:28px;flex-shrink:0;}
+.zt-principle-title{font-size:18px;font-weight:800;color:#0d1526;}
+.zt-principle-sub{font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--blue);letter-spacing:0.04em;margin-top:2px;}
+.zt-principle-body{font-size:14px;color:#2e3d5e;line-height:1.7;}
+.zt-maturity{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:24px 0;}
+.zt-stage{border-radius:12px;padding:20px;border:1.5px solid;}
+.zt-stage-num{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.08em;margin-bottom:6px;}
+.zt-stage-name{font-size:16px;font-weight:800;margin-bottom:8px;}
+.zt-stage-desc{font-size:12px;line-height:1.6;}
+.zt-stage-items{margin-top:10px;display:flex;flex-direction:column;gap:4px;}
+.zt-stage-item{font-size:11px;font-family:'JetBrains Mono',monospace;padding:3px 8px;border-radius:4px;background:rgba(255,255,255,0.6);}
+.zt-controls-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;}
+.zt-control{background:#ffffff;border:1.5px solid var(--border);border-radius:10px;padding:16px;}
+.zt-control-id{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--blue);letter-spacing:0.06em;margin-bottom:4px;}
+.zt-control-name{font-size:13px;font-weight:700;color:#0d1526;margin-bottom:6px;line-height:1.3;}
+.zt-control-desc{font-size:12px;color:#2e3d5e;line-height:1.5;}
+.zt-effort{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 8px;border-radius:3px;margin-top:8px;}
+.effort-low{background:rgba(16,124,16,0.1);color:#0a5a20;border:1px solid rgba(16,124,16,0.2);}
+.effort-med{background:rgba(255,170,0,0.1);color:#7a5000;border:1px solid rgba(255,170,0,0.2);}
+.effort-high{background:rgba(192,0,0,0.1);color:#8a2000;border:1px solid rgba(192,0,0,0.2);}
+@media(max-width:700px){
+  .zt-maturity{grid-template-columns:1fr;}
+  .zt-controls-grid{grid-template-columns:1fr;}
+}
 </style>
 </head>
 <body>
@@ -318,9 +349,9 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="frameworks.html" class="">Frameworks</a>
 <a href="gaps.html" class="">Gaps</a>
 <a href="playbooks.html" class="">Playbooks</a>
-<a href="foundry.html" class="">Foundry</a>
+<a href="foundry.html" class="active">Foundry</a>
 <a href="strategy.html" class="">Strategy</a>
-<a href="contact.html" class="active">Contact</a>
+<a href="contact.html" class="">Contact</a>
 </div>
   <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
 
@@ -337,298 +368,300 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <a href="frameworks.html" class="">Frameworks</a>
 <a href="gaps.html" class="">Gaps</a>
 <a href="playbooks.html" class="">Playbooks</a>
-<a href="foundry.html" class="">Foundry</a>
+<a href="foundry.html" class="active">Foundry</a>
 <a href="strategy.html" class="">Strategy</a>
-<a href="contact.html" class="active">Contact</a>
+<a href="contact.html" class="">Contact</a>
 </div>
   <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" class="substack-nav" style="flex-shrink:0;margin-left:10px;display:flex;align-items:center;gap:5px;background:var(--blue);color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:6px 13px;border-radius:6px;text-decoration:none;white-space:nowrap;letter-spacing:0.03em;">📬 Subscribe</a>
 </nav>
 <div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
-  📌 <strong>Author's note:</strong> This site synthesises the author's own understanding from publicly available Microsoft documentation, official Microsoft Security blog posts, RSAC 2026 announcements, and insights from Microsoft Security professionals and MVPs. It is independent and not affiliated with or endorsed by Microsoft.
+  📌 <strong>Author's note:</strong> This site synthesises the author's own understanding from publicly available Microsoft documentation, official Microsoft Security blog posts, RSAC 2026 announcements, and insights from Microsoft Security professionals and MVPs. It is independent and not affiliated with or endorsed by Microsoft. Microsoft updates products and documentation frequently — always verify current status directly with Microsoft before making architecture or purchasing decisions.
 </div>
-
 <div class="page">
+<div class="section-label">Developer Security</div>
+<h1>Microsoft Foundry Control Plane</h1>
+<p style="font-size:15px;color:var(--text2);max-width:680px;margin-bottom:8px;">Everything developers need to observe, secure, and govern fleets of AI agents — from code to runtime. The Foundry Control Plane is the developer-facing counterpart to Agent 365: while Agent 365 gives IT and security teams governance visibility, Foundry Control Plane gives developers the tools to build agents that are secure and compliant by design.</p>
+<p style="font-size:12px;color:var(--text3);font-family:'JetBrains Mono',monospace;">Source: Microsoft Agent 365 Training · Microsoft Foundry documentation · May 2026</p>
 
-<style>
-  /* CONTACT FORM STYLES */
-  .form-wrap{max-width:620px;margin:0 auto;}
-  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
-  .field{display:flex;flex-direction:column;gap:6px;}
-  .field.full{grid-column:1/-1;}
-  .field label{font-size:12px;font-weight:700;color:#2e3d5e;
-    font-family:'JetBrains Mono',monospace;letter-spacing:0.04em;}
-  .field label span{color:var(--warn-text);margin-left:2px;}
-  .field input,.field select,.field textarea{
-    background:#f5f7fc;border:1.5px solid var(--border2);border-radius:8px;
-    padding:10px 14px;font-family:'Plus Jakarta Sans',sans-serif;
-    font-size:14px;color:#0d1526;outline:none;
-    transition:border-color 0.15s,box-shadow 0.15s;width:100%;}
-  .field input:focus,.field select:focus,.field textarea:focus{
-    border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,120,212,0.1);}
-  .field textarea{resize:vertical;min-height:120px;line-height:1.6;}
-  .field select{cursor:pointer;appearance:none;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a6a8a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-repeat:no-repeat;background-position:right 14px center;
-    padding-right:36px;}
-  .char-count{font-family:'JetBrains Mono',monospace;font-size:9px;
-    color:var(--text3);text-align:right;margin-top:4px;}
-  .submit-btn{background:linear-gradient(135deg,var(--blue),#0063b1);
-    border:none;border-radius:10px;color:#ffffff;
-    font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;
-    padding:14px 36px;cursor:pointer;transition:all 0.15s;
-    display:inline-flex;align-items:center;gap:10px;margin-top:8px;}
-  .submit-btn:hover{transform:translateY(-2px);
-    box-shadow:0 6px 20px rgba(0,120,212,0.25);}
-  .submit-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
-  .success-state{display:none;text-align:center;padding:48px 20px;}
-  .success-icon{font-size:48px;margin-bottom:16px;}
-  .success-title{font-size:22px;font-weight:800;color:#0d1526;margin-bottom:8px;}
-  .success-sub{font-size:14px;color:#2e3d5e;}
-  .privacy-note{font-size:11px;color:var(--text3);margin-top:12px;
-    display:flex;align-items:flex-start;gap:6px;line-height:1.5;}
-  .privacy-note::before{content:"🔒";font-size:12px;flex-shrink:0;}
-  .type-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;}
-  .type-pill{font-family:'JetBrains Mono',monospace;font-size:10px;
-    padding:5px 12px;border-radius:20px;border:1.5px solid var(--border2);
-    cursor:pointer;color:var(--text3);transition:all 0.15s;background:#ffffff;
-    user-select:none;}
-  .type-pill.selected{border-color:var(--blue);background:#f0f6ff;color:var(--blue);font-weight:600;}
-  .hidden-type{display:none;}
-</style>
-
-<div class="hero">
-  <div class="hero-badge"><div class="live-dot"></div>FEEDBACK · SUGGESTIONS · CORRECTIONS</div>
-  <h1>Share your<br><span>thoughts</span></h1>
-  <p style="color:#2e3d5e;font-size:17px;font-weight:400;max-width:560px;line-height:1.7;">
-    Found something wrong? Have a suggestion? Know about a Microsoft AI security update we've missed? This goes directly to the author — nothing is published publicly.
-  </p>
+<div class="callout callout-info" style="margin-top:20px;">
+  <div class="callout-title">📌 Two control planes — different audiences, same goal</div>
+  <p><strong>Agent 365</strong> (admin.cloud.microsoft) → IT administrators and security teams. Observe, govern, and secure all agents at the tenant level. GA May 1, 2026.<br>
+  <strong>Foundry Control Plane</strong> (ai.azure.com/foundry) → Developers and platform engineers. Build, evaluate, monitor, and govern agent fleets from code through production. Announced alongside Agent 365.</p>
+  <p style="margin-top:6px;">Agents built in Foundry are automatically deployed to Agent 365 for IT/security governance. The two planes share the same Entra identity layer — an agent identity created in Foundry appears in Agent 365.</p>
 </div>
 
-<div style="max-width:620px;margin:0 auto 36px;">
-  <div style="background:#ffffff;border:1.5px solid var(--border);border-radius:14px;padding:28px 28px 24px;">
-    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:var(--blue);margin-bottom:12px;">ABOUT THIS SITE</div>
-    <p style="font-size:14px;color:#2e3d5e;line-height:1.8;margin-bottom:12px;">
-      This site doesn't follow the standard security blog format. It's a <strong style="color:#0d1526;">curated synthesis</strong> — built by reading across Microsoft's official documentation, RSAC announcements, and the field research of practitioners who are closer to the product than most.
-    </p>
-    <p style="font-size:14px;color:#2e3d5e;line-height:1.8;margin-bottom:12px;">
-      Where findings come from specific people — Derk van der Woude's work on Copilot Studio auth patterns, Thalpius's research on orphaned agent identities, Cyphora's Foundry logging analysis — they are named and linked. The goal is to give credit where it belongs and make it easy to go deeper at the source.
-    </p>
-    <p style="font-size:14px;color:#2e3d5e;line-height:1.8;margin-bottom:0;">
-      The site is independent and not affiliated with Microsoft. It reflects the author's understanding at a point in time — Microsoft updates products frequently and corrections are always welcome. If something here is wrong, outdated, or missing, the form below is the fastest way to get it fixed.
-    </p>
-    <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-      <div style="font-size:12px;color:#5a6a8a;line-height:1.4;">
-        <strong style="color:#0d1526;">Shashank Raina</strong><br>
-        Security Architect · aiagentsecurity.guide
-      </div>
-      <div style="display:flex;gap:8px;margin-left:auto;flex-wrap:wrap;">
-        <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" style="display:inline-flex;align-items:center;gap:5px;background:var(--blue);color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:7px 14px;border-radius:6px;text-decoration:none;">📬 Subscribe for updates</a>
-      </div>
+<div class="section-label" style="margin-top:40px;">Four Capabilities</div>
+<h2>What Foundry Control Plane provides</h2>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0 28px;">
+  <div style="background:#ffffff;border:1px solid var(--border);border-top:3px solid var(--blue);border-radius:10px;padding:18px;">
+    <div style="font-size:22px;margin-bottom:8px;">📊</div>
+    <div style="font-size:14px;font-weight:700;margin-bottom:6px;">End-to-End Observability</div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.6;">OpenTelemetry instrumentation for every agent. Traces, metrics, and logs from development through production. Distributed tracing across multi-agent workflows. Integration with Azure Monitor and Application Insights. Agent action tracing for accountability — who did what, when, and why.</div>
+  </div>
+  <div style="background:#ffffff;border:1px solid var(--border);border-top:3px solid var(--teal);border-radius:10px;padding:18px;">
+    <div style="font-size:22px;margin-bottom:8px;">🔧</div>
+    <div style="font-size:14px;font-weight:700;margin-bottom:6px;">Guardrails and Controls</div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.6;">System prompt enforcement, prompt shielding, content safety filters, task adherence controls, and custom blocklists. The same configurable controls used by Microsoft Copilot — now available to developers building custom agents. Applied consistently at both inputs and outputs.</div>
+  </div>
+  <div style="background:#ffffff;border:1px solid var(--border);border-top:3px solid var(--green);border-radius:10px;padding:18px;">
+    <div style="font-size:22px;margin-bottom:8px;">🛡️</div>
+    <div style="font-size:14px;font-weight:700;margin-bottom:6px;">Integrated Security</div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.6;">Entra identity per agent (auto-provisioned), Purview data governance, Defender runtime threat protection. Network isolation via managed VNet and private endpoints. Credential-less storage access. AI Red Teaming Agent for pre-deployment vulnerability probing.</div>
+  </div>
+  <div style="background:#ffffff;border:1px solid var(--border);border-top:3px solid var(--purple);border-radius:10px;padding:18px;">
+    <div style="font-size:22px;margin-bottom:8px;">🚀</div>
+    <div style="font-size:14px;font-weight:700;margin-bottom:6px;">Fleet-Wide Operations</div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.6;">Manage agents across clouds, frameworks, and teams from one control plane. Projects model for simplified setup. A/B experimentation. CI/CD automation. Weights & Biases integration for fine-tuned model evaluation. Organisational quota and compute management.</div>
+  </div>
+</div>
+
+<div class="section-label" style="margin-top:40px;">Agent Lifecycle</div>
+<h2>From define to operate — the full lifecycle</h2>
+<table>
+<thead><tr><th>Stage</th><th>Developer (Foundry Control Plane)</th><th>IT/Security (Agent 365)</th></tr></thead>
+<tbody>
+<tr><td><strong>Define</strong></td><td>Inherit enterprise policies, set guardrails, configure evaluators</td><td>Define enterprise policies, set allowed templates</td></tr>
+<tr><td><strong>Build</strong></td><td>Develop with SDK, run evals, integrate Content Safety, AI Red Teaming</td><td>—</td></tr>
+<tr><td><strong>Approve</strong></td><td>Deploy agent to Agent 365 (triggers IT approval workflow)</td><td>Onboard agent, apply guardrails, enforce policies</td></tr>
+<tr><td><strong>Operate</strong></td><td>Monitor performance, quality, cost, risk via Foundry dashboards</td><td>Monitor all deployed agents: usage, performance, risk</td></tr>
+<tr><td><strong>Govern</strong></td><td>Continuous evaluation, tracing, debugging, A/B experimentation</td><td>Manage policies (access, data security, compliance), defend against threats</td></tr>
+</tbody>
+</table>
+
+<div class="section-label" style="margin-top:40px;">Evaluation Framework</div>
+<h2>Three evaluation categories — automated and manual</h2>
+<p>Foundry Control Plane provides structured evaluation of agents before and after deployment. Evaluations run locally during development, in CI/CD on every commit, and in production against real user inputs.</p>
+
+<table>
+<thead><tr><th>Category</th><th>Evaluators</th><th>What they measure</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>Quality</strong></td>
+  <td>Groundedness · Coherence · Fluency · Relevance · Retrieval Score · Similarity · NLP Metrics (F1)</td>
+  <td>Is the agent response accurate, relevant, and well-formed? Does it faithfully use grounded sources?</td>
+</tr>
+<tr>
+  <td><strong>Risk &amp; Safety</strong></td>
+  <td>Jailbreak Defect · Hate and Unfairness · Sexual · Violence · Self-Harm · Protected Material · Ungrounded Attributes · Code Vulnerability</td>
+  <td>Does the agent produce harmful, unsafe, or legally problematic outputs? Can it be manipulated?</td>
+</tr>
+<tr>
+  <td><strong>Agent-Specific</strong></td>
+  <td>Intent Resolution · Tool Call Accuracy · Task Adherence · Response Completeness</td>
+  <td>Does the agent correctly understand user intent, use tools accurately, and complete tasks as instructed?</td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:12px;">
+  <div class="callout-title">📌 Evaluation workflow</div>
+  <p><strong>Test data:</strong> Generate adversarial and non-adversarial test datasets using the Foundry evaluation client library, or upload your own domain-specific prompts.<br>
+  <strong>Evaluator:</strong> Metric instructions + Azure OpenAI model → scores each response with reasoning for human review.<br>
+  <strong>CI/CD integration:</strong> Batch evaluation runs on every check-in and deployment. Production evaluations run against real user inputs using traces to debug issues.<br>
+  <strong>A/B experimentation:</strong> Compare models, prompts, and workflows at scale before committing to a change.</p>
+</div>
+
+<div class="section-label" style="margin-top:40px;">AI Red Teaming Agent</div>
+<h2>Automated vulnerability probing — built into Foundry</h2>
+<p>The Foundry Control Plane includes a built-in AI Red Teaming Agent powered by PyRIT integration. Distinct from running PyRIT manually — the Foundry Red Teaming Agent is a managed, scheduled service that automatically probes your agents for content risks and security vulnerabilities as part of the development lifecycle.</p>
+
+<table>
+<thead><tr><th>Capability</th><th>Detail</th></tr></thead>
+<tbody>
+<tr><td><strong>Automated content risk scans</strong></td><td>Scheduled adversarial probing across harmful content categories, jailbreak attempts, and sensitive information extraction</td></tr>
+<tr><td><strong>Evaluate probing success</strong></td><td>LLM-as-judge scoring on whether attacks succeeded — not just whether the attack ran</td></tr>
+<tr><td><strong>Reporting and logging</strong></td><td>Structured findings linked to OWASP LLM Top 10 categories; exportable for compliance evidence</td></tr>
+<tr><td><strong>PyRIT integration</strong></td><td>Built on the same Microsoft PyRIT framework — 53+ adversarial datasets, 70+ converters, 6 attack strategies</td></tr>
+<tr><td><strong>When to use</strong></td><td>Pre-deployment (gate on result), post-deployment (continuous monitoring), after system prompt changes</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-warn" style="margin-top:12px;">
+  <div class="callout-title">⚠ Foundry Red Teaming Agent vs PyRIT directly</div>
+  <p>The Foundry Red Teaming Agent is a managed service — scheduled, governed, and integrated with Foundry observability. PyRIT standalone (Playbook 06) is a flexible research library you wrap yourself for custom CI/CD pipelines. For organisations using Foundry, the managed agent is the right starting point. For custom agents on other platforms, PyRIT standalone is the tool.</p>
+</div>
+
+<div class="section-label" style="margin-top:40px;">Content Safety</div>
+<h2>Configurable guardrails — same stack as Microsoft Copilot</h2>
+<p>Azure AI Content Safety is integrated directly into the Foundry Control Plane, providing the same configurable content filters used by Microsoft's own Copilot products. Applied at both input (prompt) and output (response) layers.</p>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0;">
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:16px;">
+    <div style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">Content categories blocked</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.8;">
+      <strong>Violence:</strong> Weapons, bullying, terrorism, stalking<br>
+      <strong>Sexual:</strong> Vulgar content, prostitution, nudity<br>
+      <strong>Hate &amp; Unfairness:</strong> Race, gender, religion, disability, harassment<br>
+      <strong>Self-harm:</strong> Eating disorders, bullying facilitation<br>
+      <strong>Child safety:</strong> Exploitation, abuse, grooming<br>
+      <strong>Protected materials:</strong> Copyrighted content<br>
+      <strong>Ungrounded attributes:</strong> Fabricated/inaccurate claims<br>
+      <strong>Prompt injection:</strong> Direct, indirect, spotlighting, agent-specific
+    </div>
+  </div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:16px;">
+    <div style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">Control mechanisms</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.8;">
+      <strong>System message:</strong> Ground and constrain agent behaviour<br>
+      <strong>Prompt Shields:</strong> Direct and indirect injection detection<br>
+      <strong>Custom categories:</strong> Block entire topics, not just specific words<br>
+      <strong>Custom blocklists:</strong> Domain-specific terms and phrases<br>
+      <strong>Groundedness detection:</strong> Flag responses not in source materials<br>
+      <strong>Task adherence:</strong> Detect when agent goes off-task<br>
+      <strong>Multimodal filtering:</strong> Scan text, images, and multimedia<br>
+      <strong>Protected material detection:</strong> Avoid known/owned text content
     </div>
   </div>
 </div>
 
-<div class="form-wrap">
+<div class="callout callout-info" style="margin-top:4px;">
+  <div class="callout-title">📌 Content Safety runtime flow</div>
+  <p>User prompt → Content Safety evaluates → Modified/filtered prompt → Foundry model → Filtered response → App response. Purview data governance and Defender threat detection run alongside this pipeline — not instead of it.</p>
+</div>
 
-  <!-- Type selector -->
-  <div class="field" style="margin-bottom:24px;">
-    <label>CATEGORY</label>
-    <div class="type-pills">
-      <div class="type-pill selected" onclick="selectType(this,'Factual correction')">⚠️ Factual correction</div>
-      <div class="type-pill" onclick="selectType(this,'Missing content')">🆕 Missing content</div>
-      <div class="type-pill" onclick="selectType(this,'Broken link')">🔗 Broken link</div>
-      <div class="type-pill" onclick="selectType(this,'General suggestion')">💡 General suggestion</div>
-      <div class="type-pill" onclick="selectType(this,'Other')">📝 Other</div>
+<div class="section-label" style="margin-top:40px;">Observability &amp; Tracing</div>
+<h2>End-to-end visibility into agent behaviour</h2>
+<p>Foundry Control Plane provides comprehensive tracing of every agent action — enabling debugging, performance optimisation, and accountability. All traces are stored and queryable, forming an audit trail of what the agent did and why.</p>
+
+<table>
+<thead><tr><th>Layer</th><th>What is traced</th><th>Why it matters for security</th></tr></thead>
+<tbody>
+<tr><td><strong>Model inference</strong></td><td>Every LLM call: model, tokens, latency, prompt, response</td><td>Detects unusual inference patterns, cost anomalies, model substitution</td></tr>
+<tr><td><strong>Tool invocations</strong></td><td>Every tool/MCP call: name, parameters, result, duration</td><td>ATG blocks happen here; traces show what was attempted vs blocked</td></tr>
+<tr><td><strong>Memory operations</strong></td><td>Reads/writes to agent memory (Dataverse)</td><td>Memory is a persistent data store — sensitive context accumulates over sessions</td></tr>
+<tr><td><strong>Agent-to-agent</strong></td><td>Orchestrator calls to sub-agents in multi-agent workflows</td><td>Lateral movement risk; trust propagation between agents</td></tr>
+<tr><td><strong>User interactions</strong></td><td>Session start/end, message counts, satisfaction signals</td><td>Behavioural baseline for ID Protection anomaly detection</td></tr>
+</tbody>
+</table>
+
+<div class="section-label" style="margin-top:40px;">Security Architecture</div>
+<h2>Network isolation and data protection</h2>
+
+<table>
+<thead><tr><th>Control</th><th>Detail</th></tr></thead>
+<tbody>
+<tr><td><strong>Managed VNet</strong></td><td>AI hub and projects run within a managed virtual network. Private endpoints for all connected resources (Azure Storage, Key Vault, Container Registry, Foundry models). No public internet exposure for managed resources.</td></tr>
+<tr><td><strong>ExpressRoute / VPN</strong></td><td>On-premises connectivity to Foundry via ExpressRoute or VPN Gateway to your Azure VNet.</td></tr>
+<tr><td><strong>Credential-less storage</strong></td><td>Foundry supports credential-less access to Azure Storage and Foundry IQ using managed identity — no stored secrets, no rotation required. Generally available.</td></tr>
+<tr><td><strong>Customer-managed encryption</strong></td><td>Add your own encryption layer on top of Microsoft-managed encryption. Customer-managed key (CMK) for Blob Storage, Foundry IQ, and Azure CosmosDB resources.</td></tr>
+<tr><td><strong>Entra Agent ID</strong></td><td>Every Foundry agent is automatically provisioned with an Entra Agent Identity. CA for Agents, ID Protection, and lifecycle governance apply at the identity layer.</td></tr>
+</tbody>
+</table>
+
+<div class="section-label" style="margin-top:40px;">Foundry Projects Model</div>
+<h2>Simplified setup replacing the Hub/Project architecture</h2>
+<p>The new Foundry projects model significantly simplifies the previous Hub → Project → Resource hierarchy that made setup and coding complex.</p>
+
+<table>
+<thead><tr><th></th><th>Old: Hub + Projects</th><th>New: Foundry Projects</th></tr></thead>
+<tbody>
+<tr><td><strong>Entry point</strong></td><td>AI Hub → Projects → Multiple SDKs</td><td>Single Foundry Resource → Foundry SDK or API</td></tr>
+<tr><td><strong>Resources</strong></td><td>Many different resources needed upfront</td><td>Multi-tenant services by default; attach dedicated resources optionally</td></tr>
+<tr><td><strong>SDK</strong></td><td>Azure ML SDK, Azure OpenAI SDK, various others</td><td>Single Foundry SDK (or Azure OpenAI SDK for compatibility)</td></tr>
+<tr><td><strong>Optional attachments</strong></td><td>All required</td><td>Azure OpenAI, AI Search, Storage, Fabric, Azure Monitor — attach as needed</td></tr>
+<tr><td><strong>Scale</strong></td><td>Complex enterprise configuration required from start</td><td>Start simple, add enterprise controls as needed</td></tr>
+</tbody>
+</table>
+
+<div class="section-label" style="margin-top:40px;">Purview Data Security Investigations</div>
+<h2>AI-powered investigation workflow for data incidents</h2>
+<p>Microsoft Purview Data Security Investigations (Preview) is a three-stage workflow for investigating data security incidents involving AI — enabling security teams to find impacted data, analyse risks, and coordinate remediation without moving data between tools.</p>
+
+<table>
+<thead><tr><th>Stage</th><th>What you do</th><th>Key capability</th></tr></thead>
+<tbody>
+<tr><td><strong>1 — Identify</strong></td><td>Find incident-relevant data across the M365 estate</td><td>Search documents, emails, Copilot prompts/responses, and Teams messages. Launch directly from a Purview IRM case or a Defender XDR incident — pre-scoped to relevant data.</td></tr>
+<tr><td><strong>2 — Investigate</strong></td><td>Analyse impacted data for security risks</td><td>AI-powered content categorisation, severity assessment, vector search (find all content related to a subject based on context and meaning, not just keywords), key risk identification.</td></tr>
+<tr><td><strong>3 — Mitigate</strong></td><td>Coordinate remediation across teams</td><td>View data/user/activity correlations, create a mitigation plan, add reviewers from partner teams securely, use incident learnings to improve security practices.</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:12px;">
+  <div class="callout-title">📌 What makes this different from Advanced Hunting</div>
+  <p>Advanced Hunting (AIAgentsInfo, CloudAppEvents) gives you metadata and telemetry. Purview Data Security Investigations gives you the actual content — prompt text, response text, document content, emails — with AI-powered analysis to understand what sensitive data was exposed and to whom. The two tools are complementary: use Advanced Hunting to detect the incident, Purview DSI to investigate what was actually in the data.</p>
+</div>
+
+<div class="section-label" style="margin-top:40px;">AI Baseline — Compliance Manager</div>
+<h2>Automated compliance posture assessment for AI deployments</h2>
+<p>The AI Baseline assessment in Microsoft Compliance Manager provides an out-of-the-box trust assessment that automatically evaluates your AI deployment against global AI regulations (EU AI Act, NIST AI RMF) and surfaces gaps with recommended remediation actions.</p>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0;">
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:16px;">
+    <div style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">AI Baseline provides</div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.8;">
+      ✓ Automatic compliance posture evaluation<br>
+      ✓ Regulatory gap identification (EU AI Act, NIST AI RMF)<br>
+      ✓ Remediation actions (configure Purview, Entra, Defender)<br>
+      ✓ Real-time AI Compliance Score<br>
+      ✓ Audit-ready reporting
     </div>
   </div>
-
-  <form id="contactForm"
-    action="https://formspree.io/f/mojpezea"
-    method="POST"
-    onsubmit="handleSubmit(event)">
-
-    <input type="hidden" name="feedback_type" id="feedbackType" value="Factual correction">
-
-    <div class="form-grid">
-      <div class="field">
-        <label>NAME <span>*</span></label>
-        <input type="text" name="name" placeholder="Your name" required>
-      </div>
-      <div class="field">
-        <label>EMAIL</label>
-        <input type="email" name="email" placeholder="If you'd like a reply">
-      </div>
-      <div class="field full">
-        <label>PAGE THIS RELATES TO</label>
-        <select name="page">
-          <option value="">— Select a page (optional) —</option>
-          <option>Home</option>
-          <option>Overview</option>
-          <option>AI Risk</option>
-          <option>Products</option>
-          <option>Identity</option>
-          <option>MCP</option>
-          <option>Threats</option>
-          <option>Frameworks</option>
-          <option>Zero Trust for AI</option>
-          <option>Gaps</option>
-          <option>Agent 365</option>
-          <option>Playbooks</option>
-          <option>Changelog</option>
-          <option>Contact</option>
-          <option>General / whole site</option>
-        </select>
-      </div>
-      <div class="field full">
-        <label>YOUR FEEDBACK <span>*</span></label>
-        <textarea name="message" id="messageArea"
-          placeholder="Tell us what's wrong, what's missing, or what could be better. For corrections, please include a link to your source if you have one."
-          maxlength="2000" required
-          oninput="updateCharCount(this)"></textarea>
-        <div class="char-count" id="charCount">0 / 2000</div>
-      </div>
-      <div class="field full">
-        <label>SOURCE URL (if applicable)</label>
-        <input type="url" name="source_url"
-          placeholder="https://learn.microsoft.com/...">
-      </div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:16px;">
+    <div style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">Access paths</div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.8;">
+      <strong>M365 admin center:</strong><br>
+      Admin center → Compliance → AI Baseline<br><br>
+      <strong>Purview DSPM:</strong><br>
+      Purview portal → DSPM for AI → AI Baseline tab<br><br>
+      Requires: Compliance Administrator or Global Administrator role
     </div>
-
-    <button type="submit" class="submit-btn" id="submitBtn">
-      <span>Send Feedback</span> →
-    </button>
-
-    <div class="privacy-note">
-      Your feedback is sent to the author via Formspree and never published publicly. Email is optional and only used to reply to your message. <a href="contact.html#privacy" style="color:var(--blue);">Privacy policy →</a>
-    </div>
-
-  </form>
-
-  <!-- Success state -->
-  <div class="success-state" id="successState">
-    <div class="success-icon">✅</div>
-    <div class="success-title">Feedback received — thank you!</div>
-    <div class="success-sub">The author reviews all submissions. If you left an email and a response is warranted, you'll hear back within a few days.</div>
-  </div>
-
-</div>
-
-<div class="divider" style="margin-top:48px;"></div>
-
-<div class="section-label">ABOUT THIS SITE</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:48px;">
-  <div class="card">
-    <div class="card-name">Who writes this?</div>
-    <div class="card-desc">This site is written and maintained by a security architect synthesising publicly available Microsoft documentation, official blog posts, RSAC announcements, and insights from Microsoft Security professionals and MVPs. It is independent — not affiliated with or endorsed by Microsoft.</div>
-  </div>
-  <div class="card">
-    <div class="card-name">How often is it updated?</div>
-    <div class="card-desc">Significant content changes are tracked in the <a href="changelog.html" style="color:var(--blue);">Changelog</a>. The site is updated when meaningful new announcements, corrections, or field research becomes available — typically within days of major Microsoft security events.</div>
   </div>
 </div>
 
-
-<div class="divider" style="margin-top:56px;"></div>
-
-<div class="section-label" style="margin-top:40px;" id="privacy">Privacy Policy</div>
-<h2>Privacy &amp; Data — Plain English</h2>
-<p>This site does not use cookies, does not track you across other sites, and does not sell your data. The only personal information collected is what you voluntarily submit via the contact form above.</p>
-
-<div style="max-width:680px;">
-
-  <h3>What we collect and why</h3>
-
-  <h4>Contact form submissions</h4>
-  <p>Name and email (if provided) are sent to and stored by <a href="https://formspree.io/legal/privacy-policy" target="_blank" style="color:var(--blue);">Formspree</a>. Used only to respond to your message. Email is optional. Submissions retained as long as needed to respond, then deleted. To request deletion, use the form above.</p>
-
-  <h4>Web analytics</h4>
-  <p>This site uses <strong>Cloudflare Web Analytics</strong> — cookieless, no fingerprinting, no individual tracking, no data shared with advertisers. Aggregate anonymised metrics only (page views, referrer, approximate region).</p>
-
-  <h4>AI chat widget</h4>
-  <p>Password-protected, internal only. Messages processed in real time by the <a href="https://www.anthropic.com/privacy" target="_blank" style="color:var(--blue);">Anthropic API</a> and not stored by this site. Sessions are ephemeral — closing the tab clears everything.</p>
-
-  <h4>Cookies</h4>
-  <p>This site sets no cookies. Cloudflare may set technical delivery cookies — not used for tracking. See <a href="https://www.cloudflare.com/cookie-policy/" target="_blank" style="color:var(--blue);">Cloudflare's cookie policy</a>.</p>
-
-  <h4>Newsletter</h4>
-  <p>Substack handles all newsletter data independently under their own <a href="https://substack.com/privacy" target="_blank" style="color:var(--blue);">privacy policy</a>. This site has no access to subscriber data.</p>
-
-  <h3 style="margin-top:24px;">Your rights (GDPR)</h3>
-  <p>EEA residents may request access, correction, or deletion of any personal data held (contact form submissions only). Use the form above.</p>
-
-  <h3 style="margin-top:24px;">Third-party services</h3>
-  <table>
-  <thead><tr><th>Service</th><th>Purpose</th><th>Privacy policy</th></tr></thead>
-  <tbody>
-  <tr><td><strong>Cloudflare Pages</strong></td><td>Hosting and delivery</td><td><a href="https://www.cloudflare.com/privacypolicy/" target="_blank" style="color:var(--blue);">cloudflare.com/privacypolicy</a></td></tr>
-  <tr><td><strong>Formspree</strong></td><td>Contact form processing</td><td><a href="https://formspree.io/legal/privacy-policy" target="_blank" style="color:var(--blue);">formspree.io/legal</a></td></tr>
-  <tr><td><strong>Anthropic API</strong></td><td>AI chat responses</td><td><a href="https://www.anthropic.com/privacy" target="_blank" style="color:var(--blue);">anthropic.com/privacy</a></td></tr>
-  <tr><td><strong>Substack</strong></td><td>Newsletter subscriptions</td><td><a href="https://substack.com/privacy" target="_blank" style="color:var(--blue);">substack.com/privacy</a></td></tr>
-  </tbody>
-  </table>
-
-  <p style="margin-top:16px;font-size:13px;color:#5a6a8a;">This site is operated by Shashank Raina, independent security architect. Not affiliated with or endorsed by Microsoft. <a href="changelog.html" style="color:var(--text3);">Changelog</a> · Last updated: May 1, 2026.</p>
-
+<div style="background:rgba(0,120,212,0.06);border:1px solid rgba(0,120,212,0.2);border-radius:8px;padding:16px;font-size:13px;line-height:1.7;margin-top:4px;">
+  <strong>Pre-built AI regulatory templates:</strong> Upload PDF regulatory documents → automatically converted to actionable controls → mapped to Microsoft 365, Azure, and Foundry settings. AI-powered regulatory intelligence keeps you current as regulations evolve. Templates available: EU AI Act, NIST AI RMF 1.0, ISO/IEC 42001:2023, ISO/IEC 23894:2023.
 </div>
 
-<div class="page-nav"><a href="changelog.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Changelog</span></a></div>
-<div style="text-align:center;margin:32px 0 0;padding:24px 0;border-top:1px solid var(--border2);">
-  <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text3);margin-bottom:10px;">STAY UPDATED</div>
-  <div style="font-size:15px;font-weight:700;color:#0d1526;margin-bottom:6px;">Get notified when Microsoft AI security changes</div>
-  <div style="font-size:13px;color:#2e3d5e;margin-bottom:14px;">Monthly updates on new controls, GA announcements, and critical gaps — direct to your inbox.</div>
-  <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#ffffff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;padding:12px 24px;border-radius:8px;text-decoration:none;transition:opacity 0.15s;" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">
-    Subscribe to updates →
-  </a>
-  <div style="font-size:11px;color:var(--text3);margin-top:10px;font-family:'JetBrains Mono',monospace;">aiagentsecurity.substack.com · Free · No spam</div>
+<div class="section-label" style="margin-top:40px;">Agent 365 MCP Tool Catalog</div>
+<h2>Certified MCP servers for Agent 365 agents</h2>
+<p>Agent 365 provides a managed MCP tooling gateway that integrates certified tools for a consistent developer and governance experience. These tools are available to agents built with any SDK — Foundry, Copilot Studio, LangChain, or custom.</p>
+
+<table>
+<thead><tr><th>Category</th><th>MCP Tool</th><th>Key capabilities</th><th>Typical use</th></tr></thead>
+<tbody>
+<tr><td><strong>Search &amp; AI</strong></td><td>Copilot Search</td><td>Chat, multi-turn conversations, grounding with files</td><td>Knowledge retrieval</td></tr>
+<tr><td><strong>Business Data</strong></td><td>Dataverse</td><td>Dynamics 365 CRUD operations, domain actions</td><td>Business workflows</td></tr>
+<tr><td><strong>Communication</strong></td><td>Outlook Mail &amp; Calendar · Microsoft Teams</td><td>Messaging, meetings, channel operations</td><td>Collaboration</td></tr>
+<tr><td><strong>Content &amp; Files</strong></td><td>SharePoint · OneDrive</td><td>Upload, search, metadata management, lists</td><td>Content management</td></tr>
+<tr><td><strong>Identity</strong></td><td>User Profile</td><td>Manager reports, profile lookup, org chart</td><td>Organisational context</td></tr>
+<tr><td><strong>Documents</strong></td><td>Microsoft Word</td><td>Create/read documents, comments</td><td>Document workflows</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:12px;">
+  <div class="callout-title">📌 MCP tool governance</div>
+  <p><strong>Central admin control:</strong> Admins manage MCP servers via Microsoft 365 admin center — blocking a server blocks it for all users and agents.<br>
+  <strong>Scoped permissions:</strong> Each MCP server = one app permission requiring admin consent during onboarding.<br>
+  <strong>Observability:</strong> Full tool call tracing — tool invoked, parameters, execution outcome.<br>
+  <strong>Security:</strong> Rate limits, payload checks, security scans on all MCP traffic.<br>
+  <strong>Admin tasks:</strong> View activated MCP servers, allow/block servers, apply scoped permissions.</p>
 </div>
+
+<div class="section-label" style="margin-top:40px;">Shadow AI Discovery — Setup</div>
+<h2>Four-step setup for Global Secure Access Shadow AI detection</h2>
+<p>Source: Agent 365 Training Day 3 — Module 5</p>
+
+<table>
+<thead><tr><th>Step</th><th>Action</th><th>Detail</th></tr></thead>
+<tbody>
+<tr><td><strong>1</strong></td><td>Enable Internet Access traffic forwarding</td><td>Global Secure Access → Traffic forwarding → Enable Internet Access profile. Routes internet traffic through GSA client for inspection.</td></tr>
+<tr><td><strong>2</strong></td><td>Assign users and groups</td><td>Assign the Internet Access profile to target users/groups. Can scope to specific users for phased rollout or POC before tenant-wide deployment.</td></tr>
+<tr><td><strong>3</strong></td><td>Install the GSA client</td><td>Deploy Global Secure Access client to user devices. Verify in Connections view: Status should show connected, Channels configured.</td></tr>
+<tr><td><strong>4</strong></td><td>Access Shadow AI discovery</td><td>Global Secure Access portal → App discovery → Use Generative AI apps filter. See detected AI applications with usage statistics and risk scores.</td></tr>
+</tbody>
+</table>
+
+<div class="page-nav">
+  <a href="playbooks.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Playbooks</span></a>
+  <a href="strategy.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Strategy</span></a>
+</div>
+
 <div class="footer">
-  SOURCES: Microsoft Security Blog · RSAC 2026 · Microsoft Learn · Field research from Microsoft Security professionals<br>
-  Last updated: May 1, 2026
+  SOURCES: NIST AI RMF 1.0 · ISO/IEC 42001:2023 · Microsoft Zero Trust Assessment Workshop · Microsoft Entra security for AI overview · RSAC 2026<br>
+  <a href="changelog.html" style="color:var(--text3);">Changelog</a> · Last updated: May 1, 2026
 </div>
 </div>
-
-<script>
-function selectType(el, value) {
-  document.querySelectorAll('.type-pill').forEach(p => p.classList.remove('selected'));
-  el.classList.add('selected');
-  document.getElementById('feedbackType').value = value;
-}
-
-function updateCharCount(el) {
-  document.getElementById('charCount').textContent = el.value.length + ' / 2000';
-}
-
-async function handleSubmit(e) {
-  e.preventDefault();
-  const btn = document.getElementById('submitBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<span>Sending...</span>';
-
-  const form = document.getElementById('contactForm');
-  const data = new FormData(form);
-
-  try {
-    const res = await fetch(form.action, {
-      method: 'POST',
-      body: data,
-      headers: { 'Accept': 'application/json' }
-    });
-
-    if (res.ok) {
-      form.style.display = 'none';
-      document.getElementById('successState').style.display = 'block';
-    } else {
-      btn.disabled = false;
-      btn.innerHTML = '<span>Send Feedback</span> →';
-      alert('Something went wrong. Please try again or email directly.');
-    }
-  } catch(err) {
-    btn.disabled = false;
-    btn.innerHTML = '<span>Send Feedback</span> →';
-    alert('Network error. Please try again.');
-  }
-}
-</script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function(){

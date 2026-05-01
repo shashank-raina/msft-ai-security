@@ -577,6 +577,51 @@ AGENT RUNTIME PROTECTION STATUS (Copilot Studio Agents page):
   Security Analytics: blocked message trends at 7/14/30 days
   All published agents have threat detection active by default (regardless of full Defender RT setup)
 
+// ── FOUNDRY CONTROL PLANE ─────────────────────────────────────────────────────────
+
+Developer-facing AI governance. Counterpart to Agent 365 (which is for IT/security).
+Access: ai.azure.com/foundry
+
+THREE EVALUATION CATEGORIES:
+  Quality: Groundedness, Coherence, Fluency, Relevance, Retrieval Score, Similarity, F1
+  Risk & Safety: Jailbreak Defect, Hate/Unfairness, Sexual, Violence, Self-Harm,
+    Protected Material, Ungrounded Attributes, Code Vulnerability
+  Agent-specific: Intent Resolution, Tool Call Accuracy, Task Adherence, Response Completeness
+
+CONTENT SAFETY CATEGORIES: Violence, Sexual, Hate/Unfairness, Self-harm, Child safety,
+  Protected materials, Ungrounded attributes, Prompt injection (direct/indirect/spotlighting),
+  Task adherence, Custom categories/blocklists
+
+AI RED TEAMING AGENT: Built into Foundry Control Plane, powered by PyRIT integration.
+  Managed scheduled service vs PyRIT standalone (use Foundry if on Foundry, PyRIT standalone for others)
+
+PURVIEW DATA SECURITY INVESTIGATIONS (Preview): Three-stage workflow:
+  1. Identify: search M365 data estate for incident-relevant data (docs, emails, Copilot prompts)
+  2. Investigate: AI-powered content analysis, vector search, risk identification
+  3. Mitigate: correlations, mitigation plan, add reviewers, use learnings
+  Launch from: Purview IRM case or Defender XDR incident (pre-scoped)
+  Different from Advanced Hunting: DSI gives you actual content, not just metadata
+
+AI BASELINE (Compliance Manager):
+  Auto-evaluates AI posture against EU AI Act, NIST AI RMF
+  Access: M365 admin center → Compliance → AI Baseline
+       OR Purview → DSPM for AI → AI Baseline tab
+  Pre-built templates: EU AI Act, NIST AI RMF 1.0, ISO 42001:2023, ISO 23894:2023
+  Outputs: AI Compliance Score, gap recommendations, audit-ready reporting
+
+MCP TOOL CATALOG (Agent 365 certified): Copilot Search, Dataverse, Outlook/Calendar,
+  Teams, SharePoint, OneDrive, User Profile, Microsoft Word
+  Admin governance: block = blocked for all users and agents; admin consent required
+
+SHADOW AI DISCOVERY SETUP (4 steps):
+  1. Enable Internet Access traffic forwarding profile in GSA
+  2. Assign users/groups to Internet Access profile
+  3. Install GSA client on devices
+  4. Access Generative AI apps filter in App discovery portal
+
+FOUNDRY PROJECTS MODEL: New simplified setup replacing Hub→Project hierarchy
+  Single Foundry Resource → Foundry SDK/API; attach Azure OpenAI, AI Search, Storage as needed
+
 // ── FIVE PLAYBOOKS ────────────────────────────────────────────────────────────
 
 PB01 — Audit Copilot Studio estate (~30 min, KQL only)
