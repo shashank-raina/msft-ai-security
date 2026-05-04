@@ -401,6 +401,114 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 
 
+
+
+
+
+
+
+<div class="section-label" style="margin-top:40px;">MAY 3, 2026 (2)</div>
+<h2>Work IQ Three-Layer Architecture · MCP Server Renaming to Work IQ Brand</h2>
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+<tr><td><span class="tag blue">🆕 Updated</span></td>
+<td><strong>Work IQ three-layer architecture</strong> — Data (M365 signals), Memory (persistent cross-session understanding of how people/teams work), Inference (reasoning + action via Work IQ MCP tools, governed by Agent 365 control plane). M365 Copilot licence required for Work IQ MCP servers. Source: Microsoft Learn Work IQ MCP overview (Preview).</td>
+<td>agent365.html</td></tr>
+<tr><td><span class="tag blue">🆕 Updated</span></td>
+<td><strong>MCP server names updated to Work IQ branding</strong> — Copilot Search → Work IQ Copilot · Outlook/Teams → Work IQ Calendar / Work IQ Teams · SharePoint → Work IQ SharePoint Lists / Work IQ SharePoint and OneDrive (Frontier). Old names remain supported for existing connections. Source: Microsoft Learn Work IQ MCP overview (Preview).</td>
+<td>foundry.html</td></tr>
+</tbody>
+</table>
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Source</div>
+  <p><a href="https://learn.microsoft.com/en-us/microsoft-agent-365/tooling-servers-overview" target="_blank" style="color:var(--blue);">Microsoft Learn — Work IQ MCP overview (Preview)</a></p>
+</div>
+
+<div class="section-label" style="margin-top:40px;">MAY 3, 2026</div>
+<h2>Shadow AI — Two Policy Names · Coming Detections · Critical Rollback Caveat</h2>
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+<tr><td><span class="tag blue">🆕 Updated</span></td>
+<td><strong>Shadow AI page — two specific Intune policies named</strong>: "Continuously detect managed devices" (multi-signal: identity, device, network) and "Block AI Agents from OpenClaw" (Intune baseline policy: <code>A365 - Block OpenClaw</code>).</td>
+<td>agent365.html</td></tr>
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Coming Shadow AI detections expanded</strong> — beyond Claude Code CLI: Ollama Desktop, OpenAI, Cursor, Poe Desktop. Source: Derk van der Woude (Rubicon Cloud Advisor).</td>
+<td>agent365.html</td></tr>
+<tr><td><span class="tag warn">⚠️ Caveat</span></td>
+<td><strong>Critical operational caveat — Block policy cannot be disabled via Agent 365 portal.</strong> Once enabled, rollback requires deleting the Intune security policy (<code>A365 - Block OpenClaw</code>) directly in Intune. The Agent 365 portal does not expose a disable control. Source: Derk van der Woude, May 2026.</td>
+<td>agent365.html, gaps.html</td></tr>
+</tbody>
+</table>
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Source</div>
+  <p>Derk van der Woude (Rubicon Cloud Advisor / #BBTG) — LinkedIn post, May 3, 2026</p>
+</div>
+
+<div class="section-label" style="margin-top:40px;">MAY 1, 2026 (4)</div>
+<h2>Windows 365 for Agents — Full Detail from Tech Community Blog</h2>
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+<tr><td><span class="tag blue">🆕 Updated</span></td>
+<td><strong>Windows 365 for Agents expanded</strong> — Windows 365 for Agents callout replaced with full section. Additions: why agents need a managed execution environment (many enterprise apps have no APIs, UI interaction required), the employee analogy (same trust model extended to AI), three explicit benefits, four-layer Microsoft AI stack (Microsoft IQ / Windows 365 for Agents / Azure / Agent 365), prerequisites (Agent 365 + Intune + Azure subscription for compute billing), setup path, who it is for (legacy/UI apps, human-in-the-loop). Source: Windows IT Pro Blog May 1, 2026.</td>
+<td>agent365.html, product-map.html</td></tr>
+</tbody>
+</table>
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Source</div>
+  <p><a href="https://techcommunity.microsoft.com/blog/windows-itpro-blog/windows-365-for-agents-now-in-public-preview-run-ai-agents-securely-at-scale/4513479" target="_blank" style="color:var(--blue);">Windows IT Pro Blog — Windows 365 for Agents public preview (May 1, 2026)</a></p>
+</div>
+
+<div class="section-label" style="margin-top:40px;">MAY 1, 2026 (3)</div>
+<h2>Three Agent Modes · Windows 365 for Agents · OpenClaw · Network Controls GA · Partner Services</h2>
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Three agent operating modes</strong> — Delegated access (GA), Own access/autonomous (GA), Agents in team workflows (Public Preview). Full table with how-it-works and examples. Source: Agent 365 GA blog (May 1, 2026).</td>
+<td>agent365.html</td></tr>
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Windows 365 for Agents (Public Preview · US only)</strong> — new class of Cloud PCs purpose-built for agentic workloads. Managed via Intune. Observable in Agent 365. Infrastructure execution layer complementing Agent 365 governance layer.</td>
+<td>agent365.html, product-map.html</td></tr>
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Local agent discovery — OpenClaw, GitHub Copilot CLI, Claude Code</strong> — new Shadow AI page in Agent 365/M365 admin center. Discover local agents on managed devices, block via Intune. Defender context mapping for local agents June 2026. Gap added: local agents operating outside governance.</td>
+<td>agent365.html, gaps.html</td></tr>
+<tr><td><span class="tag blue">🔧 Corrected</span></td>
+<td><strong>Network controls now GA</strong> — Secure Web and AI Gateway for Agents is GA as of May 1, 2026 (not Preview). Extends to Copilot Studio agents AND local agents (OpenClaw) running on user endpoint devices.</td>
+<td>agent365.html, product-map.html</td></tr>
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Partner services taxonomy</strong> — five service categories (Inventory/Ownership, Least Privilege, Compliance, Threats, Ongoing Operations) and five service types (Workshops, Governance, Managed Services, Advisory, Security+Integration). Featured launch partners: Accenture, Bechtle, Capgemini, Insight, KPMG, Protiviti, Slalom.</td>
+<td>strategy.html</td></tr>
+</tbody>
+</table>
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Source</div>
+  <p><a href="https://www.microsoft.com/en-us/security/blog/2026/05/01/microsoft-agent-365-now-generally-available-expands-capabilities-and-integrations/" target="_blank" style="color:var(--blue);">Microsoft Security Blog — Agent 365 GA (May 1, 2026) · Full article text</a></p>
+</div>
+
+<div class="section-label" style="margin-top:40px;">MAY 1, 2026 (2)</div>
+<h2>Agent 365 GA — New Capabilities, Pricing, GCC, Defender Context Mapping</h2>
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Agent 365 registry sync with AWS Bedrock + Google Cloud (Preview)</strong> — automatically discover and inventory agents on AWS Bedrock and Google Gemini Enterprise Agent Platform. Basic lifecycle governance (start/stop/delete) coming soon. Announced GA day, May 1 2026.</td>
+<td>agent365.html</td></tr>
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Defender agent context mapping (Preview, June 2026)</strong> — relationship map per agent: devices running it, MCP servers configured, associated identities, cloud resources reachable. Blast radius context for security teams. File access and network behaviour investigation. Policy-based controls + runtime blocking via Intune also coming June 2026.</td>
+<td>agent365.html</td></tr>
+<tr><td><span class="tag blue">🆕 Updated</span></td>
+<td><strong>Agent 365 pricing clarification</strong> — no additional per-agent charge for first 10,000 managed agents per tenant. Graduated consumption ~$0.15/agent/month thereafter (volume discounts via EA). GCC/GCC High late 2026. DoD early 2027. macOS/Linux: dedicated clients committed by end of 2026.</td>
+<td>agent365.html</td></tr>
+</tbody>
+</table>
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Source</div>
+  <p><a href="https://www.microsoft.com/en-us/security/blog/2026/05/01/microsoft-agent-365-now-generally-available-expands-capabilities-and-integrations/" target="_blank" style="color:var(--blue);">Microsoft Security Blog — Agent 365 GA (May 1, 2026) · Nirav Shah, Rob Lefferts, Jason Roszak</a></p>
+</div>
+
 <div class="section-label" style="margin-top:40px;">MAY 1, 2026</div>
 <h2>Foundry Control Plane · Nav Restructure · 7 Training Gaps · Demo Updated</h2>
 <table>

@@ -431,6 +431,21 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   </div>
 </div>
 
+<div class="callout callout-info" style="margin-top:20px;">
+  <div class="callout-title">📌 GA Day announcements — May 1, 2026 (Nirav Shah, Rob Lefferts, Jason Roszak)</div>
+  <p><strong>New capabilities announced at GA:</strong></p>
+  <table style="margin:10px 0;font-size:12px;">
+  <thead><tr><th>Capability</th><th>Status</th><th>Detail</th></tr></thead>
+  <tbody>
+  <tr><td><strong>Registry sync — AWS Bedrock + Google Cloud</strong></td><td><span class="caution-inline">Preview now</span></td><td>Automatically discover and inventory agents on AWS Bedrock and Google Gemini Enterprise Agent Platform. Basic lifecycle governance (start, stop, delete) coming soon.</td></tr>
+  <tr><td><strong>Defender agent context mapping</strong></td><td><span class="caution-inline">Preview June 2026</span></td><td>Relationship map per agent: devices it runs on, MCP servers configured, associated identities, cloud resources reachable. Blast radius analysis and endpoint-based behaviour investigation.</td></tr>
+  <tr><td><strong>Intune integration — policy controls + runtime blocking</strong></td><td><span class="caution-inline">Preview June 2026</span></td><td>Policy-based controls and runtime blocking/alerting via Intune and Defender for agents on managed devices.</td></tr>
+  </tbody>
+  </table>
+  <p style="font-size:12px;margin-top:8px;"><strong>Pricing:</strong> USD$15 per user per month. Each licence covers an individual who manages or sponsors agents, or uses agents to do work on their behalf. Also included in Microsoft 365 E7.<br>
+  Source: <a href="https://www.microsoft.com/en-us/security/blog/2026/05/01/microsoft-agent-365-now-generally-available-expands-capabilities-and-integrations/" target="_blank" style="color:var(--blue);">Microsoft Security Blog — Agent 365 GA (May 1, 2026)</a></p>
+</div>
+
 <div class="section-label">What Agent 365 Is</div>
 <h2>The enterprise layer above your agent logic</h2>
 <p>Agent 365 is not an agent builder or hosting platform. It is a management and security layer that sits above whatever platform your agents run on — Copilot Studio, Microsoft Foundry, LangChain, OpenAI Agents SDK, or anything else. Once an agent is onboarded to Agent 365, it gains enterprise-grade controls it didn't have before.</p>
@@ -518,6 +533,9 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <span style="background:rgba(92,45,145,0.08);border:1px solid rgba(92,45,145,0.2);border-radius:8px;padding:6px 14px;font-size:13px;color:#5c2d91;">Vercel</span>
 </div>
 <p style="font-size:12px;color:var(--text3);">Source: <a href="https://www.microsoft.com/en-us/microsoft-365/blog/2025/11/18/microsoft-agent-365-the-control-plane-for-ai-agents/" target="_blank" style="color:var(--blue);">Microsoft 365 Blog — Agent 365: The control plane for AI agents (Nov 2025)</a></p>
+
+  <p>New Purview capability announced alongside Agent 365 GA: visibility into how Copilot and AI apps interact with enterprise data, with retention and deletion policies for AI prompts and outputs. Addresses regulatory obligations as AI adoption scales. Distinct from DLP (blocks at point of use) — DLM governs what is retained after. Source: <a href="https://techcommunity.microsoft.com/blog/microsoft-security-blog/microsoft-purview-securing-data-and-enabling-apps-and-agents-across-your-ai-stac/4503806" target="_blank" style="color:var(--blue);">Microsoft Tech Community</a>.</p>
+</div>
 
 <div class="section-label" style="margin-top:48px;">Licensing</div>
 <h2>Two ways to get Agent 365</h2>
@@ -685,10 +703,108 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 
 
+
+<div class="section-label" style="margin-top:40px;">Three Agent Operating Modes</div>
+<h2>What Agent 365 governs — by how agents work</h2>
+<p>Source: <a href="https://www.microsoft.com/en-us/security/blog/2026/05/01/microsoft-agent-365-now-generally-available-expands-capabilities-and-integrations/" target="_blank" style="color:var(--blue);">Microsoft Security Blog — Agent 365 GA (May 1, 2026)</a></p>
+
+<table>
+<thead><tr><th>Mode</th><th>Status</th><th>How it works</th><th>Example</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>Agents working on behalf of users</strong><br><span style="font-size:11px;color:var(--text3);">Delegated access</span></td>
+  <td><span class="green-inline">GA</span></td>
+  <td>Agent acts on behalf of a signed-in user using delegated permissions. Operates in response to user prompts. Uses the user's identity context.</td>
+  <td>An agent that helps an employee organise their inbox or summarise emails</td>
+</tr>
+<tr>
+  <td><strong>Agents operating behind the scenes</strong><br><span style="font-size:11px;color:var(--text3);">Own access / autonomous</span></td>
+  <td><span class="green-inline">GA</span></td>
+  <td>Agent operates with its own credentials and permissions, without user context. Runs autonomously in the background on scheduled or event-triggered tasks.</td>
+  <td>An agent autonomously triaging support tickets or running nightly data reconciliation</td>
+</tr>
+<tr>
+  <td><strong>Agents participating in team workflows</strong><br><span style="font-size:11px;color:var(--text3);">Own access / collaborative</span></td>
+  <td><span class="caution-inline">Preview</span></td>
+  <td>Agent operates with its own access while participating in team channels, meetings, or shared workspaces. Interacts with multiple users and agents in collaborative contexts.</td>
+  <td>An agent added to a Teams channel that monitors project activity and responds to @mentions</td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:12px;">
+  <div class="callout-title">📌 Local and cloud agent discovery — new as of GA</div>
+  <p>Users are installing local AI agents (OpenClaw, GitHub Copilot CLI, Claude Code) on their devices and adopting SaaS agents outside traditional governance. Agent 365 now addresses this with a new <strong>Shadow AI page</strong> in the M365 admin center.<br><br>
+  <strong>What IT can do today (Frontier programme):</strong> See if OpenClaw agents are being used in the organisation, which devices they are running on, and enable two Intune security policies from the Shadow AI page:<br><br>
+  <table style="margin:8px 0;font-size:12px;">
+  <thead><tr><th>Policy</th><th>What it does</th></tr></thead>
+  <tbody>
+  <tr><td><strong>Continuously detect managed devices</strong></td><td>Automatically detect shadow AI using multiple security signals from identity, devices, and network activity.</td></tr>
+  <tr><td><strong>Block AI Agents from OpenClaw</strong><br><code style="font-size:10px;">A365 - Block OpenClaw</code></td><td>Block common methods of running OpenClaw on managed devices via Intune security baseline policy.</td></tr>
+  </tbody>
+  </table>
+  <div style="background:rgba(216,59,1,0.08);border:1px solid rgba(216,59,1,0.3);border-radius:4px;padding:10px 14px;font-size:12px;margin:10px 0;line-height:1.6;">
+    ⚠️ <strong>Critical operational caveat (Derk van der Woude, May 2026):</strong> Once the Block AI policy is enabled, it <strong>cannot be disabled via the Agent 365 portal</strong>. The only way to reset the enable button is to delete the Security policy directly in Intune. Do not enable this policy without understanding the Intune dependency for rollback.
+  </div>
+  <strong>Coming soon — additional Shadow AI detections:</strong><br>
+  Claude Code CLI · Ollama Desktop · OpenAI · Cursor · Poe Desktop<br><br>
+  <strong>Coming in June 2026:</strong> Defender provides asset context mapping per local agent — devices running it, MCP servers configured, identities associated, cloud resources reachable. Policy-based controls and runtime blocking via Defender if malicious behaviour is detected.</p>
+</div>
+
+<div class="section-label" style="margin-top:40px;">Windows 365 for Agents</div>
+<h2>A secured, managed execution environment for AI agents</h2>
+<p>Source: <a href="https://techcommunity.microsoft.com/blog/windows-itpro-blog/windows-365-for-agents-now-in-public-preview-run-ai-agents-securely-at-scale/4513479" target="_blank" style="color:var(--blue);">Windows IT Pro Blog — Windows 365 for Agents public preview (May 1, 2026)</a></p>
+
+<div class="callout callout-info" style="margin-top:12px;">
+  <div class="callout-title">📌 Why this exists — the execution gap</div>
+  <p>Many enterprise applications have no APIs — critical work still happens through user interfaces where context, data, and intent are conveyed visually. To unlock their full potential, AI agents need to interact with applications the way people do: using a computer directly through clicks, typing, and navigation. Today most agents run on ad-hoc infrastructure — local machines, shared virtual machines, or unmanaged cloud environments — creating gaps in identity, policy enforcement, auditability, and control. This makes it difficult for IT teams to confidently scale agentic workloads beyond API- or MCP-based pilots.</p>
+</div>
+
+<div class="callout callout-info" style="margin-top:8px;">
+  <div class="callout-title">📌 The employee analogy</div>
+  <p>Every employee in an organisation has an identity and works on a managed device — typically a Windows 365 Enterprise Cloud PC. Now, each AI agent also has its own identity (governed through Agent 365) and runs on a managed Cloud PC (provided by Windows 365 for Agents). It is the same trust model and the same IT controls — extended to AI.</p>
+</div>
+
+<table style="margin-top:16px;">
+<thead><tr><th>Dimension</th><th>Detail</th></tr></thead>
+<tbody>
+<tr><td><strong>What it is</strong></td><td>A new class of Cloud PCs purpose-built for agentic workloads. Agents run in a fully managed Windows environment with identity, security, policy, and lifecycle management handled by IT.</td></tr>
+<tr><td><strong>Status</strong></td><td>Public Preview · US only · May 1, 2026</td></tr>
+<tr><td><strong>Three key benefits</strong></td><td>① Enterprise-grade identity and access controls for every agent · ② Unified device and policy management via Intune · ③ Global scalability with geo-level data residency for compliance</td></tr>
+<tr><td><strong>Prerequisites</strong></td><td>Agent 365 licence + Intune licence + active Azure subscription (billing for Cloud PC compute is Azure pay-as-you-go, not included in Agent 365)</td></tr>
+<tr><td><strong>Relationship to Agent 365</strong></td><td>Agent 365 = control plane (what agents can do, governance, policies). Windows 365 for Agents = execution layer (where agents run securely). Together: move from visibility/governance to production-ready deployments.</td></tr>
+<tr><td><strong>Who it is for</strong></td><td>IT administrators, security teams, digital workplace leaders, platform teams. Especially valuable for: legacy/UI-based app workflows with no API, human-in-the-loop scenarios, organisations needing geo-specific data residency.</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:12px;">
+  <div class="callout-title">📌 The Microsoft AI four-layer stack (from this announcement)</div>
+  <p><strong>Microsoft IQ</strong> — the intelligence layer. Shared context across people, work, and the business. Helps AI understand what matters and make informed decisions. Agents use this to reason.<br>
+  <strong>Windows 365 for Agents</strong> — the execution layer. Trusted, managed runtime for agents to get work done, especially for UI-based workflows.<br>
+  <strong>Microsoft Azure</strong> — the foundation. Global cloud for secure, scalable AI. Hosts the Cloud PCs.<br>
+  <strong>Agent 365</strong> — the control plane. Governs agent behaviour end-to-end across all platforms.</p>
+</div>
+
+<div style="font-size:12px;color:var(--text3);margin-top:8px;">Setup path: Create agent blueprint → Set up Azure billing → Create Cloud PC pool → Validate scenarios. See <a href="https://learn.microsoft.com/en-us/windows-365/agents/billing-w365a" target="_blank" style="color:var(--blue);">Windows 365 for Agents Billing</a> and <a href="https://learn.microsoft.com/en-us/windows-365/agents/cloud-pc-agent-pools" target="_blank" style="color:var(--blue);">Cloud PC Agent Pools</a> on Microsoft Learn.</div>
+
 <div class="section-label" style="margin-top:48px;">Work IQ</div>
 <h2>The intelligence layer that grounds agents in your organisation</h2>
-<p>Work IQ is the contextual intelligence engine that powers Microsoft 365 Copilot and Agent 365. It understands your organisation's work patterns — who collaborates with whom, what projects are active, how work is delegated — and makes this context available to agents securely. Announced at Microsoft AI Tour Paris (March 2026) as a standalone agentic building block.</p>
+<p>Work IQ is the contextual intelligence engine that grounds Microsoft 365 Copilot and Agent 365–managed agents in real-time, shared context across the organisation. It enables personalised search, advanced reasoning, and deeper semantic understanding by connecting signals across the Microsoft 365 ecosystem and business systems. Announced at Microsoft AI Tour Paris (March 2026) as a standalone agentic building block. Source: <a href="https://learn.microsoft.com/en-us/microsoft-agent-365/tooling-servers-overview" target="_blank" style="color:var(--blue);">Microsoft Learn — Work IQ MCP overview (Preview)</a></p>
+<p style="font-size:13px;color:var(--text2);margin-top:6px;"><strong>Prerequisite:</strong> Microsoft 365 Copilot licence required to use Work IQ MCP servers.</p>
+
 <div class="callout callout-info" style="margin-top:12px;">
+  <div class="callout-title">📌 Work IQ — three integrated layers</div>
+  <table style="margin:8px 0;font-size:12px;">
+  <thead><tr><th>Layer</th><th>What it does</th></tr></thead>
+  <tbody>
+  <tr><td><strong>Data</strong></td><td>Unifies signals from files, emails, meetings, chats, and business systems across Microsoft 365 to capture how work happens across the organisation.</td></tr>
+  <tr><td><strong>Memory</strong></td><td>Builds persistent understanding of how people and teams work. Enables Agent 365–managed agents to stay aligned to priorities and remain consistent across tasks, apps, and sessions.</td></tr>
+  <tr><td><strong>Inference</strong></td><td>Brings together models, skills, and tools so agents can reason and take action using Work IQ MCP tools, while the Agent 365 control plane ensures those actions remain observable, governed, and compliant.</td></tr>
+  </tbody>
+  </table>
+</div>
+
+<div class="callout callout-info" style="margin-top:8px;">
   <div class="callout-title">📌 Why Work IQ matters for security</div>
   <p>Agents grounded via Work IQ inherit your organisation's data governance automatically. Sensitivity labels travel with the data — an agent cannot surface Confidential content to a user without the right permissions. Work IQ enforces this at the grounding layer, not just at output. This structural compliance makes Microsoft-native agents contextually superior and inherently more governable than ungoverned third-party alternatives using direct API calls.</p>
 </div>
@@ -1038,7 +1154,7 @@ directActions | union topicActions | sort by AIAgentId, Timestamp desc</div>
 
 <div class="footer">
   SOURCES: Microsoft Agent 365 documentation · Cloudpartner.fi Defender + Agent 365 integration (April 2026) · Microsoft RSAC 2026 announcements<br>
-  <a href="changelog.html" style="color:var(--text3);">Changelog</a> · Last updated: May 1, 2026
+  <a href="changelog.html" style="color:var(--text3);">Changelog</a> · Last updated: May 3, 2026
 </div>
 </div>
 

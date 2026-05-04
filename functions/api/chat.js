@@ -609,7 +609,17 @@ AI BASELINE (Compliance Manager):
   Pre-built templates: EU AI Act, NIST AI RMF 1.0, ISO 42001:2023, ISO 23894:2023
   Outputs: AI Compliance Score, gap recommendations, audit-ready reporting
 
-MCP TOOL CATALOG (Agent 365 certified): Copilot Search, Dataverse, Outlook/Calendar,
+MCP TOOL CATALOG (Agent 365 certified — Work IQ branding):
+  Work IQ Copilot (was: Copilot Search), Dataverse, Work IQ Calendar (was: Outlook/Calendar),
+  Work IQ Teams (was: Teams MCP), Work IQ SharePoint Lists (was: SharePoint Lists) (Frontier),
+  Work IQ SharePoint and OneDrive (Frontier), User Profile, Microsoft Word
+  OLD NAMES remain supported for existing connections; use Work IQ names for NEW connections
+
+WORK IQ — THREE INTEGRATED LAYERS (Source: learn.microsoft.com/en-us/microsoft-agent-365/tooling-servers-overview):
+  Data: unifies signals from files, emails, meetings, chats, business systems across M365
+  Memory: builds persistent cross-session understanding of how people/teams work
+  Inference: models + skills + tools for reasoning + action; governed by Agent 365 control plane
+  PREREQUISITE: M365 Copilot licence required for Work IQ MCP servers
   Teams, SharePoint, OneDrive, User Profile, Microsoft Word
   Admin governance: block = blocked for all users and agents; admin consent required
 
@@ -743,6 +753,57 @@ USAGE:
 DISTINCT FROM Agent Governance Toolkit (which is RUNTIME governance)
 ARA is a PRE-DEPLOYMENT assessment — run it before manual KQL audits
 
+// ── AGENT 365 GA — THREE AGENT MODES ──────────────────────────────────────────────
+
+THREE AGENT OPERATING MODES (GA blog, May 1 2026):
+  1. Delegated access (on behalf of users) → GA
+  2. Own access / autonomous (behind the scenes) → GA
+  3. Own access / team workflows (participating in channels, meetings) → Public Preview
+
+LOCAL AGENT DISCOVERY (Shadow AI page in Agent 365 M365 admin center):
+  OpenClaw: discoverable TODAY (Frontier programme). See which devices, block via Intune.
+  TWO POLICIES in Shadow AI page:
+    1. "Continuously detect managed devices" — multi-signal detection (identity, devices, network)
+    2. "Block AI Agents from OpenClaw" (Intune baseline: A365 - Block OpenClaw)
+  ⚠️ CRITICAL CAVEAT (Derk van der Woude May 2026): Once Block policy is enabled,
+    it CANNOT be disabled via Agent 365 portal.
+    Rollback = delete the Intune security policy directly (A365 - Block OpenClaw).
+  Coming soon detections: Claude Code CLI, Ollama Desktop, OpenAI, Cursor, Poe Desktop
+  June 2026: Defender context mapping for local agents (devices, MCP servers, blast radius)
+  Defender can block coding agents at runtime and generate alerts if malicious behaviour detected
+
+WINDOWS 365 FOR AGENTS (Public Preview · US only · May 1, 2026):
+  Source: techcommunity.microsoft.com/blog/windows-itpro-blog/...
+  WHY IT EXISTS: Many enterprise apps have no APIs — agents must use UI (clicks, typing, navigation).
+    Today agents run on ad-hoc infrastructure (local VMs, shared machines) creating identity/policy gaps.
+  THE EMPLOYEE ANALOGY: employee = identity (Entra) + managed device (Windows 365 Enterprise Cloud PC)
+    agent = identity (Agent 365) + managed Cloud PC (Windows 365 for Agents). Same trust model.
+  FOUR-LAYER STACK: Microsoft IQ (intelligence) → Windows 365 for Agents (execution) → Azure (foundation) → Agent 365 (control plane)
+  PREREQUISITES: Agent 365 licence + Intune licence + Azure subscription (compute billed via Azure)
+  THREE BENEFITS: Enterprise identity/access controls, unified Intune management, geo-level data residency
+  WHO IT IS FOR: IT admins, security teams, platform teams; legacy/UI apps, human-in-the-loop scenarios
+  New class of Cloud PCs for agentic workloads. Managed via Intune.
+  Agents run in policy-controlled environments with employee-grade identity/security controls.
+  Observable in Agent 365 admin center.
+  Infrastructure execution layer (Windows 365) + governance layer (Agent 365) = production-ready.
+
+NETWORK CONTROLS — CORRECTION:
+  Secure Web and AI Gateway for Agents is GA as of May 1, 2026 (NOT Preview)
+  Covers: Copilot Studio agents AND local agents (OpenClaw) on endpoint devices
+
+// ── AGENT 365 GA ANNOUNCEMENTS (May 1, 2026) ─────────────────────────────────────
+
+GA Day new capabilities (Source: Microsoft Security Blog, Nirav Shah):
+
+REGISTRY SYNC — AWS Bedrock + Google Cloud (Preview NOW):
+  Automatically discover and inventory agents on AWS Bedrock and Google Gemini Enterprise
+  Agent Platform (formerly Vertex AI). Basic lifecycle governance (start/stop/delete) coming soon.
+
+DEFENDER AGENT CONTEXT MAPPING (Preview June 2026):
+  Relationship map per agent: devices running it, MCP servers configured, associated identities,
+  cloud resources reachable. Blast radius analysis. File/network behaviour investigation.
+  Policy-based controls + runtime blocking via Intune also Preview June 2026.
+
 // ── SECURE WEB AND AI GATEWAY FOR AGENTS (Preview) ──────────────────────────────
 
 Global Secure Access network controls extended to Copilot Studio agent outbound traffic.
@@ -760,6 +821,42 @@ Foundry supports Agent ID for MCP and A2A tool authentication.
 
 APP SERVICE / AZURE FUNCTIONS: Can use Entra Agent Identity Platform without rebuilding.
 Existing serverless workloads gain Agent ID governance automatically.
+
+// ── AGENT 365 GA — THREE AGENT MODES ──────────────────────────────────────────────
+
+THREE AGENT OPERATING MODES (GA blog, May 1 2026):
+  1. Delegated access (on behalf of users) → GA
+  2. Own access / autonomous (behind the scenes) → GA
+  3. Own access / team workflows (participating in channels, meetings) → Public Preview
+
+LOCAL AGENT DISCOVERY (Shadow AI page in Agent 365 M365 admin center):
+  OpenClaw: discoverable TODAY (Frontier programme). See which devices, block via Intune.
+  TWO POLICIES in Shadow AI page:
+    1. "Continuously detect managed devices" — multi-signal detection (identity, devices, network)
+    2. "Block AI Agents from OpenClaw" (Intune baseline: A365 - Block OpenClaw)
+  ⚠️ CRITICAL CAVEAT (Derk van der Woude May 2026): Once Block policy is enabled,
+    it CANNOT be disabled via Agent 365 portal.
+    Rollback = delete the Intune security policy directly (A365 - Block OpenClaw).
+  Coming soon detections: Claude Code CLI, Ollama Desktop, OpenAI, Cursor, Poe Desktop
+  June 2026: Defender context mapping for local agents (devices, MCP servers, blast radius)
+  Defender can block coding agents at runtime and generate alerts if malicious behaviour detected
+
+NETWORK CONTROLS — CORRECTION:
+  Secure Web and AI Gateway for Agents is GA as of May 1, 2026 (NOT Preview)
+  Covers: Copilot Studio agents AND local agents (OpenClaw) on endpoint devices
+
+// ── AGENT 365 GA ANNOUNCEMENTS (May 1, 2026) ─────────────────────────────────────
+
+GA Day new capabilities (Source: Microsoft Security Blog, Nirav Shah):
+
+REGISTRY SYNC — AWS Bedrock + Google Cloud (Preview NOW):
+  Automatically discover and inventory agents on AWS Bedrock and Google Gemini Enterprise
+  Agent Platform (formerly Vertex AI). Basic lifecycle governance (start/stop/delete) coming soon.
+
+DEFENDER AGENT CONTEXT MAPPING (Preview June 2026):
+  Relationship map per agent: devices running it, MCP servers configured, associated identities,
+  cloud resources reachable. Blast radius analysis. File/network behaviour investigation.
+  Policy-based controls + runtime blocking via Intune also Preview June 2026.
 
 // ── SECURE WEB AND AI GATEWAY FOR AGENTS (Preview) ──────────────────────────────
 

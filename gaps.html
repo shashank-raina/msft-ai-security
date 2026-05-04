@@ -451,6 +451,12 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <td>Use a dedicated low-privilege service account specifically for configuring custom Security Copilot agents — not a personal admin account. Treat this account like a shared service identity: minimal permissions scoped to what the agent actually needs, monitored, no interactive use. Establish an approval gate before any custom Security Copilot agent reaches production. Audit existing custom agents and review the permissions of the accounts used to configure them.</td>
 </tr>
 <tr>
+  <td><strong>Local AI agents (OpenClaw, GitHub Copilot CLI, Claude Code) operating outside governance</strong><br>
+  <span style="font-size:11px;color:var(--text3);">Users are installing AI agents on their devices outside MDM and security controls. These local agents can autonomously execute tasks, modify code, or access confidential information with no IT visibility. Agent 365 Shadow AI page (Frontier programme) can discover OpenClaw today; GitHub Copilot CLI and Claude Code support coming. Without Frontier programme, no native discovery mechanism exists. June 2026: Defender context mapping will show local agent blast radius including MCP servers and cloud resources reachable.</span></td>
+  <td>Enrol devices in Intune and ensure Defender for Endpoint coverage. Use Agent 365 Shadow AI page (Frontier programme) to discover OpenClaw instances. Apply Intune policies to block unauthorised local agents. June 2026: Defender context mapping and runtime blocking.<br><br><strong>⚠️ Policy caveat:</strong> Once the Block AI Agents from OpenClaw policy is enabled via Agent 365, it cannot be disabled through the Agent 365 portal. Rollback requires deleting the Intune security policy (<code>A365 - Block OpenClaw</code>) directly in Intune. Source: Derk van der Woude, May 2026.</td>
+  <td><span class="severity-high">High</span></td>
+</tr>
+<tr>
   <td><strong>No pre-deployment security testing for AI agents</strong><br>
   <span style="font-size:11px;color:var(--text3);">Most AI agents go to production without a single adversarial security test. Unlike web applications (OWASP ZAP, Snyk, DAST pipelines), AI agents have no equivalent mandatory pre-deployment security gate in the Microsoft platform. Prompt injection, system prompt leakage, excessive agency, and data exfiltration vulnerabilities (OWASP LLM01, LLM02, LLM06, LLM07) are typically only discovered after deployment. The OWASP LLM Top 10 (2025) defines 10 risk categories — most agents are untested against all ten before shipping.</span></td>
   <td>Use Microsoft PyRIT (github.com/microsoft/PyRIT) for automated pre-deployment adversarial testing. Wrap PyRIT in a config-driven scanner with OWASP mapping and CI/CD release gate (exit 0 = deploy, exit 1 = block). Run quick scans on every merge (phases 1–2), full scans pre-release (all 4 phases). See Playbook 06. Source: <a href="https://techcommunity.microsoft.com/blog/appsonazureblog/securing-your-ai-agents-before-they-ship-red-teaming-with-microsoft-pyrit/4515514" target="_blank" style="color:var(--blue);">Microsoft Tech Community — PyRIT</a></td>
@@ -594,7 +600,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  <a href="changelog.html" style="color:var(--text3);">Changelog</a> · Last updated: May 1, 2026 · Analysis covers publicly announced Microsoft security capabilities only
+  <a href="changelog.html" style="color:var(--text3);">Changelog</a> · Last updated: May 3, 2026 · Analysis covers publicly announced Microsoft security capabilities only
 </div>
 </div>
 
