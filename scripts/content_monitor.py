@@ -164,23 +164,19 @@ async def search_learn(session: ClientSession, query: str, max_results: int = 5)
             arguments={"query": query, "top": max_results},
         )
         if result and result.content:
+            # Parse the text content returned by the MCP tool
             for block in result.content:
                 if hasattr(block, "text"):
-                    text = block.text.strip()
-                    # Try JSON parse first
                     try:
-                        data = json.loads(text)
+                        data = json.loads(block.text)
                         if isinstance(data, list):
                             return data
-                        if isinstance(data, dict):
-                            for key in ("results", "value", "items", "documents"):
-                                if key in data and isinstance(data[key], list):
-                                    return data[key]
-                            return [data]
+                        if isinstance(data, dict) and "results" in data:
+                            return data["results"]
+                        return [data]
                     except json.JSONDecodeError:
-                        pass
-                    # Plain text — split into chunks if multiple results
-                    return [{"title": query, "content": text, "url": "", "raw": text}]
+                        # Return as plain text result
+                        return [{"title": query, "content": block.text, "url": ""}]
     except Exception as e:
         print(f"  Search error for '{query}': {e}", file=sys.stderr)
     return []
@@ -219,7 +215,7 @@ def analyse_with_claude(raw_results: list[dict]) -> dict:
     )
 
     response = client.messages.create(
-        model="claude-haiku-4-5-20251001",
+        model="claude-opus-4-5",
         max_tokens=4096,
         messages=[{"role": "user", "content": prompt}],
     )
@@ -328,7 +324,7 @@ async def main():
     print()
 
     all_results: list[dict] = []
-    seen_keys: set[str] = set()
+    seen_urls: set[str] = set()
 
     # Connect to Microsoft Learn MCP server
     async with streamablehttp_client(LEARN_MCP_URL) as (read, write, _):
@@ -341,43 +337,22 @@ async def main():
             print(f"Available tools: {tool_names}")
             print()
 
-            for i, query in enumerate(SEARCH_QUERIES):
+            for query in SEARCH_QUERIES:
                 print(f"Searching: {query}")
                 results = await search_learn(session, query, max_results=5)
 
-                # Debug: show raw format on first query
-                if i == 0 and results:
-                    print(f"  [debug] First result keys: {list(results[0].keys()) if isinstance(results[0], dict) else type(results[0])}")
-                    sample = results[0]
-                    if isinstance(sample, dict):
-                        for k, v in sample.items():
-                            preview = str(v)[:80].replace('\n', ' ')
-                            print(f"    {k}: {preview}")
-
-                new_count = 0
                 for item in results:
-                    if not isinstance(item, dict):
-                        item = {"content": str(item)}
+                    url = item.get("url", item.get("link", ""))
+                    if url and url not in seen_urls:
+                        seen_urls.add(url)
+                        all_results.append({
+                            "query": query,
+                            "title": item.get("title", ""),
+                            "url": url,
+                            "description": item.get("description", item.get("content", ""))[:500],
+                        })
 
-                    # Build a dedup key from url or title or content snippet
-                    url   = item.get("url", item.get("link", item.get("href", "")))
-                    title = item.get("title", item.get("name", ""))
-                    content = item.get("content", item.get("description", item.get("text", item.get("raw", ""))))
-
-                    dedup_key = url or title or content[:100]
-                    if not dedup_key or dedup_key in seen_keys:
-                        continue
-
-                    seen_keys.add(dedup_key)
-                    all_results.append({
-                        "query": query,
-                        "title": title,
-                        "url": url,
-                        "description": str(content)[:500],
-                    })
-                    new_count += 1
-
-                print(f"  → {len(results)} results ({new_count} new, {len(all_results)} total unique)")
+                print(f"  → {len(results)} results ({len(all_results)} unique so far)")
                 await asyncio.sleep(0.5)  # polite rate limiting
 
     print(f"\nTotal unique articles found: {len(all_results)}")
