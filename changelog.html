@@ -444,6 +444,25 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <p><a href="https://learn.microsoft.com/en-us/microsoft-agent-365/tooling-servers-overview" target="_blank" style="color:var(--blue);">Microsoft Learn — Work IQ MCP overview (Preview)</a></p>
 </div>
 
+
+<div class="section-label" style="margin-top:40px;">MAY 5, 2026</div>
+<h2>A365 - Monitor OpenClaw — Intune Policy Deep Dive (Derk van der Woude)</h2>
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+<tr><td><span class="tag blue">🆕 Updated</span></td>
+<td><strong>A365 - Monitor OpenClaw policy details</strong> — the "Continuously detect managed devices" toggle creates a specific Intune Device Configuration policy: <code>A365 - Monitor OpenClaw</code>. Properties catalog profile (read-only, safe to deploy). Uses new <strong>Local AI Agent</strong> Settings Catalog node. Runs via Intune Management Extension (IME), inspects disk and memory on managed Windows devices. 24-hour refresh cadence.</td>
+<td>agent365.html</td></tr>
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Eight properties collected per device</strong> — Agent Name, Agent Version, Host Process, Install Location, Install Scope, Install Scope Platform User ID (Windows SID), Install Scope User ID (Entra UPN), Local AI Agent Execution Context (user/elevated/SYSTEM). The Execution Context property is a key risk signal — SYSTEM-level agent execution indicates significantly elevated risk.</td>
+<td>agent365.html, playbooks.html</td></tr>
+</tbody>
+</table>
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Source</div>
+  <p>Derk van der Woude (Rubicon Cloud Advisor / #BBTG) — LinkedIn post, May 5, 2026</p>
+</div>
+
 <div class="section-label" style="margin-top:40px;">MAY 3, 2026</div>
 <h2>Shadow AI — Two Policy Names · Coming Detections · Critical Rollback Caveat</h2>
 <table>

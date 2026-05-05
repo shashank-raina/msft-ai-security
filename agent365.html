@@ -736,19 +736,49 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <div class="callout-title">📌 Local and cloud agent discovery — new as of GA</div>
   <p>Users are installing local AI agents (OpenClaw, GitHub Copilot CLI, Claude Code) on their devices and adopting SaaS agents outside traditional governance. Agent 365 now addresses this with a new <strong>Shadow AI page</strong> in the M365 admin center.<br><br>
   <strong>What IT can do today (Frontier programme):</strong> See if OpenClaw agents are being used in the organisation, which devices they are running on, and enable two Intune security policies from the Shadow AI page:<br><br>
+
   <table style="margin:8px 0;font-size:12px;">
-  <thead><tr><th>Policy</th><th>What it does</th></tr></thead>
+  <thead><tr><th>Policy</th><th>Intune policy created</th><th>What it does</th></tr></thead>
   <tbody>
-  <tr><td><strong>Continuously detect managed devices</strong></td><td>Automatically detect shadow AI using multiple security signals from identity, devices, and network activity.</td></tr>
-  <tr><td><strong>Block AI Agents from OpenClaw</strong><br><code style="font-size:10px;">A365 - Block OpenClaw</code></td><td>Block common methods of running OpenClaw on managed devices via Intune security baseline policy.</td></tr>
+  <tr>
+    <td><strong>Continuously detect managed devices</strong></td>
+    <td><code style="font-size:10px;">A365 - Monitor OpenClaw</code><br><span style="font-size:10px;color:var(--text3);">Device configuration · Properties catalog profile</span></td>
+    <td>Creates a <strong>read-only</strong> Properties catalog profile using the new <strong>Local AI Agent</strong> Settings Catalog node. Runs via Intune Management Extension (IME) — inspects disk and memory on managed Windows devices. <strong>Safe to deploy</strong> — reads from device, does not configure it. Refreshes every <strong>24 hours</strong>.</td>
+  </tr>
+  <tr>
+    <td><strong>Block AI Agents from OpenClaw</strong></td>
+    <td><code style="font-size:10px;">A365 - Block OpenClaw</code><br><span style="font-size:10px;color:var(--text3);">Security baseline policy</span></td>
+    <td>Blocks common methods of running OpenClaw on managed devices via Intune security baseline policy. See rollback caveat below before enabling.</td>
+  </tr>
   </tbody>
   </table>
-  <div style="background:rgba(216,59,1,0.08);border:1px solid rgba(216,59,1,0.3);border-radius:4px;padding:10px 14px;font-size:12px;margin:10px 0;line-height:1.6;">
-    ⚠️ <strong>Critical operational caveat (Derk van der Woude, May 2026):</strong> Once the Block AI policy is enabled, it <strong>cannot be disabled via the Agent 365 portal</strong>. The only way to reset the enable button is to delete the Security policy directly in Intune. Do not enable this policy without understanding the Intune dependency for rollback.
+
+  <div style="margin-top:14px;margin-bottom:8px;font-size:12px;font-weight:700;color:var(--text2);">Eight properties collected by A365 - Monitor OpenClaw</div>
+  <table style="font-size:12px;margin-bottom:12px;">
+  <thead><tr><th>Property</th><th>What it captures</th></tr></thead>
+  <tbody>
+  <tr><td><code>Agent Name</code></td><td>Canonical identifier for the agent type (e.g. "OpenClaw")</td></tr>
+  <tr><td><code>Agent Version</code></td><td>Version string of the installed agent</td></tr>
+  <tr><td><code>Host Process</code></td><td>Parent process executing the agent — identifies the execution context</td></tr>
+  <tr><td><code>Install Location</code></td><td>Filesystem path of the agent installation</td></tr>
+  <tr><td><code>Install Scope</code></td><td>Per-user vs per-machine installation</td></tr>
+  <tr><td><code>Install Scope Platform User ID</code></td><td>Windows SID of the installing user</td></tr>
+  <tr><td><code>Install Scope User ID</code></td><td>Entra ID user identifier (UPN) of the installing user</td></tr>
+  <tr><td><code>Local AI Agent Execution Context</code></td><td>Privilege/security context — user / elevated / SYSTEM. ⚠️ SYSTEM-level execution is high risk.</td></tr>
+  </tbody>
+  </table>
+
+  <div style="background:rgba(0,120,212,0.06);border:1px solid rgba(0,120,212,0.2);border-radius:4px;padding:10px 14px;font-size:12px;margin-bottom:10px;line-height:1.6;">
+    📌 <strong>Why the Execution Context property matters:</strong> An agent running at SYSTEM privilege has access to far more resources than one running as the logged-in user. The <code>Local AI Agent Execution Context</code> field lets IT and security teams immediately identify which devices have agents running with elevated or SYSTEM-level privileges — a key risk signal for triage.
   </div>
+
+  <div style="background:rgba(216,59,1,0.08);border:1px solid rgba(216,59,1,0.3);border-radius:4px;padding:10px 14px;font-size:12px;margin-bottom:10px;line-height:1.6;">
+    ⚠️ <strong>Block policy rollback caveat (Derk van der Woude, May 2026):</strong> Once the Block AI policy is enabled, it <strong>cannot be disabled via the Agent 365 portal</strong>. Rollback requires deleting the <code>A365 - Block OpenClaw</code> security policy directly in Intune. The Agent 365 portal does not expose a disable control.
+  </div>
+
   <strong>Coming soon — additional Shadow AI detections:</strong><br>
   Claude Code CLI · Ollama Desktop · OpenAI · Cursor · Poe Desktop<br><br>
-  <strong>Coming in June 2026:</strong> Defender provides asset context mapping per local agent — devices running it, MCP servers configured, identities associated, cloud resources reachable. Policy-based controls and runtime blocking via Defender if malicious behaviour is detected.</p>
+  <strong>Coming in June 2026:</strong> Defender asset context mapping per local agent — devices, MCP servers, identities, cloud resources reachable. Runtime blocking if malicious behaviour detected.</p>
 </div>
 
 <div class="section-label" style="margin-top:40px;">Windows 365 for Agents</div>
@@ -1154,7 +1184,7 @@ directActions | union topicActions | sort by AIAgentId, Timestamp desc</div>
 
 <div class="footer">
   SOURCES: Microsoft Agent 365 documentation · Cloudpartner.fi Defender + Agent 365 integration (April 2026) · Microsoft RSAC 2026 announcements<br>
-  <a href="changelog.html" style="color:var(--text3);">Changelog</a> · Last updated: May 3, 2026
+  <a href="changelog.html" style="color:var(--text3);">Changelog</a> · Last updated: May 5, 2026
 </div>
 </div>
 

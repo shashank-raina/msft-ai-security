@@ -787,6 +787,17 @@ THREE AGENT OPERATING MODES (GA blog, May 1 2026):
 LOCAL AGENT DISCOVERY (Shadow AI page in Agent 365 M365 admin center):
   OpenClaw: discoverable TODAY (Frontier programme). See which devices, block via Intune.
   TWO POLICIES in Shadow AI page:
+  DETECT POLICY DETAILS (Derk van der Woude, May 5 2026):
+    Intune policy created: "A365 - Monitor OpenClaw" (Device configuration)
+    Type: Properties catalog profile — READ ONLY, safe to deploy
+    Settings Catalog node: "Local AI Agent" (new, purpose-built for agent inventory)
+    Collection: via Intune Management Extension (IME) — inspects disk + memory on Windows
+    Refresh: every 24 hours
+    Eight properties collected:
+      Agent Name, Agent Version, Host Process, Install Location, Install Scope,
+      Install Scope Platform User ID (Windows SID), Install Scope User ID (Entra UPN),
+      Local AI Agent Execution Context (user / elevated / SYSTEM)
+    KEY RISK: SYSTEM-level execution context = agent has high-privilege access — triage immediately
     1. "Continuously detect managed devices" — multi-signal detection (identity, devices, network)
     2. "Block AI Agents from OpenClaw" (Intune baseline: A365 - Block OpenClaw)
   ⚠️ CRITICAL CAVEAT (Derk van der Woude May 2026): Once Block policy is enabled,
@@ -856,6 +867,17 @@ THREE AGENT OPERATING MODES (GA blog, May 1 2026):
 LOCAL AGENT DISCOVERY (Shadow AI page in Agent 365 M365 admin center):
   OpenClaw: discoverable TODAY (Frontier programme). See which devices, block via Intune.
   TWO POLICIES in Shadow AI page:
+  DETECT POLICY DETAILS (Derk van der Woude, May 5 2026):
+    Intune policy created: "A365 - Monitor OpenClaw" (Device configuration)
+    Type: Properties catalog profile — READ ONLY, safe to deploy
+    Settings Catalog node: "Local AI Agent" (new, purpose-built for agent inventory)
+    Collection: via Intune Management Extension (IME) — inspects disk + memory on Windows
+    Refresh: every 24 hours
+    Eight properties collected:
+      Agent Name, Agent Version, Host Process, Install Location, Install Scope,
+      Install Scope Platform User ID (Windows SID), Install Scope User ID (Entra UPN),
+      Local AI Agent Execution Context (user / elevated / SYSTEM)
+    KEY RISK: SYSTEM-level execution context = agent has high-privilege access — triage immediately
     1. "Continuously detect managed devices" — multi-signal detection (identity, devices, network)
     2. "Block AI Agents from OpenClaw" (Intune baseline: A365 - Block OpenClaw)
   ⚠️ CRITICAL CAVEAT (Derk van der Woude May 2026): Once Block policy is enabled,

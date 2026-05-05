@@ -757,6 +757,35 @@ Step 4: Enable and tune analytic rules to your policy and risk appetite</pre></d
       📌 <strong>Source:</strong> Samik Roy — "<a href="https://www.linkedin.com/pulse/monitor-detect-microsoft-copilot-activity-sentinel-samik-roy" target="_blank" style="color:var(--blue);">Monitor & Detect Microsoft Copilot Activity with Microsoft Sentinel</a>" (May 4, 2026). Contributed to official <a href="https://github.com/Azure/Azure-Sentinel/tree/master/Solutions/Microsoft%20Copilot" target="_blank" style="color:var(--blue);">Azure/Azure-Sentinel GitHub repository</a>.
     </div>
 
+
+    <div class="pb-section-label">A365 - MONITOR OPENCLAW — INTUNE PROPERTIES COLLECTED</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">When you enable "Continuously detect managed devices" in Agent 365 Shadow AI, Intune automatically creates a <strong>Properties catalog profile</strong> called <code>A365 - Monitor OpenClaw</code>. It uses the new <strong>Local AI Agent</strong> Settings Catalog node, runs via the Intune Management Extension (IME), and refreshes every <strong>24 hours</strong>. Read-only — safe to deploy. Source: Derk van der Woude, May 2026.</p>
+
+    <div class="kql-label">Eight properties collected per device</div>
+    <div style="background:#f5f7fc;border:1px solid var(--border);border-radius:4px;padding:12px 16px;font-size:12px;margin-bottom:14px;line-height:1.9;">
+      <div><code>Agent Name</code> — canonical identifier for the agent type</div>
+      <div><code>Agent Version</code> — version string of the installed agent</div>
+      <div><code>Host Process</code> — parent process executing the agent</div>
+      <div><code>Install Location</code> — filesystem path of the installation</div>
+      <div><code>Install Scope</code> — per-user vs per-machine</div>
+      <div><code>Install Scope Platform User ID</code> — Windows SID of installing user</div>
+      <div><code>Install Scope User ID</code> — Entra ID user identifier (UPN)</div>
+      <div><code>Local AI Agent Execution Context</code> — <strong>user / elevated / SYSTEM</strong> ⚠️ SYSTEM = high risk</div>
+    </div>
+
+    <div class="kql-label">KQL — surface agents running at elevated or SYSTEM context</div>
+    <div class="kql-block"><pre style="margin:0;white-space:pre;">// Requires Intune device inventory data in Log Analytics
+// IntuneDeviceCompliancePolicies or custom inventory table from IME
+// Filter for elevated/SYSTEM execution context
+IntuneDevices
+| where Properties has "Local AI Agent Execution Context"
+| extend AgentName = extract("AgentName:([^,]+)", 1, Properties)
+| extend ExecContext = extract("ExecutionContext:([^,]+)", 1, Properties)
+| extend InstallUser = extract("InstallScopeUserID:([^,]+)", 1, Properties)
+| where ExecContext in ("elevated","SYSTEM")
+| project DeviceName, AgentName, ExecContext, InstallUser, LastSync
+| order by ExecContext desc, LastSync desc</pre></div>
+
     <div class="pb-section-label">CLOUDAPPEVENTS — COPILOT AUDIT HUNTING</div>
     <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">The CloudAppEvents table captures Copilot and agent activity from the M365 Unified Audit Log via Defender for Cloud Apps. Requires: Settings → Cloud Apps → App connectors → M365 activities enabled. Metadata only — no prompt content.</p>
 
@@ -1498,7 +1527,7 @@ jobs:
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Learn · Field research from Microsoft Security professionals<br>
-  <a href="changelog.html" style="color:var(--text3);">Changelog</a> · Last updated: May 4, 2026 · Playbooks reflect publicly announced Microsoft capabilities only
+  <a href="changelog.html" style="color:var(--text3);">Changelog</a> · Last updated: May 5, 2026 · Playbooks reflect publicly announced Microsoft capabilities only
 </div>
 </div>
 <script>
