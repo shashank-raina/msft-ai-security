@@ -701,6 +701,62 @@ Disconnect-MgGraph</div>
 
   <div class="pb-section">
     
+
+    <div class="pb-section-label">SENTINEL — COPILOT ACTIVITY MONITORING</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Six analytic rules and a dedicated workbook for Copilot telemetry, contributed to the official Microsoft Sentinel GitHub repository by Samik Roy (May 2026). Deploy as a single solution from Sentinel Content Hub → Microsoft Copilot solution. Requires CopilotActivity table ingestion via the Copilot Data Connector.</p>
+
+    <div class="kql-label">Six analytic rules — deploy from Content Hub</div>
+    <div style="background:#f5f7fc;border:1px solid var(--border);border-radius:4px;padding:12px 16px;font-size:12px;margin-bottom:14px;line-height:1.9;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 20px;">
+        <div>🔴 <strong>Copilot – Jailbreak Attempt Detected</strong></div>
+        <div>🟡 <strong>Copilot – Access From External IP Address</strong></div>
+        <div>🟡 <strong>Copilot – Plugin Created by Non-Admin User</strong></div>
+        <div>🟡 <strong>Copilot – Plugin Enabled After Being Disabled</strong></div>
+        <div>🟡 <strong>Copilot – Plugin Tampering (Enable and Disable Within 5 Minutes)</strong></div>
+        <div>🔵 <strong>Copilot – File Uploads Disabled</strong></div>
+      </div>
+    </div>
+
+    <div class="kql-label">Workbook sections — Microsoft Copilot Activity Monitoring</div>
+    <div style="background:#f5f7fc;border:1px solid var(--border);border-radius:4px;padding:12px 16px;font-size:12px;margin-bottom:14px;line-height:1.9;">
+      <div><strong>1. All Events</strong> — Raw CopilotActivity for quick validation and troubleshooting</div>
+      <div><strong>2. Activity Overview</strong> — Timeline by record type, distribution by activity type</div>
+      <div><strong>3. User Activity Analysis</strong> — Top users by activity (who uses Copilot most)</div>
+      <div><strong>4. Plugin Management</strong> — Plugin lifecycle events (create, enable, disable, change)</div>
+      <div><strong>5. AI Model Usage</strong> — Model usage statistics and usage by application host</div>
+      <div><strong>6. Security Insights</strong> — Jailbreak detection events and top source IP addresses</div>
+      <div><strong>7. Detailed Activity Log</strong> — Recent Copilot activities for deep-dive investigation</div>
+    </div>
+
+    <div class="kql-label">Deployment path</div>
+    <div class="kql-block"><pre style="margin:0;white-space:pre;">Step 1: Ensure CopilotActivity logs are ingested
+  → Sentinel Content Hub → Copilot Data Connector (Public Preview Feb 2026)
+  → Requires Global/Security Administrator role
+
+Step 2: Deploy the Microsoft Copilot solution
+  → Microsoft Sentinel → Content Hub → search "Microsoft Copilot" → Install
+  → Includes: workbook + 6 analytic rules + hunting queries in one solution
+
+  GitHub source:
+    Analytic rules: Azure-Sentinel/Solutions/Microsoft Copilot/Analytic Rules
+    Hunting queries: Azure-Sentinel/Solutions/Microsoft Copilot/Hunting Queries
+    Workbook: Azure-Sentinel/Solutions/Microsoft Copilot/Workbooks/MicrosoftCopilotActivityMonitoring.json
+
+Step 3: Open workbook and validate data against your environment
+Step 4: Enable and tune analytic rules to your policy and risk appetite</pre></div>
+
+    <div class="kql-label">Why these detections matter — key questions answered</div>
+    <div style="background:#f5f7fc;border:1px solid var(--border);border-radius:4px;padding:12px 16px;font-size:12px;margin-bottom:14px;line-height:1.8;">
+      Who is accessing Copilot from external or unusual IP ranges? → <strong>Copilot – Access From External IP Address</strong><br>
+      Are plugins created or enabled by non-admin users? → <strong>Plugin Created by Non-Admin User</strong><br>
+      Signs of jailbreak attempts or prompt abuse? → <strong>Jailbreak Attempt Detected</strong><br>
+      Plugins being rapidly enabled/disabled (bypass testing)? → <strong>Plugin Tampering (5-minute window)</strong>
+    </div>
+
+    <div style="background:rgba(0,120,212,0.06);border:1px solid rgba(0,120,212,0.2);border-radius:4px;padding:10px 14px;font-size:12px;margin-top:8px;line-height:1.6;">
+      📌 <strong>Source:</strong> Samik Roy — "<a href="https://www.linkedin.com/pulse/monitor-detect-microsoft-copilot-activity-sentinel-samik-roy" target="_blank" style="color:var(--blue);">Monitor & Detect Microsoft Copilot Activity with Microsoft Sentinel</a>" (May 4, 2026). Contributed to official <a href="https://github.com/Azure/Azure-Sentinel/tree/master/Solutions/Microsoft%20Copilot" target="_blank" style="color:var(--blue);">Azure/Azure-Sentinel GitHub repository</a>.
+    </div>
+
     <div class="pb-section-label">CLOUDAPPEVENTS — COPILOT AUDIT HUNTING</div>
     <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">The CloudAppEvents table captures Copilot and agent activity from the M365 Unified Audit Log via Defender for Cloud Apps. Requires: Settings → Cloud Apps → App connectors → M365 activities enabled. Metadata only — no prompt content.</p>
 
@@ -1442,7 +1498,7 @@ jobs:
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Learn · Field research from Microsoft Security professionals<br>
-  <a href="changelog.html" style="color:var(--text3);">Changelog</a> · Last updated: May 1, 2026 · Playbooks reflect publicly announced Microsoft capabilities only
+  <a href="changelog.html" style="color:var(--text3);">Changelog</a> · Last updated: May 4, 2026 · Playbooks reflect publicly announced Microsoft capabilities only
 </div>
 </div>
 <script>

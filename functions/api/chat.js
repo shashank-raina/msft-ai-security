@@ -394,6 +394,30 @@ EUDB status:
 HIGH SEVERITY GAP: no native admin UI shows model selection, no policy prevents out-of-EUDB model use.
 Source: github.com/Blue161616/Agent-Identity/CopilotStudioAgentModelInfo.KQL
 
+// ── SENTINEL COPILOT MONITORING (Samik Roy, May 2026) ────────────────────────────
+
+Microsoft Copilot solution in Sentinel Content Hub:
+  Deploy: Sentinel → Content Hub → "Microsoft Copilot" → Install
+  GitHub: Azure-Sentinel/Solutions/Microsoft Copilot/
+
+SIX ANALYTIC RULES (all on CopilotActivity table):
+  Copilot – Jailbreak Attempt Detected
+  Copilot – Access From External IP Address
+  Copilot – Plugin Created by Non-Admin User
+  Copilot – Plugin Enabled After Being Disabled
+  Copilot – Plugin Tampering (Enable and Disable Within 5 Minutes)
+  Copilot – File Uploads Disabled
+
+WORKBOOK — Microsoft Copilot Activity Monitoring (7 sections):
+  All Events · Activity Overview · User Activity Analysis · Plugin Management
+  AI Model Usage · Security Insights (jailbreak + source IPs) · Detailed Activity Log
+
+KEY QUESTIONS ANSWERED:
+  External/unusual IP access → Copilot – Access From External IP
+  Non-admin plugin creation → Copilot – Plugin Created by Non-Admin User
+  Jailbreak/prompt abuse → Copilot – Jailbreak Attempt Detected
+  Plugin tampering (bypass testing) → Copilot – Plugin Tampering (5-minute window)
+
 // ── KEY KQL QUERIES ───────────────────────────────────────────────────────────
 
 No-auth agents (run first):
