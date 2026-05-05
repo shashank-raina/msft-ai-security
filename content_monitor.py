@@ -48,38 +48,87 @@ LEARN_MCP_URL = "https://learn.microsoft.com/api/mcp"
 #   NOTE: Microsoft Defender security-for-ai docs live under /defender-xdr/security-for-ai/ subdirectory
 # ─────────────────────────────────────────────────────────────────────────────────
 SEARCH_QUERIES = [
-    # Identity & Agent ID
-    "Entra Agent ID blueprint principal authentication",
-    "Entra Agent ID access packages governance lifecycle",
-    "Entra Agent ID SDK containerized token service",
-    "Conditional Access Agent ID policy segmentation",
 
-    # Agent 365 & platforms
-    "Microsoft Agent 365 observability OpenTelemetry",
-    "Agent 365 Foundry agents AI teammate approval workflow",
-    "Microsoft Agent 365 Exchange Online built-in agent",
+    # ── ENTRA AGENT ID ────────────────────────────────────────────────────────
+    "Entra Agent ID blueprint principal authentication token",
+    "Entra Agent ID federated identity credentials FIC managed identity",
+    "Entra Agent ID lifecycle management sponsor owner",
+    "Entra Agent ID access packages entitlement governance",
+    "Entra Agent ID SDK containerized sidecar token service",
+    "Conditional Access agent identity policy custom security attributes",
+    "ID Protection for agents risky agents report risk detections",
+    "Entra Agent ID agent user account constraints credential",
+    "Entra Agent ID collections discovery policies agent registry",
+    "Privileged Identity Management PIM agent admin roles",
 
-    # Detection & KQL
-    "AIAgentsInfo Advanced Hunting schema agent security",
-    "CloudAppEvents Copilot audit Microsoft Sentinel",
-    "Microsoft Sentinel Copilot data connector CopilotActivity",
+    # ── AGENT 365 ─────────────────────────────────────────────────────────────
+    "Microsoft Agent 365 control plane registry governance",
+    "Agent 365 shadow AI discovery local agents OpenClaw",
+    "Agent 365 templates policy bundling Entra Purview Defender",
+    "Agent 365 lifecycle management ownerless agents sponsorship",
+    "Agent 365 agent map visualization ecosystem",
+    "Agent 365 observability telemetry SDK OpenTelemetry",
+    "Windows 365 for Agents Cloud PC execution environment",
+    "Agent 365 registry sync AWS Bedrock Google Cloud multicloud",
+    "Agent 365 three agent operating modes delegated autonomous team",
+    "Agent 365 software development company partners ecosystem",
 
-    # Runtime & network protection
-    "Secure Web AI Gateway Copilot Studio agents network",
-    "Microsoft Defender AI agents Advanced Hunting preview 2026",
-    "Defender XDR AI agent posture security site:learn.microsoft.com",
+    # ── COPILOT STUDIO ────────────────────────────────────────────────────────
+    "Copilot Studio authentication patterns OAuth delegated",
+    "Copilot Studio maker credentials application permissions security",
+    "Copilot Studio automatic security scan secure defaults publishing",
+    "Copilot Studio agent runtime protection status maker visibility",
+    "Copilot Studio multitenant mode external user authentication",
+    "Copilot Studio real-time protection Defender integration",
 
-    # Data security
-    "Purview DLP Copilot sensitivity labels grounding",
-    "DSPM for AI data security posture management",
+    # ── MICROSOFT DEFENDER FOR AI ─────────────────────────────────────────────
+    "Defender XDR detect block investigate AI agent threats security-for-ai",
+    "Defender AI agent threat detection real-time protection ATG",
+    "Defender AI agent inventory posture assessment discovery",
+    "AIAgentsInfo Advanced Hunting table schema agent inventory",
+    "AlertEvidence Advanced Hunting AI agent investigation",
+    "Defender AI security posture management ASPM multicloud",
+    "Defender Copilot Studio integration Cloud Apps AI agent",
+    "Defender for Cloud AI workloads Foundry threat protection",
 
-    # Pre-deployment & red teaming
-    "PyRIT AI red teaming OWASP LLM agents",
-    "Zero Trust for AI reference architecture ZT4AI",
+    # ── MICROSOFT SENTINEL ────────────────────────────────────────────────────
+    "Microsoft Sentinel Copilot data connector CopilotActivity table",
+    "Sentinel analytic rules Copilot jailbreak plugin tampering",
+    "Sentinel MCP entity analyzer AI agent investigation",
+    "Sentinel data federation Fabric cross-tenant investigation",
+    "Sentinel playbook generator natural language SOAR automation",
+    "Sentinel GDAP unified RBAC cross-tenant MSSP",
+    "Microsoft Copilot activity monitoring workbook Sentinel",
 
-    # MCP & A2A
-    "Model Context Protocol MCP security agentic",
-    "Agent-to-Agent A2A protocol Microsoft security",
+    # ── DATA SECURITY (PURVIEW) ───────────────────────────────────────────────
+    "Purview DLP Microsoft 365 Copilot sensitivity labels prompts",
+    "DSPM for AI data security posture management activity explorer",
+    "Purview insider risk management adaptive protection AI agents",
+    "Purview data security investigations AI incident workflow",
+    "SharePoint Advanced Management restricted content discovery Copilot",
+    "Purview communication compliance unethical AI behavior detection",
+    "Purview audit eDiscovery AI agent compliance evidence",
+    "Purview compliance manager AI baseline EU AI Act NIST",
+
+    # ── NETWORK & RUNTIME PROTECTION ─────────────────────────────────────────
+    "Entra Internet Access Global Secure Access shadow AI prompt injection",
+    "Secure Web AI Gateway Copilot Studio agents network controls",
+    "Agent Tooling Gateway ATG tool invocation blocking real-time",
+
+    # ── MCP & FOUNDRY ─────────────────────────────────────────────────────────
+    "Model Context Protocol MCP security governance agentic",
+    "Work IQ MCP tooling servers Agent 365 catalog",
+    "Foundry Control Plane evaluations red teaming content safety",
+    "Foundry AI Red Teaming Agent PyRIT adversarial testing",
+    "Azure AI Content Safety prompt shields guardrails agents",
+    "Agent-to-Agent A2A protocol Microsoft security interoperability",
+
+    # ── COMPLIANCE & FRAMEWORKS ───────────────────────────────────────────────
+    "Zero Trust for AI ZT4AI reference architecture maturity",
+    "EU AI Act compliance Microsoft Purview regulatory",
+    "NIST AI Risk Management Framework ISO 42001 Microsoft",
+    "OWASP LLM Top 10 agentic AI security vulnerabilities",
+    "Security Copilot agentic SOC capabilities Security Store",
 ]
 
 # What the site already covers — used by Claude to identify genuinely new content
@@ -370,10 +419,10 @@ def analyse_with_claude(all_results: list[dict]) -> dict:
     """Send results to Claude for gap analysis against site knowledge."""
     client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
-    # Trim results to avoid huge context — fewer results but with full content
-    results_text = json.dumps(all_results[:20], indent=2, ensure_ascii=False)
-    if len(results_text) > 80_000:
-        results_text = results_text[:80_000] + "\n... (truncated)"
+    # Trim results to avoid huge context
+    results_text = json.dumps(all_results[:30], indent=2, ensure_ascii=False)
+    if len(results_text) > 60_000:
+        results_text = results_text[:60_000] + "\n... (truncated)"
 
     prompt = ANALYSIS_PROMPT.format(
         digest=SITE_KNOWLEDGE_DIGEST,
@@ -521,7 +570,7 @@ async def main():
                     if not isinstance(item, dict):
                         item = {"content": str(item)}
 
-                    # Build a dedup key from url or title or content snippet
+                    # Extract fields — trust URLs returned by MCP search
                     url   = item.get("url", item.get("link", item.get("href", "")))
                     title = item.get("title", item.get("name", ""))
                     content = item.get("content", item.get("description", item.get("text", item.get("raw", ""))))
@@ -529,30 +578,18 @@ async def main():
                     dedup_key = url or title or content[:100]
                     if not dedup_key or dedup_key in seen_keys:
                         continue
-
                     seen_keys.add(dedup_key)
-
-                    # Fetch full article content if we have a URL — gives Claude real
-                    # content and confirms the URL is valid (no 404s passed to analysis)
-                    full_content = ""
-                    if url and url.startswith("https://learn.microsoft.com"):
-                        full_content = await fetch_article(session, url)
-                        if not full_content:
-                            # URL returned no content — skip rather than pass a dud URL
-                            print(f"    ⚠ No content fetched for {url} — skipping")
-                            continue
 
                     all_results.append({
                         "query": query,
                         "title": title,
-                        "url": url,  # Real URL from MCP search result — never constructed
-                        "description": str(content)[:300],
-                        "full_content": full_content[:1500] if full_content else str(content)[:500],
+                        "url": url,   # Real URL from MCP — do not modify
+                        "description": str(content)[:500],
                     })
                     new_count += 1
 
                 print(f"  → {len(results)} results ({new_count} new, {len(all_results)} total unique)")
-                await asyncio.sleep(0.5)  # polite rate limiting
+                await asyncio.sleep(0.8)  # polite rate limiting (60 queries)
 
     print(f"\nTotal unique articles found: {len(all_results)}")
     print("Analysing with Claude...")
