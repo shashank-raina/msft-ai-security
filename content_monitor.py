@@ -378,23 +378,47 @@ async def search_learn(session: ClientSession, query: str, max_results: int = 5)
             for block in result.content:
                 if hasattr(block, "text"):
                     text = block.text.strip()
-                    # Try JSON parse first
                     try:
                         data = json.loads(text)
                         if isinstance(data, list):
                             return data
                         if isinstance(data, dict):
-                            for key in ("results", "value", "items", "documents"):
+                            for key in ("results", "value", "items", "documents", "hits"):
                                 if key in data and isinstance(data[key], list):
                                     return data[key]
                             return [data]
                     except json.JSONDecodeError:
                         pass
-                    # Plain text — split into chunks if multiple results
-                    return [{"title": query, "content": text, "url": "", "raw": text}]
+                    # Plain text — return as single result
+                    return [{"raw_text": text, "url": "", "title": query}]
     except Exception as e:
         print(f"  Search error for '{query}': {e}", file=sys.stderr)
     return []
+
+
+def extract_fields(item: dict) -> tuple[str, str, str]:
+    """Extract url, title, content from a result item regardless of field names."""
+    # URL — try every known field name
+    url = (item.get("url") or item.get("link") or item.get("href") or
+           item.get("@id") or item.get("documentUrl") or item.get("webUrl") or
+           item.get("pageUrl") or item.get("canonicalUrl") or "")
+
+    # Title — try every known field name
+    title = (item.get("title") or item.get("name") or item.get("displayText") or
+             item.get("heading") or item.get("pageTitle") or item.get("label") or
+             item.get("documentTitle") or "")
+
+    # Content — try every known field name
+    content = (item.get("content") or item.get("description") or item.get("text") or
+               item.get("raw") or item.get("abstract") or item.get("snippet") or
+               item.get("summary") or item.get("body") or item.get("raw_text") or
+               item.get("excerpt") or item.get("highlights") or "")
+
+    # If content is a dict (e.g. highlights), stringify it
+    if isinstance(content, dict):
+        content = str(content)
+
+    return str(url).strip(), str(title).strip(), str(content).strip()
 
 
 async def fetch_article(session: ClientSession, url: str) -> str:
@@ -553,27 +577,32 @@ async def main():
             print()
 
             for i, query in enumerate(SEARCH_QUERIES):
-                print(f"Searching: {query}")
+                print(f"Searching ({i+1}/{len(SEARCH_QUERIES)}): {query}")
                 results = await search_learn(session, query, max_results=5)
 
-                # Debug: show raw format on first query
-                if i == 0 and results:
-                    print(f"  [debug] First result keys: {list(results[0].keys()) if isinstance(results[0], dict) else type(results[0])}")
-                    sample = results[0]
-                    if isinstance(sample, dict):
-                        for k, v in sample.items():
-                            preview = str(v)[:80].replace('\n', ' ')
-                            print(f"    {k}: {preview}")
+                # Always dump raw format for first query — tells us actual field names
+                if i == 0:
+                    print(f"  [debug] {len(results)} raw results from MCP")
+                    if results:
+                        first = results[0]
+                        if isinstance(first, dict):
+                            print(f"  [debug] Field names: {list(first.keys())}")
+                            for k, v in list(first.items())[:5]:
+                                print(f"  [debug]   {k!r}: {str(v)[:120]!r}")
+                        else:
+                            print(f"  [debug] Item type: {type(first)}, value: {str(first)[:200]!r}")
 
                 new_count = 0
                 for item in results:
                     if not isinstance(item, dict):
-                        item = {"content": str(item)}
+                        item = {"raw_text": str(item)}
 
-                    # Extract fields — trust URLs returned by MCP search
-                    url   = item.get("url", item.get("link", item.get("href", "")))
-                    title = item.get("title", item.get("name", ""))
-                    content = item.get("content", item.get("description", item.get("text", item.get("raw", ""))))
+                    url, title, content = extract_fields(item)
+
+                    # Fallback: use all fields joined as content if still empty
+                    if not url and not title and not content:
+                        content = " ".join(str(v)[:100] for v in item.values() if v)[:300]
+                        print(f"  [warn] Empty fields for item, raw keys: {list(item.keys())}")
 
                     dedup_key = url or title or content[:100]
                     if not dedup_key or dedup_key in seen_keys:
@@ -582,14 +611,14 @@ async def main():
 
                     all_results.append({
                         "query": query,
-                        "title": title,
-                        "url": url,   # Real URL from MCP — do not modify
-                        "description": str(content)[:500],
+                        "title": title or f"[no title — query: {query}]",
+                        "url": url,
+                        "description": content[:500],
                     })
                     new_count += 1
 
-                print(f"  → {len(results)} results ({new_count} new, {len(all_results)} total unique)")
-                await asyncio.sleep(0.8)  # polite rate limiting (60 queries)
+                print(f"  → {new_count} new ({len(all_results)} total unique)")
+                await asyncio.sleep(0.8)
 
     print(f"\nTotal unique articles found: {len(all_results)}")
     print("Analysing with Claude...")
