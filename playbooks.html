@@ -1514,6 +1514,294 @@ jobs:
 
 </div>
 
+<!-- ═══════════════ KPI REFERENCE CARD ═══════════════ -->
+<div class="pb-panel" id="kpis" style="margin-top:40px;">
+  <div class="pb-header" style="background:linear-gradient(135deg,#0d1526 0%,#0078d4 100%);">
+    <div class="pb-header-eyebrow">REFERENCE</div>
+    <div class="pb-header-title">Four AI Security KPIs — Operational KQL</div>
+    <div class="pb-header-sub">Four metrics to track weekly and report quarterly. The trend matters more than the absolute number — you're looking for No-Auth count trending down and DLP hits stabilising as policies mature. For the strategic framing, see <a href="strategy.html" style="color:rgba(255,255,255,0.85);">Strategy → Four AI Security KPIs</a>.</div>
+    <div class="pb-meta-row">
+      <span class="pb-meta-item green">✓ All KQL runs on data you already have</span>
+      <span class="pb-meta-item">Bookmark in Copilot Activity Monitoring workbook</span>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">KPI 1 — RISKY AGENTS · TARGET: DECREASING TO ZERO</div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Count of published agents with no authentication</div>
+        <div class="step-desc">The single most important agent-security metric. Any agent in this count is reachable by anyone — including external users if published to a website. Trend this weekly. If it isn't going down, your Phase 2 enforcement isn't sticking.</div>
+        <div class="step-code">AIAgentsInfo
+| summarize arg_max(Timestamp, *) by AIAgentId
+| where AgentStatus == "Published"
+| where UserAuthenticationType == "None"
+| summarize RiskyAgents = count()</div>
+        <div class="step-tip">💡 Pair this with a Sentinel Analytics Rule (see Playbook 01 Step 1) that alerts on any new no-auth agent — the count metric is for trend, the rule is for incident response.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">KPI 2 — SENSITIVE ACCESS EVENTS · TARGET: STABLE</div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">AI interactions citing Confidential+ labels</div>
+        <div class="step-desc">Sourced from Purview Activity Explorer. A stable trend means label enforcement is working. A rising trend means either more sensitive data is being grounded by agents (governance problem) or sites that should have higher labels don't (label coverage gap).</div>
+        <div class="step-code">CopilotActivity
+| where TimeGenerated > ago(7d)
+| where RecordType has_any ("CopilotInteraction", "AIPluginOperation")
+| where isnotempty(SensitivityLabelEventData)
+| extend LabelName = tostring(SensitivityLabelEventData.LabelName)
+| where LabelName has_any ("Confidential", "Highly Confidential", "Restricted")
+| summarize SensitiveAccessEvents = count() by bin(TimeGenerated, 1d)</div>
+        <div class="step-tip">💡 Cross-reference with DSPM oversharing assessment — a rising trend may indicate overshared sites are being grounded.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">KPI 3 — DLP POLICY HITS · TARGET: STABLE AFTER TUNING SPIKE</div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Blocked or warned responses from Purview DLP at Copilot location</div>
+        <div class="step-desc">Expect a spike when DLP policy first deploys (audit mode reveals true volume), then stabilisation. A second spike post-stabilisation means either a new data category is being surfaced, or makers are working around an existing policy. Purview portal → Data Loss Prevention → Reports → filter by Microsoft Copilot location.</div>
+        <div class="step-tip">💡 Split this by policy: NIN/PII blocks tell a different story to OFFICIAL-SENSITIVE label blocks. Both belong in the KPI but should trend separately.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">KPI 4 — BLOCKED TOOL ACTIONS · TARGET: INCREASING THEN STABLE</div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">Tool invocations blocked by Defender real-time protection (ATG)</div>
+        <div class="step-desc">Counter-intuitive trend — you want this to increase initially, because it means runtime protection is firing. A flat-at-zero trend usually means ATG isn't enabled or the tool surface is too narrow for blocks to occur, not that everything is safe.</div>
+        <div class="step-code">AlertInfo
+| where Category == "AI"
+| where Status == "Resolved"
+| where Title has_any ("blocked", "prevented")
+| summarize BlockedToolActions = count() by bin(TimeGenerated, 1d)
+| sort by TimeGenerated desc</div>
+        <div class="step-tip">💡 Flat-at-zero is a posture finding, not a success. Investigate ATG configuration before celebrating.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">REPORTING CADENCE</div>
+    <div style="background:rgba(0,120,212,0.05);border:1px solid rgba(0,120,212,0.15);border-radius:4px;padding:12px 16px;font-size:13px;line-height:1.7;">
+      <strong>Weekly</strong> — All four KPIs in the Copilot Activity Monitoring workbook for the security team.<br>
+      <strong>Monthly</strong> — KPI trend slide for the AI Security Working Group.<br>
+      <strong>Quarterly</strong> — KPI trends as one section of the board-level reporting pack (see <a href="strategy.html" style="color:var(--blue);">Strategy → Quarterly reporting pack</a>).
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ PLAYBOOK 7 — BRIEF YOUR MAKERS ═══════════════ -->
+<div class="pb-panel" id="pb7" style="margin-top:40px;">
+  <div class="pb-header" style="background:linear-gradient(135deg,#005a3d 0%,#008575 100%);">
+    <div class="pb-header-eyebrow">PLAYBOOK 07</div>
+    <div class="pb-header-title">Brief Your Makers — 30-Minute Security Awareness</div>
+    <div class="pb-header-sub">Maker behaviour is the largest controllable factor in agent risk. Most agent security incidents trace back not to platform vulnerabilities but to maker decisions — using maker credentials, sharing org-wide by default, granting connectors broad scope. A short, focused awareness session converts the platform controls into shared discipline. Run this once before Phase 2 governance rolls out, then quarterly for new makers.</div>
+    <div class="pb-meta-row">
+      <span class="pb-meta-item green">✓ 30 minutes · live or recorded</span>
+      <span class="pb-meta-item">Audience: anyone publishing a Copilot Studio agent</span>
+      <span class="pb-meta-item warn">⚠ Mandatory before maker is granted environment access</span>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">PART A — THE FIVE THINGS EVERY MAKER MUST KNOW (15 MIN)</div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Maker credentials = your permissions, extended to every user</div>
+        <div class="step-desc">When you add a connector (SharePoint, Outlook, Teams) to a Classic agent and choose "Maker credentials," every user of that agent acts with <em>your</em> account's permissions. If you have admin access, every user has admin access via the agent. The fix: always choose end-user authentication on connectors, even if it takes longer to set up.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">No authentication = anyone, including outside the company</div>
+        <div class="step-desc">Setting authentication to "None" doesn't mean "easier sign-in" — it means no sign-in at all. If the agent is published to a website or shared org-wide, anyone who finds the URL can use it. Default to end-user auth. Only use no-auth if there's a documented business reason and the Approver has signed off.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Org-wide sharing is a security decision, not a convenience toggle</div>
+        <div class="step-desc">Sharing your agent with "Everyone in the organisation" exposes it to 100% of your colleagues — including their devices, their permissions, and any compromise of their accounts. Start with a named group. Expand only when there's a reason. Org-wide sharing requires Approver sign-off.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">Connector scope is permanent — grant the minimum</div>
+        <div class="step-desc">When you grant a connector "Files.ReadWrite.All" or "Mail.Read", the agent has that scope forever, across every conversation, every user. Don't pick the broadest scope to "make sure it works." Pick the narrowest scope that does the job. If you need to broaden later, you can — but you can't easily narrow once users depend on it.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <div class="step-title">Every agent needs an Owner, a Sponsor, and a documented purpose</div>
+        <div class="step-desc">If you build it and leave, the agent becomes ownerless. If no business stakeholder cares whether it exists, it's invisible to governance reviews. Before publishing, fill in: who maintains it (Owner), who's accountable for whether it should still exist (Sponsor), and one sentence on what it does. Future-you will thank present-you.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">PART B — RED FLAGS IN YOUR OWN AGENT (10 MIN)</div>
+    <div class="step">
+      <div class="step-num warn">!</div>
+      <div class="step-body">
+        <div class="step-title">Self-audit checklist before publishing</div>
+        <div class="step-desc">Walk through these yourself before clicking Publish. If you can't tick all six, don't publish yet.</div>
+        <div style="background:#f5f7fc;border:1px solid var(--border);border-radius:4px;padding:12px 16px;font-size:12px;margin-top:8px;line-height:1.9;">
+          ☐ End-user authentication is on (not "None", not "Maker")<br>
+          ☐ All connectors use end-user auth, not maker credentials<br>
+          ☐ Connector scopes are the narrowest that work<br>
+          ☐ Sharing is set to a named group, not "Everyone"<br>
+          ☐ Owner and Sponsor are filled in (different people for HIGH-tier agents)<br>
+          ☐ The agent description explains what it does in one sentence
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">PART C — WHERE TO GET HELP (5 MIN)</div>
+    <div class="step">
+      <div class="step-num ok">?</div>
+      <div class="step-body">
+        <div class="step-title">Escalation paths</div>
+        <div class="step-desc">Makers should leave the session knowing where to ask. Adapt this list to your organisation:</div>
+        <div style="background:#f5f7fc;border:1px solid var(--border);border-radius:4px;padding:12px 16px;font-size:12px;margin-top:8px;line-height:1.9;">
+          <strong>"I need to share my agent more broadly"</strong> → IT Approver (named individual or team mailbox)<br>
+          <strong>"My connector needs a broader scope"</strong> → IT Approver + DLP exception process<br>
+          <strong>"I think my agent has been misused"</strong> → Security team (security mailbox or SOC)<br>
+          <strong>"I'm leaving — who takes my agent?"</strong> → Sponsor (hand off Owner role before last day)<br>
+          <strong>"I need an external connector or new model"</strong> → Agent Lifecycle Board (monthly)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-tip" style="margin-top:16px;">💡 <strong>Run format:</strong> 30 minutes total — 15 min content, 10 min checklist walkthrough using a sample agent, 5 min Q&amp;A. Recording the session and making it a watch-once prerequisite for environment access scales this without burning facilitator time.</div>
+</div>
+
+<!-- ═══════════════ PLAYBOOK 8 — VET A THIRD-PARTY AGENT ═══════════════ -->
+<div class="pb-panel" id="pb8" style="margin-top:40px;">
+  <div class="pb-header" style="background:linear-gradient(135deg,#3a0066 0%,#5256a3 100%);">
+    <div class="pb-header-eyebrow">PLAYBOOK 08</div>
+    <div class="pb-header-title">Vet a Third-Party Agent Before Publish</div>
+    <div class="pb-header-sub">External agents — from the Microsoft Agent Store, ISV partners, or vendor-supplied apps — should not reach your tenant without a security review. This is the equivalent of third-party software vetting for the agent era. Run it for every external agent before it appears in any environment, and treat any agent processing regulated data as a DPIA trigger.</div>
+    <div class="pb-meta-row">
+      <span class="pb-meta-item green">✓ Run once per third-party agent</span>
+      <span class="pb-meta-item">Owner: IT Approver + Security review</span>
+      <span class="pb-meta-item warn">⚠ Some checks need DPIA where citizen / regulated data is in scope</span>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STEP 1 — PUBLISHER &amp; PROVENANCE CHECK</div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Verify who built it and their security posture</div>
+        <div class="step-desc">Before looking at the agent itself, validate the publisher. A poorly secured publisher is a supply chain risk even if their agent is well-designed.</div>
+        <div style="background:#f5f7fc;border:1px solid var(--border);border-radius:4px;padding:12px 16px;font-size:12px;margin-top:8px;line-height:1.9;">
+          ☐ Publisher identity verified (Microsoft Partner status, registered company, contact details)<br>
+          ☐ Publisher security posture documented (SOC 2, ISO 27001, or equivalent)<br>
+          ☐ Vulnerability disclosure / responsible disclosure policy exists<br>
+          ☐ Publisher subject to GDPR / UK GDPR / equivalent data protection regulation<br>
+          ☐ Agent listed on Microsoft Agent Store with "Publisher Verified" badge (if applicable)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STEP 2 — CONNECTOR &amp; DATA SCOPE REVIEW</div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">What data does it touch, and how broadly?</div>
+        <div class="step-desc">Document every connector, every OAuth scope, every data source the agent will access. The publisher's documentation may understate this — verify against what the agent's manifest actually requests.</div>
+        <div style="background:#f5f7fc;border:1px solid var(--border);border-radius:4px;padding:12px 16px;font-size:12px;margin-top:8px;line-height:1.9;">
+          ☐ Full connector list documented (with required scopes per connector)<br>
+          ☐ Each scope justified — narrowest scope that works has been selected<br>
+          ☐ No broad-read scopes (Files.ReadWrite.All, Mail.Read, Directory.Read.All) without explicit justification<br>
+          ☐ Data residency confirmed — does data leave the tenant geo? Cross-EUDB?<br>
+          ☐ Sub-processors documented if the agent uses third-party APIs<br>
+          ☐ Sensitive data categories the agent will touch are identified and DLP coverage verified
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STEP 3 — AUTHENTICATION &amp; IDENTITY MODEL</div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">How does the agent authenticate, and what is its identity model?</div>
+        <div class="step-desc">External agents must use end-user authentication and Modern identity model. Maker credentials are not acceptable for any third-party agent regardless of context.</div>
+        <div style="background:#f5f7fc;border:1px solid var(--border);border-radius:4px;padding:12px 16px;font-size:12px;margin-top:8px;line-height:1.9;">
+          ☐ Agent uses end-user authentication (not maker credentials, not no-auth)<br>
+          ☐ Agent is Modern (Entra Agent ID) — Classic agents from external publishers are rejected outright<br>
+          ☐ Conditional Access policies cover the agent identity<br>
+          ☐ Access Package or equivalent time-bound permission model is in place<br>
+          ☐ Agent identity is registered in your tenant inventory (Phase 1)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STEP 4 — DPIA &amp; REGULATORY TRIGGER</div>
+    <div class="step">
+      <div class="step-num warn">!</div>
+      <div class="step-body">
+        <div class="step-title">Does processing trigger a DPIA or regulator notification?</div>
+        <div class="step-desc">Any external agent processing regulated data (PII, financial, health, citizen records, government-classified content) is a DPIA trigger. Don't skip this step — it's the single most common compliance failure for third-party agent deployments.</div>
+        <div style="background:#f5f7fc;border:1px solid var(--border);border-radius:4px;padding:12px 16px;font-size:12px;margin-top:8px;line-height:1.9;">
+          ☐ Data Protection Officer / DPIA team notified before deployment<br>
+          ☐ DPIA completed if regulated personal data is in scope<br>
+          ☐ EU AI Act Annex III classification reviewed (high-risk categories trigger documentation, transparency, human oversight obligations)<br>
+          ☐ Existing DPIAs covering Copilot Studio updated if the agent introduces a new processing purpose<br>
+          ☐ Regulator notification considered (ICO, EU AI Office, sector regulator) where applicable
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STEP 5 — APPROVAL &amp; ONGOING GOVERNANCE</div>
+    <div class="step">
+      <div class="step-num ok">5</div>
+      <div class="step-body">
+        <div class="step-title">Sign-off and lifecycle entry</div>
+        <div class="step-desc">Approval is not the end of the workflow — every third-party agent enters the same ongoing governance cycle as internally built agents, plus a few extras.</div>
+        <div style="background:#f5f7fc;border:1px solid var(--border);border-radius:4px;padding:12px 16px;font-size:12px;margin-top:8px;line-height:1.9;">
+          ☐ Agent Approver signs off in writing (with conditions documented if applicable)<br>
+          ☐ Risk tier assigned per the methodology on the <a href="risk.html" style="color:var(--blue);">Risk page</a><br>
+          ☐ Added to quarterly governance sweep from day one<br>
+          ☐ Included in red team rotation if HIGH-tier<br>
+          ☐ Publisher's vulnerability disclosure contact added to security team's vendor register<br>
+          ☐ Annual re-vetting scheduled — publisher security posture and agent scope are reviewed every 12 months
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-tip" style="margin-top:16px;">💡 <strong>Standing veto:</strong> any of Owner / Sponsor / Approver / DPO can block a third-party agent at any step. The default for external agents is "not approved" — you have to actively decide to allow them in. This is the inverse of internally built agents, where the default is "permitted within environment policy."</div>
+</div>
+
 <div class="page-nav"><a href="gaps.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Gaps</span></a><a href="agent365.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Agent 365</span></a></div>
 
 <div style="text-align:center;margin:32px 0 0;padding:24px 0;border-top:1px solid var(--border2);">
@@ -1755,25 +2043,25 @@ document.addEventListener('DOMContentLoaded', function(){
   const CHIPS = {
     technical: [
       {q:'What should I set up on Day 1?', label:'Day 1 setup'},
-      {q:'Does CA for Agents apply to Copilot Studio?', label:'CA for Agents?'},
-      {q:"What's the difference between Classic and Modern agents?", label:'Classic vs Modern'},
-      {q:'Does maker credentials risk apply to Security Copilot custom agents?', label:'Maker creds + Security Copilot'},
-      {q:'How do I detect orphaned agents in my tenant?', label:'Detect orphaned agents'},
+      {q:'What is the six-phase AI security rollout?', label:'Six-phase rollout'},
+      {q:'How do I classify agents by risk tier (High / Medium / Low)?', label:'Risk tier H/M/L'},
+      {q:'What are the four AI security KPIs to track weekly?', label:'Four KPIs'},
       {q:'What KQL query detects no-auth agents?', label:'No-auth KQL'},
-      {q:'Is Entra Agent ID generally available yet?', label:'Entra Agent ID GA?'},
-      {q:'What are the EU AI Act and Colorado AI Act deadlines?', label:'EU AI Act deadlines'},
-      {q:'How do I set up logging for Microsoft Foundry?', label:'Foundry logging'},
+      {q:"What's the difference between Classic and Modern agents?", label:'Classic vs Modern'},
+      {q:'Does CA for Agents apply to Copilot Studio?', label:'CA for Agents?'},
+      {q:'What is the Owner / Sponsor / Approver role model for agents?', label:'Owner/Sponsor/Approver'},
+      {q:'How do I vet a third-party agent before publishing?', label:'Vet a third-party agent'},
       {q:'What are the biggest gaps in Microsoft AI security today?', label:'Key gaps'},
     ],
     business: [
       {q:"We're rolling out Microsoft Copilot — what are the main security risks we should know about?", label:'Copilot risks'},
-      {q:"What's the biggest mistake organisations make when deploying AI agents?", label:'Biggest mistakes'},
       {q:'What do we need to do on day one before anything else?', label:'Day one priority'},
-      {q:'What could go wrong if we deploy Copilot without any security controls?', label:'What if we do nothing?'},
-      {q:'How long does it take to secure AI agents properly?', label:'How long does it take?'},
+      {q:'Can you explain the six-phase AI security rollout in simple terms?', label:'Six-phase rollout (simple)'},
+      {q:'What four AI security metrics should we report to the board?', label:'Four KPIs for the board'},
+      {q:'What should be in a quarterly AI risk report to the board?', label:'Quarterly board pack'},
+      {q:'What governance forums do we need to oversee AI agents?', label:'Governance forums'},
+      {q:'How do we decide which agents are high risk?', label:'Risk tier explained'},
       {q:'What licences do we need to secure our AI agents?', label:'Licences needed'},
-      {q:'Can you explain the Classic vs Modern agent problem in simple terms?', label:'Classic vs Modern (simple)'},
-      {q:'What should a CISO prioritise in the first 90 days of Copilot deployment?', label:'CISO 90-day plan'},
       {q:'Are there any compliance or regulatory deadlines we should be aware of?', label:'Compliance deadlines'},
       {q:'How do I explain AI security risk to my board or leadership team?', label:'Explaining to the board'},
     ]

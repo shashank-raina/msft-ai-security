@@ -418,6 +418,53 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <p>How the three Zero Trust principles — Verify Explicitly, Use Least Privilege, Assume Breach — apply specifically to AI agents, the three-stage maturity model, and the 12 highest-priority ZT Workshop controls are covered on the <a href="frameworks.html" style="color:var(--blue);">Frameworks page</a>.</p>
 </div>
 
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- RISK TIER CLASSIFICATION METHODOLOGY -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:48px;">Classifying your estate</div>
+<h2>Risk tier methodology — apply H / M / L to every agent</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 18px;">Risk categories describe <em>what</em> can go wrong. This tier rubric tells you <em>which agents</em> to remediate first. Apply the criteria below to every agent in your inventory register — the tier drives both the remediation timeline and the depth of subsequent controls (red teaming scope, governance review cadence, sponsor accountability).</p>
+
+<table>
+<thead><tr><th>Tier</th><th>Criteria (any of)</th><th>Required action</th><th>Governance cadence</th></tr></thead>
+<tbody>
+<tr><td><strong style="color:#c23000;">HIGH</strong><br><span style="font-size:11px;color:var(--text3);">Priority 1</span></td><td>• No authentication<br>• Maker credentials at agent or connector level<br>• Org-wide sharing<br>• No assigned owner<br>• Handles regulated data (PII, financial, health, citizen records)</td><td><strong>Remediate or block within 14 days.</strong> Full red team engagement before production. Sentinel Analytics Rule alerting on any change.</td><td>Reviewed at every Agent Lifecycle Board (monthly)</td></tr>
+<tr><td><strong style="color:#943000;">MEDIUM</strong><br><span style="font-size:11px;color:var(--text3);">Priority 2</span></td><td>• Authenticated but broad connector access (SharePoint, Exchange, Teams)<br>• Sensitive but not regulated data connectors<br>• Named owner present but no business sponsor<br>• Shared with large group (50+) but not org-wide</td><td>Scope review within 30 days. DLP coverage validated. Annual focused red team on prompt injection &amp; data exfiltration.</td><td>Quarterly governance sweep</td></tr>
+<tr><td><strong style="color:#0a5a10;">LOW</strong><br><span style="font-size:11px;color:var(--text3);">Monitor</span></td><td>• Delegated end-user authentication<br>• Named users or small group sharing<br>• Scoped data access (single team site, single connector)<br>• Both owner and sponsor assigned</td><td>Document. Include in quarterly inventory check. Regression red team only on significant change (connector, tool, system prompt).</td><td>Annual audit + change-triggered review</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-warn" style="margin-top:16px;">
+  <div class="callout-title">⚠ Critical: the tier is the highest match, not the average</div>
+  <p>An agent that meets one HIGH criterion and four LOW criteria is still HIGH. Risk does not average down. A no-auth agent serving a tiny team and reading only a single SharePoint list is still HIGH because the no-auth condition alone makes it externally reachable. Apply the criteria as a screen, not a score.</p>
+</div>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 Where the tier is used</div>
+  <p>Phase 1 inventory output → Phase 2 governance sequence (remediate HIGH first) → Phase 4 red team scope (Tier 1/2/3 maps to High/Medium/Low) → Phase 6 board reporting (tier distribution + trend). See <a href="strategy.html#phase-1" style="color:var(--blue);">the six-phase rollout on Strategy</a> for the full sequence.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- AI TRUST & SAFETY ASSURANCE -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:48px;">Trust &amp; Safety</div>
+<h2>AI Trust and Safety assurance — distinct from security testing</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">For agents that interact directly with citizens, vulnerable users, or make consequential decisions (benefits, healthcare, financial outcomes, public-facing services), security testing alone is not sufficient. An <strong>AI Trust and Safety assessment</strong> — typically using a recognised safety assurance methodology such as <a href="https://adelard.com/" target="_blank" style="color:var(--blue);">Adelard's safety case methodology</a> — validates that the agent is trustworthy, reliable, and dependable across its full data pipeline. This is a separate assurance discipline from penetration testing or red teaming.</p>
+
+<table>
+<thead><tr><th>Discipline</th><th>What it tests</th><th>Output</th></tr></thead>
+<tbody>
+<tr><td><strong>Security testing / red teaming</strong></td><td>Adversarial robustness — prompt injection, data exfiltration, tool chain manipulation, jailbreak, model extraction</td><td>Vulnerabilities &amp; exploit paths · OWASP LLM Top 10 coverage</td></tr>
+<tr><td><strong>AI Trust and Safety assurance</strong></td><td>Reliability, dependability, fairness, safety-of-use — including failure modes for vulnerable users, edge cases, hallucination tolerance, and traceability of decisions</td><td>Safety case · auditable assurance argument · evidence pack for regulators</td></tr>
+<tr><td><strong>Responsible AI evaluation</strong></td><td>Harms — bias, toxicity, manipulation, discriminatory outputs — typically via Foundry evaluations and Content Safety</td><td>Harm taxonomy coverage · evaluation telemetry</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;">
+  <div class="callout-title">📌 When to commission a Trust &amp; Safety assessment</div>
+  <p>Required for: agents interacting directly with the public, agents making decisions about benefits or eligibility, agents in healthcare or safeguarding contexts, agents handling vulnerable users. Recommended for: any agent classified as HIGH risk per the tier methodology above, plus any agent newly subject to EU AI Act Annex III high-risk classification. The output is an auditable safety case — not a posture score — suitable for regulator submission alongside the security evidence pack.</p>
+</div>
+
 <div class="page-nav"><a href="overview.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Overview</span></a><a href="product-map.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Products</span></a></div>
 <div style="text-align:center;margin:32px 0 0;padding:24px 0;border-top:1px solid var(--border2);">
   <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text3);margin-bottom:10px;">STAY UPDATED</div>
@@ -659,25 +706,25 @@ document.addEventListener('DOMContentLoaded', function(){
   const CHIPS = {
     technical: [
       {q:'What should I set up on Day 1?', label:'Day 1 setup'},
-      {q:'Does CA for Agents apply to Copilot Studio?', label:'CA for Agents?'},
-      {q:"What's the difference between Classic and Modern agents?", label:'Classic vs Modern'},
-      {q:'Does maker credentials risk apply to Security Copilot custom agents?', label:'Maker creds + Security Copilot'},
-      {q:'How do I detect orphaned agents in my tenant?', label:'Detect orphaned agents'},
+      {q:'What is the six-phase AI security rollout?', label:'Six-phase rollout'},
+      {q:'How do I classify agents by risk tier (High / Medium / Low)?', label:'Risk tier H/M/L'},
+      {q:'What are the four AI security KPIs to track weekly?', label:'Four KPIs'},
       {q:'What KQL query detects no-auth agents?', label:'No-auth KQL'},
-      {q:'Is Entra Agent ID generally available yet?', label:'Entra Agent ID GA?'},
-      {q:'What are the EU AI Act and Colorado AI Act deadlines?', label:'EU AI Act deadlines'},
-      {q:'How do I set up logging for Microsoft Foundry?', label:'Foundry logging'},
+      {q:"What's the difference between Classic and Modern agents?", label:'Classic vs Modern'},
+      {q:'Does CA for Agents apply to Copilot Studio?', label:'CA for Agents?'},
+      {q:'What is the Owner / Sponsor / Approver role model for agents?', label:'Owner/Sponsor/Approver'},
+      {q:'How do I vet a third-party agent before publishing?', label:'Vet a third-party agent'},
       {q:'What are the biggest gaps in Microsoft AI security today?', label:'Key gaps'},
     ],
     business: [
       {q:"We're rolling out Microsoft Copilot — what are the main security risks we should know about?", label:'Copilot risks'},
-      {q:"What's the biggest mistake organisations make when deploying AI agents?", label:'Biggest mistakes'},
       {q:'What do we need to do on day one before anything else?', label:'Day one priority'},
-      {q:'What could go wrong if we deploy Copilot without any security controls?', label:'What if we do nothing?'},
-      {q:'How long does it take to secure AI agents properly?', label:'How long does it take?'},
+      {q:'Can you explain the six-phase AI security rollout in simple terms?', label:'Six-phase rollout (simple)'},
+      {q:'What four AI security metrics should we report to the board?', label:'Four KPIs for the board'},
+      {q:'What should be in a quarterly AI risk report to the board?', label:'Quarterly board pack'},
+      {q:'What governance forums do we need to oversee AI agents?', label:'Governance forums'},
+      {q:'How do we decide which agents are high risk?', label:'Risk tier explained'},
       {q:'What licences do we need to secure our AI agents?', label:'Licences needed'},
-      {q:'Can you explain the Classic vs Modern agent problem in simple terms?', label:'Classic vs Modern (simple)'},
-      {q:'What should a CISO prioritise in the first 90 days of Copilot deployment?', label:'CISO 90-day plan'},
       {q:'Are there any compliance or regulatory deadlines we should be aware of?', label:'Compliance deadlines'},
       {q:'How do I explain AI security risk to my board or leadership team?', label:'Explaining to the board'},
     ]

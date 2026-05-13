@@ -243,9 +243,9 @@ code{font-family:'JetBrains Mono',monospace;font-size:10px;background:#eef1f8;
 <div class="page">
 
 <div class="section-label">Agentic AI Defense</div>
-<h1>An Eight-Pillar Defense Strategy</h1>
-<p style="font-size:15px;color:var(--text2);max-width:680px;margin-bottom:8px;">A structured approach to securing agentic AI across the enterprise — from initial visibility through to autonomous defense. Each pillar maps to Microsoft's product stack, the controls available today, and the honest gaps that remain.</p>
-<p style="font-size:12px;color:var(--text3);font-family:'JetBrains Mono',monospace;">Source: Microsoft RSAC 2026 · Vasu Jakkal · Agent 365 · ZT4AI · April 2026</p>
+<h1>A Six-Phase Defense Strategy</h1>
+<p style="font-size:15px;color:var(--text2);max-width:680px;margin-bottom:8px;">A structured approach to securing agentic AI across the enterprise — from initial visibility through to sustained governance. Each phase has prerequisites, produces evidence the next phase consumes, and maps to controls available in your existing Microsoft 365 E5 and Sentinel investment.</p>
+<p style="font-size:12px;color:var(--text3);font-family:'JetBrains Mono',monospace;">Framework: aiagentsecurity.guide · Aligned to Microsoft RSAC 2026 announcements and Agent 365 GA</p>
 
 <!-- HERO -->
 <div class="strategy-hero">
@@ -260,520 +260,115 @@ code{font-family:'JetBrains Mono',monospace;font-size:10px;background:#eef1f8;
   </div>
 </div>
 
-<!-- QUICK NAV -->
-<div class="section-label">Eight pillars</div>
-<h2>Framework overview</h2>
-<p style="font-size:13px;color:var(--text2);margin-bottom:16px;">Click any pillar to jump to the detail.</p>
-<div class="pillars-overview">
-  <a href="#p1" class="pillar-thumb"><div class="pillar-thumb-num">PILLAR 01</div><div class="pillar-thumb-icon">👁</div><div class="pillar-thumb-name">Visibility &amp; Inventory</div></a>
-  <a href="#p2" class="pillar-thumb"><div class="pillar-thumb-num">PILLAR 02</div><div class="pillar-thumb-icon">🪪</div><div class="pillar-thumb-name">Identity</div></a>
-  <a href="#p3" class="pillar-thumb"><div class="pillar-thumb-num">PILLAR 03</div><div class="pillar-thumb-icon">🔒</div><div class="pillar-thumb-name">Data Security</div></a>
-  <a href="#p4" class="pillar-thumb"><div class="pillar-thumb-num">PILLAR 04</div><div class="pillar-thumb-icon">🛡️</div><div class="pillar-thumb-name">Endpoints &amp; Cloud</div></a>
-  <a href="#p5" class="pillar-thumb"><div class="pillar-thumb-num">PILLAR 05</div><div class="pillar-thumb-icon">🔐</div><div class="pillar-thumb-name">Zero Trust for AI</div></a>
-  <a href="#p6" class="pillar-thumb"><div class="pillar-thumb-num">PILLAR 06</div><div class="pillar-thumb-icon">🤖</div><div class="pillar-thumb-name">Agents in Security Workflows</div></a>
-  <a href="#p7" class="pillar-thumb"><div class="pillar-thumb-num">PILLAR 07</div><div class="pillar-thumb-icon">📡</div><div class="pillar-thumb-name">Agentic SIEM Platform</div></a>
-  <a href="#p8" class="pillar-thumb"><div class="pillar-thumb-num">PILLAR 08</div><div class="pillar-thumb-icon">🧑‍💼</div><div class="pillar-thumb-name">Security Experts</div></a>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- AI READINESS ASSESSMENT — BEFORE YOU START -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label">Before you start</div>
+<h2>AI Readiness Assessment — the question to answer first</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">Before kicking off Phase 1, an organisational-level readiness check frames the technical work within the strategic AI roadmap. The output is not a control deployment — it's a documented baseline of attack surface, ungoverned legacy estate (Classic agents, shadow AI tools, unmanaged OAuth grants), and the gap between current AI adoption and current AI governance. This is what turns Phase 1 from "run some KQL queries" into "we know how big the problem is before we measure it."</p>
+
+<div class="callout callout-info" style="margin-top:8px;">
+  <div class="callout-title">📌 Output of a readiness assessment</div>
+  <p>Attack surface inventory (shadow AI tools, unsanctioned LLMs, ungoverned plugins); legacy estate scale (Classic agent count, ownerless agents, no-auth agents); governance maturity gap (what's deployed today vs the six phases); commercial path (which Agent 365 capabilities are needed and at what population size). This becomes the brief for Phase 1.</p>
 </div>
 
 <div class="divider"></div>
 
-<!-- ═══ PILLAR 1 ═══ -->
-<div class="pillar" id="p1">
-  <div class="pillar-header">
-    <div class="pillar-num-badge" style="background:rgba(0,120,212,0.1);color:var(--blue);border:1.5px solid rgba(0,120,212,0.25);">01</div>
-    <div class="pillar-header-text">
-      <div class="pillar-name">👁 Visibility &amp; Inventory</div>
-      <div class="pillar-tagline">You cannot secure what you cannot see. Start here — always.</div>
-    </div>
-  </div>
-  <div class="pillar-body">
-    <div class="pillar-desc">The first diagnostic question for any organisation: how many AI agents do you have, who built them, what authentication pattern are they using, and who owns them? Most organisations do not know. The gap between perceived and actual agent estate typically reveals 3–5× more agents than IT believes exist. Visibility is not just an audit exercise — it is the prerequisite for every other pillar.</div>
-    <div class="pillar-cols">
-      <div>
-        <div class="pillar-col-title">Controls available now</div>
-        <div class="pillar-col-items">
-          <div class="pillar-item">AIAgentsInfo Advanced Hunting table — all agent types, all platforms</div>
-          <div class="pillar-item">Security Dashboard for AI at ai.security.microsoft.com — GA</div>
-          <div class="pillar-item">M365 admin center → Agents → All agents (AI Reader role, no licence)</div>
-          <div class="pillar-item">Entra Internet Access Shadow AI Detection — GA March 31 2026</div>
-          <div class="pillar-item">Defender for Cloud Apps discovery — GenAI, model providers, MCP servers</div>
-          <div class="pillar-item">ARA tool — automated pre-deployment readiness across 6 domains</div>
-          <div class="pillar-item">Agent Model Inventory KQL — identifies out-of-EUDB models (modelNameHint)</div>
-        </div>
-      </div>
-      <div>
-        <div class="pillar-col-title">Products</div>
-        <div class="product-chips">
-          <span class="chip chip-blue">Security Dashboard for AI</span>
-          <span class="chip chip-blue">Defender Advanced Hunting</span>
-          <span class="chip chip-blue">Entra Internet Access</span>
-          <span class="chip chip-blue">Defender for Cloud Apps</span>
-          <span class="chip chip-green">Agent 365 Registry</span>
-          <span class="chip chip-grey">ARA Tool (open source)</span>
-        </div>
-        <div style="margin-top:14px;">
-          <div class="pillar-col-title">Key KQL</div>
-          <div class="pillar-col-items">
-            <div class="pillar-item"><code>AIAgentsInfo | summarize arg_max(Timestamp,*) by AIAgentId</code></div>
-            <div class="pillar-item"><code>extract(modelNameHint)</code> for out-of-EUDB model detection</div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="pillar-col-title">Gaps &amp; honest caveats</div>
-        <div class="pillar-col-items">
-          <div class="pillar-gap-item">Classic agents (73% of estate) are service principals — no agent-specific inventory fields</div>
-          <div class="pillar-gap-item">Cloud App discovery shows disabled in dashboard even when connected (known bug)</div>
-          <div class="pillar-gap-item">AIAgentsInfo requires Defender P2 — not all tenants have it</div>
-          <div class="pillar-gap-item">EUDB model visibility: modelNameHint only available for Copilot Studio agents, not Foundry</div>
-        </div>
-      </div>
-    </div>
-    <div class="callout callout-info" style="margin-top:16px;">
-      <div class="callout-title">📌 Recommended starting point</div>
-      Run the ARA tool first — it gives you a tenant-wide posture report in minutes. Then run the AIAgentsInfo audit KQL in Playbook 01 for agent-specific detail. Classic vs Modern split is the first thing to establish.
-    </div>
-  </div>
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- PHASED IMPLEMENTATION FRAMEWORK -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label">Implementation sequence</div>
+<h2>Six-phase rollout — where to start if you're starting from zero</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 18px;">Each phase has prerequisites and produces evidence the next phase consumes. Run them in order — skipping ahead leaves controls without the visibility they depend on. Each phase maps to capabilities available in your existing Microsoft 365 E5 and Microsoft Sentinel footprint, with Agent 365 add-ons clearly marked where required.</p>
+
+<div class="pillars-overview" style="grid-template-columns:repeat(3,1fr);">
+  <a href="#phase-1" class="pillar-thumb"><div class="pillar-thumb-num">PHASE 01</div><div class="pillar-thumb-icon">🔍</div><div class="pillar-thumb-name">Discover &amp; Inventory</div></a>
+  <a href="#phase-2" class="pillar-thumb"><div class="pillar-thumb-num">PHASE 02</div><div class="pillar-thumb-icon">🪪</div><div class="pillar-thumb-name">Identity &amp; Governance</div></a>
+  <a href="#phase-3" class="pillar-thumb"><div class="pillar-thumb-num">PHASE 03</div><div class="pillar-thumb-icon">📂</div><div class="pillar-thumb-name">Data Security</div></a>
+  <a href="#phase-4" class="pillar-thumb"><div class="pillar-thumb-num">PHASE 04</div><div class="pillar-thumb-icon">🛡️</div><div class="pillar-thumb-name">Runtime Protection</div></a>
+  <a href="#phase-5" class="pillar-thumb"><div class="pillar-thumb-num">PHASE 05</div><div class="pillar-thumb-icon">📡</div><div class="pillar-thumb-name">Monitoring &amp; Detection</div></a>
+  <a href="#phase-6" class="pillar-thumb"><div class="pillar-thumb-num">PHASE 06</div><div class="pillar-thumb-icon">⚖️</div><div class="pillar-thumb-name">Compliance &amp; Governance</div></a>
 </div>
 
-<!-- ═══ PILLAR 2 ═══ -->
-<div class="pillar" id="p2">
-  <div class="pillar-header">
-    <div class="pillar-num-badge" style="background:rgba(98,100,167,0.1);color:var(--purple);border:1.5px solid rgba(98,100,167,0.3);">02</div>
-    <div class="pillar-header-text">
-      <div class="pillar-name">🪪 Identity</div>
-      <div class="pillar-tagline">Every agent needs its own identity — not the builder's.</div>
-    </div>
-  </div>
-  <div class="pillar-body">
-    <div class="pillar-desc">Identity is the most targeted layer in any environment and the first line of defence. For AI agents, the challenge is that most existing agents share the identity of the person who built them — granting every user who runs the agent the builder's full permission set. Entra Agent ID is the structural fix: each agent gets its own service principal with scoped permissions, lifecycle governance, and full Entra security stack coverage.</div>
-    <div class="pillar-cols">
-      <div>
-        <div class="pillar-col-title">Controls available now</div>
-        <div class="pillar-col-items">
-          <div class="pillar-item">Entra Agent ID — Blueprint, T1/T2 auth, FIC credentials, four object types</div>
-          <div class="pillar-item">CA for Agent ID (Preview) — zero trust CA policies targeting agent identities</div>
-          <div class="pillar-item">ID Protection for Agents (Preview) — six risk detections, Risky Agents report</div>
-          <div class="pillar-item">Custom security attributes for agent segmentation — scalable CA scoping</div>
-          <div class="pillar-item">Owner + Sponsor model — technical and business accountability per agent</div>
-          <div class="pillar-item">Sentinel Analytics Rule — auth type change detection as high-severity Incident</div>
-          <div class="pillar-item">Copilot Studio auto security scan — warns at publish time on auth misconfigs</div>
-          <div class="pillar-item">Agent runtime protection status — Protected / Needs review / Unknown per agent</div>
-        </div>
-      </div>
-      <div>
-        <div class="pillar-col-title">Five auth patterns (risk ladder)</div>
-        <div class="pillar-col-items">
-          <div class="pillar-item">① End User (OBO) — Low risk · Classic</div>
-          <div class="pillar-item">② Maker credentials — Very High · Classic · most dangerous</div>
-          <div class="pillar-item">③ App Reg Delegated — Low · Classic</div>
-          <div class="pillar-item">④ App Reg App Permissions — Very High · Classic</div>
-          <div class="pillar-item">⑤ Agent User Account — Very High · Modern only</div>
-        </div>
-        <div style="margin-top:10px;">
-          <div class="pillar-col-title">Three Agent Identity security guarantees</div>
-          <div class="pillar-col-items">
-            <div class="pillar-item">No admin token generation — even Global Admins cannot generate agent identity tokens</div>
-            <div class="pillar-item">Tenant-bound — tokens only valid in home tenant</div>
-            <div class="pillar-item">Impersonation model — Blueprint performs exchange, Agent Identity appears in audit logs</div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="pillar-col-title">Gaps &amp; honest caveats</div>
-        <div class="pillar-col-items">
-          <div class="pillar-gap-item">Classic agents (73% of estate) get zero CA, ID Protection, or lifecycle governance</div>
-          <div class="pillar-gap-item">Entra Agent ID requires Frontier programme — not generally available</div>
-          <div class="pillar-gap-item">Any tenant user can change another agent's auth type regardless of ownership</div>
-          <div class="pillar-gap-item">CA carve-outs: Blueprint T1 flows excluded from CA evaluation by design</div>
-          <div class="pillar-gap-item">Agent User survives Blueprint deletion — orphaned with full permissions, no flag</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ PILLAR 3 ═══ -->
-<div class="pillar" id="p3">
-  <div class="pillar-header">
-    <div class="pillar-num-badge" style="background:rgba(0,133,117,0.1);color:var(--teal2);border:1.5px solid rgba(0,133,117,0.3);">03</div>
-    <div class="pillar-header-text">
-      <div class="pillar-name">🔒 Data Security</div>
-      <div class="pillar-tagline">Governance must be enforced at the grounding layer, not just at output.</div>
-    </div>
-  </div>
-  <div class="pillar-body">
-    <div class="pillar-desc">With AI embedded in everyday work, sensitive data moves through prompts, responses, and grounding flows faster than policies can keep up. Security teams need visibility into how AI interacts with data and the ability to stop leakage at the point of use. Microsoft's approach embeds data security directly into the AI control plane — sensitivity labels travel with grounded data through Work IQ, enforcing governance at the intelligence layer, not just at output.</div>
-    <div class="pillar-cols">
-      <div>
-        <div class="pillar-col-title">Controls available now</div>
-        <div class="pillar-col-items">
-          <div class="pillar-item">Purview DLP for M365 Copilot — GA March 31 2026. Blocks PII, credit card numbers, custom SITs in prompts and web grounding</div>
-          <div class="pillar-item">SAM Restricted Content Discovery (RCD) — excludes SharePoint sites from Copilot grounding. Included with M365 Copilot licence</div>
-          <div class="pillar-item">DSPM for AI — activity explorer, sensitivity label insights, unethical behaviour detection</div>
-          <div class="pillar-item">IRM Adaptive Protection — auto-enrols risky users into stricter DLP based on risk score</div>
-          <div class="pillar-item">Browser DLP (Edge for Business) — inspects typed prompts to unmanaged GenAI apps including BYOD</div>
-          <div class="pillar-item">Network DLP (Global Secure Access) — network-layer enforcement</div>
-          <div class="pillar-item">Entra Internet Access prompt injection protection — GA March 31 2026</div>
-          <div class="pillar-item">Work IQ — grounding-layer governance: sensitivity labels enforced before data reaches agent context</div>
-        </div>
-      </div>
-      <div>
-        <div class="pillar-col-title">Products</div>
-        <div class="product-chips">
-          <span class="chip chip-blue">Purview DLP for Copilot</span>
-          <span class="chip chip-blue">DSPM for AI</span>
-          <span class="chip chip-blue">Purview Comm. Compliance</span>
-          <span class="chip chip-blue">IRM Adaptive Protection</span>
-          <span class="chip chip-blue">SAM + RCD</span>
-          <span class="chip chip-blue">Edge for Business DLP</span>
-          <span class="chip chip-blue">Global Secure Access</span>
-          <span class="chip chip-green">Work IQ</span>
-        </div>
-        <div style="margin-top:14px;">
-          <div class="pillar-col-title">Purview Sentinel connector</div>
-          <div class="pillar-col-items">
-            <div class="pillar-item">Copilot Data Connector (Preview Feb 3 2026) → <code>CopilotActivity</code> table. 21 record types from Purview UAL. Single-tenant only.</div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="pillar-col-title">Gaps &amp; honest caveats</div>
-        <div class="pillar-col-items">
-          <div class="pillar-gap-item">DLP for Copilot requires two separate policies — label-blocking and SIT prompt-blocking cannot be combined in one policy</div>
-          <div class="pillar-gap-item">EUDB gap: Anthropic model agents process data outside EU Data Boundary — no native policy to prevent makers selecting these models</div>
-          <div class="pillar-gap-item">CW1226324 (Jan 2026): Copilot background indexing bypasses DLP for Outlook Drafts and Sent Items. Fix deployed April 2026 but confirm in your tenant</div>
-          <div class="pillar-gap-item">Data lifecycle retention requires Azure pay-as-you-go — unpredictable cost</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ PILLAR 4 ═══ -->
-<div class="pillar" id="p4">
-  <div class="pillar-header">
-    <div class="pillar-num-badge" style="background:rgba(216,59,1,0.08);color:var(--orange);border:1.5px solid rgba(216,59,1,0.25);">04</div>
-    <div class="pillar-header-text">
-      <div class="pillar-name">🛡️ Endpoints, Cloud &amp; Runtime</div>
-      <div class="pillar-tagline">Real-time blocking at the tool execution layer — with honest limits.</div>
-    </div>
-  </div>
-  <div class="pillar-body">
-    <div class="pillar-desc">Defending at the endpoint and cloud layer means catching threats in motion — blocking dangerous tool invocations before they execute, detecting suspicious agent behaviour, and protecting the infrastructure that agentic AI runs on. The Agent Tooling Gateway (ATG) is the primary real-time blocking mechanism, but it has a critical limitation: it only inspects the tool execution path, not model reasoning between tool calls.</div>
-    <div class="pillar-cols">
-      <div>
-        <div class="pillar-col-title">Controls available now</div>
-        <div class="pillar-col-items">
-          <div class="pillar-item">Agent Tooling Gateway (ATG) — evaluates every tool invocation before execution. Real-time block. 1-second timeout.</div>
-          <div class="pillar-item">Defender for Cloud Apps RT Protection — Copilot Studio agents via webhook connector</div>
-          <div class="pillar-item">Defender for Cloud AI Workloads plan — Azure AI Foundry agents and models</div>
-          <div class="pillar-item">Prompt Shields — direct and indirect injection detection at orchestration layer</div>
-          <div class="pillar-item">Defender Predictive Shielding (Preview) — dynamically adjusts identity and access policies during active attacks</div>
-          <div class="pillar-item">Enhanced Defender for Cloud container security (Preview) — binary drift and antimalware</div>
-          <div class="pillar-item">Defender for Cloud posture management — AWS and GCP coverage in preview</div>
-          <div class="pillar-item">CloudAppEvents table — Copilot and agent audit metadata for hunting (no prompt content)</div>
-        </div>
-      </div>
-      <div>
-        <div class="pillar-col-title">Products</div>
-        <div class="product-chips">
-          <span class="chip chip-blue">ATG (Agent Tooling Gateway)</span>
-          <span class="chip chip-blue">Defender for Cloud Apps</span>
-          <span class="chip chip-blue">Defender for Cloud</span>
-          <span class="chip chip-blue">Prompt Shields</span>
-          <span class="chip chip-orange">Defender Predictive Shielding</span>
-          <span class="chip chip-blue">CloudAppEvents</span>
-        </div>
-        <div style="margin-top:14px;">
-          <div class="pillar-col-title">CloudAppEvents key ActionTypes</div>
-          <div class="pillar-col-items">
-            <div class="pillar-item"><code>UpdateCopilotAgent</code> · <code>CopilotInteraction</code></div>
-            <div class="pillar-item"><code>CopilotForSecurityTrigger</code> · <code>DLPRuleMatch</code></div>
-            <div class="pillar-item">Requires M365 app connector + "M365 activities" checkbox</div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="pillar-col-title">Gaps &amp; honest caveats</div>
-        <div class="pillar-col-items">
-          <div class="pillar-gap-item">ATG critical limitation: only inspects tool execution path — does NOT inspect model reasoning between tool calls</div>
-          <div class="pillar-gap-item">ATG 1-second timeout — fast tool calls may execute before block decision is returned</div>
-          <div class="pillar-gap-item">CloudAppEvents: metadata only — no prompt or response content. Pivot to DSPM Activity Explorer for content.</div>
-          <div class="pillar-gap-item">Copilot Studio dual-admin setup required for RT protection — Power Platform Admin + Defender Admin must coordinate</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ PILLAR 5 ═══ -->
-<div class="pillar" id="p5">
-  <div class="pillar-header">
-    <div class="pillar-num-badge" style="background:rgba(0,63,113,0.1);color:#004a9e;border:1.5px solid rgba(0,63,113,0.25);">05</div>
-    <div class="pillar-header-text">
-      <div class="pillar-name">🔐 Zero Trust for AI</div>
-      <div class="pillar-tagline">Three principles. New application. Same rigour.</div>
-    </div>
-  </div>
-  <div class="pillar-body">
-    <div class="pillar-desc">Zero Trust was always built on three principles: verify explicitly, use least privilege, and assume breach. As AI becomes embedded across every layer of the enterprise — the models you build on, the data they consume, the agents that act on your behalf — applying those principles has never been more critical. ZT4AI extends the architecture to the full AI lifecycle: data ingestion, model training, deployment, and agent behaviour at runtime.</div>
-    <div class="pillar-cols">
-      <div>
-        <div class="pillar-col-title">Three principles applied to AI</div>
-        <div class="pillar-col-items">
-          <div class="pillar-item"><strong>Verify explicitly:</strong> Every agent needs a verified identity — not just a name. Entra Agent ID, CA for Agents, ID Protection. Classic agents are the gap.</div>
-          <div class="pillar-item"><strong>Least privilege / least agency:</strong> Minimum permissions AND minimum connectors per agent. Each MCP tool or connector added expands blast radius. Review what each agent can actually do, not just what it can read.</div>
-          <div class="pillar-item"><strong>Assume breach:</strong> Design for prompt injection, data poisoning, and lateral movement. ATG at the tool layer. Sentinel for cross-signal correlation. CA policy to block high-risk agents automatically.</div>
-        </div>
-      </div>
-      <div>
-        <div class="pillar-col-title">ZT4AI resources</div>
-        <div class="pillar-col-items">
-          <div class="pillar-item">ZT4AI Reference Architecture — published RSAC 2026, free to use. Covers full AI lifecycle.</div>
-          <div class="pillar-item">Zero Trust Workshop — AI pillar coming summer 2026. Use Identity, Data, and Networking pillars in the interim.</div>
-          <div class="pillar-item">ZT Assessment Tool — AI pillar due summer 2026. Current: manual mapping to Identity/Data/Networking pillars.</div>
-          <div class="pillar-item">ZT4AI patterns and practices articles — new guidance published at RSAC 2026.</div>
-        </div>
-        <div style="margin-top:12px;">
-          <div class="pillar-col-title">Access Fabric</div>
-          <div class="pillar-col-items">
-            <div class="pillar-item">Architectural concept: treat access as a continuous end-to-end system with identity as the consistent decision point, enforcing across environments in near real time.</div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="pillar-col-title">Maturity stages</div>
-        <div class="mat-stage stage1" style="margin-bottom:8px;">
-          <div class="mat-label">STAGE 1 · VISIBILITY</div>
-          <div class="mat-name">Know your estate</div>
-          <div class="mat-items">Agent inventory · No-auth detection · Owner assignment · ARA assessment</div>
-        </div>
-        <div class="mat-stage stage2" style="margin-bottom:8px;">
-          <div class="mat-label">STAGE 2 · CONTROL</div>
-          <div class="mat-name">Enforce least privilege</div>
-          <div class="mat-items">Entra Agent ID migration · CA for agents · DLP enforcement · ATG deployment</div>
-        </div>
-        <div class="mat-stage stage3">
-          <div class="mat-label">STAGE 3 · AUTOMATION</div>
-          <div class="mat-name">Agentic defense</div>
-          <div class="mat-items">ID Protection CA integration · Security Copilot agents · Sentinel automation · Predictive shielding</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ PILLAR 6 ═══ -->
-<div class="pillar" id="p6">
-  <div class="pillar-header">
-    <div class="pillar-num-badge" style="background:rgba(16,124,16,0.09);color:var(--green2);border:1.5px solid rgba(16,124,16,0.25);">06</div>
-    <div class="pillar-header-text">
-      <div class="pillar-name">🤖 Agents in Security Workflows</div>
-      <div class="pillar-tagline">If adversaries use agents to attack at machine speed, defenders need agents to respond at machine speed.</div>
-    </div>
-  </div>
-  <div class="pillar-body">
-    <div class="pillar-desc">Security Copilot is now included in Microsoft 365 E5 and E7, embedding AI-powered assistance directly into the flow of security operations. New purpose-built security agents accelerate threat investigations, autonomously triage repetitive alerts, and optimise identity access policies — reducing manual effort so defenders can focus on complex, judgement-intensive work.</div>
-    <div class="pillar-cols">
-      <div>
-        <div class="pillar-col-title">Security agents available now</div>
-        <div class="pillar-col-items">
-          <div class="pillar-item"><strong>Security Analyst Agent</strong> (Defender, Preview Mar 26) — contextual threat investigation with guided workflows. Multi-step autonomous analysis.</div>
-          <div class="pillar-item"><strong>Security Alert Triage Agent</strong> (Defender, Preview Apr) — autonomously classifies, prioritises, and resolves repetitive low-value alerts at scale across cloud and identity.</div>
-          <div class="pillar-item"><strong>CA Optimization Agent</strong> (Entra, GA + enhancements Preview) — context-aware CA policy recommendations with phased rollout capability.</div>
-          <div class="pillar-item"><strong>Data Security Posture Agent</strong> (Purview, Preview) — credential scanning to proactively detect credential exposure in your data.</div>
-          <div class="pillar-item"><strong>Data Security Triage Agent</strong> (Purview, GA + enhancements Preview) — advanced AI reasoning layer for DLP alert triage with improved custom SIT interpretation.</div>
-          <div class="pillar-item"><strong>15+ partner-built agents</strong> — available in Security Store in Defender portal.</div>
-        </div>
-      </div>
-      <div>
-        <div class="pillar-col-title">Security Copilot licensing</div>
-        <div class="pillar-col-items">
-          <div class="pillar-item">Included in M365 E5: 400 SCU per 1,000 users/month</div>
-          <div class="pillar-item">Included in M365 E7: same as E5 plus Agent 365</div>
-          <div class="pillar-item">Standalone: SCU-based pricing</div>
-          <div class="pillar-item">Security Store: access to 15+ partner security agents — deploy directly in Defender portal</div>
-        </div>
-        <div style="margin-top:14px;">
-          <div class="pillar-col-title">Products</div>
-          <div class="product-chips">
-            <span class="chip chip-blue">Microsoft Security Copilot</span>
-            <span class="chip chip-blue">Defender Security Analyst Agent</span>
-            <span class="chip chip-blue">Alert Triage Agent</span>
-            <span class="chip chip-purple">Entra CA Optimization Agent</span>
-            <span class="chip chip-green">Purview Data Security Agents</span>
-            <span class="chip chip-grey">Security Store</span>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="pillar-col-title">Strategic consideration</div>
-        <div class="pillar-col-items">
-          <div class="pillar-item">Security agents are AI agents too — they must be subject to the same governance as the agents they protect. Own identity, scoped permissions, Entra Agent ID where available.</div>
-          <div class="pillar-item">Alert volume reduction is the primary value proposition: ATG generates an alert for every tool block. Without triage automation, this creates alert fatigue that undermines the defence.</div>
-          <div class="pillar-item">Security Copilot operates under the configuring user's Entra permissions — its blast radius matches the identity of whoever configured it.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ PILLAR 7 ═══ -->
-<div class="pillar" id="p7">
-  <div class="pillar-header">
-    <div class="pillar-num-badge" style="background:rgba(98,100,167,0.1);color:var(--purple);border:1.5px solid rgba(98,100,167,0.3);">07</div>
-    <div class="pillar-header-text">
-      <div class="pillar-name">📡 Agentic SIEM Platform</div>
-      <div class="pillar-tagline">Where all signals converge — and human analysts work.</div>
-    </div>
-  </div>
-  <div class="pillar-body">
-    <div class="pillar-desc">Microsoft Sentinel is the agentic defense platform — the correlation layer that unifies context from Defender, Entra, Purview, and external sources, automates end-to-end workflows, and gives analysts a single place to investigate and respond. RSAC 2026 significantly expanded Sentinel's AI-specific capabilities, making it the right long-term investment for organisations with a mature AI security posture.</div>
-    <div class="pillar-cols">
-      <div>
-        <div class="pillar-col-title">RSAC 2026 Sentinel capabilities</div>
-        <div class="pillar-col-items">
-          <div class="pillar-item"><strong>Copilot Data Connector</strong> (Preview Feb 2026) — <code>CopilotActivity</code> table, 21 record types from Purview UAL. Single-tenant only.</div>
-          <div class="pillar-item"><strong>MCP Entity Analyzer</strong> (GA April 2026) — natural language querying of MCP entity data in investigations.</div>
-          <div class="pillar-item"><strong>Data Federation via Fabric</strong> (Preview) — investigate external data in Databricks, Fabric, ADLS in place without moving it.</div>
-          <div class="pillar-item"><strong>Playbook Generator</strong> (Preview) — natural language orchestration for complex incident response workflows.</div>
-          <div class="pillar-item"><strong>Custom Graphs via Fabric</strong> (Preview) — custom relationship views unique to your org's environment.</div>
-          <div class="pillar-item"><strong>GDAP + unified RBAC</strong> (Preview) — secure cross-tenant management for MSSP/partner scenarios.</div>
-          <div class="pillar-item"><strong>Auth-type change Analytics Rule</strong> — fires as high-severity Incident when any agent is switched to No Authentication.</div>
-        </div>
-      </div>
-      <div>
-        <div class="pillar-col-title">Defender vs Sentinel — when to use each</div>
-        <div class="pillar-col-items">
-          <div class="pillar-item"><strong>Defender XDR:</strong> Real-time blocking (ATG), 90-day hunting, agent inventory, CloudAppEvents. Primary detection + response layer.</div>
-          <div class="pillar-item"><strong>Sentinel:</strong> Long-term retention (years), cross-system correlation, SOAR automation, cross-tenant management. Strategic correlation + compliance layer.</div>
-          <div class="pillar-item">Both pull from Purview UAL — Defender via CloudAppEvents (M365 app connector), Sentinel via Copilot Data Connector. Enable both for full coverage.</div>
-        </div>
-        <div style="margin-top:14px;">
-          <div class="pillar-col-title">Products</div>
-          <div class="product-chips">
-            <span class="chip chip-blue">Microsoft Sentinel</span>
-            <span class="chip chip-blue">Copilot Data Connector</span>
-            <span class="chip chip-blue">MCP Entity Analyzer</span>
-            <span class="chip chip-blue">Sentinel Data Federation</span>
-            <span class="chip chip-purple">Playbook Generator</span>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="pillar-col-title">Key detection rules to deploy</div>
-        <div class="pillar-col-items">
-          <div class="pillar-item">Auth type change → No Authentication (high-severity Incident)</div>
-          <div class="pillar-item">Ownerless agent creation (new agent with no OwnerAccountUpns)</div>
-          <div class="pillar-item">Maker credentials + org-wide sharing + admin builder (attack path correlation)</div>
-          <div class="pillar-item">CopilotForSecurityTrigger volume anomalies (Security Copilot abuse)</div>
-        </div>
-        <div style="margin-top:10px;">
-          <div class="pillar-gap-item pillar-item">Copilot Data Connector: single-tenant only — partners need separate instance per customer</div>
-          <div class="pillar-gap-item pillar-item">Ingestion costs apply — prompt content is sensitive; apply field-level masking on CopilotActivity</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ PILLAR 8 ═══ -->
-<div class="pillar" id="p8">
-  <div class="pillar-header">
-    <div class="pillar-num-badge" style="background:rgba(0,133,117,0.1);color:var(--teal2);border:1.5px solid rgba(0,133,117,0.3);">08</div>
-    <div class="pillar-header-text">
-      <div class="pillar-name">🧑‍💼 Technical &amp; Governance Partners</div>
-      <div class="pillar-tagline">The platform tells you what's broken. Partners help you fix it — and build the governance to keep it fixed.</div>
-    </div>
-  </div>
-  <div class="pillar-body">
-    <div class="pillar-desc">The tools across Pillars 1–7 are powerful but they require skilled people to configure, interpret, and act on them. Most organisations lack internal expertise in AI agent security architecture, Microsoft's identity stack, and the governance models needed to manage agent sprawl at scale. External technical and governance partners bridge that gap — not just for implementation but for building the internal capability to sustain it.</div>
-    <div class="pillar-cols">
-      <div>
-        <div class="pillar-col-title">Where partners add most value</div>
-        <div class="pillar-col-items">
-          <div class="pillar-item"><strong>AI security readiness assessment</strong> — structured discovery across all 8 pillars. ARA tool provides the automated baseline; partners translate findings into a prioritised, business-contextualised roadmap.</div>
-          <div class="pillar-item"><strong>Agent governance framework design</strong> — defining who can build agents, what approval process applies, what authentication is mandated, and how owner/sponsor accountability is enforced. Policy without tooling is theatre; tooling without policy is ungoverned.</div>
-          <div class="pillar-item"><strong>Classic Agent migration planning</strong> — scoping the migration from Classic to Modern agents. Discovery, identity governance, testing, rollback planning. Significant effort for most tenants — the right workstream to package as a managed service.</div>
-          <div class="pillar-item"><strong>Security architecture review</strong> — validating that Copilot Studio, Foundry, or third-party agent deployments meet the organisation's security baseline before go-live.</div>
-          <div class="pillar-item"><strong>Incident response for agent compromise</strong> — tracing what a compromised or manipulated agent accessed, what data left the tenant, and whether the cause was prompt injection, stolen credentials, or misconfiguration.</div>
-        </div>
-      </div>
-      <div>
-        <div class="pillar-col-title">Governance workstreams</div>
-        <div class="pillar-col-items">
-          <div class="pillar-item"><strong>Agent lifecycle policy</strong> — creation approval, mandatory authentication standard, owner/sponsor assignment, periodic review cadence, and decommissioning process.</div>
-          <div class="pillar-item"><strong>Data access governance for agents</strong> — which agents can access which data sources, under what conditions, reviewed by whom and how often.</div>
-          <div class="pillar-item"><strong>Third-party agent vetting</strong> — process for evaluating agents from Microsoft marketplace, partner ecosystem (SAP, ServiceNow, Workday etc.), and custom builds before onboarding.</div>
-          <div class="pillar-item"><strong>AI security policy and standards</strong> — organisational policy covering acceptable use, authentication mandates, data classification requirements, and monitoring obligations for AI agents.</div>
-          <div class="pillar-item"><strong>EUDB and data residency governance</strong> — policy for which models are approved for use in Copilot Studio agents, given the EUDB compliance risk for Anthropic and other non-Microsoft-hosted models.</div>
-        </div>
-      </div>
-      <div>
-        <div class="pillar-col-title">Service packaging opportunities</div>
-        <div class="pillar-col-items">
-
-        <div class="pillar-col-title" style="margin-top:14px;">Five service categories (Microsoft taxonomy)</div>
-        <div class="pillar-col-items">
-          <div class="pillar-item"><strong>Inventory and ownership:</strong> What agents exist, who owns them, where they run</div>
-          <div class="pillar-item"><strong>Least privilege:</strong> Right-sizing permissions, enforcing access guardrails without slowing delivery</div>
-          <div class="pillar-item"><strong>Compliance and data protection:</strong> Preventing oversharing, producing audit-ready evidence</div>
-          <div class="pillar-item"><strong>Threats and multi-platform estates:</strong> Attack paths, governing across vendors and clouds</div>
-          <div class="pillar-item"><strong>Ongoing operations:</strong> Lifecycle management, monitoring, continuous governance hygiene</div>
-        </div>
-        <div class="pillar-col-title" style="margin-top:10px;">Five service types</div>
-        <div class="pillar-col-items">
-          <div class="pillar-item">Workshops and assessments (diagnose + roadmap)</div>
-          <div class="pillar-item">Governance and enablement (stand up the control plane)</div>
-          <div class="pillar-item">Managed services (run and improve continuously)</div>
-          <div class="pillar-item">Advisory and readiness (operating model, adoption)</div>
-          <div class="pillar-item">Security and integration (harden posture, integrate third-party)</div>
-        </div>
-
-          <div class="pillar-item"><strong>AI Security Readiness Assessment</strong> — Pillars 1–4, ARA tool + KQL audit + gap register. Fixed scope, 2–4 week engagement.</div>
-          <div class="pillar-item"><strong>Agent Governance Design</strong> — Pillar 2 + 3 + governance framework. Policy, process, and tooling configuration.</div>
-          <div class="pillar-item"><strong>Classic Agent Migration</strong> — Pillar 2 focused. Discovery, identity governance uplift, test migration, rollout plan.</div>
-          <div class="pillar-item"><strong>AI Security Managed Service</strong> — ongoing Pillars 4 + 7. ATG monitoring, Sentinel rule management, alert triage, monthly posture reporting.</div>
-          <div class="pillar-item"><strong>CISO AI Risk Briefing</strong> — Pillars 1 + 5. Executive-level gap analysis using the site's business chat mode as a live reference tool.</div>
-        </div>
-      </div>
-    </div>
-    
-<div class="callout callout-info" style="margin-top:16px;">
-      <div class="callout-title">📌 The key insight for partner positioning</div>
-      <p>Microsoft's tooling is increasingly sophisticated but the configuration burden is high, the Classic Agent migration problem is real and requires hands-on work, and governance frameworks don't build themselves. The gap between "here is your ARA report" and "your agents are now governed and secure" is a well-defined, repeatable services opportunity.</p>
-    </div>
-  </div>
-</div>
-
-<div class="divider"></div>
-
-<!-- SUMMARY TABLE -->
-<div class="section-label">Quick reference</div>
-<h2>Eight pillars at a glance</h2>
-<table>
-<thead><tr><th>#</th><th>Pillar</th><th>Start here</th><th>Key product</th><th>Critical gap</th></tr></thead>
+<table style="margin-top:24px;">
+<thead><tr><th>Phase</th><th>What you do</th><th>Key prerequisites</th><th>Phase output (input to next phase)</th></tr></thead>
 <tbody>
-<tr><td><strong>1</strong></td><td>Visibility &amp; Inventory</td><td>ARA tool + AIAgentsInfo KQL audit</td><td>Security Dashboard for AI</td><td class="gap-badge">73% of agents invisible to agent-specific controls</td></tr>
-<tr><td><strong>2</strong></td><td>Identity</td><td>Map Classic vs Modern estate; assign Owners</td><td>Entra Agent ID</td><td class="gap-badge">Auth type changeable by any user, no policy lock</td></tr>
-<tr><td><strong>3</strong></td><td>Data Security</td><td>Purview DLP policy + SAM RCD for SharePoint</td><td>Purview DLP for Copilot</td><td class="gap-badge">EUDB gap: Anthropic models process outside EU Data Boundary</td></tr>
-<tr><td><strong>4</strong></td><td>Endpoints &amp; Cloud</td><td>ATG + dual-admin Defender/Power Platform setup</td><td>ATG (Agent Tooling Gateway)</td><td class="gap-badge">ATG misses reasoning layer — model can decide before ATG fires</td></tr>
-<tr><td><strong>5</strong></td><td>Zero Trust for AI</td><td>ZT4AI reference architecture + three-stage maturity model</td><td>ZT4AI + Entra + CA</td><td class="gap-badge">ZT Assessment AI pillar not until summer 2026</td></tr>
-<tr><td><strong>6</strong></td><td>Agents in Security Workflows</td><td>Security Copilot (E5 included) + Security Analyst Agent</td><td>Microsoft Security Copilot</td><td class="gap-badge">Security agents must be governed the same way as the agents they protect</td></tr>
-<tr><td><strong>7</strong></td><td>Agentic SIEM Platform</td><td>Auth-type change Analytics Rule + Copilot Data Connector</td><td>Microsoft Sentinel</td><td class="gap-badge">Copilot Data Connector single-tenant only — MSSP limitation</td></tr>
-<tr><td><strong>8</strong></td><td>Technical &amp; Governance Partners</td><td>AI security readiness assessment + agent governance framework design</td><td>Partner-led services</td><td>—</td></tr>
+<tr id="phase-1"><td><strong>01 — Discover &amp; Inventory</strong></td><td>Set up Security Dashboard for AI. Enable AI Agent Inventory (Defender + Power Platform integration). Run full AIAgentsInfo KQL inventory. Identify no-auth and maker-credential agents. Apply H/M/L risk tier classification. Discover shadow AI via Cloud App Catalog.</td><td>M365 E5; Defender + Power Platform admin access</td><td>Tiered agent register · no-auth agent list · shadow AI baseline</td></tr>
+<tr id="phase-2"><td><strong>02 — Identity &amp; Governance</strong></td><td><strong>Part A (Classic):</strong> Enable Managed Environments. Enforce end-user authentication. Set sharing limits. Define Owner / Sponsor / Approver model. Deploy Power Platform DLP. <strong>Part B (Modern):</strong> Apply Conditional Access policies. Deploy ID Protection. Configure Access Packages.</td><td>Phase 1 inventory complete · Agent 365 licence (Modern controls only)</td><td>Governed maker estate · CA-protected Modern agents · auth-type baseline</td></tr>
+<tr id="phase-3"><td><strong>03 — Data Security</strong></td><td>Run DSPM oversharing assessment. Configure regulated SITs. Enable sensitivity label inheritance. Deploy Purview DLP for Copilot. Apply retention to agent-generated content. Address EU Data Boundary via model inventory KQL. Apply SAM RCD as interim site exclusion. Deploy browser DLP for public LLMs.</td><td>Phase 2 governance baseline · Purview E5</td><td>Oversharing remediated · DLP active · label coverage measured</td></tr>
+<tr id="phase-4"><td><strong>04 — Runtime Protection</strong></td><td>Enable Defender real-time protection for Copilot Studio (three layers). Configure Entra Internet Access prompt-injection protection. Deploy Prompt Shields. Run pre-deployment red teaming with PyRIT (or Foundry Red Teaming Agent for Foundry agents). LLM + Agent red team for High-tier agents.</td><td>Phase 1 setup · Agent 365 licence from July 1, 2026 (network controls)</td><td>Runtime blocking active · red team findings register</td></tr>
+<tr id="phase-5"><td><strong>05 — Monitoring &amp; Detection</strong></td><td>Bookmark Security Dashboard for AI. Deploy Microsoft Copilot Sentinel solution (6 analytic rules + workbook). Enable auth-type downgrade Analytics Rule. Hunting queries for sensitive label access, out-of-EUDB models, ownerless agents. Configure ITDR for agent identities.</td><td>CopilotActivity table ingested · Sentinel workspace</td><td>SOC alerting live · weekly KPI tracking · incident workflow</td></tr>
+<tr id="phase-6"><td><strong>06 — Compliance &amp; Governance</strong></td><td>Run AI Baseline in Purview Compliance Manager (establish score). Map estate to EU AI Act, NIST AI RMF, ISO 42001. Stand up AI Governance Operating Model — Working Group, Lifecycle Board, quarterly sweep, annual review. Board-level quarterly reporting pack. Vet third-party agents pre-publish.</td><td>Phases 1–5 generating evidence · governance forum approvals</td><td>Compliance score baseline · sustained operating model</td></tr>
 </tbody>
 </table>
 
+<div class="callout callout-info" style="margin-top:18px;">
+  <div class="callout-title">📌 Why the order matters</div>
+  <p>Phase 1 produces the agent inventory that Phase 2 governance applies to. Phase 2 produces the governed maker estate that Phase 3 DLP attaches to. Phase 5 monitoring depends on Phases 1, 3, and 4 having generated the underlying telemetry. Phase 6 compliance evidence comes from controls deployed in Phases 1–5. Running phases in parallel is possible — running them out of order is not.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- FOUR AI SECURITY KPIs (SHORT VERSION) -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label">Measurement</div>
+<h2>Four AI security KPIs to track weekly</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">The trend matters more than the absolute number. These four metrics give a defensible weekly view that maps directly to controls deployed across the six phases.</p>
+
+<table>
+<thead><tr><th>KPI</th><th>Source</th><th>Definition</th><th>Target trend</th></tr></thead>
+<tbody>
+<tr><td><strong>Risky agents</strong></td><td><code>AIAgentsInfo</code></td><td>Count of published agents where <code>UserAuthenticationType == "None"</code></td><td>Decreasing to zero</td></tr>
+<tr><td><strong>Sensitive access events</strong></td><td>Purview Activity Explorer</td><td>AI interactions where a sensitivity label of Confidential or above was cited</td><td>Stable — rising trend = label enforcement gaps</td></tr>
+<tr><td><strong>DLP policy hits</strong></td><td>Purview DLP — Copilot location</td><td>Count of blocked or warned responses from DLP policy evaluation</td><td>Stable after initial tuning spike</td></tr>
+<tr><td><strong>Blocked tool actions</strong></td><td>Defender Incidents — Category: AI, Status: Blocked</td><td>Tool invocations blocked by Defender real-time protection (ATG)</td><td>Increasing initially (policy working), then stable</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;">
+  <div class="callout-title">📌 Operational KQL for each KPI</div>
+  <p>For the source queries and SOC workflow integration, see <a href="playbooks.html#kpis" style="color:var(--blue);">Playbooks → Four AI Security KPIs</a>.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- BOARD-LEVEL REPORTING PACK -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label">Executive reporting</div>
+<h2>Quarterly board-level AI risk reporting pack</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 18px;">AI agent risk should be reported alongside conventional cyber risk metrics, not as a separate workstream. The pack below uses outputs from the six phases and the four weekly KPIs, rolled up to a quarterly view suitable for senior leadership.</p>
+
+<table>
+<thead><tr><th>Section</th><th>What to include</th><th>Source</th></tr></thead>
+<tbody>
+<tr><td><strong>Agent estate summary</strong></td><td>Total agents, Classic vs Modern split, risk tier distribution (H/M/L), quarter-over-quarter trend</td><td>Phase 1 inventory · AIAgentsInfo</td></tr>
+<tr><td><strong>No-auth agent count trend</strong></td><td>Quarterly trajectory — should be decreasing toward zero. Flag any quarter where it rises.</td><td>Phase 1 KQL · Weekly KPI #1</td></tr>
+<tr><td><strong>Sentinel alert volume by category</strong></td><td>Jailbreak attempts, auth-type changes, anomalous tool calls, external IP access, plugin tampering</td><td>Phase 5 Content Hub analytic rules</td></tr>
+<tr><td><strong>DLP hits</strong></td><td>Volume and category, split by Copilot location and browser extension</td><td>Phase 3 · Weekly KPI #3</td></tr>
+<tr><td><strong>Compliance score trend</strong></td><td>Purview Compliance Manager AI Baseline score over time, against EU AI Act, NIST AI RMF, ISO 42001 templates</td><td>Phase 6 · AI Baseline assessment</td></tr>
+<tr><td><strong>Red team findings</strong></td><td>Critical findings from PyRIT runs and structured red-team engagements during the quarter, status of remediation</td><td>Phase 4 · Red team cycle</td></tr>
+<tr><td><strong>Agent 365 licence compliance</strong></td><td>Are all users of premium capabilities licensed? Where are the gaps?</td><td>Phase 6 · Procurement</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;">
+  <div class="callout-title">📌 Format note</div>
+  <p>One page or one slide per section is enough — the board is reviewing trends, not drilling into individual agents. The detail lives in the working group and lifecycle board reviews. Consider pairing this with a red/amber/green status indicator per section so the trajectory is readable at a glance.</p>
+</div>
+
+<div class="divider"></div>
+
 <div class="callout callout-info" style="margin-top:24px;">
-  <div class="callout-title">📌 Source</div>
-  <p>Microsoft RSAC 2026 — Vasu Jakkal, <a href="https://www.microsoft.com/en-us/security/blog/2026/03/20/secure-agentic-ai-end-to-end/" target="_blank" style="color:var(--blue);">Secure agentic AI end-to-end</a> (March 20, 2026) · Agent 365 GA announcement · ZT4AI reference architecture · Site content compiled from Microsoft Learn, Microsoft Security Blog, RSAC 2026 announcements, and field research from the Microsoft Security MVP community.</p>
+  <div class="callout-title">📌 Source &amp; method</div>
+  <p>The six-phase framework synthesises the Agentic AI Security Framework with Microsoft's RSAC 2026 announcements (<a href="https://www.microsoft.com/en-us/security/blog/2026/03/20/secure-agentic-ai-end-to-end/" target="_blank" style="color:var(--blue);">Vasu Jakkal — Secure agentic AI end-to-end, March 2026</a>), the Agent 365 GA capabilities, the Zero Trust for AI reference architecture, and field-validated patterns from the Microsoft Security MVP community. Phase ordering is informed by real-world implementation experience across enterprise tenants — not a theoretical sequence.</p>
 </div>
 
 <div class="footer">
   aiagentsecurity.guide · Independent, non-commercial · Not affiliated with or endorsed by Microsoft<br>
-  Last updated: May 1, 2026 · <a href="changelog.html" style="color:var(--text3);">Changelog</a> · <a href="changelog.html" style="color:var(--text3);">Changelog</a> · · <a href="contact.html" style="color:var(--text3);">Contact</a>
+  Last updated: May 12, 2026 · <a href="changelog.html" style="color:var(--text3);">Changelog</a> · <a href="contact.html" style="color:var(--text3);">Contact</a>
 </div>
 
 </div>
