@@ -352,7 +352,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <div class="page">
 
 <div class="hero">
-  <div class="hero-badge"><div class="live-dot"></div>SITE CHANGELOG · LAST UPDATED MARCH 26, 2026</div>
+  <div class="hero-badge"><div class="live-dot"></div>SITE CHANGELOG · LAST UPDATED MAY 12, 2026</div>
   <h1>What's Changed<br><span>& When</span></h1>
   <p style="color:#2e3d5e;font-size:17px;font-weight:400;max-width:640px;line-height:1.7;">
     This site is a living document. Microsoft updates products and capabilities frequently — this log tracks meaningful content changes, corrections, and additions. Minor fixes (typos, link corrections) are not listed.
@@ -407,6 +407,79 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 
 
+
+<div class="section-label" style="margin-top:40px;">MAY 12, 2026</div>
+<h2>Strategy Restructure · 12 Content Additions Across Strategy, Risk, Identity, Frameworks, Playbooks</h2>
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag blue">🔧 Restructured</span></td>
+<td><strong>Strategy page restructured — six-phase rollout replaces eight-pillar framework</strong>. The eight-pillar version described <em>what</em> the stack is; the new six-phase framework describes <em>how to roll it out</em>: Discover &amp; Inventory → Identity &amp; Governance → Data Security → Runtime Protection → Monitoring &amp; Detection → Compliance &amp; Governance. Each phase has prerequisites and produces evidence the next phase consumes. Per-pillar deep-dive content lives on its dedicated topic page (playbooks, identity, frameworks, etc.) so the strategy page can stay a strategy page.</td>
+<td>strategy.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>AI Readiness Assessment — pre-Phase-1 framing</strong>. Attack surface inventory, legacy estate scale, governance maturity gap, commercial path. Now appears before the six-phase rollout as the question to answer first.</td>
+<td>strategy.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Four AI security KPIs to track weekly</strong> — Risky agents (target zero), Sensitive access events (stable), DLP policy hits (stable post-tuning), Blocked tool actions (rising then stable). Short version on Strategy with reporting cadence; full operational KQL on Playbooks.</td>
+<td>strategy.html, playbooks.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Quarterly board-level reporting pack</strong> — seven-section structure for executive AI risk reporting, sourced from outputs of the six phases and the four weekly KPIs.</td>
+<td>strategy.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Risk tier classification methodology (H / M / L)</strong> — explicit criteria with required action and governance cadence. HIGH = no-auth OR maker credentials OR org-wide sharing OR no owner OR regulated data. Includes the critical "highest match wins, not average" caveat — risk does not average down.</td>
+<td>risk.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>AI Trust and Safety assurance — distinct from security testing</strong>. Adelard safety case methodology referenced for citizen-facing or safety-critical agents. Distinguishes security testing (adversarial), Trust &amp; Safety assurance (reliability, fairness), and Responsible AI evaluation (harms).</td>
+<td>risk.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Agent Approver — third accountability role added to Identity page</strong>. Role model extended from Owner / Sponsor / Orphaned to Owner / Sponsor / <strong>Approver</strong> / Orphaned. The Approver is the IT gatekeeper for any sharing beyond a team or org-wide — what converts sharing limits from policy to enforced gate.</td>
+<td>identity.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>AI Governance Operating Model — five forums with cadence and decision rights</strong>. AI Security Working Group (monthly), Agent Lifecycle Board (monthly), Quarterly Governance Sweep, Annual AI Risk Assessment, Agent Red Team Cycle. Fills the human-layer gap between deployed controls and sustained governance.</td>
+<td>frameworks.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>AI Baseline in Purview Compliance Manager — promoted as starting compliance action</strong>. Pre-built evaluation against EU AI Act, NIST AI RMF, ISO 42001 with mapped remediation. Established as the recommended Phase 6 first task.</td>
+<td>frameworks.html</td></tr>
+
+<tr><td><span class="tag warn">⚠️ Caveat</span></td>
+<td><strong>Compliance Manager score ≠ audit-ready compliance assessment</strong>. New callout explicitly distinguishing the automated posture score from a structured assessment with evidence collection, control testing, and written findings — suitable for ICO, EU AI Office, internal audit, or board sign-off. Common misconception explicitly corrected.</td>
+<td>frameworks.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New Playbook</span></td>
+<td><strong>Playbook 07 — Brief Your Makers (30-minute awareness session)</strong>. Three parts: five things every maker must know (maker credentials risk, no-auth risk, org-wide sharing, connector scope, Owner/Sponsor); red-flag self-audit checklist before publishing; escalation paths.</td>
+<td>playbooks.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New Playbook</span></td>
+<td><strong>Playbook 08 — Vet a Third-Party Agent Before Publish</strong>. Five-step checklist: publisher &amp; provenance, connector &amp; data scope, authentication &amp; identity model, DPIA &amp; regulatory trigger, approval &amp; ongoing governance. Default for external agents is "not approved" — opt-in to allow, opposite of internally built agents.</td>
+<td>playbooks.html</td></tr>
+
+<tr><td><span class="tag blue">🔧 Fixed</span></td>
+<td><strong>Frameworks page — orphan callout div closed</strong>. The "Full control list" callout at the bottom of the ZT Workshop controls section was an unclosed div from a previous edit — now properly closed with content pointing to the dedicated Zero Trust page.</td>
+<td>frameworks.html</td></tr>
+
+<tr><td><span class="tag blue">🔧 Refreshed</span></td>
+<td><strong>Chat widget suggestion chips refreshed across both modes</strong>. Technical mode now surfaces the six-phase rollout, risk tier methodology, four KPIs, Owner/Sponsor/Approver model, and third-party vetting playbook. Business mode now surfaces six-phase (simple), four KPIs for the board, quarterly board pack, governance forums, and risk tier explained. Older chips that overlapped or had aged out (How long does it take?, Biggest mistakes, CISO 90-day plan, Foundry logging, Maker creds + Security Copilot, Detect orphaned agents, Entra Agent ID GA?, What if we do nothing?, Classic vs Modern simple) were retired. Applied identically across all 15 pages with the chat widget.</td>
+<td>All pages with the chat widget (15 files)</td></tr>
+
+<tr><td><span class="tag blue">🔧 Updated</span></td>
+<td><strong>Chat assistant system prompt (chat.js) updated to cover all new content</strong>. Added technical-mode sections for: six-phase rollout (with phase ordering rationale), AI Readiness Assessment, risk tier methodology with the "highest match, not average" caveat, four AI security KPIs with KQL, quarterly board reporting pack structure, AI Governance Operating Model (5 forums with cadences), AI Baseline vs structured assessment distinction, AI Trust &amp; Safety assurance (Adelard), third-party agent vetting (5 steps), maker awareness brief. Owner / Sponsor / Orphaned model extended to Owner / Sponsor / Approver / Orphaned. Business mode received plain-English versions of six-phase, four KPIs, board pack, governance forums, and risk tier. Site navigation section updated to reflect new playbooks (PB07, PB08) and the zero-trust.html page.</td>
+<td>chat.js</td></tr>
+
+</tbody>
+</table>
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Method</div>
+  <p>This batch of changes came from a gap analysis of the site against an enterprise AI security implementation plan. Twelve generalisable content gaps were identified; customer-specific content (UK NIN, HMG classification, ICO obligations) was deliberately excluded to keep the site vendor-and-jurisdiction neutral.</p>
+</div>
 
 <div class="section-label" style="margin-top:40px;">MAY 4, 2026</div>
 <h2>Sentinel — Microsoft Copilot Solution: 6 Analytic Rules + Workbook</h2>
@@ -1936,25 +2009,25 @@ document.addEventListener('DOMContentLoaded', function(){
   const CHIPS = {
     technical: [
       {q:'What should I set up on Day 1?', label:'Day 1 setup'},
-      {q:'Does CA for Agents apply to Copilot Studio?', label:'CA for Agents?'},
-      {q:"What's the difference between Classic and Modern agents?", label:'Classic vs Modern'},
-      {q:'Does maker credentials risk apply to Security Copilot custom agents?', label:'Maker creds + Security Copilot'},
-      {q:'How do I detect orphaned agents in my tenant?', label:'Detect orphaned agents'},
+      {q:'What is the six-phase AI security rollout?', label:'Six-phase rollout'},
+      {q:'How do I classify agents by risk tier (High / Medium / Low)?', label:'Risk tier H/M/L'},
+      {q:'What are the four AI security KPIs to track weekly?', label:'Four KPIs'},
       {q:'What KQL query detects no-auth agents?', label:'No-auth KQL'},
-      {q:'Is Entra Agent ID generally available yet?', label:'Entra Agent ID GA?'},
-      {q:'What are the EU AI Act and Colorado AI Act deadlines?', label:'EU AI Act deadlines'},
-      {q:'How do I set up logging for Microsoft Foundry?', label:'Foundry logging'},
+      {q:"What's the difference between Classic and Modern agents?", label:'Classic vs Modern'},
+      {q:'Does CA for Agents apply to Copilot Studio?', label:'CA for Agents?'},
+      {q:'What is the Owner / Sponsor / Approver role model for agents?', label:'Owner/Sponsor/Approver'},
+      {q:'How do I vet a third-party agent before publishing?', label:'Vet a third-party agent'},
       {q:'What are the biggest gaps in Microsoft AI security today?', label:'Key gaps'},
     ],
     business: [
       {q:"We're rolling out Microsoft Copilot — what are the main security risks we should know about?", label:'Copilot risks'},
-      {q:"What's the biggest mistake organisations make when deploying AI agents?", label:'Biggest mistakes'},
       {q:'What do we need to do on day one before anything else?', label:'Day one priority'},
-      {q:'What could go wrong if we deploy Copilot without any security controls?', label:'What if we do nothing?'},
-      {q:'How long does it take to secure AI agents properly?', label:'How long does it take?'},
+      {q:'Can you explain the six-phase AI security rollout in simple terms?', label:'Six-phase rollout (simple)'},
+      {q:'What four AI security metrics should we report to the board?', label:'Four KPIs for the board'},
+      {q:'What should be in a quarterly AI risk report to the board?', label:'Quarterly board pack'},
+      {q:'What governance forums do we need to oversee AI agents?', label:'Governance forums'},
+      {q:'How do we decide which agents are high risk?', label:'Risk tier explained'},
       {q:'What licences do we need to secure our AI agents?', label:'Licences needed'},
-      {q:'Can you explain the Classic vs Modern agent problem in simple terms?', label:'Classic vs Modern (simple)'},
-      {q:'What should a CISO prioritise in the first 90 days of Copilot deployment?', label:'CISO 90-day plan'},
       {q:'Are there any compliance or regulatory deadlines we should be aware of?', label:'Compliance deadlines'},
       {q:'How do I explain AI security risk to my board or leadership team?', label:'Explaining to the board'},
     ]

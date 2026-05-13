@@ -474,8 +474,41 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 
 <div class="callout callout-info" style="margin-top:16px;">
+  <div class="callout-title">✓ Start here — AI Baseline in Purview Compliance Manager</div>
+  <p>If you're standing up AI governance from zero, the first thing to run is the <strong>AI Baseline assessment</strong> in Purview Compliance Manager (Purview portal → Compliance Manager → Assessments → AI Baseline). It's a pre-built evaluation that automatically scores your tenant against the EU AI Act, NIST AI RMF 1.0, and ISO 42001 — surfacing remediation actions mapped to Purview, Entra, and Defender controls. Run it once to establish your baseline; re-run quarterly to track trend.</p>
+</div>
+
+<div class="callout callout-info" style="margin-top:14px;">
   <div class="callout-title">🛠️ Closing the gaps operationally — Purview Compliance Manager</div>
-  <p>Knowing the deadlines is the easy part. Purview Compliance Manager includes AI-specific regulatory assessment templates — EU AI Act, NIST AI RMF, and others — that evaluate your tenant against specific obligations and surface prioritised improvement actions for data protection, auditability, and AI usage controls. It's the operational tool that turns the deadline into a task list. Access via the <a href="https://learn.microsoft.com/en-us/purview/compliance-manager" target="_blank" style="color:var(--blue);">Microsoft Purview portal → Compliance Manager</a>.</p>
+  <p>Beyond the AI Baseline, Compliance Manager includes additional AI-specific regulatory assessment templates that evaluate your tenant against specific obligations and surface prioritised improvement actions for data protection, auditability, and AI usage controls. It's the operational tool that turns each deadline into a task list. Access via the <a href="https://learn.microsoft.com/en-us/purview/compliance-manager" target="_blank" style="color:var(--blue);">Microsoft Purview portal → Compliance Manager</a>.</p>
+</div>
+
+<div class="callout callout-warn" style="margin-top:14px;">
+  <div class="callout-title">⚠ Compliance Manager score ≠ audit-ready compliance assessment</div>
+  <p>The Compliance Manager AI Baseline produces a posture score — useful for tracking trend and prioritising remediation. It is <strong>not</strong> the same as a structured compliance assessment with evidence collection, control testing, gap analysis, and a written findings report suitable for the ICO, EU AI Office, internal audit, or board sign-off. Regulated sectors (financial services, healthcare, public sector) typically need both: the score for operational tracking, and an independently validated assessment for regulator submission. Treating the score as the assessment is a common and significant misconception.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- AI GOVERNANCE OPERATING MODEL -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:48px;">Governance operating model</div>
+<h2>The human layer — forums, cadences, and decision rights</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 18px;">Most failed AI security programmes fail at governance, not technology. Compliance Manager produces evidence; Sentinel produces alerts; PyRIT produces findings. What turns those into sustained risk reduction is the human layer that meets to review them. The forums below are the minimum viable AI governance operating model — they sit alongside (not instead of) existing security governance.</p>
+
+<table>
+<thead><tr><th>Forum</th><th>What it owns</th><th>Attendees</th><th>Frequency</th></tr></thead>
+<tbody>
+<tr><td><strong>AI Security Working Group</strong></td><td>Cross-functional review of new agent deployments, the risk register, compliance posture, weekly KPI trends. Owns the agenda for everything below.</td><td>IT, Security, Data Protection, Legal, key business unit reps</td><td>Monthly</td></tr>
+<tr><td><strong>Agent Lifecycle Board</strong></td><td>Approves new agents, reviews ownerless agents, owns the Classic-to-Modern migration roadmap, signs off on risk-tier overrides. Reviews every HIGH-tier agent.</td><td>Owner (per agent), Sponsor (per agent), IT Approver, security lead</td><td>Monthly</td></tr>
+<tr><td><strong>Quarterly Governance Sweep</strong></td><td>Full Phase 1 KQL re-run, auth-type review, Access Package renewal, DLP exception review, ownerless-agent check cross-referenced with HR data, shadow-AI scan.</td><td>Security ops, IAM ops, Purview admin</td><td>Quarterly</td></tr>
+<tr><td><strong>Annual AI Risk Assessment</strong></td><td>Full estate review against the risk tier rubric, red team prioritisation for the year ahead, compliance framework re-assessment, board pack preparation.</td><td>Working Group + executive sponsor</td><td>Annual</td></tr>
+<tr><td><strong>Agent Red Team Cycle</strong></td><td>Structured adversarial testing of HIGH-tier agents, new agents tested pre-production, regression red teaming on significant change. Findings feed back into Agent Lifecycle Board.</td><td>Internal red team or external partner</td><td>Per new HIGH-tier agent + annual for in-production HIGH agents</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;">
+  <div class="callout-title">📌 What each forum decides</div>
+  <p><strong>Working Group:</strong> direction and prioritisation. <strong>Lifecycle Board:</strong> approval and accountability for individual agents. <strong>Quarterly Sweep:</strong> operational hygiene. <strong>Annual Assessment:</strong> strategy and budget. <strong>Red Team:</strong> evidence. The forums escalate up the table — a Lifecycle Board cannot override the Working Group; an Annual Assessment cannot override the executive sponsor. Document the escalation path explicitly before the first meeting.</p>
 </div>
 
 <div class="section-label">NIST AI RMF</div>
@@ -847,7 +880,8 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 <div class="callout callout-info" style="margin-top:32px;">
   <div class="callout-title">📌 Full control list</div>
-
+  <p>The 12 controls shown above are the highest-impact subset of the full Zero Trust Workshop AI catalogue. For the complete list of controls including effort, dependencies, and implementation notes, see the <a href="zero-trust.html" style="color:var(--blue);">dedicated Zero Trust for AI page</a>.</p>
+</div>
 
 <div class="page-nav"><a href="threats.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Threats</span></a><a href="gaps.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Gaps</span></a></div>
 <div style="text-align:center;margin:32px 0 0;padding:24px 0;border-top:1px solid var(--border2);">
@@ -1090,25 +1124,25 @@ document.addEventListener('DOMContentLoaded', function(){
   const CHIPS = {
     technical: [
       {q:'What should I set up on Day 1?', label:'Day 1 setup'},
-      {q:'Does CA for Agents apply to Copilot Studio?', label:'CA for Agents?'},
-      {q:"What's the difference between Classic and Modern agents?", label:'Classic vs Modern'},
-      {q:'Does maker credentials risk apply to Security Copilot custom agents?', label:'Maker creds + Security Copilot'},
-      {q:'How do I detect orphaned agents in my tenant?', label:'Detect orphaned agents'},
+      {q:'What is the six-phase AI security rollout?', label:'Six-phase rollout'},
+      {q:'How do I classify agents by risk tier (High / Medium / Low)?', label:'Risk tier H/M/L'},
+      {q:'What are the four AI security KPIs to track weekly?', label:'Four KPIs'},
       {q:'What KQL query detects no-auth agents?', label:'No-auth KQL'},
-      {q:'Is Entra Agent ID generally available yet?', label:'Entra Agent ID GA?'},
-      {q:'What are the EU AI Act and Colorado AI Act deadlines?', label:'EU AI Act deadlines'},
-      {q:'How do I set up logging for Microsoft Foundry?', label:'Foundry logging'},
+      {q:"What's the difference between Classic and Modern agents?", label:'Classic vs Modern'},
+      {q:'Does CA for Agents apply to Copilot Studio?', label:'CA for Agents?'},
+      {q:'What is the Owner / Sponsor / Approver role model for agents?', label:'Owner/Sponsor/Approver'},
+      {q:'How do I vet a third-party agent before publishing?', label:'Vet a third-party agent'},
       {q:'What are the biggest gaps in Microsoft AI security today?', label:'Key gaps'},
     ],
     business: [
       {q:"We're rolling out Microsoft Copilot — what are the main security risks we should know about?", label:'Copilot risks'},
-      {q:"What's the biggest mistake organisations make when deploying AI agents?", label:'Biggest mistakes'},
       {q:'What do we need to do on day one before anything else?', label:'Day one priority'},
-      {q:'What could go wrong if we deploy Copilot without any security controls?', label:'What if we do nothing?'},
-      {q:'How long does it take to secure AI agents properly?', label:'How long does it take?'},
+      {q:'Can you explain the six-phase AI security rollout in simple terms?', label:'Six-phase rollout (simple)'},
+      {q:'What four AI security metrics should we report to the board?', label:'Four KPIs for the board'},
+      {q:'What should be in a quarterly AI risk report to the board?', label:'Quarterly board pack'},
+      {q:'What governance forums do we need to oversee AI agents?', label:'Governance forums'},
+      {q:'How do we decide which agents are high risk?', label:'Risk tier explained'},
       {q:'What licences do we need to secure our AI agents?', label:'Licences needed'},
-      {q:'Can you explain the Classic vs Modern agent problem in simple terms?', label:'Classic vs Modern (simple)'},
-      {q:'What should a CISO prioritise in the first 90 days of Copilot deployment?', label:'CISO 90-day plan'},
       {q:'Are there any compliance or regulatory deadlines we should be aware of?', label:'Compliance deadlines'},
       {q:'How do I explain AI security risk to my board or leadership team?', label:'Explaining to the board'},
     ]

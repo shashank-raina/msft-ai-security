@@ -285,8 +285,10 @@ FRAMEWORKS & STRATEGY
   workshop + assessment tool (AI pillar summer 2026), patterns and practices articles (RSAC 2026)
 - EU AI Act August 2026, Colorado AI Act June 2026
 - Purview Compliance Manager AI templates
-- Eight-pillar defense strategy page: Visibility, Identity, Data, Endpoints/Cloud,
-  Zero Trust for AI, Agents in Security Workflows, Agentic SIEM, Technical/Governance Partners
+- Six-phase defense strategy page: Discover & Inventory, Identity & Governance,
+  Data Security, Runtime Protection, Monitoring & Detection, Compliance & Governance.
+  Includes AI Readiness Assessment (pre-Phase-1), four AI security KPIs,
+  quarterly board-level reporting pack.
 - Frontier Firms: Microsoft's term for AI-native enterprises (RSAC 2026, Vasu Jakkal)
 - PyRIT (Python Risk Identification Tool): open source, MIT, 53+ datasets, 70+ converters,
   6 attack strategies, 20+ scorers, CI/CD release gate, OWASP LLM mapping.

@@ -1,6 +1,7 @@
 // =============================================================================
 // SYSTEM PROMPT — UPDATE THIS SECTION WHEN SITE CONTENT CHANGES
-// Last updated: April 23, 2026 (2)
+// Last updated: May 12, 2026 — added six-phase strategy, risk tiers, KPIs, board pack,
+//                governance forums, Approver role, trust & safety, third-party vetting
 // =============================================================================
 
 const SYSTEM_PROMPT = `\
@@ -119,15 +120,24 @@ AGENT SEGMENTATION — custom security attributes (recommended governance model)
 
 5. Agent's User Account                  Risk: VERY HIGH (full human identity)
 
-// ── OWNER vs SPONSOR vs ORPHANED ─────────────────────────────────────────────
+// ── OWNER vs SPONSOR vs APPROVER vs ORPHANED ─────────────────────────────────
 
-OWNER: Technical admin — credentials, config, anomaly monitoring
-SPONSOR: Business accountable — "why does this agent exist?", Access Package approvals
+OWNER: Technical admin — credentials, config, anomaly monitoring (the maker who built it)
+SPONSOR: Business accountable — "why does this agent exist?", Access Package approvals,
+  notified of lifecycle changes, accountable if agent becomes ownerless
+APPROVER: IT gatekeeper — required to approve any sharing beyond a team or org-wide.
+  Without an explicit Approver, sharing limits are policy not gate. For HIGH-tier
+  agents, Owner / Sponsor / Approver should be three different people.
 ORPHANED: Blueprint deleted → Agent Identities remain with all permissions intact
   - Cannot authenticate (no Blueprint = no token exchange)
   - Orphaned Agent Users appear as NORMAL user accounts in Entra — no flag
   - Microsoft does NOT auto-detect these
   - Detection: cross-reference Agent Identities vs active Blueprint Principals via Graph API
+
+THE THREE QUESTIONS EACH ROLE ANSWERS:
+  Owner   → "Is the agent working correctly?" (technical)
+  Sponsor → "Does the agent still need to exist?" (business)
+  Approver → "Should this agent be shared more broadly?" (gatekeeper)
 
 FOUR ENTRA AGENT ID OBJECTS:
 
@@ -975,21 +985,309 @@ Covers: Copilot Studio, Foundry, Agent 365, M365
 Detects: suspicious behaviour, prompt injection, data leakage, misconfigurations
 Status: Preview · rolling out to some tenants
 
+// ── SIX-PHASE IMPLEMENTATION FRAMEWORK (strategy.html) ─────────────────────────
+
+The strategy page describes HOW to roll out AI security, not just what the stack is.
+Six phases, each with prerequisites and outputs that feed the next phase.
+Run in order — skipping ahead leaves later controls without their dependencies.
+
+PHASE 01 — Discover & Inventory:
+  Set up Security Dashboard for AI · enable AI Agent Inventory (Defender + Power Platform)
+  Run AIAgentsInfo KQL · identify no-auth and maker-credential agents
+  Apply H/M/L risk tier classification · discover shadow AI via Cloud App Catalog
+  Output: tiered agent register · no-auth list · shadow AI baseline
+
+PHASE 02 — Identity & Governance (split into two parts):
+  Part A (Classic): Managed Environments · enforce end-user auth · sharing limits ·
+                    Owner/Sponsor/Approver model · Power Platform DLP
+  Part B (Modern):  Conditional Access · ID Protection · Access Packages
+  Output: governed maker estate · CA-protected Modern agents · auth-type baseline
+
+PHASE 03 — Data Security:
+  DSPM oversharing assessment · regulated SITs · label inheritance ·
+  Purview DLP for Copilot · retention for agent content · SAM RCD ·
+  EUDB via model inventory KQL · browser DLP for public LLMs
+  Output: oversharing remediated · DLP active · label coverage measured
+
+PHASE 04 — Runtime Protection:
+  Defender real-time protection (3 layers) · Entra Internet Access prompt-injection
+  protection · Prompt Shields · pre-deployment PyRIT red teaming (or Foundry
+  Red Teaming Agent for Foundry) · LLM + Agent red team for HIGH agents
+  Output: runtime blocking active · red team findings register
+
+PHASE 05 — Monitoring & Detection:
+  Security Dashboard for AI · Microsoft Copilot Sentinel solution (6 analytic
+  rules + workbook) · auth-type downgrade Analytics Rule · hunting queries ·
+  ITDR for agent identities
+  Output: SOC alerting live · weekly KPI tracking · incident workflow
+
+PHASE 06 — Compliance & Governance:
+  AI Baseline in Purview Compliance Manager (establish score) · map to
+  EU AI Act, NIST AI RMF, ISO 42001 · stand up AI Governance Operating Model ·
+  board-level quarterly reporting · vet third-party agents pre-publish
+  Output: compliance score baseline · sustained operating model
+
+WHY ORDER MATTERS:
+Phase 1 produces inventory → Phase 2 governance applies to inventory.
+Phase 2 produces governed estate → Phase 3 DLP attaches to it.
+Phase 5 monitoring needs Phases 1, 3, 4 telemetry.
+Phase 6 compliance evidence comes from controls in Phases 1–5.
+Parallel = OK. Out of order = not OK.
+
+// ── AI READINESS ASSESSMENT (before Phase 1) ──────────────────────────────────
+
+Pre-Phase-1 organisational-level readiness check. Output is NOT a control
+deployment — it's a documented baseline of:
+  - Attack surface (shadow AI tools, unsanctioned LLMs, ungoverned plugins)
+  - Legacy estate scale (Classic agent count, ownerless, no-auth)
+  - Governance maturity gap (what's deployed today vs the six phases)
+  - Commercial path (which Agent 365 capabilities at what population)
+Becomes the brief for Phase 1. Different from M365 Copilot ARA tool —
+that runs IN Phase 1 to score tenant readiness, not before.
+
+// ── RISK TIER CLASSIFICATION METHODOLOGY (risk.html) ──────────────────────────
+
+Apply H/M/L tier to every agent in your inventory register. Tier drives
+remediation timeline AND red team scope AND governance cadence.
+
+HIGH (Priority 1) — any of:
+  - No authentication
+  - Maker credentials at agent or connector level
+  - Org-wide sharing
+  - No assigned owner
+  - Handles regulated data (PII, financial, health, citizen records)
+  Action: remediate or block within 14 days · full red team before production ·
+  Sentinel Analytics Rule alerting · reviewed every Agent Lifecycle Board
+
+MEDIUM (Priority 2) — any of:
+  - Authenticated but broad connector access (SharePoint/Exchange/Teams)
+  - Sensitive but not regulated data connectors
+  - Named owner but no business sponsor
+  - Shared with large group (50+) but not org-wide
+  Action: scope review within 30 days · DLP validated · annual focused red
+  team on prompt injection & data exfiltration · quarterly governance sweep
+
+LOW (Monitor) — all of:
+  - Delegated end-user authentication
+  - Named users or small group sharing
+  - Scoped data access (single team site, single connector)
+  - Both owner and sponsor assigned
+  Action: document · quarterly inventory check · regression red team only
+  on significant change (connector, tool, system prompt) · annual audit
+
+CRITICAL CAVEAT — TIER IS HIGHEST MATCH, NOT AVERAGE:
+An agent that meets one HIGH criterion and four LOW criteria is still HIGH.
+Risk does not average down. A no-auth agent on a tiny team reading one
+SharePoint list is still HIGH because no-auth alone makes it externally
+reachable. Apply criteria as a screen, not a score.
+
+// ── FOUR AI SECURITY KPIs (strategy.html + playbooks.html) ────────────────────
+
+Four metrics to track weekly, report quarterly. Trend > absolute number.
+
+KPI 1 — RISKY AGENTS (target: decreasing to zero)
+  Source: AIAgentsInfo
+  Definition: count of published agents where UserAuthenticationType == "None"
+  KQL: AIAgentsInfo | summarize arg_max(Timestamp, *) by AIAgentId
+       | where AgentStatus == "Published"
+       | where UserAuthenticationType == "None"
+       | summarize RiskyAgents = count()
+
+KPI 2 — SENSITIVE ACCESS EVENTS (target: stable)
+  Source: Purview Activity Explorer / CopilotActivity
+  Definition: AI interactions citing Confidential+ sensitivity labels
+  Rising trend = label enforcement gap OR new sensitive sites being grounded
+
+KPI 3 — DLP POLICY HITS (target: stable after initial tuning spike)
+  Source: Purview DLP — Copilot location
+  Definition: blocked or warned responses from DLP policy evaluation
+  Expect spike on rollout (audit mode reveals true volume), then stabilise
+
+KPI 4 — BLOCKED TOOL ACTIONS (target: increasing then stable)
+  Source: AlertInfo where Category == "AI" and Status == "Resolved"
+  Definition: tool invocations blocked by Defender real-time protection (ATG)
+  Counter-intuitive: flat-at-zero usually means ATG isn't enabled, not safety
+
+REPORTING CADENCE: weekly to security team · monthly to AI Security Working
+Group · quarterly to board pack.
+
+// ── QUARTERLY BOARD-LEVEL REPORTING PACK (strategy.html) ──────────────────────
+
+Seven-section structure for executive AI risk reporting:
+
+  1. Agent estate summary       (total / Classic vs Modern / H-M-L distribution / QoQ trend)
+  2. No-auth agent count trend  (should decrease toward zero · flag if rising)
+  3. Sentinel alert volume      (by category: jailbreak / auth changes / anomalous tool
+                                 calls / external IP access / plugin tampering)
+  4. DLP hits                   (volume + category · Copilot location + browser extension)
+  5. Compliance score trend     (Purview Compliance Manager AI Baseline against
+                                 EU AI Act, NIST AI RMF, ISO 42001 templates)
+  6. Red team findings          (critical findings from PyRIT and structured engagements ·
+                                 status of remediation)
+  7. Agent 365 licence compliance (are all premium-cap users licensed · gaps)
+
+Format: one page or one slide per section. Board reviews trends, not individual
+agents — detail lives in working group and lifecycle board reviews.
+
+// ── AI GOVERNANCE OPERATING MODEL (frameworks.html) ───────────────────────────
+
+The human layer. Five forums that turn Compliance Manager evidence + Sentinel
+alerts + PyRIT findings into sustained risk reduction.
+
+  AI Security Working Group       Monthly       Cross-functional review · owns the agenda
+    IT, Security, Data Protection, Legal, business unit reps
+    Decides: direction, prioritisation
+
+  Agent Lifecycle Board           Monthly       Per-agent approval / accountability
+    Owner (per agent), Sponsor (per agent), IT Approver, security lead
+    Decides: new agent approvals · ownerless review · Classic→Modern migration ·
+    risk tier overrides · reviews every HIGH-tier agent
+
+  Quarterly Governance Sweep      Quarterly     Operational hygiene
+    Security ops, IAM ops, Purview admin
+    Action: full Phase 1 KQL re-run · auth-type review · Access Package renewals ·
+    DLP exception review · ownerless × HR cross-reference · shadow-AI scan
+
+  Annual AI Risk Assessment       Annual        Strategy & budget
+    Working Group + executive sponsor
+    Action: full estate review against tier rubric · red team prioritisation ·
+    framework re-assessment · board pack prep
+
+  Agent Red Team Cycle           Per HIGH agent  Evidence generation
+    Internal red team or external partner
+    Pre-production for new HIGH agents · annual for in-production HIGH agents ·
+    regression on significant change · feeds Agent Lifecycle Board
+
+ESCALATION: Lifecycle Board cannot override Working Group · Annual Assessment
+cannot override executive sponsor · document escalation path before first meeting.
+
+// ── AI BASELINE + COMPLIANCE MANAGER SCORE vs ASSESSMENT (frameworks.html) ────
+
+STARTING POINT: Run the AI Baseline assessment in Purview Compliance Manager
+(Purview portal → Compliance Manager → Assessments → AI Baseline). Pre-built
+evaluation against EU AI Act, NIST AI RMF 1.0, ISO 42001. Auto-scored.
+Re-run quarterly for trend.
+
+CRITICAL DISTINCTION (common misconception):
+  Compliance Manager AI Baseline score = automated posture score · trend tracking
+  Structured compliance assessment      = evidence collection · control testing ·
+                                          written findings · audit-ready
+
+The first is NOT the second. Regulated sectors (financial services, healthcare,
+public sector) typically need BOTH: the score for operational tracking, an
+independently validated assessment for regulator submission (ICO, EU AI Office,
+sector regulator, internal audit). Treating the score as the assessment is the
+single most common compliance failure for AI agent deployments.
+
+// ── AI TRUST AND SAFETY ASSURANCE (risk.html) ─────────────────────────────────
+
+For agents interacting directly with citizens, vulnerable users, or making
+consequential decisions (benefits, healthcare, financial outcomes), security
+testing alone is insufficient. AI Trust and Safety assessment uses a recognised
+safety assurance methodology — typically Adelard's safety case methodology —
+to validate that the agent is trustworthy, reliable, and dependable across
+its full data pipeline. Separate assurance discipline from pen testing.
+
+THREE DISCIPLINES (distinguish them):
+  Security testing / red teaming   adversarial robustness (prompt injection,
+                                   exfiltration, tool chain manipulation, jailbreak)
+                                   → vulnerabilities · OWASP LLM Top 10 coverage
+  AI Trust and Safety assurance    reliability, dependability, fairness,
+                                   safety-of-use for vulnerable users
+                                   → safety case · auditable evidence pack
+  Responsible AI evaluation        harms — bias, toxicity, manipulation,
+                                   discriminatory outputs
+                                   → harm taxonomy coverage · evaluation telemetry
+
+REQUIRED for: public-facing agents · benefits/eligibility decisions · healthcare
+or safeguarding contexts · vulnerable users. RECOMMENDED for: any HIGH-tier
+agent · any agent newly subject to EU AI Act Annex III high-risk classification.
+
+// ── THIRD-PARTY AGENT VETTING (playbooks.html — Playbook 08) ──────────────────
+
+External agents from Microsoft Agent Store, ISV partners, or vendor-supplied
+apps. Five-step checklist before ANY appears in ANY environment.
+
+  STEP 1 — Publisher & provenance:
+    Publisher identity verified · security posture (SOC 2, ISO 27001) ·
+    vulnerability disclosure policy · GDPR/equivalent applicability ·
+    Microsoft Agent Store "Publisher Verified" badge if applicable
+
+  STEP 2 — Connector & data scope:
+    Full connector list + scopes · narrowest scope justified · no broad-read
+    scopes (Files.ReadWrite.All, Mail.Read, Directory.Read.All) without explicit
+    justification · data residency · sub-processors documented · sensitive data
+    categories identified + DLP coverage verified
+
+  STEP 3 — Authentication & identity model:
+    End-user authentication (not maker credentials, not no-auth) · Modern
+    (Entra Agent ID) only — Classic from external publishers REJECTED OUTRIGHT ·
+    CA covers the agent · Access Package or time-bound permissions · registered
+    in tenant inventory
+
+  STEP 4 — DPIA & regulatory trigger:
+    DPO notified before deployment · DPIA if regulated personal data ·
+    EU AI Act Annex III classification reviewed · existing Copilot Studio DPIA
+    updated if new processing purpose · regulator notification considered (ICO,
+    EU AI Office, sector regulator)
+
+  STEP 5 — Approval & ongoing governance:
+    Agent Approver signs off in writing · risk tier assigned · quarterly sweep
+    from day one · red team rotation if HIGH-tier · publisher disclosure contact
+    in vendor register · annual re-vetting
+
+STANDING VETO: Owner / Sponsor / Approver / DPO can each block at any step.
+Default for external agents is "not approved" — opt-in to allow. Opposite
+of internally built agents where default is "permitted within environment policy".
+
+// ── MAKER AWARENESS (playbooks.html — Playbook 07) ────────────────────────────
+
+30-minute session for anyone publishing a Copilot Studio agent. Mandatory
+before environment access granted. Quarterly for new makers.
+
+PART A — Five things every maker must know:
+  1. Maker credentials = your permissions, extended to every user
+  2. No authentication = anyone (including outside the company)
+  3. Org-wide sharing is a security decision, not a convenience toggle
+  4. Connector scope is permanent — grant the minimum
+  5. Every agent needs Owner, Sponsor, and one-sentence purpose
+
+PART B — Pre-publish self-audit checklist (must tick all six):
+  ☐ End-user auth on (not None, not Maker)
+  ☐ Connectors use end-user auth
+  ☐ Scopes narrowest that work
+  ☐ Sharing to named group, not "Everyone"
+  ☐ Owner and Sponsor filled (different people for HIGH-tier)
+  ☐ Description: one sentence on what it does
+
+PART C — Where to get help (adapt per org):
+  Share more broadly → IT Approver
+  Broader connector scope → IT Approver + DLP exception process
+  Suspected misuse → Security team
+  Leaving → Sponsor (hand off Owner role)
+  External connector / new model → Agent Lifecycle Board
+
 // ── SITE NAVIGATION ───────────────────────────────────────────────────────────
 
 overview.html           7-layer stack viz, RSAC stats, Day 1 dashboard callout
-risk.html               Agent properties, risk taxonomy, 53/47 incident split
+risk.html               Agent properties, risk taxonomy, RISK TIER METHODOLOGY (H/M/L),
+                        AI TRUST & SAFETY assurance (Adelard)
+strategy.html           SIX-PHASE rollout · AI READINESS · FOUR KPIs (short) · BOARD PACK
 product-map.html        32+ products with GA/Preview status
 agent365.html          Agent 365 deep dive — what it is, licensing, platform support, KQL
-identity.html           5 auth patterns, Classic/Modern, Owner/Sponsor,
-                        orphaned agents, KQL queries, Graph API scripts
+identity.html           5 auth patterns, Classic/Modern,
+                        OWNER / SPONSOR / APPROVER / ORPHANED roles, KQL, Graph API
 mcp.html                MCP architecture, attack vectors, A2A protocol
 threats.html            7 threat scenarios with attack chains + controls
-frameworks.html         NIST AI RMF, ISO 42001, OWASP Top 10, ZT4AI,
-                        Access Fabric, regulatory deadlines
+frameworks.html         NIST AI RMF, ISO 42001, OWASP Top 10, ZT4AI, regulatory deadlines,
+                        AI BASELINE (Compliance Manager), SCORE vs ASSESSMENT distinction,
+                        AI GOVERNANCE OPERATING MODEL (5 forums)
 gaps.html               Gap register with interim mitigations
-playbooks.html          5 runbooks (KQL + PowerShell + setup steps)
+playbooks.html          PB01 Audit estate · PB02 Secure new agent · PB03 Security Dashboard ·
+                        PB04 Compromise response · PB06 PyRIT red team · KPI Reference Card ·
+                        PB07 Brief Your Makers · PB08 Vet Third-Party Agent
 copilot-vs-foundry.html Side-by-side security handbook
+zero-trust.html         Zero Trust for AI — 3 principles · maturity model · 12 priority controls
 changelog.html          What changed and when
 contact.html            Feedback form
 `;
@@ -1062,6 +1360,39 @@ HOW TO SEE ALL YOUR AGENTS (no licence needed):
 Go to M365 admin center → Agents → All agents. You need the AI Administrator or AI Reader role. No additional licence required — this is inventory visibility only. You will see ALL agents regardless of whether they have been secured or registered with Entra. This is the starting point before any governance work.
 
 EXPLAINING TO THE BOARD: AI agents are like contractors with access badges. Right now, most organisations don't know how many contractors they have, what access each one has, or what they're doing. The Security Dashboard is the access control register. The governance programme is the onboarding process.
+
+WHERE TO START (six-phase framework, in plain English):
+The site lays out AI security in six phases — run them in order:
+  1. Discover what you have (inventory every AI agent, classify by risk)
+  2. Govern who can build and use them (identity controls, ownership)
+  3. Protect the data they touch (DLP, oversharing fix)
+  4. Block bad behaviour at runtime (real-time protection, red teaming)
+  5. Monitor and alert (Sentinel dashboards, weekly metrics)
+  6. Compliance and sustained governance (Compliance Manager, board reporting)
+You can do phases in parallel, but not out of order — each phase produces evidence the next phase consumes. Typical timeline: visibility in 30 minutes, basic controls in 1–2 days, full governance programme weeks to months.
+
+FOUR METRICS TO REPORT TO THE BOARD:
+The site recommends four AI security KPIs — track weekly, report quarterly:
+  1. Risky agents (no-auth agent count) — target: decreasing to zero
+  2. Sensitive access events (AI touching confidential data) — target: stable
+  3. DLP policy hits (blocks/warnings on sensitive content) — target: stable after initial spike
+  4. Blocked tool actions (real-time protection firings) — target: rising then stable
+The TREND matters more than the absolute number. Flat-at-zero on metric 4 usually means runtime protection isn't enabled, not that everything is safe.
+
+THE QUARTERLY BOARD PACK:
+For AI risk to be reported alongside conventional cyber risk, the site suggests a seven-section quarterly pack: estate summary · no-auth trend · Sentinel alert volume · DLP hits · Compliance Manager score trend · red team findings · Agent 365 licence compliance. One page or one slide per section.
+
+GOVERNANCE FORUMS (the human layer):
+Five forums turn deployed controls into sustained risk reduction:
+  1. AI Security Working Group — monthly, cross-functional, owns the agenda
+  2. Agent Lifecycle Board — monthly, approves new agents, reviews HIGH-risk ones
+  3. Quarterly Governance Sweep — operational hygiene (rerun inventory, renew access)
+  4. Annual AI Risk Assessment — strategy and budget
+  5. Agent Red Team Cycle — adversarial testing of HIGH-tier agents
+Without these, deployed controls drift. Most failed AI security programmes fail at governance, not technology.
+
+RISK TIER (which agents to fix first):
+The site uses a HIGH / MEDIUM / LOW tier system. An agent is HIGH risk if ANY of: no authentication, maker credentials, org-wide sharing, no owner, or handles regulated data. HIGH means remediate in 14 days. Crucially: the tier is the HIGHEST match, not an average. An agent that meets one HIGH criterion and four LOW criteria is still HIGH — risk doesn't average down.
 
 After answering, always end with a short natural follow-up question to keep the conversation going.
 
