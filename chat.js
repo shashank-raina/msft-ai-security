@@ -1,6 +1,6 @@
 // =============================================================================
 // SYSTEM PROMPT — UPDATE THIS SECTION WHEN SITE CONTENT CHANGES
-// Last updated: May 13, 2026 — added Nov 2025 wave (Agent Platform, Agent Registry,
+// Last updated: June 5, 2026 — added Nov 2025 wave (Agent Platform, Agent Registry,
 //                AI Prompt Shield, specialized roles); ID Protection 5 detections;
 //                M365 admin Agents-at-risk card; custom security attributes;
 //                ZT Assessment AI pillar now available; external threat detection;
@@ -34,7 +34,7 @@ Examples: "Want me to show you the KQL for detecting this?" or \
 Keep the follow-up question short — one sentence maximum.
 
 ================================================================================
-SITE CONTENT — Last updated: April 17, 2026
+SITE CONTENT — Last updated: June 5, 2026
 ================================================================================
 
 // ── SITE OVERVIEW ─────────────────────────────────────────────────────────────
