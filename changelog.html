@@ -352,7 +352,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <div class="page">
 
 <div class="hero">
-  <div class="hero-badge"><div class="live-dot"></div>SITE CHANGELOG · LAST UPDATED MAY 13, 2026</div>
+  <div class="hero-badge"><div class="live-dot"></div>SITE CHANGELOG · LAST UPDATED JUNE 5, 2026</div>
   <h1>What's Changed<br><span>& When</span></h1>
   <p style="color:#2e3d5e;font-size:17px;font-weight:400;max-width:640px;line-height:1.7;">
     This site is a living document. Microsoft updates products and capabilities frequently — this log tracks meaningful content changes, corrections, and additions. Minor fixes (typos, link corrections) are not listed.
@@ -408,7 +408,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 
 
-<div class="section-label" style="margin-top:40px;">MAY 13, 2026</div>
+<div class="section-label" style="margin-top:40px;">JUNE 5, 2026</div>
 <h2>Microsoft Learn Comparison Pass · 14 Updates Across 9 Pages</h2>
 <table>
 <thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
@@ -483,8 +483,12 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <td>chat.js</td></tr>
 
 <tr><td><span class="tag blue">🔧 Updated</span></td>
-<td><strong>content_monitor.py updated with comprehensive May 13 covered-topics list</strong>. November 2025 wave additions, role groups, Foundry naming, MCP servers landscape, harm categories, ID Protection detection list — all added so the monitor doesn't flag these as new on next sweep.</td>
+<td><strong>content_monitor.py updated with comprehensive June 5 covered-topics list</strong>. November 2025 wave additions, role groups, Foundry naming, MCP servers landscape, harm categories, ID Protection detection list — all added so the monitor doesn't flag these as new on next sweep.</td>
 <td>content_monitor.py</td></tr>
+
+<tr><td><span class="tag blue">🔧 Refreshed</span></td>
+<td><strong>Chat widget chips refreshed to surface Microsoft Learn additions</strong>. Technical mode added: "Latest from Microsoft" (Nov 2025 wave summary), "ID Protection detections" (the five offline risk detections), "Microsoft's MCP servers" (Sentinel MCP, Windows ODR, Foundry integration). Technical dropped: No-auth KQL (covered by KPI chip), Vet a third-party agent (specialised), Key gaps (too generic). Business mode added: "Latest from Microsoft" (leadership-language Nov 2025 summary). Business dropped: Risk tier explained (overlaps with six-phase). Applied identically across all 15 pages with the chat widget. Verified single MD5 hash across files.</td>
+<td>All pages with the chat widget (15 files)</td></tr>
 
 </tbody>
 </table>
@@ -493,7 +497,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <p>This batch came from a structured Microsoft Learn comparison using the Microsoft Learn MCP server. Searches covered each major content page's primary topics; findings were filtered for genuine novelty (not just rephrasing of known material). The site is now aligned with Microsoft's November 2025 wave of AI security announcements. The Microsoft Learn MCP server is recommended as a periodic-sweep tool going forward — natural-language access to current Microsoft documentation without manually crawling the Learn portal.</p>
 </div>
 
-<div class="section-label" style="margin-top:40px;">MAY 12, 2026</div>
+<div class="section-label" style="margin-top:40px;">JUNE 4, 2026</div>
 <h2>Strategy Restructure · 12 Content Additions Across Strategy, Risk, Identity, Frameworks, Playbooks</h2>
 <table>
 <thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
@@ -1865,7 +1869,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  <a href="changelog.html" style="color:var(--text3);">Changelog</a> · Last updated: May 1, 2026 · Analysis covers publicly announced Microsoft security capabilities only
+  <a href="changelog.html" style="color:var(--text3);">Changelog</a> · Last updated: June 5, 2026 · Analysis covers publicly announced Microsoft security capabilities only
 </div>
 </div>
 
@@ -2095,23 +2099,23 @@ document.addEventListener('DOMContentLoaded', function(){
     technical: [
       {q:'What should I set up on Day 1?', label:'Day 1 setup'},
       {q:'What is the six-phase AI security rollout?', label:'Six-phase rollout'},
+      {q:"What's new in the November 2025 Microsoft AI security wave?", label:'Latest from Microsoft'},
       {q:'How do I classify agents by risk tier (High / Medium / Low)?', label:'Risk tier H/M/L'},
       {q:'What are the four AI security KPIs to track weekly?', label:'Four KPIs'},
-      {q:'What KQL query detects no-auth agents?', label:'No-auth KQL'},
+      {q:'What are the five risk detections in ID Protection for Agents?', label:'ID Protection detections'},
       {q:"What's the difference between Classic and Modern agents?", label:'Classic vs Modern'},
       {q:'Does CA for Agents apply to Copilot Studio?', label:'CA for Agents?'},
       {q:'What is the Owner / Sponsor / Approver role model for agents?', label:'Owner/Sponsor/Approver'},
-      {q:'How do I vet a third-party agent before publishing?', label:'Vet a third-party agent'},
-      {q:'What are the biggest gaps in Microsoft AI security today?', label:'Key gaps'},
+      {q:"What MCP servers does Microsoft provide and how do they compare?", label:"Microsoft's MCP servers"},
     ],
     business: [
       {q:"We're rolling out Microsoft Copilot — what are the main security risks we should know about?", label:'Copilot risks'},
       {q:'What do we need to do on day one before anything else?', label:'Day one priority'},
+      {q:"What's new in Microsoft AI security that leadership should know about?", label:'Latest from Microsoft'},
       {q:'Can you explain the six-phase AI security rollout in simple terms?', label:'Six-phase rollout (simple)'},
       {q:'What four AI security metrics should we report to the board?', label:'Four KPIs for the board'},
       {q:'What should be in a quarterly AI risk report to the board?', label:'Quarterly board pack'},
       {q:'What governance forums do we need to oversee AI agents?', label:'Governance forums'},
-      {q:'How do we decide which agents are high risk?', label:'Risk tier explained'},
       {q:'What licences do we need to secure our AI agents?', label:'Licences needed'},
       {q:'Are there any compliance or regulatory deadlines we should be aware of?', label:'Compliance deadlines'},
       {q:'How do I explain AI security risk to my board or leadership team?', label:'Explaining to the board'},

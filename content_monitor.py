@@ -305,7 +305,7 @@ FRAMEWORKS & STRATEGY
 - Maker awareness 30-minute brief (Playbook 07)
 - Third-party agent vetting checklist (Playbook 08)
 
-NOVEMBER 2025 WAVE — covered as of May 13, 2026:
+NOVEMBER 2025 WAVE — covered as of June 5, 2026:
 - Microsoft Entra Agent Platform (developer-first identity platform)
 - Microsoft Entra Agent Registry (third-party agent inventory)
 - AI Prompt Shield (network-layer prompt injection blocking, Preview)
