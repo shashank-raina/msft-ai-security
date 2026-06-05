@@ -519,6 +519,40 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <p>Copilot Studio agent chains, Power Automate flows that call agents, and custom orchestration built on Microsoft Foundry typically have no formal A2A authentication. This means a compromised orchestrator can issue malicious delegations to sub-agents without any identity check. Until A2A becomes standard, treat every inter-agent boundary as an untrusted boundary and apply least-privilege scoping per agent.</p>
 </div>
 
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- MICROSOFT-PROVIDED MCP SERVERS — THE LANDSCAPE NOW -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:48px;">Microsoft's MCP servers</div>
+<h2>What Microsoft now ships as first-party MCP servers</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 18px;">As of late 2025, Microsoft has shipped or previewed several first-party MCP servers, each with different security boundaries and trust models. Understanding what each one is — and where the authoritative auth/audit lives — is critical for designing safe MCP integrations.</p>
+
+<table>
+<thead><tr><th>MCP server</th><th>What it provides</th><th>Auth / boundary</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td><strong>Microsoft Sentinel MCP server</strong></td><td>Scenario-focused collections of security tools — query Sentinel data lake and Defender in natural language, build security agents, automate triage and threat hunting. Includes Security Copilot agent creation tools.</td><td>Fully hosted by Microsoft. Microsoft Entra for identity. No infrastructure deployment needed.</td><td><span class="green-inline">Available</span></td></tr>
+<tr><td><strong>Microsoft Learn MCP server</strong></td><td>Three tools: <code>microsoft_docs_search</code>, <code>microsoft_docs_fetch</code>, <code>microsoft_code_sample_search</code>. Searches official Microsoft docs.</td><td>Hosted by Microsoft. Authless.</td><td><span class="green-inline">Available</span> at <code>learn.microsoft.com/api/mcp</code></td></tr>
+<tr><td><strong>Foundry MCP integration</strong> (client side)</td><td>Foundry agents consume remote MCP servers. Each tool added with unique <code>server_label</code> + <code>server_url</code>. Some pre-validated MCP servers (e.g. Azure DevOps) are in the Foundry Add Tools catalog.</td><td>Custom headers (including auth tokens) pass per-run only — not persisted. Foundry approval and audit mechanisms apply.</td><td><span class="green-inline">Available</span></td></tr>
+<tr><td><strong>Windows On-device Agent Registry (ODR)</strong></td><td>Local registry of MCP servers on Windows endpoints. Apps and agents discover MCP servers via the ODR. Includes built-in connectors (e.g. File Explorer MCP).</td><td>MCP servers run in <strong>contained environment by default</strong>. User and IT admin control via Windows Settings and Intune. Logging and auditing for client↔server interactions.</td><td><span class="caution-inline">Preview</span></td></tr>
+<tr><td><strong>Copilot Studio MCP onboarding wizard</strong></td><td>Add existing MCP servers to Copilot Studio agents via guided OAuth wizard. Generates callback URLs for identity provider registration. Handles authorization code → access token → refresh token flow.</td><td>Per-agent OAuth 2.0 configuration. Identity provider remains the trust anchor.</td><td><span class="green-inline">Available</span></td></tr>
+<tr><td><strong>Microsoft Agent Framework MCP tools</strong></td><td>.NET/Java/Python SDKs for connecting custom agents to MCP servers, including local MCP servers. Used to build framework-based agents.</td><td>Developer chooses transport and auth; Microsoft provides SDK primitives.</td><td><span class="green-inline">Available</span></td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;">
+  <div class="callout-title">📌 Authoritative Microsoft security guidance for MCP</div>
+  <p>Microsoft repeatedly cites two sources across all MCP-related docs: (1) <a href="https://modelcontextprotocol.io/specification/draft/basic/security_best_practices" target="_blank" style="color:var(--blue);">MCP Security Best Practices</a> on the Model Context Protocol website, and (2) the Microsoft Security Community Blog post <a href="https://techcommunity.microsoft.com/blog/microsoft-security-blog/understanding-and-mitigating-security-risks-in-mcp-implementations/4404667" target="_blank" style="color:var(--blue);">Understanding and mitigating security risks in MCP implementations</a>. Both are required reading for anyone integrating MCP into an enterprise estate.</p>
+</div>
+
+<div class="callout callout-warn" style="margin-top:14px;">
+  <div class="callout-title">⚠ Microsoft's stated stance on third-party MCP servers</div>
+  <p>From Microsoft's own Agent Framework documentation: "The remote MCP servers that you decide to use with the MCP tool described in this article were created by third parties, not Microsoft. Microsoft hasn't tested or verified these servers. Microsoft has no responsibility to you or others in relation to your use of any remote MCP servers." This is the framing to use when third-party MCP servers come up in governance discussions — Microsoft treats them as supply-chain risk you own. Recommended: track every MCP server added to any agent in your estate, rely on servers hosted by trusted providers (not proxies), and log all data shared with remote MCP servers for auditing.</p>
+</div>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 Windows ODR — the local MCP control plane Microsoft is now shipping</div>
+  <p>The Windows On-device Agent Registry is the local equivalent of what Entra Agent Registry does for cloud agents — it tracks MCP servers on Windows endpoints. Key security properties: MCP servers run <strong>contained</strong> by default (separate environment, can only access approved resources), users and IT admins control access per agent via Windows Settings or Intune, and interactions between MCP clients and servers are logged and auditable. The <code>odr.exe</code> command-line tool lets users and admins view and manage MCP servers. For endpoints where users may install MCP-enabled apps, this is the control point to manage centrally.</p>
+</div>
+
 <div class="page-nav"><a href="identity.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Identity</span></a><a href="threats.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Threats</span></a></div>
 <div style="text-align:center;margin:32px 0 0;padding:24px 0;border-top:1px solid var(--border2);">
   <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text3);margin-bottom:10px;">STAY UPDATED</div>

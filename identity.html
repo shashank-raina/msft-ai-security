@@ -1072,6 +1072,98 @@ Disconnect-MgGraph</pre>
 </tbody>
 </table>
 
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- ID PROTECTION FOR AGENTS — RISK DETECTIONS -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:32px;">ID Protection for Agents (Preview)</div>
+<h2>Five offline risk detections — what Microsoft is now flagging</h2>
+<p>Microsoft Entra ID Protection for agents (Preview) detects anomalous activity on agent identities provisioned by Microsoft Entra Agent ID. All current detections are <strong>offline</strong> — they run on logged activity, not at sign-in time. Detections retain for 90 days. Requires Entra ID P2 (during preview).</p>
+
+<table>
+<thead><tr><th>Detection</th><th>What it detects</th><th>riskEventType</th></tr></thead>
+<tbody>
+<tr><td><strong>Unfamiliar resource access</strong></td><td>Agent targeted resources it doesn't usually access — may indicate attacker accessing sensitive resources beyond intended purpose</td><td><code>unfamiliarResourceAccess</code></td></tr>
+<tr><td><strong>Sign-in spike</strong></td><td>Agent made a higher number of sign-ins than usual — may indicate automation or toolkit abuse</td><td><code>signInSpike</code></td></tr>
+<tr><td><strong>Failed access attempt</strong></td><td>Agent attempted and failed to access resources it isn't authorised for — may indicate token replay against unauthorised resource</td><td><code>failedAccessAttempt</code></td></tr>
+<tr><td><strong>Confirmed compromised</strong></td><td>Admin confirmed agent compromised via the Risky Agents report</td><td><code>adminConfirmedAgentCompromised</code></td></tr>
+<tr><td><strong>Microsoft Entra threat intelligence</strong></td><td>Activity consistent with known attack patterns from Microsoft's internal and external threat intelligence sources</td><td><code>threatIntelligenceAccount</code></td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-warn" style="margin-top:14px;">
+  <div class="callout-title">⚠ Critical detail — OBO flow attribution</div>
+  <p>In On-Behalf-Of flows where an agent acts using a user's delegated permissions, <strong>risky activity is attributed to the user, not the agent</strong>. Detection table above applies to <strong>autonomous</strong> agent activity only. This is the right design (targets the compromised session, doesn't disrupt the agent for other users) but is critical to understand when investigating — a delegated-auth agent appearing misbehaved may not appear in the Risky Agents report at all.</p>
+</div>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 Response actions + Microsoft Graph API</div>
+  <p>From the Risky Agents report, admins can take four actions: <strong>Confirm compromise</strong> (sets risk level to High, triggers CA risk-based policies, automatically blocks if CA is configured), <strong>Confirm safe</strong>, <strong>Dismiss risk</strong>, or <strong>Disable</strong>. Programmatic access via Microsoft Graph: new collections <code>riskyAgents</code> and <code>agentRiskDetections</code>. Required roles: Security Administrator / Security Operator / Security Reader. For CA policies using Agent Risk as a condition: Conditional Access Administrator. Source: <a href="https://learn.microsoft.com/entra/id-protection/concept-risky-agents" target="_blank" style="color:var(--blue);">ID Protection for agents (Preview)</a>.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- CUSTOM SECURITY ATTRIBUTES FOR AGENT SEGMENTATION -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:32px;">Scaling CA across the estate</div>
+<h2>Custom Security Attributes — segment agents for CA policy at scale</h2>
+<p>Targeting Conditional Access policies at individual agent identities doesn't scale beyond a handful of agents. Microsoft's recommended pattern is <strong>custom security attributes</strong> — define organisation-wide attributes such as <code>Environment</code>, <code>Department</code>, or <code>DataSensitivity</code>, assign them to agent identities, then use the attributes as Conditional Access policy conditions. This converts per-agent policy management into attribute-based policy management.</p>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 Example use cases</div>
+  <p><strong>Environment segmentation:</strong> attribute <code>Environment = "production"</code> vs <code>"development"</code> — block non-prod agents from production resources. <strong>Data sensitivity gating:</strong> <code>DataSensitivity = "regulated"</code> — apply stricter CA, network controls, and IRM policies. <strong>Departmental scope:</strong> <code>Department = "HR"</code> — limit HR agents to HR-relevant resources only. Combine attributes for fine-grained but maintainable policy.</p>
+</div>
+
+<div class="callout callout-warn" style="margin-top:14px;">
+  <div class="callout-title">⚠ Important: agents can't satisfy interactive MFA</div>
+  <p>Per Microsoft's <a href="https://learn.microsoft.com/entra/agent-id/best-practices-agent-id" target="_blank" style="color:var(--blue);">Best practices for Entra Agent ID</a>: <strong>don't rely on user-targeted Conditional Access policies for agents</strong>. Agents cannot satisfy interactive controls like MFA. Create separate, agent-specific CA policies using identity filters, risk signals, and named locations as control points. Audit existing broad policies (e.g., "All users must use MFA") to ensure they don't unintentionally block agent flows — refactor to exclude agent identities and add dedicated agent policies. Use report-only mode to test before enforcing.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- AGENT REGISTRY ADMINISTRATOR — NEW BUILT-IN ROLE -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:32px;">Built-in Entra roles for AI</div>
+<h2>Specialized roles for Agent ID management</h2>
+<p>Microsoft has added formal Entra built-in roles for AI agent management — separate from the legacy AI Administrator role. These are what to assign to admins handling agents, sharing controls, and risk response. Assign least-privileged role to each persona, then escalate only when scope requires it.</p>
+
+<table>
+<thead><tr><th>Role</th><th>What it manages</th><th>When to assign</th></tr></thead>
+<tbody>
+<tr><td><strong>Agent Registry Administrator</strong> <span style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;">(NEW)</span></td><td>Manage metadata for AI agents in Entra ID; manage collections and visibility of agents; assign Agent Registry-specific roles to other users or agents</td><td>The dedicated AI agent admin — your primary AI operations role</td></tr>
+<tr><td><strong>AI Administrator</strong></td><td>Manage Microsoft 365 Copilot; manage AI-related enterprise services, extensibility, and copilot agents from Integrated apps; approve and publish LOB copilot agents; usage reports and adoption insights</td><td>Tenant-wide M365 Copilot administration; Copilot connector consent (can be delegated for <code>ExternalItem.*</code> / <code>ExternalConnection.*</code> without Global Admin)</td></tr>
+<tr><td><strong>Security Administrator / Operator / Reader</strong></td><td>Required to use the Risky Agents report (ID Protection)</td><td>SOC and security ops investigating agent risk</td></tr>
+<tr><td><strong>Conditional Access Administrator</strong></td><td>Required to configure CA policies using Agent Risk as a condition</td><td>Identity engineers building risk-based policies for agents</td></tr>
+<tr><td><strong>Copilot Studio Author</strong> (Power Platform)</td><td>Access analytics for agents they create</td><td>Makers — the role to assign so they have analytics without further Power Platform privilege</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 Purview role groups for Security Dashboard for AI</div>
+  <p>Separately from Entra roles, Purview has role groups specifically for the Security Dashboard for AI: <strong>Data Security Management</strong> (full DSPM + Security Copilot for AI risk prioritisation and tailored remediation), <strong>Data Security Viewers</strong> (read-only DSPM + Security Dashboard for AI including third-party agent inventory: Gemini, ChatGPT, MCP servers), and <strong>Data Security IRM Triage Agent</strong> (intended for non-interactive agent users to triage and remediate insider risk alerts — a role assignable to an agent identity rather than a human admin). This last one is a new pattern worth flagging: Microsoft is now expecting agents themselves to hold security responsibilities.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- AGENT SECURITY LICENSING MATRIX -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:32px;">Licensing</div>
+<h2>What licence do I need for each agent security feature?</h2>
+<p>Agent security capabilities are licensed across multiple Entra and M365 SKUs. The matrix below clarifies what's included with what — and where the per-user-vs-per-agent licensing gap remains.</p>
+
+<table>
+<thead><tr><th>Capability</th><th>Required licence</th></tr></thead>
+<tbody>
+<tr><td><strong>Microsoft Entra Agent ID</strong> (create and manage agent identities)</td><td>All Microsoft Entra customers — included</td></tr>
+<tr><td><strong>Conditional Access for Agents</strong></td><td>Microsoft Entra ID P1</td></tr>
+<tr><td><strong>ID Protection for Agents</strong> (Preview)</td><td>Microsoft Entra ID P2</td></tr>
+<tr><td><strong>ID Governance for Agents</strong> (Access Packages, Lifecycle Workflows)</td><td>Microsoft Entra ID P1</td></tr>
+<tr><td><strong>Network controls for Agents</strong> (Secure Web and AI Gateway for Copilot Studio)</td><td>Microsoft Entra Internet Access (in Entra Suite or licensed separately)</td></tr>
+<tr><td><strong>Integration with Microsoft Agent 365</strong> (publish to Agent 365, central observability)</td><td>Microsoft Agent 365 licence — per user, not per agent</td></tr>
+<tr><td><strong>Technical baseline</strong> (gateway, Defender for AI, DSPM for AI)</td><td>Microsoft 365 E5 or equivalent</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-warn" style="margin-top:14px;">
+  <div class="callout-title">⚠ The per-user-not-per-agent gap remains</div>
+  <p>Agent 365 licensing is priced per <strong>user</strong>, not per <strong>agent</strong>. If you have 50 licensed users but 500 deployed agents, you have a governance gap — only the 50 users get the premium capabilities. This pricing model is unchanged since the May 2026 GA announcement. If your population of agent makers and consumers is small but your population of deployed agents is large, the economics may not pencil for full Agent 365 coverage.</p>
+</div>
 
 <div class="page-nav"><a href="agent365.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Agent 365</span></a><a href="mcp.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">MCP</span></a></div>
 <div style="text-align:center;margin:32px 0 0;padding:24px 0;border-top:1px solid var(--border2);">

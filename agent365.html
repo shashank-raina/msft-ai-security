@@ -893,6 +893,46 @@ AIAgentsInfo
 | project AIAgentId, AIAgentName, Trigger.type</pre>
 </div>
 
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- AGENT 365 SENTINEL DATA CONNECTOR -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:48px;">Telemetry to Sentinel</div>
+<h2>Agent 365 Sentinel Data Connector — unified agent telemetry</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">Microsoft has shipped an <strong>Agent 365 data connector</strong> for Microsoft Sentinel. It does something distinctive: ingests agent telemetry into the Sentinel data lake from <strong>three sources at once</strong> — Agent 365, Microsoft Foundry, and Copilot. For organisations running agents across multiple Microsoft platforms, this replaces what would otherwise be three separate connector configurations.</p>
+
+<table>
+<thead><tr><th>Capability</th><th>Detail</th></tr></thead>
+<tbody>
+<tr><td><strong>Data sources unified</strong></td><td>Agent 365 + Microsoft Foundry + Copilot — all in the Sentinel data lake</td></tr>
+<tr><td><strong>Telemetry types</strong></td><td>Agent behaviour, tool usage, execution metrics, runtime events</td></tr>
+<tr><td><strong>Workflows enabled</strong></td><td>Hunting (KQL + natural language via Sentinel MCP), graph relationships (agent-to-agent, agent-to-tool), MCP server interactions</td></tr>
+<tr><td><strong>Supported by</strong></td><td>Microsoft Corporation (first-party connector)</td></tr>
+<tr><td><strong>Deployment</strong></td><td>Sentinel → Content Hub → search "Agent 365" → install + configure data ingestion to the data lake</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 Pair with the Sentinel MCP server</div>
+  <p>The Agent 365 connector pairs naturally with the <a href="https://learn.microsoft.com/azure/sentinel/datalake/sentinel-mcp-overview" target="_blank" style="color:var(--blue);">Microsoft Sentinel MCP server</a> for natural-language querying of the unified data lake. SOC analysts can ask questions like "show me all Copilot agents that called external HTTP endpoints in the last week" without writing KQL. This is the model Microsoft is now pushing for AI-driven SOC operations on agent telemetry.</p>
+</div>
+
+<div class="callout callout-warn" style="margin-top:14px;">
+  <div class="callout-title">⚠ Deactivation cascade</div>
+  <p>Per Microsoft's documentation: "Data from this connector is used to investigate AI agent behavior, tool usage, and execution in Microsoft Sentinel. If you have enabled these workflows, deactivating this connector will prevent those investigations from being performed." Hunting queries, graphs, and MCP investigations all depend on the connector being live — treat it as a first-class production dependency for SOC, not an optional add-on.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- AGENT 365 + PURVIEW -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:32px;">Agent 365 + Purview</div>
+<h2>Audit an agent like a user — Agent 365 in Purview</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">Microsoft has published <a href="https://learn.microsoft.com/purview/ai-agent-365" target="_blank" style="color:var(--blue);">dedicated Purview documentation for Microsoft Agent 365</a>, formalising what's auditable and how Agent 365 instances appear in DSPM and the unified audit log.</p>
+
+<div class="callout callout-info" style="margin-top:8px;">
+  <div class="callout-title">📌 Key Purview-Agent 365 properties</div>
+  <p><strong>Audit an agent instance as you would a user</strong> — all interactions appear in the unified audit log, including agent-to-human, human-to-agent, agent-to-tools, and agent-to-agent. <strong>Activity Explorer in DSPM (and DSPM for AI)</strong> shows agent activity under the AI activities tab, including prompts and responses where applicable. <strong>Sensitivity labels</strong> applied to data the agent accesses are captured in the audit record. Search via <a href="https://learn.microsoft.com/purview/audit-log-activities#agent-365-activities" target="_blank" style="color:var(--blue);">Agent 365 audit activities</a> in the Purview portal.</p>
+</div>
+
 <div class="page-nav">
   <a href="product-map.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Products</span></a>
   <a href="identity.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Identity</span></a>

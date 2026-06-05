@@ -282,37 +282,72 @@ FRAMEWORKS & STRATEGY
 - NIST AI RMF, ISO 42001, OWASP Agentic AI Top 10, ZT4AI reference architecture
 - OWASP LLM Top 10 (2025): LLM01–LLM10 mapped to Microsoft AI agent controls
 - ZT4AI: three principles applied to AI, three-stage maturity model (Visibility/Control/Automation),
-  workshop + assessment tool (AI pillar summer 2026), patterns and practices articles (RSAC 2026)
+  workshop + assessment tool. AI PILLAR OF ZT ASSESSMENT NOW AVAILABLE — see
+  learn.microsoft.com/entra/fundamentals/zero-trust-ai (3 common agent issues:
+  auth/policy mismatch, overpermissioned access, lifecycle gaps).
 - EU AI Act August 2026, Colorado AI Act June 2026
-- Purview Compliance Manager AI templates
+- Purview Compliance Manager AI templates + AI Baseline assessment as Phase 6 starting action
+- Compliance Manager score vs structured audit-ready assessment distinction
 - Six-phase defense strategy page: Discover & Inventory, Identity & Governance,
   Data Security, Runtime Protection, Monitoring & Detection, Compliance & Governance.
   Includes AI Readiness Assessment (pre-Phase-1), four AI security KPIs,
-  quarterly board-level reporting pack.
+  quarterly board-level reporting pack, AI Governance Operating Model (5 forums).
 - Frontier Firms: Microsoft's term for AI-native enterprises (RSAC 2026, Vasu Jakkal)
 - PyRIT (Python Risk Identification Tool): open source, MIT, 53+ datasets, 70+ converters,
   6 attack strategies, 20+ scorers, CI/CD release gate, OWASP LLM mapping.
   Playbook 06 covers pre-deployment red teaming workflow.
   Two risk surfaces: security vulnerabilities AND responsible AI harms.
 - ARA tool: M365 Copilot Automated Readiness Assessment (open source, Jan 2026)
+- Five Copilot Studio auth patterns including Agent's User Account (5th)
+- Owner / Sponsor / Approver / Orphaned role model
+- Risk tier methodology H/M/L (highest match wins, not average)
+- AI Trust and Safety assurance (Adelard methodology) for citizen-facing agents
+- Maker awareness 30-minute brief (Playbook 07)
+- Third-party agent vetting checklist (Playbook 08)
+
+NOVEMBER 2025 WAVE — covered as of May 13, 2026:
+- Microsoft Entra Agent Platform (developer-first identity platform)
+- Microsoft Entra Agent Registry (third-party agent inventory)
+- AI Prompt Shield (network-layer prompt injection blocking, Preview)
+- Specialized roles: Agent Registry Administrator (NEW Entra built-in role)
+- Microsoft Copilot Studio AI agent protection in Defender (Preview, GA June 2026)
+- External threat detection for Copilot Studio (Preview Sep 4 2025, GA June 2026)
+- Foundry Control Plane "Operate" pane structure (Overview/Assets/Compliance/Quota/Monitoring)
+- Agent 365 Sentinel data connector (unifies Agent 365 + Foundry + Copilot telemetry)
+- M365 admin center "Agents at risk" card (4 risk types: shadow agent, no owner,
+  excessive permissions, security misconfiguration)
+- Purview role groups for AI: Data Security Management, Viewers, IRM Triage Agent
+- Microsoft Foundry naming (formerly Azure AI Foundry)
+- Custom security attributes for CA at scale (Environment, Department, DataSensitivity)
+- OBO flow risk attribution detail (user not agent in delegated flows)
+- Microsoft Sentinel MCP server + Windows On-device Agent Registry (ODR)
+- ID Protection for agents: 5 offline risk detections, 4 actions, 90-day retention
 
 ═══════════════════════════════════════════════════════════════
 PRODUCTS COVERED (do not flag these as new)
 ═══════════════════════════════════════════════════════════════
 Agent 365, Entra Agent ID, CA for Agent ID, ID Protection for Agents,
-Security Dashboard for AI (GA, ai.security.microsoft.com), ATG, Secure Web and AI Gateway,
+Entra Agent Platform, Entra Agent Registry, AI Prompt Shield,
+Security Dashboard for AI (Preview, ai.security.microsoft.com), ATG, Secure Web and AI Gateway,
 Defender for Cloud Apps RT protection, CloudAppEvents, Copilot Data Connector (CopilotActivity),
+Agent 365 Sentinel Data Connector (unifies Agent 365 + Foundry + Copilot),
+Sentinel MCP server (hosted), Microsoft Learn MCP server, Foundry MCP integration,
+Windows On-device Agent Registry (ODR), Copilot Studio MCP onboarding wizard,
 Sentinel MCP Entity Analyzer, Sentinel Data Federation, Sentinel Playbook Generator,
-Sentinel Custom Graphs, Sentinel GDAP + RBAC, Prompt Shields, DSPM for AI,
+Sentinel Custom Graphs, Sentinel GDAP + RBAC, Prompt Shields, DSPM for AI (new + classic),
 Purview DLP for Copilot, Browser DLP (Edge for Business), Network DLP (Global Secure Access),
-SAM + RCD, IRM Adaptive Protection, Purview Compliance Manager, Purview Audit,
-Defender Predictive Shielding, Entra Internet Access (Shadow AI + Prompt Injection GA),
+SAM + RCD, IRM Adaptive Protection, Purview Compliance Manager (incl. AI Baseline),
+Purview Audit (Agent 365 activities), Defender Predictive Shielding,
+Entra Internet Access (Shadow AI + Prompt Injection GA), External Threat Detection (Copilot Studio),
 Entra Backup and Recovery (Preview), Entra Tenant Governance (Preview),
 Unified Identity Security Dashboard (Preview), Identity Risk Score (Preview),
 Agent Governance Toolkit (open source), PyRIT (open source), ARA tool (open source),
 Security Copilot (E5/E7 included), Security Analyst Agent, Security Alert Triage Agent,
 CA Optimization Agent, Data Security Posture Agent, Data Security Triage Agent,
-Security Store (GA March 31 2026), Defender Experts Suite, Work IQ
+Security Store (GA March 31 2026), Defender Experts Suite, Work IQ,
+Microsoft Foundry (formerly Azure AI Foundry), Foundry Control Plane,
+Foundry IQ knowledge integration, Foundry Red Teaming Agent,
+9 Copilot Studio harm categories, 9 Foundry risk dimensions
 """
 
 ANALYSIS_PROMPT = """You are analysing Microsoft Learn documentation search results to identify

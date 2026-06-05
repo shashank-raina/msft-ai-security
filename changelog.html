@@ -352,7 +352,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <div class="page">
 
 <div class="hero">
-  <div class="hero-badge"><div class="live-dot"></div>SITE CHANGELOG · LAST UPDATED MAY 12, 2026</div>
+  <div class="hero-badge"><div class="live-dot"></div>SITE CHANGELOG · LAST UPDATED MAY 13, 2026</div>
   <h1>What's Changed<br><span>& When</span></h1>
   <p style="color:#2e3d5e;font-size:17px;font-weight:400;max-width:640px;line-height:1.7;">
     This site is a living document. Microsoft updates products and capabilities frequently — this log tracks meaningful content changes, corrections, and additions. Minor fixes (typos, link corrections) are not listed.
@@ -407,6 +407,91 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 
 
+
+<div class="section-label" style="margin-top:40px;">MAY 13, 2026</div>
+<h2>Microsoft Learn Comparison Pass · 14 Updates Across 9 Pages</h2>
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag blue">🔧 Method</span></td>
+<td><strong>Used the Microsoft Learn MCP server to systematically compare site coverage against current Microsoft documentation</strong>. Searches across the AI security stack, Foundry Control Plane, Purview DSPM for AI, Sentinel data connectors, Entra Agent ID / Agent Registry / ID Protection, MCP integration, and Zero Trust. Source: Microsoft Learn "What's new in Microsoft AI security" (November 2025 wave) — <a href="https://learn.microsoft.com/security/security-for-ai/whats-new" target="_blank" style="color:var(--blue);">learn.microsoft.com/security/security-for-ai/whats-new</a>.</td>
+<td>All content pages</td></tr>
+
+<tr><td><span class="tag warn">⚠ Correctness</span></td>
+<td><strong>Security Dashboard for AI status corrected from GA to Preview</strong>. Per current Microsoft Learn documentation, the dashboard is still labelled Preview. Day 1 callout on index.html updated accordingly.</td>
+<td>index.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>"Latest from Microsoft Learn (Nov 2025 wave)" callout on Overview</strong>. Summarises the November 2025 Microsoft AI security wave: Entra Agent Platform, Entra Agent Registry, AI Prompt Shield (network-layer), specialized roles for Agent ID management, Copilot Studio AI agent protection in Defender, and the Microsoft Foundry naming change (formerly Azure AI Foundry).</td>
+<td>overview.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>"Agents at risk" card — Microsoft's formal risk taxonomy</strong>. Added the four agent risk types Microsoft surfaces natively in the M365 admin center: Shadow agent (Critical), No owner assigned (Critical), Excessive permissions (Critical), Security misconfiguration (High). Each with source signal mapping (Entra / Purview / Defender).</td>
+<td>risk.html</td></tr>
+
+<tr><td><span class="tag warn">⚠ Critical detail</span></td>
+<td><strong>OBO flow risk attribution caveat</strong>. Critical technical detail from Microsoft Learn: in On-Behalf-Of flows, risky activity is attributed to the user, not the agent. The agent risk detection table applies only to autonomous agent activity. A delegated-auth agent appearing misbehaved may not appear in the Risky Agents report at all — investigators should check user risk instead. Documented on both risk.html and identity.html.</td>
+<td>risk.html, identity.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>ID Protection for Agents — five offline risk detections documented</strong>. Detailed coverage of the five detections Microsoft lists in <a href="https://learn.microsoft.com/entra/id-protection/concept-risky-agents" target="_blank" style="color:var(--blue);">ID Protection for agents (Preview)</a>: unfamiliarResourceAccess, signInSpike, failedAccessAttempt, adminConfirmedAgentCompromised, threatIntelligenceAccount. Includes 4 response actions, 90-day retention, Microsoft Graph collections (<code>riskyAgents</code>, <code>agentRiskDetections</code>), and required roles (Security Admin/Operator/Reader for reports, Conditional Access Administrator for risk policies).</td>
+<td>identity.html, chat.js</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Custom Security Attributes for agent segmentation</strong>. New section on identity.html covering Microsoft's recommended pattern for scaling CA policy across agent estates — define attributes (Environment, Department, DataSensitivity), assign to agents, use as CA policy conditions. Plus the critical caveat: agents cannot satisfy interactive MFA controls — don't rely on user-targeted CA policies for agents.</td>
+<td>identity.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Agent Registry Administrator role + AI security licensing matrix</strong>. New Entra built-in role for AI agent management (separate from broader AI Administrator). Plus a clear licensing breakdown: Agent ID (free with Entra), CA for Agents (Entra ID P1), ID Protection for Agents (Entra ID P2), ID Governance (Entra ID P1), Network controls (Entra Internet Access), Agent 365 (per-user, not per-agent). Includes Purview role groups: Data Security Management, Data Security Viewers, Data Security IRM Triage Agent (the new "role assigned to an agent identity" pattern).</td>
+<td>identity.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Microsoft's MCP server landscape</strong>. Comprehensive table of first-party MCP servers Microsoft now ships or previews: Sentinel MCP server (hosted, Entra-auth), Microsoft Learn MCP server (authless), Foundry MCP integration (<code>server_label</code> + <code>server_url</code>), Windows On-device Agent Registry (ODR) with contained-by-default execution, Copilot Studio MCP onboarding wizard, Microsoft Agent Framework MCP tools. Plus Microsoft's stated position on third-party MCP servers and authoritative security guidance links.</td>
+<td>mcp.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>External threat detection for Copilot Studio agents</strong>. Pluggable runtime control via REST API endpoint that agents call before tool invocation. Public Preview Sep 4, 2025 · GA expected June 2026. Generative agents only. Use cases include corporate-specific data classification, sector-specific guardrails, third-party threat intel integration. Critical caveat: endpoint becomes hard dependency for every tool call — treat as tier-1 service for production.</td>
+<td>threats.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Microsoft's nine harm categories (from Copilot Studio Application Card)</strong>. The official categories Microsoft tests against in internal safety evaluations: hate and unfairness, sexual, violence, self-harm, protected material, indirect jailbreak (XPIA), direct jailbreak (UPIA), code vulnerability, ungrounded attributes. Distinguished from Foundry's nine continuous-evaluation risk dimensions — both apply, complete acceptance tests cover both.</td>
+<td>threats.html</td></tr>
+
+<tr><td><span class="tag green">✓ Resolved</span></td>
+<td><strong>Zero Trust Assessment AI pillar — now available</strong>. Site previously flagged this as "summer 2026" — Microsoft has shipped it. Updated the Frameworks page, Zero Trust page, and Gaps register. Microsoft identifies three common agent issues the assessment helps surface: authentication and policy mismatch, overpermissioned access, lifecycle and accountability gaps. See <a href="https://learn.microsoft.com/entra/fundamentals/zero-trust-ai" target="_blank" style="color:var(--blue);">Configure agent identity security with the Zero Trust Assessment</a>.</td>
+<td>frameworks.html, zero-trust.html, gaps.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Foundry Control Plane — formal "Operate" toolbar 5-pane structure</strong>. Microsoft has standardised the Foundry Control Plane interface around five panes accessible from Operate: Overview (fleet health), Assets (unified inventory), Compliance (policies + Azure Policy/Defender/Purview integration), Quota, Monitoring (App Insights). Plus the Microsoft Foundry naming note (formerly Azure AI Foundry — same product).</td>
+<td>foundry.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New product card</span></td>
+<td><strong>Three new identity product cards on the product map</strong>: Microsoft Entra Agent Platform (developer-first identity SDK/API), Microsoft Entra Agent Registry (complete agent inventory including third-party), AI Prompt Shield (network-layer prompt injection blocking via Entra Internet Access). All Preview, all from the November 2025 wave.</td>
+<td>product-map.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New playbook section</span></td>
+<td><strong>Agent 365 Sentinel Data Connector documented</strong>. Microsoft-supported connector that ingests agent telemetry from Agent 365 + Microsoft Foundry + Copilot into the Sentinel data lake — single connector, three sources. Enables hunting (KQL + natural language via Sentinel MCP), graph workflows (agent-to-agent and agent-to-tool relationships), and MCP investigation workflows. Deactivation cascade caveat documented.</td>
+<td>playbooks.html, agent365.html</td></tr>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Agent 365 + Purview integration section</strong>. Per Microsoft's <a href="https://learn.microsoft.com/purview/ai-agent-365" target="_blank" style="color:var(--blue);">dedicated Purview documentation for Microsoft Agent 365</a>: audit an agent instance as you would a user; all agent-to-human, human-to-agent, agent-to-tools, and agent-to-agent interactions captured in unified audit log; Activity Explorer in DSPM shows agent activity under AI activities tab.</td>
+<td>agent365.html</td></tr>
+
+<tr><td><span class="tag blue">🔧 Chat assistant</span></td>
+<td><strong>chat.js SYSTEM_PROMPT extensively updated</strong>. Added: November 2025 wave (Agent Platform, Agent Registry, AI Prompt Shield, Foundry naming); M365 admin center "Agents at risk" card with four risk types; Entra built-in roles for AI agent management (with new Agent Registry Administrator); Purview role groups for AI (including the new IRM Triage Agent role assignable to agent identities); ZT Assessment AI pillar now available; external threat detection for Copilot Studio; Agent 365 Sentinel data connector; Microsoft-provided MCP servers landscape; nine harm categories; Foundry Control Plane Operate pane structure; OBO flow risk attribution; custom security attributes for CA at scale.</td>
+<td>chat.js</td></tr>
+
+<tr><td><span class="tag blue">🔧 Updated</span></td>
+<td><strong>content_monitor.py updated with comprehensive May 13 covered-topics list</strong>. November 2025 wave additions, role groups, Foundry naming, MCP servers landscape, harm categories, ID Protection detection list — all added so the monitor doesn't flag these as new on next sweep.</td>
+<td>content_monitor.py</td></tr>
+
+</tbody>
+</table>
+<div class="callout callout-info" style="margin-top:16px;margin-bottom:32px;">
+  <div class="callout-title">📌 Method note</div>
+  <p>This batch came from a structured Microsoft Learn comparison using the Microsoft Learn MCP server. Searches covered each major content page's primary topics; findings were filtered for genuine novelty (not just rephrasing of known material). The site is now aligned with Microsoft's November 2025 wave of AI security announcements. The Microsoft Learn MCP server is recommended as a periodic-sweep tool going forward — natural-language access to current Microsoft documentation without manually crawling the Learn portal.</p>
+</div>
 
 <div class="section-label" style="margin-top:40px;">MAY 12, 2026</div>
 <h2>Strategy Restructure · 12 Content Additions Across Strategy, Risk, Identity, Frameworks, Playbooks</h2>
