@@ -666,6 +666,82 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   </div>
 </div>
 
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- EXTERNAL THREAT DETECTION FOR COPILOT STUDIO -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:48px;">External threat detection</div>
+<h2>External threat detection for Copilot Studio — pluggable runtime control</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">Beyond the built-in UPIA / XPIA protections, Copilot Studio now lets organisations plug in <strong>external threat detection systems</strong> at runtime. The agent calls a customer-configured REST API endpoint every time the orchestrator considers invoking a tool. The endpoint evaluates the proposed tool use and returns an allow/block decision. This gives security teams a hook point to apply organisation-specific policy that Microsoft's built-in classifiers can't cover — third-party threat intel, custom prompt injection detectors, sector-specific guardrails.</p>
+
+<table>
+<thead><tr><th>Aspect</th><th>Detail</th></tr></thead>
+<tbody>
+<tr><td><strong>Scope</strong></td><td>Generative agents only — Classic agents skip external threat detection entirely</td></tr>
+<tr><td><strong>Trigger</strong></td><td>Every time the orchestrator considers invoking a tool, before invocation</td></tr>
+<tr><td><strong>Payload to endpoint</strong></td><td>Relevant data about the proposed tool use (Microsoft hasn't published full schema yet)</td></tr>
+<tr><td><strong>Response shape</strong></td><td>Allow or block — agent halts processing on block, notifies user the message is blocked</td></tr>
+<tr><td><strong>On allow</strong></td><td>Agent proceeds — no visible effect or interruption for the user</td></tr>
+<tr><td><strong>Status</strong></td><td>Public Preview Sep 4, 2025 · GA expected June 2026</td></tr>
+<tr><td><strong>Reference</strong></td><td><a href="https://learn.microsoft.com/microsoft-copilot-studio/external-security-provider" target="_blank" style="color:var(--blue);">Enable external threat detection and protection for Copilot Studio custom agents</a></td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;">
+  <div class="callout-title">📌 When to use this</div>
+  <p>External threat detection is the answer when you need policy beyond what Defender real-time protection (ATG) covers. Examples: enforcement of corporate-specific data classification, integration with an existing third-party content security service, sector-specific guardrails (financial advice, medical contraindication), or threat intel from a SOC platform Microsoft doesn't natively integrate with. Critical caveat: the endpoint becomes a hard dependency for every tool call — its availability and latency directly affect agent UX. Treat the threat detection endpoint as a tier-1 service for high-volume production agents.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- COPILOT STUDIO 9 HARM CATEGORIES -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:32px;">What Microsoft evaluates against</div>
+<h2>Microsoft's nine harm categories — what Copilot Studio evaluations check</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">Per Microsoft's published <strong>Copilot Studio Application Card</strong>, all internal safety evaluations check against the same nine harm categories. These are also the categories the Foundry Red Teaming Agent probes against. Useful as a benchmark against which to align your own red-team and acceptance criteria — if you're not at least testing these nine, you're behind Microsoft's own baseline.</p>
+
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:14px 0;">
+  <div class="card" style="border-color:rgba(216,59,1,0.25);">
+    <div class="card-name" style="color:#c23000;font-size:12px;">① Hate and unfairness</div>
+    <div class="card-desc" style="font-size:11px;">Discrimination, derogation, stereotyping</div>
+  </div>
+  <div class="card" style="border-color:rgba(216,59,1,0.25);">
+    <div class="card-name" style="color:#c23000;font-size:12px;">② Sexual</div>
+    <div class="card-desc" style="font-size:11px;">Inappropriate sexual content</div>
+  </div>
+  <div class="card" style="border-color:rgba(216,59,1,0.25);">
+    <div class="card-name" style="color:#c23000;font-size:12px;">③ Violence</div>
+    <div class="card-desc" style="font-size:11px;">Graphic violence, harm to others</div>
+  </div>
+  <div class="card" style="border-color:rgba(216,59,1,0.25);">
+    <div class="card-name" style="color:#c23000;font-size:12px;">④ Self-harm</div>
+    <div class="card-desc" style="font-size:11px;">Suicide, self-injury content</div>
+  </div>
+  <div class="card" style="border-color:rgba(216,59,1,0.25);">
+    <div class="card-name" style="color:#c23000;font-size:12px;">⑤ Protected material</div>
+    <div class="card-desc" style="font-size:11px;">Copyrighted text, code, IP leakage</div>
+  </div>
+  <div class="card" style="border-color:rgba(216,59,1,0.25);">
+    <div class="card-name" style="color:#c23000;font-size:12px;">⑥ Indirect jailbreak</div>
+    <div class="card-desc" style="font-size:11px;">XPIA — cross-prompt injection from data sources</div>
+  </div>
+  <div class="card" style="border-color:rgba(216,59,1,0.25);">
+    <div class="card-name" style="color:#c23000;font-size:12px;">⑦ Direct jailbreak</div>
+    <div class="card-desc" style="font-size:11px;">UPIA — user prompt injection</div>
+  </div>
+  <div class="card" style="border-color:rgba(216,59,1,0.25);">
+    <div class="card-name" style="color:#c23000;font-size:12px;">⑧ Code vulnerability</div>
+    <div class="card-desc" style="font-size:11px;">Insecure code generation, exploit suggestions</div>
+  </div>
+  <div class="card" style="border-color:rgba(216,59,1,0.25);">
+    <div class="card-name" style="color:#c23000;font-size:12px;">⑨ Ungrounded attributes</div>
+    <div class="card-desc" style="font-size:11px;">Hallucinated facts, fabricated citations</div>
+  </div>
+</div>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 Foundry's nine risk dimensions are different — both apply</div>
+  <p>Foundry Control Plane uses a different but overlapping set of nine continuous-evaluation risk dimensions: task adherence, intent resolution, tool call success, groundedness, sensitive data leakage, jailbreak exposure, XPIA exposure, plus general performance/quality metrics. The Copilot Studio nine above are <em>harm</em> categories (what bad output looks like); the Foundry nine are <em>quality and risk dimensions</em> (how the agent is behaving). A complete agent acceptance test covers both.</p>
+</div>
+
 <div class="page-nav"><a href="mcp.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">MCP</span></a><a href="frameworks.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Frameworks</span></a></div>
 <div style="text-align:center;margin:32px 0 0;padding:24px 0;border-top:1px solid var(--border2);">
   <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text3);margin-bottom:10px;">STAY UPDATED</div>

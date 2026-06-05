@@ -757,6 +757,33 @@ Step 4: Enable and tune analytic rules to your policy and risk appetite</pre></d
       📌 <strong>Source:</strong> Samik Roy — "<a href="https://www.linkedin.com/pulse/monitor-detect-microsoft-copilot-activity-sentinel-samik-roy" target="_blank" style="color:var(--blue);">Monitor & Detect Microsoft Copilot Activity with Microsoft Sentinel</a>" (May 4, 2026). Contributed to official <a href="https://github.com/Azure/Azure-Sentinel/tree/master/Solutions/Microsoft%20Copilot" target="_blank" style="color:var(--blue);">Azure/Azure-Sentinel GitHub repository</a>.
     </div>
 
+    <div class="pb-section-label" style="margin-top:24px;">AGENT 365 DATA CONNECTOR — UNIFIED AGENT TELEMETRY (NEW)</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Microsoft has shipped an <strong>Agent 365 data connector</strong> for Sentinel that ingests agent telemetry into the Sentinel data lake from <strong>three sources at once</strong>: Agent 365, Microsoft Foundry, and Copilot. This is the unified connector you want for cross-platform agent investigation — it replaces the need to wire three separate sources.</p>
+
+    <div class="kql-label">What it provides</div>
+    <div style="background:#f5f7fc;border:1px solid var(--border);border-radius:4px;padding:12px 16px;font-size:12px;margin-bottom:14px;line-height:1.9;">
+      <div>✓ Agent behaviour telemetry — actions taken, decisions made, state changes</div>
+      <div>✓ Tool usage telemetry — which tools were invoked, with what parameters, with what outcome</div>
+      <div>✓ Execution telemetry — runtime metrics, error rates, latency</div>
+      <div>✓ <strong>Hunting workflows</strong> — natural-language and KQL queries against the unified data lake</div>
+      <div>✓ <strong>Graph workflows</strong> — visualise agent-to-agent and agent-to-tool relationships</div>
+      <div>✓ <strong>MCP workflows</strong> — investigate MCP server interactions via the Sentinel MCP server</div>
+    </div>
+
+    <div class="kql-label">Deployment</div>
+    <div class="kql-block"><pre style="margin:0;white-space:pre;">Step 1: In Sentinel → Content Hub → search "Agent 365"
+Step 2: Install the Agent 365 data connector
+Step 3: Configure data ingestion to the Sentinel data lake
+Step 4: Use the Sentinel MCP server interface to query in natural language
+        or write KQL directly against the new tables
+
+⚠ If this connector is enabled and then deactivated, hunting/graph/MCP
+   workflows that depended on its data will stop functioning.</pre></div>
+
+    <div style="background:rgba(0,120,212,0.06);border:1px solid rgba(0,120,212,0.2);border-radius:4px;padding:10px 14px;font-size:12px;margin-top:8px;line-height:1.6;">
+      📌 <strong>Source:</strong> Microsoft Corporation — Agent 365 connector in <a href="https://learn.microsoft.com/azure/sentinel/data-connectors-reference" target="_blank" style="color:var(--blue);">Microsoft Sentinel data connectors reference</a>. Pairs with the <a href="https://learn.microsoft.com/azure/sentinel/datalake/sentinel-mcp-overview" target="_blank" style="color:var(--blue);">Sentinel MCP server</a> for natural-language querying.
+    </div>
+
 
     <div class="pb-section-label">A365 - MONITOR OPENCLAW — INTUNE PROPERTIES COLLECTED</div>
     <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">When you enable "Continuously detect managed devices" in Agent 365 Shadow AI, Intune automatically creates a <strong>Properties catalog profile</strong> called <code>A365 - Monitor OpenClaw</code>. It uses the new <strong>Local AI Agent</strong> Settings Catalog node, runs via the Intune Management Extension (IME), and refreshes every <strong>24 hours</strong>. Read-only — safe to deploy. Source: Derk van der Woude, May 2026.</p>

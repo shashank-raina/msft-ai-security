@@ -465,6 +465,33 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <p>Required for: agents interacting directly with the public, agents making decisions about benefits or eligibility, agents in healthcare or safeguarding contexts, agents handling vulnerable users. Recommended for: any agent classified as HIGH risk per the tier methodology above, plus any agent newly subject to EU AI Act Annex III high-risk classification. The output is an auditable safety case — not a posture score — suitable for regulator submission alongside the security evidence pack.</p>
 </div>
 
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- M365 ADMIN CENTER "AGENTS AT RISK" CARD -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:48px;">Where Microsoft surfaces this</div>
+<h2>"Agents at risk" card — what Microsoft is now flagging natively</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">As of late 2025, the Microsoft 365 admin center Overview page includes an <strong>"Agents at risk" card</strong> that aggregates high-severity risk signals across Entra, Purview, and Defender. The card surfaces the top three most at-risk agents and links into the All agents → Registry view, prefiltered by risk level. Microsoft now publishes a formal taxonomy of agent risk types — useful to anchor your own risk tier methodology against.</p>
+
+<table>
+<thead><tr><th>Risk type</th><th>Severity</th><th>Source signal</th><th>Trigger</th></tr></thead>
+<tbody>
+<tr><td><strong>Shadow agent</strong></td><td><span style="color:#c23000;font-weight:700;">Critical</span></td><td>Entra · M365 admin center</td><td>Agent has no registry entry, no owner, or no Entra Agent ID</td></tr>
+<tr><td><strong>No owner assigned</strong></td><td><span style="color:#c23000;font-weight:700;">Critical</span></td><td>Entra · M365 admin center</td><td>No owner or sponsor on record</td></tr>
+<tr><td><strong>Excessive permissions</strong></td><td><span style="color:#c23000;font-weight:700;">Critical</span></td><td>Entra · Defender</td><td>Access rights exceed declared function (least-privilege violation)</td></tr>
+<tr><td><strong>Security misconfiguration</strong></td><td><span style="color:#943000;font-weight:700;">High</span></td><td>Defender Security Exposure Management</td><td>Agent exploitable attack path detected</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;">
+  <div class="callout-title">📌 How this maps to the tier rubric above</div>
+  <p>Three of Microsoft's four risk types align cleanly with HIGH-tier criteria in the rubric above (no auth ≈ shadow agent attribute; no owner ≈ no owner assigned; excessive permissions = least-privilege violation). The "Security misconfiguration" Defender signal is a useful fifth criterion to add to your local HIGH-tier definition. Source: <a href="https://learn.microsoft.com/microsoft-365/admin/manage/agent-registry" target="_blank" style="color:var(--blue);">Manage agent registry in Microsoft 365 admin center</a>.</p>
+</div>
+
+<div class="callout callout-warn" style="margin-top:14px;">
+  <div class="callout-title">⚠ Technical detail — OBO flow risk attribution</div>
+  <p>Per Microsoft's <a href="https://learn.microsoft.com/entra/id-protection/concept-risky-agents" target="_blank" style="color:var(--blue);">ID Protection for agents</a> documentation: in On-Behalf-Of (OBO) flows where an agent acts using a user's delegated permissions, risky activity is attributed to <strong>the user</strong>, not the agent. This targets remediation at the compromised user session without disrupting the agent for other users. The agent risk detection table applies only to <strong>autonomous</strong> agent activity. This is critical to understand when investigating: if a delegated-auth agent appears to be misbehaving but isn't flagged, the risk has likely been logged against the calling user.</p>
+</div>
+
 <div class="page-nav"><a href="overview.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Overview</span></a><a href="product-map.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Products</span></a></div>
 <div style="text-align:center;margin:32px 0 0;padding:24px 0;border-top:1px solid var(--border2);">
   <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text3);margin-bottom:10px;">STAY UPDATED</div>
