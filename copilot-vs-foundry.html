@@ -465,7 +465,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
       <div class="platform-item"><strong>What it produces:</strong> Copilot Studio agents published to Teams, SharePoint, websites — conversational agents connecting to M365 data</div>
       <div class="platform-item"><strong>Critical distinction:</strong> Classic agents (most existing deployments) sit outside the Entra security perimeter. Modern agents (new) get full Entra coverage</div>
       <div class="platform-item"><strong>Primary risk surface:</strong> Maker credentials, no-auth agents, org-wide sharing, agent sprawl, any-user-can-change-auth</div>
-      <div class="platform-item"><strong>Primary detection surface:</strong> AIAgentsInfo table in Defender Advanced Hunting</div>
+      <div class="platform-item"><strong>Primary detection surface:</strong> AgentsInfo table in Defender Advanced Hunting</div>
     </div>
   </div>
   <div class="platform-card platform-foundry">
@@ -500,15 +500,15 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <tr><td>ID Protection for Agents</td><td>❌ Classic agents only — Modern agents supported</td><td>✅ Supported</td></tr>
 <tr><td>Identity Governance (lifecycle)</td><td>⚠️ Modern agents only</td><td>✅ Supported via Entra ID Governance</td></tr>
 <tr><td>Defender real-time protection</td><td>✅ Copilot Studio agents (Defender for Cloud Apps)</td><td>✅ Defender for Cloud AI security posture</td></tr>
-<tr><td>Sentinel analytics rules</td><td>✅ AIAgentsInfo table queries</td><td>✅ Azure Monitor + App Insights tables</td></tr>
+<tr><td>Sentinel analytics rules</td><td>✅ AgentsInfo table queries</td><td>✅ Azure Monitor + App Insights tables</td></tr>
 <tr><td>Prompt Shield / Content Safety</td><td>✅ Built-in via M365 Copilot layer</td><td>✅ Content Safety SDK — opt-in per agent</td></tr>
 <tr><td>DLP / Purview (policy layer)</td><td>✅ DLP for M365 Copilot (GA March 31 2026) — covers Copilot experiences</td><td>✅ Azure data governance applies</td></tr>
 <tr><td>Browser-layer DLP</td><td>✅ Edge for Business inline protection — inspects typed prompts to any GenAI app incl. shadow AI. Works on BYOD if signed into Edge for Business profile</td><td>✅ Same — applies to any browser-based interaction</td></tr>
 <tr><td>Network-layer DLP</td><td>⚠️ Preview — Network Data Security via Global Secure Access. Covers unmanaged devices, desktop apps, API calls</td><td>⚠️ Preview — same coverage</td></tr>
 <tr><td>SharePoint oversharing controls (SAM)</td><td>✅ SharePoint Advanced Management included with Copilot licence — RCD, Site Access Reviews, Content Assessment, RAC. Primary tool for Copilot data exposure remediation.</td><td>⚠️ Not applicable at the same level — Foundry agents access data via explicit connections, not broad SharePoint indexing</td></tr>
 <tr><td>Agentic data governance</td><td>✅ DLP extends to agent-to-human, agent-to-tools, agent-to-agent. Sensitive files blocked from grounding data. Auto-enrolled for audit at creation</td><td>✅ Same — agent instances enrolled as auditable entities</td></tr>
-<tr><td>Inventory / discovery</td><td>✅ Agent 365 + AIAgentsInfo table</td><td>⚠️ Azure Resource Manager + Entra Agent ID — no unified agent-level inventory table equivalent</td></tr>
-<tr><td>Logging — default state</td><td>✅ Some data in AIAgentsInfo automatically</td><td>⚠️ Nothing collected by default — all logging is opt-in</td></tr>
+<tr><td>Inventory / discovery</td><td>✅ Agent 365 + AgentsInfo table</td><td>⚠️ Azure Resource Manager + Entra Agent ID — no unified agent-level inventory table equivalent</td></tr>
+<tr><td>Logging — default state</td><td>✅ Some data in AgentsInfo automatically</td><td>⚠️ Nothing collected by default — all logging is opt-in</td></tr>
 <tr><td>Red teaming</td><td>⚠️ No native Copilot Studio red teaming tool</td><td>✅ AI Red Teaming Agent in Microsoft Foundry</td></tr>
 <tr><td>Supply chain scanning</td><td>⚠️ Limited — connector risk is the main vector</td><td>✅ Defender for Cloud CSPM, AI model scanning</td></tr>
 </tbody>
@@ -530,13 +530,13 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
     <div class="auth-num">①</div>
     <div><div class="auth-name">End User Credentials (OBO)</div><div class="auth-sub">Auth with Microsoft → End user credentials</div></div>
     <div class="risk-badge risk-low">LOW RISK</div>
-    <code style="font-size:9px;background:#f0f4fb;padding:2px 6px;border-radius:3px;">UserAuthenticationType == "Integrated"</code>
+    <code style="font-size:9px;background:#f0f4fb;padding:2px 6px;border-radius:3px;">ToolsAuthenticationType == "Integrated"</code>
   </div>
   <div class="auth-row">
     <div class="auth-num">②</div>
     <div><div class="auth-name">Maker-Provided Credentials</div><div class="auth-sub">Auth with Microsoft → Maker-provided credentials</div></div>
     <div class="risk-badge risk-high">HIGH RISK</div>
-    <code style="font-size:9px;background:#f0f4fb;padding:2px 6px;border-radius:3px;">AgentToolsDetails.mode == "Maker"</code>
+    <code style="font-size:9px;background:#f0f4fb;padding:2px 6px;border-radius:3px;">DeclaredTools.mode == "Maker"</code>
   </div>
   <div class="auth-row">
     <div class="auth-num">③</div>
@@ -593,48 +593,48 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <p>Run these in Defender Advanced Hunting to get immediate visibility. Any result from Query 1 or 2 is a critical finding.</p>
 
 <div class="code-block">// Query 1: No-auth agents (critical — run first)
-AIAgentsInfo
-| summarize arg_max(Timestamp, *) by AIAgentId
-| where AgentStatus == "Published"
-| where UserAuthenticationType == "None"
-| project AIAgentName, CreatorAccountUpn, OwnerAccountUpns, AgentCreationTime</div>
+AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where PublishedStatus == "Published"
+| where tostring(ToolsAuthenticationType) contains "None"
+| project AgentName, Owners, CreatedDateTime</div>
 
 <div class="code-block">// Query 2: Change-detection — auth downgraded to None (use as Sentinel Analytics Rule)
-AIAgentsInfo
-| summarize arg_max(Timestamp, *) by AIAgentId
-| where AgentStatus == "Published"
-| order by AIAgentName
-| extend PreviousAuthType = prev(UserAuthenticationType, 1)
-| where UserAuthenticationType == "None" and PreviousAuthType != "None"
-| project AIAgentName, PreviousAuthType, UserAuthenticationType, ReportId = tostring(AIAgentId), Timestamp</div>
+AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where PublishedStatus == "Published"
+| order by AgentName
+| extend PreviousAuthType = prev(ToolsAuthenticationType, 1)
+| where tostring(ToolsAuthenticationType) contains "None" and PreviousAuthType != "None"
+| project AgentName, PreviousAuthType, ToolsAuthenticationType, ReportId = tostring(AgentId), Timestamp</div>
 
 <div class="code-block">// Query 3: Maker credentials (field-validated — checks both Tools and Topics)
-let base = AIAgentsInfo
-| summarize arg_max(Timestamp, *) by AIAgentId
-| where AgentStatus == "Published";
+let base = AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where PublishedStatus == "Published";
 let directActions = base
-| mv-expand detail = AgentToolsDetails
+| mv-expand detail = DeclaredTools
 | where detail.action.connectionProperties.mode == "Maker"
 | extend ActionType = "FromTools"
-| project-reorder AgentCreationTime, AIAgentId, AIAgentName, UserAuthenticationType, CreatorAccountUpn;
+| project-reorder CreatedDateTime, AgentId, AgentName, ToolsAuthenticationType, Owners;
 let topicActions = base
-| mv-expand topic = AgentTopicsDetails
+| mv-expand topic = Capabilities
 | extend topicActionsArray = topic.beginDialog.actions
 | mv-expand Action = topicActionsArray
 | where Action.connectionProperties.mode == "Maker"
 | extend ActionType = "FromTopic"
-| project-reorder AgentCreationTime, AIAgentId, AIAgentName, AgentStatus, CreatorAccountUpn, OwnerAccountUpns, Action;
-directActions | union topicActions | sort by AIAgentId, Timestamp desc</div>
+| project-reorder CreatedDateTime, AgentId, AgentName, PublishedStatus, Owners, Action;
+directActions | union topicActions | sort by AgentId, Timestamp desc</div>
 
 <h2 style="margin-top:28px;">Copilot Studio — Critical Gaps</h2>
 <table>
 <thead><tr><th>Gap</th><th>Risk</th><th>Interim Mitigation</th></tr></thead>
 <tbody>
-<tr><td><strong>Classic agents outside Entra perimeter</strong></td><td><span class="severity-critical">⚠️ Critical</span></td><td>Inventory via AIAgentsInfo; enforce end-user auth in Power Platform admin; manually recreate critical agents as Modern</td></tr>
+<tr><td><strong>Classic agents outside Entra perimeter</strong></td><td><span class="severity-critical">⚠️ Critical</span></td><td>Inventory via AgentsInfo; enforce end-user auth in Power Platform admin; manually recreate critical agents as Modern</td></tr>
 <tr><td><strong>Any user can change another agent's auth type to None</strong></td><td><span class="severity-critical">⚠️ Critical</span></td><td>Deploy change-detection Sentinel Analytics Rule; restrict Copilot Studio access via Managed Environments</td></tr>
 <tr><td><strong>Maker credentials blast radius</strong></td><td><span class="severity-high">⚠️ High</span></td><td>Enforce end-user auth per agent; PAM hygiene on developers who build agents; audit via Query 3 above</td></tr>
-<tr><td><strong>Portal inventory count inconsistency</strong></td><td><span class="severity-high">⚠️ High</span></td><td>Trust AIAgentsInfo table as primary source; treat portal counts as approximate</td></tr>
-<tr><td><strong>Agent sprawl — no lifecycle enforcement</strong></td><td><span class="severity-high">⚠️ High</span></td><td>Assign owners to all agents; use access packages for time-bound permissions; quarterly AIAgentsInfo audit</td></tr>
+<tr><td><strong>Portal inventory count inconsistency</strong></td><td><span class="severity-high">⚠️ High</span></td><td>Trust AgentsInfo table as primary source; treat portal counts as approximate</td></tr>
+<tr><td><strong>Agent sprawl — no lifecycle enforcement</strong></td><td><span class="severity-high">⚠️ High</span></td><td>Assign owners to all agents; use access packages for time-bound permissions; quarterly AgentsInfo audit</td></tr>
 </tbody>
 </table>
 

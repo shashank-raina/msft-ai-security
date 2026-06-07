@@ -424,6 +424,62 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   font-family:'JetBrains Mono',monospace;}
 </style>
 
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- AGENTSINFO MIGRATION BANNER -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div style="background:#fff4d6;border:1.5px solid #e8b840;border-left:5px solid #e89500;border-radius:8px;padding:16px 20px;margin-bottom:24px;">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#8a5a00;font-weight:700;margin-bottom:6px;">⚠ ADVANCED HUNTING SCHEMA TRANSITION · ACTION NEEDED BEFORE JULY 1, 2026</div>
+  <div style="font-size:13px;color:#2e3d5e;line-height:1.7;">
+    <p style="margin:0 0 10px;">Per the <a href="https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-schema-changes" target="_blank" style="color:var(--blue);font-weight:600;">Microsoft Learn schema changes notice (June 2026)</a>: the <code style="background:#fff;padding:1px 5px;border-radius:3px;font-size:12px;">AIAgentsInfo</code> table is being replaced by the unified <code style="background:#fff;padding:1px 5px;border-radius:3px;font-size:12px;">AgentsInfo</code> table. The old table remains accessible until <strong>July 1, 2026</strong>. Microsoft Agent 365 customers should use <code style="background:#fff;padding:1px 5px;border-radius:3px;font-size:12px;">AgentsInfo</code> today.</p>
+    <p style="margin:0 0 10px;"><strong>All KQL queries on this page have been migrated to AgentsInfo</strong> with column renames applied. The new schema is currently labelled <span style="background:#fff4d6;border:1px solid #e8b840;border-radius:3px;padding:1px 6px;font-family:'JetBrains Mono',monospace;font-size:11px;">Preview</span> — queries against dynamic columns (<code style="background:#fff;padding:1px 5px;border-radius:3px;font-size:12px;">ToolsAuthenticationType</code>, <code style="background:#fff;padding:1px 5px;border-radius:3px;font-size:12px;">Owners</code>, <code style="background:#fff;padding:1px 5px;border-radius:3px;font-size:12px;">Capabilities</code>) may need field-path adjustment when tested against your tenant data. Verify the canonical Microsoft example query works first.</p>
+    <p style="margin:0;"><strong>Two other things to know about July 1, 2026:</strong> (1) Agent security capabilities for Copilot Studio and Foundry agents will require a <strong>Microsoft Agent 365 license</strong> — tenants without one lose access. (2) Existing Agent 365 real-time protection rules in <strong>Block mode stop blocking</strong>; alerts move to the new <code style="background:#fff;padding:1px 5px;border-radius:3px;font-size:12px;">BehaviorInfo</code> table. Block rules must be redefined under Settings → Security for AI → Policies. See <a href="https://learn.microsoft.com/en-us/defender-xdr/security-for-ai/transition-agent-security-to-agent-365" target="_blank" style="color:var(--blue);font-weight:600;">Microsoft's transition guide</a>.</p>
+  </div>
+</div>
+
+<!-- COLUMN MIGRATION REFERENCE -->
+<details style="margin-bottom:24px;background:#f5f7fc;border:1px solid var(--border);border-radius:8px;padding:14px 18px;">
+  <summary style="cursor:pointer;font-weight:700;font-size:13px;color:#0d1526;">📋 AIAgentsInfo → AgentsInfo column mapping (click to expand)</summary>
+  <div style="margin-top:12px;font-size:12px;line-height:1.7;color:#2e3d5e;">
+    <table style="width:100%;border-collapse:collapse;">
+      <thead><tr style="background:#fff;border-bottom:1px solid var(--border);">
+        <th style="text-align:left;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:10px;">Old (AIAgentsInfo)</th>
+        <th style="text-align:left;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:10px;">New (AgentsInfo)</th>
+        <th style="text-align:left;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:10px;">Notes</th>
+      </tr></thead>
+      <tbody style="font-family:'JetBrains Mono',monospace;font-size:11px;">
+        <tr><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">AIAgentId</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">AgentId</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;font-family:inherit;">Simple rename</td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">AIAgentName</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">AgentName</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;font-family:inherit;">Simple rename</td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">AgentStatus = "Published"</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">PublishedStatus = "Published"</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;font-family:inherit;">Same values: Draft / Published</td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">AgentStatus = "Deleted"</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">LifecycleStatus = "Deleted"</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;font-family:inherit;">Split into separate column: Active / Blocked / Uninstalled / Deleted</td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">UserAuthenticationType (string)</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">ToolsAuthenticationType (dynamic)</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;font-family:inherit;"><strong>Type change.</strong> Now a structured JSON record. Site uses <code>tostring(ToolsAuthenticationType) contains "None"</code> as a robust pattern; exact JSON paths may need adjustment.</td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">OwnerAccountUpns (string)</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">Owners (dynamic)</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;font-family:inherit;"><strong>Type change.</strong> Now an array. Use <code>array_length(Owners) == 0</code> instead of <code>isempty()</code>.</td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">CreatorAccountUpn</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">Owners[0] (within dynamic)</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;font-family:inherit;">No direct column; first owner is typically the creator. Available via <code>RawAgentInfo</code> JSON if needed.</td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">AgentCreationTime</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">CreatedDateTime</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;font-family:inherit;">Simple rename, same datetime type</td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">AgentActionTriggers</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">Triggers (dynamic)</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;font-family:inherit;">Simple rename. Already dynamic in old schema.</td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">AgentChannel</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">Channels (dynamic)</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;font-family:inherit;">Renamed and now dynamic array (multi-channel agents).</td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">AgentToolsDetails</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">DeclaredTools (dynamic)</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;font-family:inherit;">Closest equivalent. Same dynamic JSON structure.</td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">AgentTopicsDetails</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">Capabilities (dynamic)</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;font-family:inherit;">Best approximation — Capabilities covers intents, actions, skills, orchestrations.</td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">RegistrySource</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">Platform</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;font-family:inherit;"><strong>Semantics change.</strong> All AgentsInfo rows are A365-registered (no need to filter). <code>"PowerPlatform"</code> → <code>"Copilot Studio"</code>. New values include "Microsoft Foundry", "Microsoft 365 Copilot".</td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">IsBlocked (boolean)</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">LifecycleStatus == "Blocked"</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;font-family:inherit;">Filter via LifecycleStatus values (Active / Blocked / Uninstalled / Deleted).</td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">AIModel</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">Model</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;font-family:inherit;">Simple rename. Same string type.</td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">EntraObjectId</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">EntraAgentId</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;font-family:inherit;">Same concept — the enterprise application object identifier.</td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">EntraBlueprintId</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">EntraBlueprintId</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;font-family:inherit;">Same name in both schemas.</td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">AgentUsers</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">SharedWith</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;font-family:inherit;">Users / groups the agent has been shared with. Now dynamic.</td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">KnowledgeDetails</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">DeclaredDataSources</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;font-family:inherit;">Data repositories and knowledge sources the agent can access.</td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">LastModifiedTime</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">LastUpdatedDateTime</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;font-family:inherit;">Simple rename, same datetime type.</td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">LastPublishedTime</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">LastPublishedDateTime</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;font-family:inherit;">Simple rename, same datetime type.</td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">AgentAppId</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">EntraAgentId</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;font-family:inherit;">Both refer to the agent's Entra app identifier.</td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">ConnectedAgentsSchemaNames</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">ConnectedAgents</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;font-family:inherit;">Multi-agent orchestration links. Now dynamic with full agent records.</td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">LastModifiedByUpn / LastPublishedByUpn / CreatorAccountUpn</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">— (use RawAgentInfo)</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;font-family:inherit;">No direct columns. Parse from <code>RawAgentInfo</code> JSON via <code>parse_json(RawAgentInfo).creatorId</code> etc., then join to <code>IdentityInfo</code> for UPN.</td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">AuthenticationTrigger / AccessControlPolicy / AuthorizedSecurityGroupIds</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">ToolsAuthenticationType / Permissions / SharedWith (dynamic fields)</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;font-family:inherit;">Old per-field columns consolidated into structured dynamic columns. Exact JSON paths require verification against tenant data.</td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">IsGenerativeOrchestrationEnabled / AccessCapabilities / ElementTypes</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">Capabilities (dynamic) / RawAgentInfo</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;font-family:inherit;">Likely surfaced inside the <code>Capabilities</code> dynamic. Microsoft's published query uses <code>tostring(todynamic(RawAgentInfo).Bot.Attributes.configuration) has '"GenerativeActionsEnabled": true'</code> for the orchestration check.</td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">EnvironmentId</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;">— (use RawAgentInfo)</td><td style="padding:6px 10px;border-bottom:1px solid #e5e8ef;font-family:inherit;">Power Platform environment ID. Not a top-level column in AgentsInfo; available via <code>RawAgentInfo</code> JSON for Copilot Studio platform agents.</td></tr>
+        <tr><td style="padding:6px 10px;">—</td><td style="padding:6px 10px;">EntraAgentId, EntraBlueprintId, Permissions, McpServers, ConnectedAgents, Guardrails, Endpoints, RawAgentInfo</td><td style="padding:6px 10px;font-family:inherit;"><strong>New columns</strong> with no old equivalent. Use for cross-platform agent inventory and governance queries.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</details>
+
 <!-- PLAYBOOK NAV -->
 <div class="pb-grid">
   <div class="pb-nav-card active" onclick="showPlaybook('pb1',this)">
@@ -453,7 +509,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <div class="pb-header">
     <div class="pb-header-eyebrow">PLAYBOOK 01</div>
     <div class="pb-header-title">Audit Your Agent Estate in 30 Minutes</div>
-    <div class="pb-header-sub">Find no-auth agents, overly shared agents, ownerless agents, and maker credential risks — using KQL in Microsoft Defender Advanced Hunting. The AIAgentsInfo table now covers Copilot Studio, Microsoft Foundry, 3rd-party marketplace, and custom LOB agents. No extra licensing required beyond Defender.<br><br>💡 <strong>Before running these KQL queries:</strong> consider running the <a href="https://github.com/microsoft/m365-copilot-automated-readiness-assessment" target="_blank" style="color:var(--blue);">M365 Copilot Automated Readiness Assessment (ARA)</a> first. It evaluates your full tenant posture across 6 service domains in minutes and surfaces gaps in licensing, Entra, Defender, Purview, and Power Platform — before you start the manual KQL audit. Free, open source, read-only API access, no data leaves your tenant.</div>
+    <div class="pb-header-sub">Find no-auth agents, overly shared agents, ownerless agents, and maker credential risks — using KQL in Microsoft Defender Advanced Hunting. The AgentsInfo table now covers Copilot Studio, Microsoft Foundry, 3rd-party marketplace, and custom LOB agents. No extra licensing required beyond Defender.<br><br>💡 <strong>Before running these KQL queries:</strong> consider running the <a href="https://github.com/microsoft/m365-copilot-automated-readiness-assessment" target="_blank" style="color:var(--blue);">M365 Copilot Automated Readiness Assessment (ARA)</a> first. It evaluates your full tenant posture across 6 service domains in minutes and surfaces gaps in licensing, Entra, Defender, Purview, and Power Platform — before you start the manual KQL audit. Free, open source, read-only API access, no data leaves your tenant.</div>
     <div class="pb-meta-row">
       <span class="pb-meta-item green">✓ Works for Classic & Modern Agents</span>
       <span class="pb-meta-item green">✓ Copilot Studio · Foundry · Marketplace · LOB</span>
@@ -467,8 +523,8 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
       <div class="step-num">P</div>
       <div class="step-body">
         <div class="step-title">Enable AI Agent Inventory — Security for AI</div>
-        <div class="step-desc">In Microsoft Defender portal → <strong>Settings → Security for AI</strong> (previously: Settings → Cloud Apps → AI Agents). Then in Power Platform Admin Center → Security → Threat Detection → enable Microsoft Defender — Copilot Studio AI Agents. Dual-admin setup required (Defender admin + Power Platform admin).<br><br><strong>April 2026 expansion:</strong> The AIAgentsInfo table now includes additional columns covering all agent types — not just Copilot Studio. Foundry agents, 3rd-party marketplace agents, and custom LOB agents are now included where they are registered with Agent 365 or use the Agent 365 SDK.</div>
-        <div class="step-warn">⚠ Takes up to 2 hours for initial data population in the AIAgentsInfo table.</div>
+        <div class="step-desc">In Microsoft Defender portal → <strong>Settings → Security for AI</strong> (previously: Settings → Cloud Apps → AI Agents). Then in Power Platform Admin Center → Security → Threat Detection → enable Microsoft Defender — Copilot Studio AI Agents. Dual-admin setup required (Defender admin + Power Platform admin).<br><br><strong>April 2026 expansion:</strong> The AgentsInfo table now includes additional columns covering all agent types — not just Copilot Studio. Foundry agents, 3rd-party marketplace agents, and custom LOB agents are now included where they are registered with Agent 365 or use the Agent 365 SDK.</div>
+        <div class="step-warn">⚠ Takes up to 2 hours for initial data population in the AgentsInfo table.</div>
       </div>
     </div>
   </div>
@@ -480,25 +536,25 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
       <div class="step-body">
         <div class="step-title">Run this KQL in Defender Advanced Hunting</div>
         <div class="step-desc">Finds published agents with no authentication configured — anyone with the link can chat with them.</div>
-        <div class="step-code">AIAgentsInfo
-| summarize arg_max(Timestamp, *) by AIAgentId
-| where AgentStatus == "Published"
-| where UserAuthenticationType == "None"
-| project AIAgentName, CreatorAccountUpn, OwnerAccountUpns,
-    AgentCreationTime, UserAuthenticationType</div>
+        <div class="step-code">AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where PublishedStatus == "Published"
+| where tostring(ToolsAuthenticationType) contains "None"
+| project AgentName, Owners,
+    CreatedDateTime, ToolsAuthenticationType</div>
         <div class="step-warn">⚠ Any result here is a critical finding. A no-auth published agent is accessible to anyone with the link — including external users if the agent is published to a website.</div>
         <div class="step-desc" style="margin-top:12px;font-weight:600;">Also run this change-detection query — use as a Sentinel Analytics Rule to alert the moment any agent is switched to no-auth:</div>
-        <div class="step-code">// Alert when UserAuthenticationType changes to "None"
-AIAgentsInfo
-| summarize arg_max(Timestamp, *) by AIAgentId
-| where AgentStatus == "Published"
-| order by AIAgentName
-| extend PreviousAuthType = prev(UserAuthenticationType, 1)
-| where UserAuthenticationType == "None"
+        <div class="step-code">// Alert when ToolsAuthenticationType changes to "None"
+AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where PublishedStatus == "Published"
+| order by AgentName
+| extend PreviousAuthType = prev(ToolsAuthenticationType, 1)
+| where tostring(ToolsAuthenticationType) contains "None"
     and PreviousAuthType != "None"
-| project AIAgentName, PreviousAuthType,
-    UserAuthenticationType,
-    ReportId = tostring(AIAgentId), Timestamp</div>
+| project AgentName, PreviousAuthType,
+    ToolsAuthenticationType,
+    ReportId = tostring(AgentId), Timestamp</div>
         <div class="step-tip">💡 Save this as a Sentinel Analytics Rule to get an incident the moment a published agent is downgraded to no-auth — even if the change was made by someone who isn't the agent owner.</div>
       </div>
     </div>
@@ -511,12 +567,12 @@ AIAgentsInfo
       <div class="step-body">
         <div class="step-title">Find agents with no accountable owner</div>
         <div class="step-desc">Agents without an owner lack accountability — no one is responsible for reviewing or decommissioning them.</div>
-        <div class="step-code">AIAgentsInfo
-| summarize arg_max(Timestamp, *) by AIAgentId
-| where AgentStatus == "Published"
-| where isempty(OwnerAccountUpns)
-| project AIAgentName, CreatorAccountUpn,
-    AgentCreationTime, AgentStatus</div>
+        <div class="step-code">AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where PublishedStatus == "Published"
+| where array_length(Owners) == 0
+| project AgentName, Owners,
+    CreatedDateTime, PublishedStatus, LifecycleStatus</div>
       </div>
     </div>
   </div>
@@ -528,12 +584,12 @@ AIAgentsInfo
       <div class="step-body">
         <div class="step-title">Identify agents shared with the entire organisation</div>
         <div class="step-desc">Org-wide sharing means every employee can interact with the agent. When combined with maker credentials this is critical — the maker's privileges are extended to everyone.</div>
-        <div class="step-code">AIAgentsInfo
-| summarize arg_max(Timestamp, *) by AIAgentId
-| where AgentStatus == "Published"
+        <div class="step-code">AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where PublishedStatus == "Published"
 | where SharedWithOrganization == true
-| project AIAgentName, CreatorAccountUpn,
-    OwnerAccountUpns, UserAuthenticationType</div>
+| project AgentName, Owners,
+    Owners, ToolsAuthenticationType</div>
         <div class="step-warn">⚠ Cross-reference this list with Step 4 (maker credentials). Any agent that is both org-wide shared AND uses maker credentials is your highest blast-radius risk.</div>
       </div>
     </div>
@@ -546,27 +602,27 @@ AIAgentsInfo
       <div class="step-body">
         <div class="step-title">Find agents using maker credentials (Classic agents with connected services)</div>
         <div class="step-desc">Classic Copilot Studio agents authenticate connected services (SharePoint, Outlook etc) using the builder's credentials — not the end user's. Review the creator of each published agent to assess blast radius.</div>
-        <div class="step-code">let base = AIAgentsInfo
-| summarize arg_max(Timestamp, *) by AIAgentId
-| where AgentStatus == "Published";
+        <div class="step-code">let base = AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where PublishedStatus == "Published";
 let directActions = base
-| mv-expand detail = AgentToolsDetails
+| mv-expand detail = DeclaredTools
 | where detail.action.connectionProperties.mode == "Maker"
 | extend ActionType = "FromTools", Action = detail.action
-| project-reorder AgentCreationTime, AIAgentId, AIAgentName,
-    UserAuthenticationType, CreatorAccountUpn;
+| project-reorder CreatedDateTime, AgentId, AgentName,
+    ToolsAuthenticationType, Owners;
 let topicActions = base
-| mv-expand topic = AgentTopicsDetails
+| mv-expand topic = Capabilities
 | extend topicActionsArray = topic.beginDialog.actions
 | mv-expand Action = topicActionsArray
 | where Action.connectionProperties.mode == "Maker"
 | extend ActionType = "FromTopic"
-| project-reorder AgentCreationTime, AIAgentId, AIAgentName,
-    AgentStatus, CreatorAccountUpn, OwnerAccountUpns, Action;
+| project-reorder CreatedDateTime, AgentId, AgentName,
+    PublishedStatus, LifecycleStatus, Owners, Action;
 directActions
 | union topicActions
-| sort by AIAgentId, Timestamp desc</div>
-        <div class="step-tip">💡 This query checks both AgentToolsDetails and AgentTopicsDetails — more precise than checking only UserAuthenticationType. Prioritise agents created by high-privilege users (Global Admins, SharePoint Admins).</div>
+| sort by AgentId, Timestamp desc</div>
+        <div class="step-tip">💡 This query checks both DeclaredTools and Capabilities — more precise than checking only ToolsAuthenticationType. Prioritise agents created by high-privilege users (Global Admins, SharePoint Admins).</div>
       </div>
     </div>
   </div>
@@ -580,10 +636,10 @@ directActions
       <div class="step-body">
         <div class="step-title">Detect agents using Entra App Registrations to call Microsoft Graph</div>
         <div class="step-desc">Finds agents with HTTP Request actions calling graph.microsoft.com or management.azure.com. Delegated permissions = low risk. Application permissions (no user context, tenant-wide access, admin consent required) = very high risk. Check each result to determine which pattern is in use.</div>
-        <div class="step-code">AIAgentsInfo
-| summarize arg_max(Timestamp, *) by AIAgentId
-| where AgentStatus != "Deleted"
-| mvexpand Topic = AgentTopicsDetails
+        <div class="step-code">AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where LifecycleStatus != "Deleted"
+| mvexpand Topic = Capabilities
 | where Topic has "HttpRequestAction"
 | extend TopicActions = Topic.beginDialog.actions
 | mvexpand action = TopicActions
@@ -592,9 +648,9 @@ directActions
 | extend ParsedUrl = parse_url(Url)
 | extend Host = tostring(ParsedUrl["Host"])
 | where Host has_any("graph.microsoft.com", "management.azure.com")
-| project-reorder AgentCreationTime, AIAgentId, AIAgentName,
-    ParsedUrl, Url, Host, AgentStatus,
-    CreatorAccountUpn, OwnerAccountUpns</div>
+| project-reorder CreatedDateTime, AgentId, AgentName,
+    ParsedUrl, Url, Host, PublishedStatus,
+    Owners</div>
         <div class="step-warn">⚠ Application permissions agents have no user context and can access data across the entire tenant. If you find any, verify admin consent was intentional and review the granted scopes immediately.</div>
       </div>
     </div>
@@ -605,13 +661,13 @@ directActions
       <div class="step-num">5</div>
       <div class="step-body">
         <div class="step-title">Cross-check inventory counts</div>
-        <div class="step-desc">Compare agent counts across three portals — they will likely differ. Use the AIAgentsInfo table as your most reliable source.</div>
-        <div class="step-code">// Total agents in AIAgentsInfo
-AIAgentsInfo
-| summarize arg_max(Timestamp, *) by AIAgentId
+        <div class="step-desc">Compare agent counts across three portals — they will likely differ. Use the AgentsInfo table as your most reliable source.</div>
+        <div class="step-code">// Total agents in AgentsInfo
+AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
 | summarize
     Total = count(),
-    Published = countif(AgentStatus == "Published"),
+    Published = countif(PublishedStatus == "Published"),
     Classic = countif(AgentType == "Classic"),
     Modern = countif(AgentType == "Modern")</div>
         <div class="step-warn">⚠ Known issue: Agent 365 portal, Security Dashboard for AI, and Entra Agent ID portal show different counts. Microsoft has confirmed this is in progress. Trust the KQL table for detailed audit work.</div>
@@ -640,7 +696,7 @@ AIAgentsInfo
       <div class="step-num">6</div>
       <div class="step-body">
         <div class="step-title">Find Modern agents missing Owner or Sponsor (PowerShell via Graph)</div>
-        <div class="step-desc">AIAgentsInfo covers Copilot Studio agents (Classic and Modern) and now also Foundry, marketplace, and LOB agents registered with Agent 365. For Modern agents specifically (Entra Agent ID owner/sponsor check), use this PowerShell script. Requires Agent ID Administrator role — Global Reader returns 403.</div>
+        <div class="step-desc">AgentsInfo covers Copilot Studio agents (Classic and Modern) and now also Foundry, marketplace, and LOB agents registered with Agent 365. For Modern agents specifically (Entra Agent ID owner/sponsor check), use this PowerShell script. Requires Agent ID Administrator role — Global Reader returns 403.</div>
         <div class="step-code">Connect-MgGraph -Scopes "AgentIdentity.Read.All"
 
 $agents = Invoke-MgGraphRequest -Method GET `
@@ -854,9 +910,9 @@ IntuneDevices
     <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Identifies which AI model each Copilot Studio agent is using by extracting <code>modelNameHint</code> from <code>RawAgentInfo</code>. Flags EU Data Boundary (EUDB) compliance status per agent — critical for EU organisations where Anthropic-hosted models process data outside the EUDB. Source: <a href="https://github.com/Blue161616/Agent-Identity/blob/main/CopilotStudioAgentModelInfo.KQL" target="_blank" style="color:var(--blue);">Blue161616/Agent-Identity</a>.</p>
 
     <div class="kql-label">Agent model inventory with EUDB status</div>
-    <div class="kql-block"><pre style="margin:0;white-space:pre;">AIAgentsInfo
-| summarize arg_max(Timestamp, *) by AIAgentId
-| where Platform == "Copilot Studio" and AgentStatus != "Deleted"
+    <div class="kql-block"><pre style="margin:0;white-space:pre;">AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where Platform == "Copilot Studio" and LifecycleStatus != "Deleted"
 | extend ModelNameHint = extract(@"modelNameHint:\s*([A-Za-z0-9_\-\.]+)", 1, RawAgentInfo)
 | extend HintLower = tolower(ModelNameHint)
 | extend Provider = case(
@@ -871,9 +927,9 @@ IntuneDevices
     Provider == "Environment default", "Depends on tenant default — verify",
     "Verify"
 )
-| project AIAgentName, Provider, ModelNameHint, EUDB_Status,
-          EnvironmentId, CreatorAccountUpn, OwnerAccountUpns, LastModifiedTime
-| sort by Provider asc, AIAgentName asc</pre></div>
+| project AgentName, Provider, ModelNameHint, EUDB_Status,
+          EnvironmentId, Owners, LastModifiedTime
+| sort by Provider asc, AgentName asc</pre></div>
 
     <div style="background:rgba(248,81,73,0.06);border:1px solid rgba(248,81,73,0.2);border-radius:4px;padding:10px 14px;font-size:12px;margin-top:8px;line-height:1.6;">
       ⚠️ <strong>EUDB implication:</strong> Copilot Studio agents using Anthropic models (Sonnet, Haiku, Opus) process data outside the EU Data Boundary regardless of your tenant's geo. This is a compliance risk for EU organisations subject to GDPR or contractual data residency requirements. Run this query to identify affected agents before a data residency audit.
@@ -883,57 +939,120 @@ IntuneDevices
     <div class="step">
       <div class="step-num">8</div>
       <div class="step-body">
-        <div class="step-title">Query A365-registered agents using RegistrySource filter</div>
-        <div class="step-desc">The AIAgentsInfo table now has a <code>RegistrySource</code> column distinguishing agent origin: <code>"A365"</code> (Agent 365 registered) vs <code>"PowerPlatform"</code> (Copilot Studio via Power Platform connector). Use these filters to target the right agent population. The four queries below cover the highest-risk patterns for A365-registered agents.<br><br>
+        <div class="step-title">Microsoft's published sample queries — migrated to AgentsInfo</div>
+        <div class="step-desc">These eight queries are Microsoft's <a href="https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-aiagentsinfo-table" target="_blank" style="color:var(--blue);">published sample queries</a> migrated to the new <code>AgentsInfo</code> table. All rows in AgentsInfo are A365-registered — to scope to a specific platform, use <code>Platform == "Copilot Studio"</code> or <code>Platform == "Microsoft Foundry"</code>. Queries that traverse dynamic JSON columns (Capabilities, DeclaredTools, Triggers) target Power-Platform-era JSON shapes; you may need to adjust nested field paths once your tenant data flows through the new schema. Test against AIAgentsInfo (still accessible until July 1, 2026) for ground truth.<br><br>
         <strong>Portal direct URL:</strong> <a href="https://security.microsoft.com/securitysettings/security_for_ai" target="_blank" style="color:var(--blue);">security.microsoft.com/securitysettings/security_for_ai</a></div>
 
         <div class="step-code">// Query 8a: All Agent 365 registered agents (latest state)
-AIAgentsInfo
-| where RegistrySource == "A365"
-| summarize arg_max(Timestamp, *) by AIAgentId
-| where AgentStatus != "Deleted"
-| project AIAgentId, AIAgentName, AgentStatus, IsBlocked, AIModel, Instructions, AgentCreationTime</div>
+AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where LifecycleStatus != "Deleted"
+| project AgentId, AgentName, Platform, PublishedStatus, LifecycleStatus, Model, Instructions, CreatedDateTime</div>
 
-        <div class="step-code">// Query 8b: Published A365 agents with NO INSTRUCTIONS (prompt injection risk)
+        <div class="step-code">// Query 8b: Published agents with NO INSTRUCTIONS (prompt injection risk)
 // Empty Instructions = no guardrails = agent can be redirected by adversarial input
-AIAgentsInfo
-| summarize arg_max(Timestamp, *) by AIAgentId
-| where RegistrySource == "A365"
-| where IsBlocked == 0
-| where isnotnull(Instructions)
+AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where LifecycleStatus != "Blocked" and LifecycleStatus != "Deleted"
 | where isempty(Instructions) or Instructions == "N/A"
-| extend RawAgentInfoJson = parse_json(RawAgentInfo)
-| extend PublishedStatus = RawAgentInfoJson.publishedStatus
 | where PublishedStatus == "Published"
-| project AIAgentId, AIAgentName, Instructions, PublishedStatus</div>
+| project AgentId, AgentName, Platform, Instructions, PublishedStatus, Owners</div>
 
-        <div class="step-code">// Query 8c: A365 agents with MCP tools configured (expanded attack surface)
+        <div class="step-code">// Query 8c: Agents with MCP tools configured (expanded attack surface)
 // Each MCP server = additional entry point into enterprise systems
-AIAgentsInfo
-| where RegistrySource == "A365"
-| summarize arg_max(Timestamp, *) by AIAgentId
-| where isnotempty(AgentActionTriggers)
-| extend AgentActionTriggersJson = parse_json(AgentActionTriggers)
-| mv-expand Trigger = AgentActionTriggersJson
+AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where isnotempty(Triggers)
+| extend TriggersJson = parse_json(Triggers)
+| mv-expand Trigger = TriggersJson
 | extend ActionType = Trigger.type
 | where ActionType == "RemoteMCPServer"
-| project AIAgentId, AIAgentName, ActionType</div>
+| project AgentId, AgentName, Platform, ActionType</div>
 
-        <div class="step-code">// Query 8d: A365 agents using non-HTTPS endpoints (insecure MCP connections)
-AIAgentsInfo
-| where RegistrySource == "A365"
-| summarize arg_max(Timestamp, *) by AIAgentId
-| where isnotempty(AgentActionTriggers)
-| extend AgentActionTriggersJson = parse_json(AgentActionTriggers)
-| mv-expand Trigger = AgentActionTriggersJson
+        <div class="step-code">// Query 8d: Agents using non-HTTPS endpoints (insecure MCP/HTTP connections)
+// Communication over unencrypted HTTP exposes sensitive data in transit
+AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where isnotempty(Triggers)
+| extend TriggersJson = parse_json(Triggers)
+| mv-expand Trigger = TriggersJson
 | extend ServerUrls = Trigger.serverUrls
 | mv-expand Url = ServerUrls
 | extend ParsedUrl = parse_url(tostring(Url))
 | extend Scheme = tostring(ParsedUrl["Scheme"])
 | where isnotempty(Scheme) and Scheme != "https"
-| project AIAgentId, AIAgentName, Url, Scheme</div>
+| project AgentId, AgentName, Url, Scheme</div>
 
-        <div class="step-tip">💡 For Copilot Studio agents, use <code>RegistrySource == "PowerPlatform"</code> in the same queries. The no-auth query from Step 1 remains the most important for Copilot Studio — Query 8a–8d are specifically designed for A365-registered agents.</div>
+        <div class="step-code">// Query 8e: HTTP requests to nonstandard ports (potential C2 or covert channel)
+// Standard web ports are 443 (HTTPS) and 80 (HTTP). Other ports warrant investigation.
+AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where Platform == "Copilot Studio"
+| where LifecycleStatus != "Deleted"
+| mv-expand Topic = Capabilities
+| where Topic has "HttpRequestAction"
+| extend TopicActions = Topic.beginDialog.actions
+| mv-expand action = TopicActions
+| where action['$kind'] == "HttpRequestAction"
+| extend Url = tostring(action.url.literalValue)
+| extend ParsedUrl = parse_url(Url)
+| extend Port = tostring(ParsedUrl["Port"])
+| where isnotempty(Port) and Port != "443" and Port != "80"
+| project AgentId, AgentName, Url, Port, Owners</div>
+
+        <div class="step-code">// Query 8f: HTTP requests to Graph/Azure management endpoints (privilege escalation indicator)
+// Direct calls to graph.microsoft.com or management.azure.com may indicate App Registration
+// auth pattern with tenant-wide application permissions — highest risk auth pattern.
+AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where Platform == "Copilot Studio"
+| where LifecycleStatus != "Deleted"
+| mv-expand Topic = Capabilities
+| where Topic has "HttpRequestAction"
+| extend TopicActions = Topic.beginDialog.actions
+| mv-expand action = TopicActions
+| where action['$kind'] == "HttpRequestAction"
+| extend Url = tostring(action.url.literalValue)
+| extend ParsedUrl = parse_url(Url)
+| extend Host = tostring(ParsedUrl["Host"])
+| where Host has_any("graph.microsoft.com", "management.azure.com")
+| project AgentId, AgentName, Url, Host, Owners</div>
+
+        <div class="step-code">// Query 8g: Generative orchestration + email send with AI-controlled inputs (XPIA exfil risk)
+// If the agent uses generative orchestration AND the email recipient/body is unspecified
+// (populated by orchestrator at runtime), a successful XPIA could exfiltrate data
+// to attacker-controlled recipients.
+AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where Platform == "Copilot Studio"
+| where LifecycleStatus != "Deleted"
+| extend IsGenAIOrchestrator = tostring(todynamic(RawAgentInfo).Bot.Attributes.configuration) has '"GenerativeActionsEnabled": true'
+| where IsGenAIOrchestrator
+| mv-expand Action = DeclaredTools
+| extend OperationId = tostring(Action.action.operationId)
+| extend ActionName = tostring(Action.modelDisplayName)
+| where OperationId == "SendEmailV2"
+| where isempty(Action.inputs)  // All inputs populated by orchestrator
+| project AgentId, AgentName, ActionName, Owners, CreatedDateTime</div>
+
+        <div class="step-code">// Query 8h: Hard-coded credentials in Topics or Tools (regex pattern matching)
+// Credentials in clear text expose them to unintended entities.
+// Patterns cover AWS, GCP, Slack, GitHub, Stripe, SendGrid, Telegram, JWTs, Basic Auth.
+let suspicious_patterns = @"(AKIA[0-9A-Z]{16})|(AIza[0-9A-Za-z_\-]{35})|(xox[baprs]-[0-9a-zA-Z]{10,48})|(ghp_[A-Za-z0-9]{36,59})|(sk_(live|test)_[A-Za-z0-9]{24})|(SG\.[A-Za-z0-9]{22}\.[A-Za-z0-9]{43})|(\d{8}:[\w\-]{35})|(eyJ[A-Za-z0-9_\-]+\.[A-Za-z0-9_\-]+\.[A-Za-z0-9_\-]+)|(Authorization\s*:\s*Basic\s+[A-Za-z0-9=:+]+)|([A-Za-z]+:\/\/[^\/\s]+:[^\/\s]+@[^\/\s]+)";
+AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where Platform == "Copilot Studio"
+| where LifecycleStatus != "Deleted"
+| mv-expand tool = DeclaredTools
+| mv-expand topic = Capabilities
+| where isnotempty(tool) and isnotempty(topic)
+| where tool matches regex suspicious_patterns or topic matches regex suspicious_patterns
+| extend SuspiciousMatchTool = tool, SuspiciousMatchTopic = topic
+| project AgentId, AgentName, Owners, SuspiciousMatchTool, SuspiciousMatchTopic</div>
+
+        <div class="step-tip">💡 <strong>Coverage note:</strong> Queries 8e–8h use Power-Platform-era JSON structures (<code>Capabilities</code> → topics with <code>beginDialog.actions</code>, <code>DeclaredTools</code> → action records with <code>operationId</code>/<code>modelDisplayName</code>). These shapes are preserved during the transition but may evolve as the unified <code>AgentsInfo</code> schema matures. Compare results between AIAgentsInfo (legacy) and AgentsInfo (new) during the migration window to catch shape changes early.</div>
+
+        <div class="step-tip">💡 <strong>Community Queries tip:</strong> In Defender Advanced Hunting → Community queries, there is a dedicated <strong>AI Agents</strong> section containing multiple queries created by the Microsoft Product Group. Check this section for the latest detection queries beyond what's listed here.</div>
       </div>
     </div>
   </div>
@@ -1042,7 +1161,7 @@ AIAgentsInfo
     <div class="check-item"><input type="checkbox"><div class="check-label">Block Images and URLs enabled via Defender external threat detection</div></div>
     <div class="check-item"><input type="checkbox"><div class="check-label">Sharing scoped to minimum required audience</div></div>
     <div class="check-item"><input type="checkbox"><div class="check-label">Named owner assigned and agent documented</div></div>
-    <div class="check-item"><input type="checkbox"><div class="check-label">Agent visible in AI Agent Inventory after publishing<span class="check-caveat">Verify it appears in Defender Advanced Hunting AIAgentsInfo table</span></div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Agent visible in AI Agent Inventory after publishing<span class="check-caveat">Verify it appears in Defender Advanced Hunting AgentsInfo table</span></div></div>
   </div>
 </div>
 
@@ -1109,11 +1228,11 @@ AIAgentsInfo
     <div class="step">
       <div class="step-num">6</div>
       <div class="step-body">
-        <div class="step-title">Confirm AIAgentsInfo table is populating</div>
+        <div class="step-title">Confirm AgentsInfo table is populating</div>
         <div class="step-desc">Run this query in Defender Advanced Hunting. If it returns rows, setup is complete. If it returns nothing after 2 hours, check the connection status in Step 5.</div>
-        <div class="step-code">AIAgentsInfo
-| summarize arg_max(Timestamp, *) by AIAgentId
-| summarize count() by AgentStatus</div>
+        <div class="step-code">AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| summarize count() by PublishedStatus</div>
       </div>
     </div>
     <div class="step">
@@ -1145,7 +1264,7 @@ AIAgentsInfo
     <div class="check-item"><input type="checkbox"><div class="check-label">Copilot Studio AI Agents enabled — URL copied</div></div>
     <div class="check-item"><input type="checkbox"><div class="check-label">Power Platform external threat detection configured with correct App ID and URL</div></div>
     <div class="check-item"><input type="checkbox"><div class="check-label">Connection status shows "Connected" in Defender portal</div></div>
-    <div class="check-item"><input type="checkbox"><div class="check-label">AIAgentsInfo table returning data in Advanced Hunting</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">AgentsInfo table returning data in Advanced Hunting</div></div>
     <div class="check-item"><input type="checkbox"><div class="check-label">Security Dashboard for AI accessible in Defender portal</div></div>
     <div class="check-item"><input type="checkbox"><div class="check-label">Real-time protection enabled</div></div>
   </div>
@@ -1178,14 +1297,14 @@ AIAgentsInfo
         <div class="step-title">Query for suspicious agent activity in Advanced Hunting</div>
         <div class="step-desc">Run these queries to surface anomalous agent behaviour in the last 24 hours.</div>
         <div class="step-code">// Agents with sudden auth type changes
-AIAgentsInfo
-| summarize arg_max(Timestamp, *) by AIAgentId
-| where AgentStatus == "Published"
-| extend PreviousAuthType = prev(UserAuthenticationType, 1)
-| where UserAuthenticationType == "None"
+AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where PublishedStatus == "Published"
+| extend PreviousAuthType = prev(ToolsAuthenticationType, 1)
+| where tostring(ToolsAuthenticationType) contains "None"
     and PreviousAuthType != "None"
-| project AIAgentName, PreviousAuthType,
-    UserAuthenticationType, Timestamp
+| project AgentName, PreviousAuthType,
+    ToolsAuthenticationType, Timestamp
 
 // High-volume tool invocations in last 24h
 // (use CopilotActivity table if connector enabled)
@@ -1560,10 +1679,10 @@ jobs:
       <div class="step-body">
         <div class="step-title">Count of published agents with no authentication</div>
         <div class="step-desc">The single most important agent-security metric. Any agent in this count is reachable by anyone — including external users if published to a website. Trend this weekly. If it isn't going down, your Phase 2 enforcement isn't sticking.</div>
-        <div class="step-code">AIAgentsInfo
-| summarize arg_max(Timestamp, *) by AIAgentId
-| where AgentStatus == "Published"
-| where UserAuthenticationType == "None"
+        <div class="step-code">AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where PublishedStatus == "Published"
+| where tostring(ToolsAuthenticationType) contains "None"
 | summarize RiskyAgents = count()</div>
         <div class="step-tip">💡 Pair this with a Sentinel Analytics Rule (see Playbook 01 Step 1) that alerts on any new no-auth agent — the count metric is for trend, the rule is for incident response.</div>
       </div>
@@ -1633,17 +1752,17 @@ jobs:
 <div class="pb-panel" id="pb7" style="margin-top:40px;">
   <div class="pb-header" style="background:linear-gradient(135deg,#005a3d 0%,#008575 100%);">
     <div class="pb-header-eyebrow">PLAYBOOK 07</div>
-    <div class="pb-header-title">Brief Your Makers — 30-Minute Security Awareness</div>
-    <div class="pb-header-sub">Maker behaviour is the largest controllable factor in agent risk. Most agent security incidents trace back not to platform vulnerabilities but to maker decisions — using maker credentials, sharing org-wide by default, granting connectors broad scope. A short, focused awareness session converts the platform controls into shared discipline. Run this once before Phase 2 governance rolls out, then quarterly for new makers.</div>
+    <div class="pb-header-title">Brief Your Makers — 33-Minute Security Awareness</div>
+    <div class="pb-header-sub">Maker behaviour is the largest controllable factor in agent risk. Most agent security incidents trace back not to platform vulnerabilities but to maker decisions — using maker credentials, sharing org-wide by default, granting connectors broad scope, and (newly relevant since June 2026) treating local AI agents as outside policy when Purview now sees them. A short, focused awareness session converts the platform controls into shared discipline. Run this once before Phase 2 governance rolls out, then quarterly for new makers.</div>
     <div class="pb-meta-row">
-      <span class="pb-meta-item green">✓ 30 minutes · live or recorded</span>
-      <span class="pb-meta-item">Audience: anyone publishing a Copilot Studio agent</span>
+      <span class="pb-meta-item green">✓ 33 minutes · live or recorded</span>
+      <span class="pb-meta-item">Audience: anyone publishing a Copilot Studio agent OR using local AI agents on their laptop</span>
       <span class="pb-meta-item warn">⚠ Mandatory before maker is granted environment access</span>
     </div>
   </div>
 
   <div class="pb-section">
-    <div class="pb-section-label">PART A — THE FIVE THINGS EVERY MAKER MUST KNOW (15 MIN)</div>
+    <div class="pb-section-label">PART A — THE SIX THINGS EVERY MAKER MUST KNOW (18 MIN)</div>
     <div class="step">
       <div class="step-num">1</div>
       <div class="step-body">
@@ -1679,6 +1798,14 @@ jobs:
         <div class="step-desc">If you build it and leave, the agent becomes ownerless. If no business stakeholder cares whether it exists, it's invisible to governance reviews. Before publishing, fill in: who maintains it (Owner), who's accountable for whether it should still exist (Sponsor), and one sentence on what it does. Future-you will thank present-you.</div>
       </div>
     </div>
+    <div class="step">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <div class="step-title">Your local AI agent is no longer a black box — Purview now sees it</div>
+        <div class="step-desc">If you use <strong>GitHub Copilot CLI, Claude Code, OpenAI Codex, or OpenClaw</strong> on your work laptop, treat your local agent the same way you'd treat your work laptop itself. As of June 2026, Purview extends DSPM visibility, real-time DLP enforcement, Insider Risk signal generation, and full interaction logging to these tools. Prompts, responses, and actions are visible to the central security team. Practical implications: <strong>(a)</strong> don't paste regulated data (customer records, payment data, health information) into a local AI agent any more than you'd email it to yourself externally; <strong>(b)</strong> assume your agent's actions are auditable — they are; <strong>(c)</strong> if you're grounding a local agent against an internal repo or sensitive doc, the same DLP rules that apply to M365 Copilot now apply here. The convenience of "it's just on my machine" no longer means "it's outside policy".<br><br>
+        <strong>Special note on OpenClaw and "claws":</strong> a claw is a skill loaded into the OpenClaw runtime — and <em>installing a claw is functionally installing privileged code on your laptop</em>. Claws are typically discovered through ClawHub, the public skills registry, where Microsoft Threat Intelligence has already observed attackers publishing malicious skills disguised as utilities. Before installing a claw: check whether your organisation has an approved-claws list; prefer skills from verified publishers; if you can, run OpenClaw inside Microsoft Execution Containers (MXC) on Windows so the runtime is contained even if a skill turns out to be malicious. Treat new claws the same way you'd treat installing a browser extension or npm package — third-party code review hygiene applies.</div>
+      </div>
+    </div>
   </div>
 
   <div class="pb-section">
@@ -1712,13 +1839,14 @@ jobs:
           <strong>"My connector needs a broader scope"</strong> → IT Approver + DLP exception process<br>
           <strong>"I think my agent has been misused"</strong> → Security team (security mailbox or SOC)<br>
           <strong>"I'm leaving — who takes my agent?"</strong> → Sponsor (hand off Owner role before last day)<br>
-          <strong>"I need an external connector or new model"</strong> → Agent Lifecycle Board (monthly)
+          <strong>"I need an external connector or new model"</strong> → Agent Lifecycle Board (monthly)<br>
+          <strong>"I want to use Claude Code / GitHub Copilot CLI / Codex / OpenClaw on my laptop"</strong> → Security team (current policy, what's covered by Purview, whether DLP exceptions are needed for your data)
         </div>
       </div>
     </div>
   </div>
 
-  <div class="step-tip" style="margin-top:16px;">💡 <strong>Run format:</strong> 30 minutes total — 15 min content, 10 min checklist walkthrough using a sample agent, 5 min Q&amp;A. Recording the session and making it a watch-once prerequisite for environment access scales this without burning facilitator time.</div>
+  <div class="step-tip" style="margin-top:16px;">💡 <strong>Run format:</strong> 33 minutes total — 18 min content (six things to know), 10 min checklist walkthrough using a sample agent, 5 min Q&amp;A. Recording the session and making it a watch-once prerequisite for environment access scales this without burning facilitator time.</div>
 </div>
 
 <!-- ═══════════════ PLAYBOOK 8 — VET A THIRD-PARTY AGENT ═══════════════ -->

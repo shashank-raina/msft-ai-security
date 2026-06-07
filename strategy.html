@@ -294,7 +294,7 @@ code{font-family:'JetBrains Mono',monospace;font-size:10px;background:#eef1f8;
 <table style="margin-top:24px;">
 <thead><tr><th>Phase</th><th>What you do</th><th>Key prerequisites</th><th>Phase output (input to next phase)</th></tr></thead>
 <tbody>
-<tr id="phase-1"><td><strong>01 — Discover &amp; Inventory</strong></td><td>Set up Security Dashboard for AI. Enable AI Agent Inventory (Defender + Power Platform integration). Run full AIAgentsInfo KQL inventory. Identify no-auth and maker-credential agents. Apply H/M/L risk tier classification. Discover shadow AI via Cloud App Catalog.</td><td>M365 E5; Defender + Power Platform admin access</td><td>Tiered agent register · no-auth agent list · shadow AI baseline</td></tr>
+<tr id="phase-1"><td><strong>01 — Discover &amp; Inventory</strong></td><td>Set up Security Dashboard for AI. Enable AI Agent Inventory (Defender + Power Platform integration). Run full AgentsInfo KQL inventory. Identify no-auth and maker-credential agents. Apply H/M/L risk tier classification. Discover shadow AI via Cloud App Catalog.</td><td>M365 E5; Defender + Power Platform admin access</td><td>Tiered agent register · no-auth agent list · shadow AI baseline</td></tr>
 <tr id="phase-2"><td><strong>02 — Identity &amp; Governance</strong></td><td><strong>Part A (Classic):</strong> Enable Managed Environments. Enforce end-user authentication. Set sharing limits. Define Owner / Sponsor / Approver model. Deploy Power Platform DLP. <strong>Part B (Modern):</strong> Apply Conditional Access policies. Deploy ID Protection. Configure Access Packages.</td><td>Phase 1 inventory complete · Agent 365 licence (Modern controls only)</td><td>Governed maker estate · CA-protected Modern agents · auth-type baseline</td></tr>
 <tr id="phase-3"><td><strong>03 — Data Security</strong></td><td>Run DSPM oversharing assessment. Configure regulated SITs. Enable sensitivity label inheritance. Deploy Purview DLP for Copilot. Apply retention to agent-generated content. Address EU Data Boundary via model inventory KQL. Apply SAM RCD as interim site exclusion. Deploy browser DLP for public LLMs.</td><td>Phase 2 governance baseline · Purview E5</td><td>Oversharing remediated · DLP active · label coverage measured</td></tr>
 <tr id="phase-4"><td><strong>04 — Runtime Protection</strong></td><td>Enable Defender real-time protection for Copilot Studio (three layers). Configure Entra Internet Access prompt-injection protection. Deploy Prompt Shields. Run pre-deployment red teaming with PyRIT (or Foundry Red Teaming Agent for Foundry agents). LLM + Agent red team for High-tier agents.</td><td>Phase 1 setup · Agent 365 licence from July 1, 2026 (network controls)</td><td>Runtime blocking active · red team findings register</td></tr>
@@ -320,7 +320,7 @@ code{font-family:'JetBrains Mono',monospace;font-size:10px;background:#eef1f8;
 <table>
 <thead><tr><th>KPI</th><th>Source</th><th>Definition</th><th>Target trend</th></tr></thead>
 <tbody>
-<tr><td><strong>Risky agents</strong></td><td><code>AIAgentsInfo</code></td><td>Count of published agents where <code>UserAuthenticationType == "None"</code></td><td>Decreasing to zero</td></tr>
+<tr><td><strong>Risky agents</strong></td><td><code>AgentsInfo</code></td><td>Count of published agents where <code>ToolsAuthenticationType == "None"</code></td><td>Decreasing to zero</td></tr>
 <tr><td><strong>Sensitive access events</strong></td><td>Purview Activity Explorer</td><td>AI interactions where a sensitivity label of Confidential or above was cited</td><td>Stable — rising trend = label enforcement gaps</td></tr>
 <tr><td><strong>DLP policy hits</strong></td><td>Purview DLP — Copilot location</td><td>Count of blocked or warned responses from DLP policy evaluation</td><td>Stable after initial tuning spike</td></tr>
 <tr><td><strong>Blocked tool actions</strong></td><td>Defender Incidents — Category: AI, Status: Blocked</td><td>Tool invocations blocked by Defender real-time protection (ATG)</td><td>Increasing initially (policy working), then stable</td></tr>
@@ -344,7 +344,7 @@ code{font-family:'JetBrains Mono',monospace;font-size:10px;background:#eef1f8;
 <table>
 <thead><tr><th>Section</th><th>What to include</th><th>Source</th></tr></thead>
 <tbody>
-<tr><td><strong>Agent estate summary</strong></td><td>Total agents, Classic vs Modern split, risk tier distribution (H/M/L), quarter-over-quarter trend</td><td>Phase 1 inventory · AIAgentsInfo</td></tr>
+<tr><td><strong>Agent estate summary</strong></td><td>Total agents, Classic vs Modern split, risk tier distribution (H/M/L), quarter-over-quarter trend</td><td>Phase 1 inventory · AgentsInfo</td></tr>
 <tr><td><strong>No-auth agent count trend</strong></td><td>Quarterly trajectory — should be decreasing toward zero. Flag any quarter where it rises.</td><td>Phase 1 KQL · Weekly KPI #1</td></tr>
 <tr><td><strong>Sentinel alert volume by category</strong></td><td>Jailbreak attempts, auth-type changes, anomalous tool calls, external IP access, plugin tampering</td><td>Phase 5 Content Hub analytic rules</td></tr>
 <tr><td><strong>DLP hits</strong></td><td>Volume and category, split by Copilot location and browser extension</td><td>Phase 3 · Weekly KPI #3</td></tr>

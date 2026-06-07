@@ -492,7 +492,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <tr><td><strong>Content Inspection</strong></td><td>Detect adversarial instructions in MCP tool outputs</td><td>Prompt Shields</td><td><span class="green-inline">GA</span></td></tr>
 <tr><td><strong>Runtime Protection</strong></td><td>Block tool invocations during suspicious Copilot Studio agent activity</td><td>Defender for Cloud Apps real-time protection</td><td><span class="caution-inline">Preview · Copilot Studio only</span></td></tr>
 <tr><td><strong>SaaS Governance</strong></td><td>OAuth scope governance; anomalous API usage detection</td><td>Defender for Cloud Apps</td><td><span class="green-inline">GA</span></td></tr>
-<tr><td><strong>Inventory & Posture</strong></td><td>Discover all MCP servers; assess risk</td><td>Security Dashboard for AI</td><td><span class="green-inline">Now GA</span></td></tr>
+<tr><td><strong>Inventory &amp; Posture</strong></td><td>Discover all MCP servers; assess risk</td><td>Security Dashboard for AI</td><td><span class="green-inline">Now GA</span></td></tr>
 <tr><td><strong>Investigation</strong></td><td>NL querying of MCP entity relationships in Sentinel</td><td>Sentinel MCP Entity Analyzer</td><td><span class="green-inline">GA April</span></td></tr>
 </tbody>
 </table>
@@ -551,6 +551,107 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <div class="callout callout-info" style="margin-top:14px;">
   <div class="callout-title">📌 Windows ODR — the local MCP control plane Microsoft is now shipping</div>
   <p>The Windows On-device Agent Registry is the local equivalent of what Entra Agent Registry does for cloud agents — it tracks MCP servers on Windows endpoints. Key security properties: MCP servers run <strong>contained</strong> by default (separate environment, can only access approved resources), users and IT admins control access per agent via Windows Settings or Intune, and interactions between MCP clients and servers are logged and auditable. The <code>odr.exe</code> command-line tool lets users and admins view and manage MCP servers. For endpoints where users may install MCP-enabled apps, this is the control point to manage centrally.</p>
+</div>
+
+<div class="callout callout-info" style="margin-top:14px;background:#fff8e6;border-color:#e8b840;">
+  <div class="callout-title">🆕 June 2026 — Purview now governs MCP clients on developer endpoints</div>
+  <p>Until June 2026, MCP clients running on developer endpoints — <strong>GitHub Copilot CLI, Claude Code, OpenAI Codex, OpenClaw</strong> — were largely outside the reach of Microsoft's central security tooling. Activity happened on a developer's laptop and stayed there. Purview's <strong>local & endpoint agents</strong> preview (June 2026) changes this. The same DSPM, DLP, and Insider Risk capabilities that govern cloud-side agents now extend to these local agents, with full interaction context flowing back to Purview.</p>
+  <p style="margin-top:8px;">Four protections come together: <strong>(1) DSPM visibility</strong> into prompts, responses, and actions taken by the local agent; <strong>(2) real-time DLP enforcement</strong> during execution — sensitive content can be blocked mid-flow; <strong>(3) Insider Risk signal generation</strong> from risky local-agent behaviour (data being moved out of policy boundaries); <strong>(4) full interaction logs</strong> in the unified audit log for forensics. This is the same governance plane that already covers cloud Copilot and Foundry agents — extended to the build environment.</p>
+  <p style="margin-top:8px;font-size:12px;color:var(--text2);">Why it matters: developers using Claude Code or GitHub Copilot CLI to ground an agent against sensitive source code, internal docs, or production data were a real gap. The data left the corporate perimeter via the agent and Purview had no view. This closes that gap for any MCP client Microsoft supports as a local-agent endpoint. See <a href="product-map.html#data-security" style="color:var(--blue);">Purview for Local & Endpoint Agents</a> on the product map for full details.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- CLAWS + CLAWHUB -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:48px;">Claws · the new agent skill primitive</div>
+<h2>What are "claws" — and what's the security model</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">Build 2026 introduced a new agent-runtime vocabulary worth knowing for any security architect designing for local AI agents.</p>
+
+<table>
+<thead><tr><th>Concept</th><th>Definition</th><th>Security implication</th></tr></thead>
+<tbody>
+<tr><td><strong>OpenClaw</strong></td><td>A self-hosted agent runtime that runs on a workstation, VM, or container. Loads skills and interacts with local and cloud resources. <strong>Open-source.</strong></td><td>Inherits the trust (and risk) of the machine and the identities it can use. Same operational model as installing a desktop application with elevated privileges.</td></tr>
+<tr><td><strong>Claws</strong></td><td>Skills loaded into OpenClaw. Each claw is a discrete capability — read files, query a database, call an API, write code. Composed by the user to build a working agent.</td><td><strong>Installing a skill is basically installing privileged code.</strong> The skill operates inside the OpenClaw runtime with the user's permissions to local apps, files, and accounts.</td></tr>
+<tr><td><strong>ClawHub</strong></td><td>Public skills registry for OpenClaw. Skills are discovered and installed through ClawHub — by search, by recommendation, by community channels.</td><td><strong>Supply chain attack surface.</strong> Microsoft Threat Intelligence has already observed attackers publishing malicious skills disguised as utilities, and promoting them through community channels. Skills can also be discovered organically via search and installed by users who don't recognise the risk.</td></tr>
+<tr><td><strong>OpenClaw on Windows via MXC</strong></td><td>Windows node and gateway for OpenClaw run inside Microsoft Execution Containers (MXC). Windows companion app available to set up and connect claws. Available open-source.</td><td>Containment is now native to the platform on Windows — the OpenClaw runtime can't reach beyond what MXC policy permits. Compare to running OpenClaw bare on a developer's machine where the runtime has whatever permissions the user has.</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-warn" style="margin-top:14px;">
+  <div class="callout-title">⚠ Treat ClawHub like a package registry, not an app store</div>
+  <p>The same threat model applies as for npm, PyPI, VS Code Marketplace, or any other third-party code source. Microsoft's <a href="https://www.microsoft.com/en-us/security/blog/2026/02/19/running-openclaw-safely-identity-isolation-runtime-risk/" target="_blank" style="color:var(--blue);">February 2026 OpenClaw security research</a> documented the pattern: malicious skills disguised as utilities, organic discovery via search, social engineering via community channels. Recommended controls before any developer team adopts OpenClaw: maintain an approved-claws list, prefer skills from verified publishers, run OpenClaw inside MXC on Windows (not bare), and ensure Purview's local-agent observability is enabled so risky behaviour at skill execution time generates Insider Risk signals.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- MICROSOFT EXECUTION CONTAINERS (MXC) -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:48px;">Runtime containment</div>
+<h2>Microsoft Execution Containers (MXC) — the policy-driven runtime layer</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">MXC SDK is a new layer introduced at Build 2026 that sits between the agent runtime and the OS. Developers <strong>declare what an agent can access</strong> (files, network, processes) and MXC enforces those declarations at runtime. The model is similar to seccomp on Linux or App Container on Windows, but designed specifically for agentic workloads where behaviour is non-deterministic.</p>
+
+<div class="callout callout-info" style="margin-top:8px;">
+  <div class="callout-title">📌 Composable isolation by intent and risk</div>
+  <p>MXC offers a <strong>spectrum of isolation semantics</strong> — light containment when an agent's task is low-risk, full sandboxing when it touches sensitive data or invokes high-impact tools. Composition is dynamic: a single agent can run light when summarising a doc and switch to strict containment when invoking a connector that could exfiltrate data. The point: containment policy follows the operation, not the agent identity.</p>
+  <p style="margin-top:10px;"><strong>Agent 365 + MXC integration</strong> (Preview, July 2026) brings Defender, Entra, Intune, and Purview protections through MXC so agents start secure and stay secure. This is the moment when the four governance pillars (identity, threat, device, data) converge at the runtime boundary for local agents — not just cloud agents.</p>
+</div>
+
+<div class="callout callout-warn" style="margin-top:14px;">
+  <div class="callout-title">⚠ Real-world finding — Claude Code GitHub Action prompt injection</div>
+  <p>Microsoft Threat Intelligence identified a <strong>prompt injection pathway in the Claude Code GitHub Action</strong> that allowed access to workflow secrets under specific conditions (research published February 2026). The attack pattern: untrusted content (e.g., an issue body) becomes input to the agent's prompt; the injected prompt redirects the agent to dump <code>secrets.*</code> values or call out to attacker-controlled endpoints. The fix in CI/CD: treat any LLM agent invocation as a trust boundary — never pass untrusted content directly into prompts that have access to secrets, and scope <code>GITHUB_TOKEN</code> permissions to the minimum the agent actually needs. This is the same threat class as <a href="threats.html" style="color:var(--blue);">Threat Scenario 6 (XPIA via untrusted data sources)</a>, manifesting in a code-automation context.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- DEFENDER'S VIEW OF LOCAL AI AGENTS (Build 2026) -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:48px;">Endpoint inventory & runtime protection</div>
+<h2>Defender's view of local AI agents — 20+ tools surfaced as security assets</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">Microsoft Defender for Endpoint now discovers and protects local AI agents on Defender-onboarded Windows endpoints — <strong>treating each agent as a first-class security asset rather than just an OS process</strong>. Per the authoritative <a href="https://learn.microsoft.com/en-us/defender-endpoint/local-agent-discovery-overview" target="_blank" style="color:var(--blue);">Microsoft Learn local agent discovery page</a>, Defender currently identifies five categories of local AI agents. Many of these are MCP clients — the inventory is the central place to see what agents users have installed and what MCP server configurations they've added.</p>
+
+<table>
+<thead><tr><th>Category</th><th>Agents discovered today</th></tr></thead>
+<tbody>
+<tr><td><strong>CLI agents</strong></td><td>Claude Code · Codex CLI · Gemini CLI · GitHub Copilot CLI · OpenCode · Antigravity CLI</td></tr>
+<tr><td><strong>Desktop apps</strong></td><td>ChatGPT Desktop · Claude Desktop · Codex Desktop · Ollama Desktop · Poe Desktop</td></tr>
+<tr><td><strong>Agentic IDEs</strong></td><td>Cursor · Antigravity IDE · Windsurf</td></tr>
+<tr><td><strong>VS Code extensions</strong></td><td>Claude Code · Cline · Codex · Gemini Code Assist · GitHub Copilot · Roo Code</td></tr>
+<tr><td><strong>Claw-based agents</strong></td><td>OpenClaw · Clawpilot · Claw/Nanobot</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 How Defender defines an "agent"</div>
+  <p>An agent is the combination of <strong>user + device + agent type</strong>. So if Claude Code runs in 15 different project folders on the same user/device, it's <em>one</em> agent in the inventory — not 15. This keeps the inventory tractable while still giving SOC analysts the dimensions they need to pivot during investigation (which user is running what on which machine).</p>
+  <p style="margin-top:8px;">Three views available in the Microsoft Defender portal:</p>
+  <ul style="margin:8px 0 0 18px;font-size:13px;line-height:1.8;">
+    <li><strong>Local AI agent inventory</strong> — centralised list across the tenant, with device and user associations, MCP server configurations (local AND remote), and discovery metadata.</li>
+    <li><strong>Exposure map</strong> — visual relationships between local agents, devices, identities, and the resources those identities can reach. The exposure map is the answer to "if this agent is compromised, what can it touch?"</li>
+    <li><strong>Advanced Hunting</strong> — KQL queries against discovery data. Hunt for risky configurations (e.g., agents in auto-approve mode under a privileged identity with access to production, source code, or CI/CD), then convert hunting queries into custom detection rules.</li>
+  </ul>
+</div>
+
+<h2 style="margin-top:32px;">Runtime protection — inline prompt-injection detection in the agent loop</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">Discovery surfaces what's running; <strong>runtime protection</strong> stops malicious instructions before the agent acts on them. Per the <a href="https://learn.microsoft.com/en-us/defender-endpoint/ai-agent-runtime-protection-overview" target="_blank" style="color:var(--blue);">AI agent runtime protection overview</a>, Defender inspects three points in the agent loop where content enters or leaves reasoning:</p>
+
+<table>
+<thead><tr><th>Hook point</th><th>What Defender inspects</th><th>What's caught</th></tr></thead>
+<tbody>
+<tr><td><strong>① User prompt</strong></td><td>The prompt submitted to the agent</td><td>Direct prompt injection via user input</td></tr>
+<tr><td><strong>② Pre-tool call</strong></td><td>The tool invocation request before execution</td><td>Hidden instructions in fetched content (file, web page, repo) attempting to redirect a tool call</td></tr>
+<tr><td><strong>③ Post-tool response</strong></td><td>The tool response after execution completes</td><td>Tool output containing injection payload aimed at the next reasoning step</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 How the inspection works in practice</div>
+  <p>Defender uses each agent's published <strong>hooks framework</strong> (<a href="https://code.claude.com/docs/en/hooks" target="_blank" style="color:var(--blue);">Claude Code hooks</a>, <a href="https://docs.github.com/copilot/how-tos/copilot-cli/customize-copilot/use-hooks" target="_blank" style="color:var(--blue);">GitHub Copilot CLI hooks</a>) — Defender registers as a hook consumer at the three inspection points. This means added latency is minimal because each scan is a fast inline check, not continuous monitoring of the agent process.</p>
+  <p style="margin-top:8px;"><strong>Modes:</strong> <em>Block</em> (Defender stops the action, notifies the user via agent UI + Windows toast, raises an alert correlated into Defender incidents); <em>Audit</em> (action continues, alert still raised — recommended starting mode); <em>Disabled</em>. The setting is protected by Tamper Protection so it can't be silently disabled. Alert name: <strong>Suspicious AI prompt injection</strong>.</p>
+  <p style="margin-top:8px;"><strong>Currently supported agents</strong> for runtime protection: Claude Code, GitHub Copilot CLI. Coverage expanding — any agent that exposes a hooks framework can in principle be added. Worth noting: until coverage broadens, runtime protection is a meaningful capability only for organisations whose developers actually use these two specific tools. Discovery (above) covers the much broader 20+ list.</p>
+</div>
+
+<div class="callout callout-warn" style="margin-top:14px;">
+  <div class="callout-title">⚠ Example scenario from Microsoft's documentation</div>
+  <p style="font-size:13px;color:#2e3d5e;"><em>"A coding agent fetches a project's documentation to answer a question, and the page contains hidden text that instructs the agent to read the local <code>.env</code> file and post its contents to an external URL. The agent treats the instruction as part of the page and is about to comply, but Defender detects the prompt injection in the tool response and blocks the action before any data leaves the device."</em></p>
+  <p style="margin-top:8px;font-size:13px;color:var(--text2);">This is the canonical local agent threat — and the canonical case for why runtime protection earns its place in any tenant where developers use Claude Code or GitHub Copilot CLI against real production data.</p>
 </div>
 
 <div class="page-nav"><a href="identity.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Identity</span></a><a href="threats.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Threats</span></a></div>

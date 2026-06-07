@@ -400,6 +400,20 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <p>Foundry Control Plane capabilities are organised under the <strong>Operate</strong> toolbar in the Foundry portal. Each pane is designed around a specific job: <strong>Overview</strong> (fleet health, alert summaries, compliance metrics at a glance) · <strong>Assets</strong> (unified searchable agent/model/tool inventory across projects with health indicators) · <strong>Compliance</strong> (define and enforce guardrail policies; integrates with Azure Policy, Defender, Purview; supports versioned policies and bulk remediation) · <strong>Quota</strong> (view, adjust, request) · <strong>Monitoring</strong> (Application Insights integration; fleet-wide health metrics; cost tracking; anomaly detection). Source: <a href="https://learn.microsoft.com/azure/foundry/control-plane/overview" target="_blank" style="color:var(--blue);">What is Microsoft Foundry Control Plane?</a></p>
 </div>
 
+<div class="callout callout-info" style="margin-top:14px;background:#fff8e6;border-color:#e8b840;">
+  <div class="callout-title">🆕 June 2026 — Purview integrations with Foundry</div>
+  <p>Two new Purview ↔ Foundry capabilities landed in the June 2026 wave:</p>
+  <p style="margin-top:10px;"><strong>① Purview insights embedded in Foundry Control Plane <span style="color:var(--green2);">(GA)</span></strong> — security-relevant telemetry surfaces directly in the developer workflow without leaving Foundry. Three signals appear: detected sensitive data in agent interactions, share of interactions involving sensitive content, and high-risk user indicators. Pushes risk discovery earlier in the build cycle so developers can adjust agent configurations before code reaches production. Generally available on launch — meaningful because it removes the "wait until Purview admin reports the problem" delay.</p>
+  <p style="margin-top:8px;"><strong>② DLP runtime controls for Foundry <span style="color:#7a4500;">(Public Preview)</span></strong> — inline DLP protection in Foundry's prompt handling. Sensitive Information Types (PII, financial data, custom SITs) are detected <strong>during execution</strong>; the system can block the request from being processed. Enforces consistent DLP regardless of how the agent or app on Foundry is built. Pairs naturally with the runtime evaluation framework already used for the nine continuous-evaluation dimensions described below.</p>
+  <p style="margin-top:8px;font-size:12px;color:var(--text2);">Microsoft's announcement uses the legacy "Azure AI Foundry" name — same product as Microsoft Foundry (consolidated naming in Q4 2025).</p>
+</div>
+
+<div class="callout callout-info" style="margin-top:14px;background:#fff8e6;border-color:#e8b840;">
+  <div class="callout-title">🆕 Build 2026 — Foundry Agent Service hosted agents</div>
+  <p>For cloud deployment of agents, <strong>Foundry Agent Service hosted agents</strong> (Public Preview) provides the same containment model that Microsoft Execution Containers (MXC) provides on Windows: <strong>instant-on sandboxes per agent</strong>. Each agent runs in its own isolated execution boundary; no shared runtime state with other agents in the tenant; spin-up cost amortised across the platform rather than the developer's project.</p>
+  <p style="margin-top:8px;">Why this matters architecturally: it removes a previously-real friction in agent deployments — provisioning and maintaining agent compute infrastructure (App Service plans, Functions hosts, custom containers) was a meaningful tax on small-team agent projects. With Foundry Agent Service, the runtime layer is platform-provided and consistent with Agent 365's identity, observability, and governance plane. The control plane stays the same regardless of where the agent is hosted (local MXC, hosted Foundry Agent Service, or Windows 365 for Agents).</p>
+</div>
+
 <div class="section-label" style="margin-top:40px;">Four Capabilities</div>
 <h2>What Foundry Control Plane provides</h2>
 
@@ -589,7 +603,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 <div class="callout callout-info" style="margin-top:12px;">
   <div class="callout-title">📌 What makes this different from Advanced Hunting</div>
-  <p>Advanced Hunting (AIAgentsInfo, CloudAppEvents) gives you metadata and telemetry. Purview Data Security Investigations gives you the actual content — prompt text, response text, document content, emails — with AI-powered analysis to understand what sensitive data was exposed and to whom. The two tools are complementary: use Advanced Hunting to detect the incident, Purview DSI to investigate what was actually in the data.</p>
+  <p>Advanced Hunting (AgentsInfo, CloudAppEvents) gives you metadata and telemetry. Purview Data Security Investigations gives you the actual content — prompt text, response text, document content, emails — with AI-powered analysis to understand what sensitive data was exposed and to whom. The two tools are complementary: use Advanced Hunting to detect the incident, Purview DSI to investigate what was actually in the data.</p>
 </div>
 
 <div class="section-label" style="margin-top:40px;">AI Baseline — Compliance Manager</div>

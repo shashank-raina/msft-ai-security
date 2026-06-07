@@ -401,7 +401,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <tr><td><strong>Agent sprawl</strong></td><td>No inventory of deployed agents; no lifecycle ownership</td><td>IT / Security</td><td>Agent 365 <span class="caution-inline">⚠ per-user license</span></td></tr>
 <tr><td><strong>Classic agents — outside Entra perimeter</strong></td><td>Most existing Copilot Studio agents are Classic Service Principals with no Entra security product coverage</td><td>IAM / Security</td><td>Migration to Modern Agents <span class="warn-inline">⚠ tool not yet available</span></td></tr>
 <tr><td><strong>Maker credentials</strong></td><td>Copilot Studio agents authenticate as their builder — maker's permissions extended to all users of the agent</td><td>IAM / AppSec</td><td>Power Platform Managed Environments; enforce end-user auth per agent</td></tr>
-<tr><td><strong>No-auth agents</strong></td><td>Agents set to no authentication — accessible to anyone in Teams with no login</td><td>IT / Security</td><td>AIAgentsInfo KQL detection; Power Platform admin enforcement</td></tr>
+<tr><td><strong>No-auth agents</strong></td><td>Agents set to no authentication — accessible to anyone in Teams with no login</td><td>IT / Security</td><td>AgentsInfo KQL detection; Power Platform admin enforcement</td></tr>
 <tr><td><strong>Org-wide sharing</strong></td><td>One toggle exposes agent to all employees — compounds with maker credentials</td><td>IT / Security</td><td>Power Platform Managed Environments — set sharing limits</td></tr>
 <tr><td><strong>Over-permissioned access</strong></td><td>Agents granted broad access; OBO inherits user's full rights</td><td>IAM / Security</td><td>Entra Agent ID <span class="warn-inline">⚠ preview, Modern Agents only</span></td></tr>
 <tr><td><strong>Shadow AI / plugins</strong></td><td>Business users deploy unsanctioned AI tools and MCP servers outside IT oversight</td><td>IT / CASB</td><td>Defender for Cloud Apps + Entra Internet Access <span class="green-inline">GA Mar 31 2026</span></td></tr>
@@ -409,7 +409,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <tr><td><strong>AI model supply chain</strong></td><td>Pretrained models from registries (Hugging Face, Azure ML) may carry embedded malware or backdoors. Training data can be poisoned before it reaches the pipeline. Build-time risks that traditional AppSec doesn't cover.</td><td>AppSec / ML Eng</td><td>AI Model Scanning in Defender for Cloud <span class="green-inline">GA · RSAC 2026</span></td></tr>
 <tr><td><strong>Prompt injection / XPIA</strong></td><td>Malicious inputs hijack agent behaviour mid-task</td><td>AppSec / SOC</td><td>Prompt Shields + Entra Internet Access Prompt Injection Protection <span class="green-inline">GA Mar 31 2026</span></td></tr>
 <tr><td><strong>Data leakage</strong></td><td>Sensitive data enters AI context; exfiltrated via outputs or prompts</td><td>DLP / Compliance</td><td>Purview DSPM + Purview DLP for Copilot <span class="green-inline">GA Mar 31 2026</span></td></tr>
-<tr><td><strong>Ownerless agents</strong></td><td>No accountable owner — agents persist indefinitely with no governance review</td><td>IT / IAM</td><td>Power Platform Inventory; AIAgentsInfo Advanced Hunting</td></tr>
+<tr><td><strong>Ownerless agents</strong></td><td>No accountable owner — agents persist indefinitely with no governance review</td><td>IT / IAM</td><td>Power Platform Inventory; AgentsInfo Advanced Hunting</td></tr>
 </tbody>
 </table>
 

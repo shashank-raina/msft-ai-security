@@ -351,6 +351,12 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 <div class="page">
 
+<!-- AGENTSINFO MIGRATION NOTE -->
+<div style="background:#fff4d6;border:1.5px solid #e8b840;border-left:5px solid #e89500;border-radius:8px;padding:12px 18px;margin-bottom:20px;font-size:12px;color:#2e3d5e;line-height:1.7;">
+  ⚠ <strong>Schema migration in progress:</strong> All KQL queries on this page have been migrated from <code>AIAgentsInfo</code> to the new unified <code>AgentsInfo</code> table per Microsoft Learn (<a href="https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-schema-changes" target="_blank" style="color:var(--blue);">schema changes notice, June 2026</a>). Old table accessible until <strong>July 1, 2026</strong>. New schema is in Preview. See the <a href="playbooks.html#playbook1" style="color:var(--blue);">full column mapping on playbooks.html</a> if you encounter query issues.
+</div>
+
+
 
 <div class="hero">
   <div class="hero-badge"><div class="live-dot"></div>UPDATED · FIELD RESEARCH · MARCH 2026</div>
@@ -541,7 +547,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <tr><td><strong>Defender for Cloud Apps — AI Agent Inventory</strong></td><td><span class="green-inline">✓ Supported</span></td><td><span class="green-inline">✓ Supported</span></td><td>Works for both. Requires Defender + Power Platform admin collaboration.</td></tr>
 <tr><td><strong>Defender for Cloud Apps — Real-time Protection</strong></td><td><span class="green-inline">✓ Supported</span></td><td><span class="green-inline">✓ Supported</span></td><td>Works for both. Inspects tool invocations before execution.</td></tr>
 <tr><td><strong>Block Images and URLs</strong></td><td><span class="green-inline">✓ Supported</span></td><td><span class="green-inline">✓ Supported</span></td><td>Works for both. External threat detection must be configured in Copilot Studio.</td></tr>
-<tr><td><strong>AIAgentsInfo KQL (Advanced Hunting)</strong></td><td><span class="green-inline">✓ Supported</span></td><td><span class="green-inline">✓ Supported</span></td><td>Works for both once AI Agent Inventory is enabled.</td></tr>
+<tr><td><strong>AgentsInfo KQL (Advanced Hunting)</strong></td><td><span class="green-inline">✓ Supported</span></td><td><span class="green-inline">✓ Supported</span></td><td>Works for both once AI Agent Inventory is enabled.</td></tr>
 <tr><td><strong>Entra Agent ID — Identity Registration</strong></td><td><span class="severity-critical">❌ Not supported</span></td><td><span class="green-inline">✓ Supported (preview)</span></td><td>Classic agents registered as Service Principals, not Agent Identities.</td></tr>
 <tr><td><strong>ID Protection for Agents</strong></td><td><span class="severity-critical">❌ Not supported</span></td><td><span class="green-inline">✓ Supported (preview)</span></td><td>Requires Entra Agent ID. Classic agents have no risk signal in ID Protection.</td></tr>
 <tr><td><strong>Conditional Access for Agents</strong></td><td><span class="severity-critical">❌ Not supported</span></td><td><span class="green-inline">✓ Supported (preview)</span></td><td>Requires Entra Agent ID. Name sync bug makes policy management difficult at scale.</td></tr>
@@ -567,13 +573,13 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <td><strong>① End User Credentials (OBO)</strong><br><span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5a6a8a;">Auth with Microsoft → End user credentials</span></td>
   <td>User authenticates once; agent exchanges token OBO the user. Everything runs in the user's own permission context. Sign-in logs available in Entra for the user.</td>
   <td><span class="green-inline">✓ Low risk</span></td>
-  <td><code>UserAuthenticationType == "Integrated"</code></td>
+  <td><code>ToolsAuthenticationType == "Integrated"</code></td>
 </tr>
 <tr>
   <td><strong>② Maker-Provided Credentials</strong><br><span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5a6a8a;">Auth with Microsoft → Maker-provided credentials</span></td>
   <td>Agent authenticates at <em>design time</em> using the maker's identity, then reuses that connection for every user at runtime. Silent authentication — stored credentials. No per-user sign-in logs for the agent.</td>
   <td><span class="severity-critical">⚠️ High risk</span><br><span style="font-size:11px;color:#5a6a8a;">Data oversharing, silent auth</span></td>
-  <td><code>AgentToolsDetails.mode == "Maker"</code><br><span style="font-size:10px;color:#5a6a8a;">See KQL below</span></td>
+  <td><code>DeclaredTools.mode == "Maker"</code><br><span style="font-size:10px;color:#5a6a8a;">See KQL below</span></td>
 </tr>
 <tr>
   <td><strong>③ App Registration — Delegated Permissions</strong><br><span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5a6a8a;">Authenticate manually → Entra ID V2 (delegated)</span></td>
@@ -622,37 +628,37 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 <div class="section-label" style="margin-top:32px;">Advanced Detection KQL</div>
 <h2>Detecting Maker Credentials with Precision</h2>
-<p>The following KQL (field-validated by Derk van der Woude) detects maker credentials at the connector level — checking both <code>AgentToolsDetails</code> and <code>AgentTopicsDetails</code> for where maker mode is actually configured. This is more precise than checking only the agent-level auth type.</p>
+<p>The following KQL (field-validated by Derk van der Woude) detects maker credentials at the connector level — checking both <code>DeclaredTools</code> and <code>Capabilities</code> for where maker mode is actually configured. This is more precise than checking only the agent-level auth type.</p>
 <div style="background:#f0f4fb;border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-top:8px;overflow-x:auto;">
-<pre style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#0d1526;line-height:1.8;margin:0;white-space:pre;">let base = AIAgentsInfo
-| summarize arg_max(Timestamp, *) by AIAgentId
-| where AgentStatus == "Published";
+<pre style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#0d1526;line-height:1.8;margin:0;white-space:pre;">let base = AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where PublishedStatus == "Published";
 let directActions = base
-| mv-expand detail = AgentToolsDetails
+| mv-expand detail = DeclaredTools
 | where detail.action.connectionProperties.mode == "Maker"
 | extend ActionType = "FromTools", Action = detail.action
-| project-reorder AgentCreationTime, AIAgentId, AIAgentName,
-    UserAuthenticationType, CreatorAccountUpn;
+| project-reorder CreatedDateTime, AgentId, AgentName,
+    ToolsAuthenticationType, Owners;
 let topicActions = base
-| mv-expand topic = AgentTopicsDetails
+| mv-expand topic = Capabilities
 | extend topicActionsArray = topic.beginDialog.actions
 | mv-expand Action = topicActionsArray
 | where Action.connectionProperties.mode == "Maker"
 | extend ActionType = "FromTopic"
-| project-reorder AgentCreationTime, AIAgentId, AIAgentName,
-    AgentStatus, CreatorAccountUpn, OwnerAccountUpns, Action;
+| project-reorder CreatedDateTime, AgentId, AgentName,
+    PublishedStatus, LifecycleStatus, Owners, Action;
 directActions
 | union topicActions
-| sort by AIAgentId, Timestamp desc</pre>
+| sort by AgentId, Timestamp desc</pre>
 </div>
 
 <h2 style="margin-top:28px;">Detecting App Registration Agents Calling Microsoft Graph</h2>
 <p>Finds agents using HTTP Request actions to graph.microsoft.com or management.azure.com — indicating App Registration authentication (pattern ③ or ④). Delegated = low risk. Application permissions = very high risk.</p>
 <div style="background:#f0f4fb;border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-top:8px;overflow-x:auto;">
-<pre style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#0d1526;line-height:1.8;margin:0;white-space:pre;">AIAgentsInfo
-| summarize arg_max(Timestamp, *) by AIAgentId
-| where AgentStatus != "Deleted"
-| mvexpand Topic = AgentTopicsDetails
+<pre style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#0d1526;line-height:1.8;margin:0;white-space:pre;">AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where LifecycleStatus != "Deleted"
+| mvexpand Topic = Capabilities
 | where Topic has "HttpRequestAction"
 | extend TopicActions = Topic.beginDialog.actions
 | mvexpand action = TopicActions
@@ -661,9 +667,9 @@ directActions
 | extend ParsedUrl = parse_url(Url)
 | extend Host = tostring(ParsedUrl["Host"])
 | where Host has_any("graph.microsoft.com", "management.azure.com")
-| project-reorder AgentCreationTime, AIAgentId, AIAgentName,
-    ParsedUrl, Url, Host, AgentStatus,
-    CreatorAccountUpn, OwnerAccountUpns</pre>
+| project-reorder CreatedDateTime, AgentId, AgentName,
+    ParsedUrl, Url, Host, PublishedStatus,
+    Owners</pre>
 </div>
 <p style="font-size:12px;color:#5a6a8a;margin-top:8px;">Source: <a href="https://derkvanderwoude.medium.com/your-copilot-studio-agent-is-acting-as-someone-do-you-know-who-f9e5be1116b9" target="_blank" style="color:var(--blue);">Derk van der Woude — Your Copilot Studio agent is acting as someone, do you know who? (March 2026)</a></p>
 
@@ -724,7 +730,7 @@ directActions
 </div>
 
 <h2 style="margin-top:24px;">Detecting Ownerless &amp; Orphaned Modern Agents (Graph API)</h2>
-<p>AIAgentsInfo KQL covers Copilot Studio agents (Classic and Modern) and Foundry, marketplace, and LOB agents registered with Agent 365. Use the <code>RegistrySource</code> column to distinguish: <code>RegistrySource == "PowerPlatform"</code> for Copilot Studio agents via the Power Platform connector; <code>RegistrySource == "A365"</code> for Agent 365-registered agents. Most existing KQL queries on this page target Copilot Studio (PowerPlatform) — see Playbook 01 Step 8 for A365-specific queries. For Modern agent Owner/Sponsor checks, use PowerShell via Microsoft Graph (Agent ID Administrator role required — Global Reader returns 403).</p>
+<p>AgentsInfo KQL covers Copilot Studio agents (Classic and Modern) and Foundry, marketplace, and LOB agents registered with Agent 365. Use the <code>Platform</code> column to distinguish: <code>Platform == "Copilot Studio"</code> for Copilot Studio agents via the Power Platform connector; <code>Platform == "Microsoft Agent 365"</code> for Agent 365-registered agents. Most existing KQL queries on this page target Copilot Studio (PowerPlatform) — see Playbook 01 Step 8 for A365-specific queries. For Modern agent Owner/Sponsor checks, use PowerShell via Microsoft Graph (Agent ID Administrator role required — Global Reader returns 403).</p>
 
 <div class="callout callout-info" style="margin-top:8px;margin-bottom:16px;">
   <div class="callout-title">📌 Two portals — different agent visibility</div>
@@ -1063,8 +1069,8 @@ Disconnect-MgGraph</pre>
 <tbody>
 <tr><td><strong>Enforce end-user authentication per agent</strong></td><td>Require users to authenticate with their own credentials — prevents maker credential blast radius</td><td><span class="green-inline">Available now (Power Platform admin)</span></td><td>Must be set per agent; not default</td></tr>
 <tr><td><strong>Restrict org-wide sharing</strong></td><td>Use Managed Environments to set numerical sharing limits or restrict to security groups</td><td><span class="green-inline">Available now (Managed Environments)</span></td><td>Requires Power Platform admin</td></tr>
-<tr><td><strong>Detect no-auth agents via KQL</strong></td><td><code>AIAgentsInfo | where UserAuthenticationType == "None"</code></td><td><span class="green-inline">Available (requires AI Agent Inventory enabled)</span></td><td>AI Agent Inventory requires Defender + Power Platform admin collaboration</td></tr>
-<tr><td><strong>Detect ownerless agents via KQL</strong></td><td><code>AIAgentsInfo | where isempty(OwnerAccountUpns)</code></td><td><span class="green-inline">Available (requires AI Agent Inventory enabled)</span></td><td>Same setup requirement</td></tr>
+<tr><td><strong>Detect no-auth agents via KQL</strong></td><td><code>AgentsInfo | where tostring(ToolsAuthenticationType) contains "None"</code></td><td><span class="green-inline">Available (requires AI Agent Inventory enabled)</span></td><td>AI Agent Inventory requires Defender + Power Platform admin collaboration</td></tr>
+<tr><td><strong>Detect ownerless agents via KQL</strong></td><td><code>AgentsInfo | where array_length(Owners) == 0</code></td><td><span class="green-inline">Available (requires AI Agent Inventory enabled)</span></td><td>Same setup requirement</td></tr>
 <tr><td><strong>Migrate Classic → Modern Agents</strong></td><td>Enables Entra security product coverage; requires recreating agents from scratch</td><td><span class="caution-inline">Manual only — migration tool not yet available</span></td><td>Impractical at scale; migration tool planned</td></tr>
 <tr><td><strong>User PAM hygiene</strong></td><td>Least-privileged makers → least-privileged agent credentials</td><td><span class="green-inline">Available via PAM tooling</span></td><td>Indirect; does not change the structural authentication problem</td></tr>
 <tr><td><strong>Entra Workload Identity</strong></td><td>App-level service principal scoping for non-Copilot-Studio agents</td><td><span class="green-inline">GA</span></td><td>Not purpose-scoped per agent-instance</td></tr>
