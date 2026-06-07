@@ -523,7 +523,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
       <div class="nist-item"><div class="nist-control">Establish AI risk governance structure</div><div class="nist-tool">Agent 365 · Purview</div></div>
       <div class="nist-item"><div class="nist-control">Define roles and accountabilities for AI</div><div class="nist-tool">Entra Agent ID</div><div class="nist-gap">⚠ preview · Modern Agents only</div></div>
       <div class="nist-item"><div class="nist-control">Establish AI lifecycle policies</div><div class="nist-tool">SDL for AI · ZT4AI</div></div>
-      <div class="nist-item"><div class="nist-control">Govern Classic vs Modern agent estate</div><div class="nist-tool">Power Platform Admin + AIAgentsInfo KQL</div></div>
+      <div class="nist-item"><div class="nist-control">Govern Classic vs Modern agent estate</div><div class="nist-tool">Power Platform Admin + AgentsInfo KQL</div></div>
       <div class="nist-item"><div class="nist-control">Govern multi-tenant AI environments</div><div class="nist-tool">Entra Tenant Governance</div><div class="nist-gap">Preview · RSAC 2026</div></div>
       <div class="nist-item"><div class="nist-control">Manage third-party AI and MCP risk</div><div class="nist-tool">Defender for Cloud Apps</div></div>
       <div class="nist-item"><div class="nist-control">Workforce AI literacy and training</div><div class="nist-gap">⚠ Not a product control</div></div>
@@ -536,8 +536,8 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
     </div>
     <div class="nist-body">
       <div class="nist-item"><div class="nist-control">Inventory all AI systems in use</div><div class="nist-tool">Security Dashboard for AI</div><div class="nist-gap" style="color:var(--green2);">✓ Now GA</div></div>
-      <div class="nist-item"><div class="nist-control">Inventory agent authentication posture</div><div class="nist-tool">AIAgentsInfo Advanced Hunting (Defender)</div></div>
-      <div class="nist-item"><div class="nist-control">Identify Classic vs Modern agents</div><div class="nist-tool">Entra Agent ID portal · AIAgentsInfo KQL</div><div class="nist-gap">⚠ Name sync bug complicates this</div></div>
+      <div class="nist-item"><div class="nist-control">Inventory agent authentication posture</div><div class="nist-tool">AgentsInfo Advanced Hunting (Defender)</div></div>
+      <div class="nist-item"><div class="nist-control">Identify Classic vs Modern agents</div><div class="nist-tool">Entra Agent ID portal · AgentsInfo KQL</div><div class="nist-gap">⚠ Name sync bug complicates this</div></div>
       <div class="nist-item"><div class="nist-control">Identify sensitive data exposure</div><div class="nist-tool">Purview DSPM for AI</div></div>
       <div class="nist-item"><div class="nist-control">Identify shadow AI deployment</div><div class="nist-tool">Entra Internet Access Shadow AI</div><div class="nist-gap" style="color:var(--green2);">GA Mar 31 2026</div></div>
       <div class="nist-item"><div class="nist-control">Identify threat actors and attack vectors</div><div class="nist-tool">Defender · Sentinel · ZT4AI</div></div>
@@ -551,7 +551,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
     </div>
     <div class="nist-body">
       <div class="nist-item"><div class="nist-control">Continuous AI risk monitoring</div><div class="nist-tool">Security Dashboard · Defender</div><div class="nist-gap" style="color:var(--green2);">Dashboard Now GA</div></div>
-      <div class="nist-item"><div class="nist-control">Measure no-auth and ownerless agents</div><div class="nist-tool">AIAgentsInfo KQL queries</div></div>
+      <div class="nist-item"><div class="nist-control">Measure no-auth and ownerless agents</div><div class="nist-tool">AgentsInfo KQL queries</div></div>
       <div class="nist-item"><div class="nist-control">Evaluate model safety pre-deployment</div><div class="nist-tool">Foundry Red Teaming + Evals</div></div>
       <div class="nist-item"><div class="nist-control">Detect credential exposure in data</div><div class="nist-tool">Data Security Posture Agent</div><div class="nist-gap">Preview · RSAC 2026</div></div>
       <div class="nist-item"><div class="nist-control">Benchmark AI security posture</div><div class="nist-tool">ZT Workshop + ZT Assessment Tool</div><div class="nist-gap"><span class="green-inline">✓ AI pillar now available</span></div></div>
@@ -582,11 +582,11 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <tbody>
 <tr><td><strong>4.2 — Interested Parties</strong></td><td>Identify stakeholders and AI-related requirements</td><td>Agent 365 governance; Purview compliance; Entra Tenant Governance (preview)</td><td>Organisational process — not a product control</td></tr>
 <tr><td><strong>5.2 — AI Policy</strong></td><td>Establish and maintain an AI policy</td><td>SDL for AI; ZT for AI framework; Zero Trust Workshop (microsoft.github.io/zerotrustassessment)</td><td>Policy content is customer-defined; Microsoft provides scaffolding and guided workshop</td></tr>
-<tr><td><strong>6.1 — Risk Assessment</strong></td><td>AI-specific risk identification and assessment process</td><td>Security Dashboard for AI (now GA); Purview DSPM; AIAgentsInfo Advanced Hunting; Foundry Red Teaming</td><td>Quantitative risk scoring still limited; qualitative posture now available via GA dashboard. Classic Agent estate requires separate inventory.</td></tr>
+<tr><td><strong>6.1 — Risk Assessment</strong></td><td>AI-specific risk identification and assessment process</td><td>Security Dashboard for AI (now GA); Purview DSPM; AgentsInfo Advanced Hunting; Foundry Red Teaming</td><td>Quantitative risk scoring still limited; qualitative posture now available via GA dashboard. Classic Agent estate requires separate inventory.</td></tr>
 <tr><td><strong>6.1.3 — AI Impact Assessment</strong></td><td>Assess impacts on individuals and society</td><td>Microsoft Responsible AI Impact Assessment tools (separate from Security)</td><td>Outside security product scope; separate RAI tooling required</td></tr>
 <tr><td><strong>8.4 — AI System Development</strong></td><td>Security in AI development lifecycle</td><td>SDL for AI; GitHub Advanced Security; Foundry Red Teaming; Classic→Modern Agent migration</td><td>Classic Agent legacy complicates this — agents built before Agent ID may have no secure development baseline</td></tr>
 <tr><td><strong>8.6 — Data for AI Systems</strong></td><td>Data quality, provenance, and governance</td><td>Purview Information Protection; DSPM for AI; DLP for Copilot (GA March 31 2026)</td><td>Training data provenance still limited; inference-time data controls now stronger. Maker credentials can bypass data governance if not configured correctly.</td></tr>
-<tr><td><strong>9.1 — Monitoring & Measurement</strong></td><td>Continuous monitoring of AI system performance and risks</td><td>Security Dashboard (GA); Sentinel + MCP Entity Analyzer; Defender for AI; AIAgentsInfo KQL; Purview AI Observability</td><td>Good coverage when fully deployed. AI Agent Inventory requires Defender + Power Platform admin collaboration — complex setup.</td></tr>
+<tr><td><strong>9.1 — Monitoring & Measurement</strong></td><td>Continuous monitoring of AI system performance and risks</td><td>Security Dashboard (GA); Sentinel + MCP Entity Analyzer; Defender for AI; AgentsInfo KQL; Purview AI Observability</td><td>Good coverage when fully deployed. AI Agent Inventory requires Defender + Power Platform admin collaboration — complex setup.</td></tr>
 <tr><td><strong>10.2 — Continual Improvement</strong></td><td>Improve AIMS based on incidents and audit findings</td><td>Sentinel incident management; SDL feedback loops; ZT Workshop; ZT Assessment AI pillar (now available)</td><td>Classic Agent name sync bug makes agent-level policy improvement tracking difficult.</td></tr>
 </tbody>
 </table>
@@ -881,6 +881,27 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <div class="callout callout-info" style="margin-top:32px;">
   <div class="callout-title">📌 Full control list</div>
   <p>The 12 controls shown above are the highest-impact subset of the full Zero Trust Workshop AI catalogue. For the complete list of controls including effort, dependencies, and implementation notes, see the <a href="zero-trust.html" style="color:var(--blue);">dedicated Zero Trust for AI page</a>.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- OPEN-SOURCE AI TRUST STACK (Build 2026) -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:48px;">Open trust stack for AI agents</div>
+<h2>ASSERT + Agent Control Specification — Microsoft's open trust standards (Build 2026)</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">Alongside the Build 2026 product announcements, Microsoft published an open-source trust stack — two projects designed to standardise agent evaluation and control across <strong>any framework</strong>, not just Microsoft-built agents. Worth tracking even if you aren't yet using them: they signal where Microsoft expects industry-wide agent governance standards to converge.</p>
+
+<table>
+<thead><tr><th>Project</th><th>What it does</th><th>Why a security architect should care</th></tr></thead>
+<tbody>
+<tr><td><strong>ASSERT</strong><br><span style="font-size:11px;color:var(--text3);">Adaptive Spec-driven Scoring for Evaluation and Regression Testing</span></td><td>Open-source framework for <strong>policy-driven safety evaluation</strong> of AI agents. Define a policy spec, run automated evaluations, get a score, gate releases on the score. Adaptive — adjusts test depth based on detected risk in the agent's behaviour.</td><td>Provides the missing "test coverage gate" for agent CI/CD. Treats safety evaluation like unit test coverage. Combined with PyRIT (Microsoft's red-team tool), gives a complete pre-deployment evaluation pipeline. Use as the release-gate criterion in Phase 4 (Runtime Protection) of the six-phase strategy.</td></tr>
+<tr><td><strong>Agent Control Specification (ACS)</strong></td><td>Standardises <strong>where and how to apply controls in the agent loop</strong>. Defines hook points (prompt receive, tool call, response generation, action commit) and a policy schema describing what controls run at each point.</td><td>The agentic equivalent of OWASP Top 10 + CWE for traditional apps. Once vendor tools converge on ACS-compatible policy schemas, controls become portable across runtimes (Copilot Studio, Foundry, OpenClaw, third-party). Reduces lock-in. Worth referencing now in vendor evaluation criteria — "is your control framework ACS-aligned?"</td></tr>
+<tr><td><strong>Codename MDASH</strong></td><td>Microsoft's defence-side project mentioned alongside ASSERT and ACS at Build 2026. Limited public detail at announcement; positioned as a complementary defensive capability.</td><td>Track for future evaluation. Microsoft typically uses codenames for capabilities still being shaped — expect a productised form in a future wave.</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 The strategic positioning</div>
+  <p>Microsoft is doing for agentic AI what they did for identity (OpenID Connect, FIDO) and zero trust (the Zero Trust principles): publish open standards that lower the cost of interoperability and shape the industry around their preferred shape. For your architecture decisions, the practical implication is to <strong>prefer agent runtimes and control frameworks that align with ACS hook points</strong> — even if you don't adopt the spec wholesale today. It positions you for the next wave of cross-platform agent security tools without committing to a single vendor's proprietary control model.</p>
 </div>
 
 <div class="page-nav"><a href="threats.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Threats</span></a><a href="gaps.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Gaps</span></a></div>

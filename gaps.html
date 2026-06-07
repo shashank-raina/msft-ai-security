@@ -351,6 +351,12 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 <div class="page">
 
+<!-- AGENTSINFO MIGRATION NOTE -->
+<div style="background:#fff4d6;border:1.5px solid #e8b840;border-left:5px solid #e89500;border-radius:8px;padding:12px 18px;margin-bottom:20px;font-size:12px;color:#2e3d5e;line-height:1.7;">
+  ⚠ <strong>Schema migration in progress:</strong> All KQL queries on this page have been migrated from <code>AIAgentsInfo</code> to the new unified <code>AgentsInfo</code> table per Microsoft Learn (<a href="https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-schema-changes" target="_blank" style="color:var(--blue);">schema changes notice, June 2026</a>). Old table accessible until <strong>July 1, 2026</strong>. New schema is in Preview. See the <a href="playbooks.html#playbook1" style="color:var(--blue);">full column mapping on playbooks.html</a> if you encounter query issues.
+</div>
+
+
 
 <div class="hero">
   <div class="hero-badge"><div class="live-dot"></div>UPDATED · RSAC 2026 + FIELD RESEARCH · MARCH 2026</div>
@@ -373,7 +379,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <tr>
   <td><strong>Classic Agents — no Entra security product coverage</strong></td>
   <td>Most existing Copilot Studio agents in production are Classic Agents (Service Principals). They receive zero Entra Agent ID security product coverage: no ID Protection, no Conditional Access, no lifecycle governance. This gap is invisible from Microsoft's marketing materials. Field research confirms this is the default state of most enterprise Copilot Studio deployments.</td>
-  <td>Inventory Classic vs Modern agents via AIAgentsInfo KQL; enforce end-user auth per agent via Power Platform admin; restrict org-wide sharing; manually recreate critical agents as Modern Agents</td>
+  <td>Inventory Classic vs Modern agents via AgentsInfo KQL; enforce end-user auth per agent via Power Platform admin; restrict org-wide sharing; manually recreate critical agents as Modern Agents</td>
   <td>Microsoft migration tool planned — no date confirmed. Manual recreation is the only current path.</td>
 </tr>
 <tr>
@@ -403,7 +409,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <tr>
   <td><strong>OBO audit trail — user not agent identity</strong></td>
   <td>Logs show user UPN (or service), not agent identity. In Copilot Studio with maker credentials, logs may show the service account — making the attacker invisible. Forensic attribution is fundamentally broken until Agent ID GA + Classic migration.</td>
-  <td>Purview AI Observability (data-access layer); Sentinel correlation; application-layer logging; AIAgentsInfo Advanced Hunting for agent-side context</td>
+  <td>Purview AI Observability (data-access layer); Sentinel correlation; application-layer logging; AgentsInfo Advanced Hunting for agent-side context</td>
   <td>Improves with Agent ID GA and Classic→Modern migration</td>
 </tr>
 </tbody>
@@ -432,13 +438,13 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <tbody>
 <tr>
   <td><strong>Orphaned agents — two distinct scenarios, both undetected by default</strong><br>
-  <span style="font-size:11px;color:var(--text3);"><strong>Scenario A — Blueprint deleted (Entra):</strong> When a Blueprint is deleted, the Modern Agent Identities it created are not automatically removed. They retain all permissions (Graph API, Azure RBAC, Entra roles) but can no longer authenticate. Orphaned Agent Users remain as normal user accounts with no flag or indicator.<br><br><strong>Scenario B — Builder left the company (most common in practice):</strong> Agents built in Copilot Studio by employees who have since left the organisation continue running with the builder's original permissions, full tool access, and no accountable owner. The agent remains active and accessible to anyone it was shared with. Microsoft does not detect or flag either scenario automatically — detection requires active KQL queries against AIAgentsInfo and cross-referencing against current employee lists.</span></td>
+  <span style="font-size:11px;color:var(--text3);"><strong>Scenario A — Blueprint deleted (Entra):</strong> When a Blueprint is deleted, the Modern Agent Identities it created are not automatically removed. They retain all permissions (Graph API, Azure RBAC, Entra roles) but can no longer authenticate. Orphaned Agent Users remain as normal user accounts with no flag or indicator.<br><br><strong>Scenario B — Builder left the company (most common in practice):</strong> Agents built in Copilot Studio by employees who have since left the organisation continue running with the builder's original permissions, full tool access, and no accountable owner. The agent remains active and accessible to anyone it was shared with. Microsoft does not detect or flag either scenario automatically — detection requires active KQL queries against AgentsInfo and cross-referencing against current employee lists.</span></td>
   <td>Run quarterly Graph API sweep to detect orphaned Agent Identities (Agent Identities whose Blueprint Principal no longer exists). Use PowerShell with AgentIdentity.Read.All scope — note Global Reader gets 403, requires Agent ID Administrator. Remove orphaned identities and revoke their permissions. See Identity page for detection scripts.</td>
 </tr>
 <tr>
   <td><strong>Agent sprawl — no lifecycle enforcement by default</strong><br>
   <span style="font-size:11px;color:var(--text3);">Microsoft formally defines agent sprawl as the uncontrolled expansion of agents without adequate visibility, management, or lifecycle controls. It manifests as shadow AI (agents created without IT oversight), abandoned agents (created for temporary purposes and never decommissioned), and over-privileged agents (permissions granted and never reviewed). Agent sprawl leads to increased security risk, compliance challenges, and incident response difficulty.</span></td>
-  <td>Implement Entra ID Governance lifecycle management for Modern Agents — assign sponsors, configure Access Reviews, use access packages for time-bound permissions. For Classic Agents, use AIAgentsInfo KQL to audit and track all published agents quarterly. Run Playbook 01 to detect ownerless and abandoned agents.</td>
+  <td>Implement Entra ID Governance lifecycle management for Modern Agents — assign sponsors, configure Access Reviews, use access packages for time-bound permissions. For Classic Agents, use AgentsInfo KQL to audit and track all published agents quarterly. Run Playbook 01 to detect ownerless and abandoned agents.</td>
 </tr>
 <tr>
   <td><strong>Microsoft Managed Policies not widely known or deployed</strong><br>
@@ -465,15 +471,15 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <tr>
   <td><strong>No visibility into which AI model each agent uses — EUDB compliance blind spot</strong><br>
   <span style="font-size:11px;color:var(--text3);">Copilot Studio allows agents to use third-party models (Anthropic Sonnet/Haiku/Opus, OpenAI GPT-4o etc.). The model selection is stored in <code>RawAgentInfo.modelNameHint</code> — not surfaced in any admin UI or registry view. Agents using Anthropic models process data outside the EU Data Boundary regardless of tenant geo settings. No native policy to prevent makers selecting out-of-EUDB models. Source: <a href="https://github.com/Blue161616/Agent-Identity/blob/main/CopilotStudioAgentModelInfo.KQL" target="_blank">Blue161616/Agent-Identity</a>.</span></td>
-  <td>Query AIAgentsInfo with extract(modelNameHint) to identify affected agents and their EUDB status. Consider restricting available models in Copilot Studio environment settings via Power Platform Admin Center. Run before any data residency audit.</td>
+  <td>Query AgentsInfo with extract(modelNameHint) to identify affected agents and their EUDB status. Consider restricting available models in Copilot Studio environment settings via Power Platform Admin Center. Run before any data residency audit.</td>
   <td><span class="severity-high">High</span></td>
   </tr>
   <tr>
   <td><strong>Any user can change another agent's authentication type</strong><br>
   <span style="font-size:11px;color:var(--text3);">By design in Copilot Studio, any tenant user can change the authentication settings of an agent they did not create and do not own — including downgrading a published agent from authenticated to No Authentication. A single non-admin user can silently expose any published agent to anonymous access without the owner's knowledge. There is currently no platform-enforced owner-only restriction on auth type changes.</span></td>
-  <td>Deploy the change-detection Sentinel Analytics Rule (see Playbooks) to alert immediately when any agent is switched to No Authentication. Audit auth type changes regularly via the AIAgentsInfo table. Restrict who can access Copilot Studio environments via Managed Environments in Power Platform Admin Center.</td>
+  <td>Deploy the change-detection Sentinel Analytics Rule (see Playbooks) to alert immediately when any agent is switched to No Authentication. Audit auth type changes regularly via the AgentsInfo table. Restrict who can access Copilot Studio environments via Managed Environments in Power Platform Admin Center.</td>
 </tr><br><span style="font-size:11px;color:var(--text3);">Agent 365, Security Dashboard for AI, and Entra Agent ID portal show different agent counts. Microsoft has confirmed this is a known issue. Security teams cannot rely on any single portal for a definitive agent inventory.</span></td>
-  <td>Cross-reference all three portals; use AIAgentsInfo Advanced Hunting table as the most granular source; treat any portal count as approximate until Microsoft resolves the consistency issue</td>
+  <td>Cross-reference all three portals; use AgentsInfo Advanced Hunting table as the most granular source; treat any portal count as approximate until Microsoft resolves the consistency issue</td>
 </tr>
 <tr>
   <td><strong>Purview triage agent 90-day re-auth requirement</strong><br><span style="font-size:11px;color:var(--text3);">Purview Security Copilot triage agents (DLP, IRM) run in the security context of the last user who saved the config. After 90 days, the agent stops running until config is manually re-saved. No automatic renewal.</span></td>
@@ -499,7 +505,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <span style="font-size:11px;color:var(--text3);">Browser-layer DLP (Edge for Business inline protection) only activates where users are signed into their Edge for Business profile. Users on unmanaged devices using Chrome, Firefox, or Safari to access external GenAI tools have no browser-layer DLP coverage. Network Data Security (Global Secure Access) fills this gap but is still in preview. Organisations have a residual exposure window for BYOD users on non-Edge browsers.</span></td>
   <td>Prioritise Edge for Business rollout as an immediate mitigation. Enable Network Data Security (Global Secure Access preview) for broader device coverage. Communicate acceptable use policy for GenAI apps on personal devices pending GA.</td>
 </tr>
-<tr><td><strong>AI Agent Inventory — complex setup requiring two admins</strong><br><span style="font-size:11px;color:var(--text3);">Setup requires collaboration between Defender admin (enable 3 preview features) AND Power Platform admin (enable separate threat detection toggle). Takes up to 30 min for connection, longer for data population. Not self-service.</span></td><td>Assign a joint Defender + Power Platform admin workstream for onboarding. Verify via AIAgentsInfo KQL after setup. Plan for 30-minute minimum delay on initial data.</td></tr>
+<tr><td><strong>AI Agent Inventory — complex setup requiring two admins</strong><br><span style="font-size:11px;color:var(--text3);">Setup requires collaboration between Defender admin (enable 3 preview features) AND Power Platform admin (enable separate threat detection toggle). Takes up to 30 min for connection, longer for data population. Not self-service.</span></td><td>Assign a joint Defender + Power Platform admin workstream for onboarding. Verify via AgentsInfo KQL after setup. Plan for 30-minute minimum delay on initial data.</td></tr>
 <tr><td><strong>Agent name sync bug — Copilot Studio rename not reflected in Entra Agent ID</strong><br><span style="font-size:11px;color:var(--text3);">Agents renamed in Copilot Studio keep their original "Agent #" name in Entra. Makes per-agent CA policy management nearly impossible at scale.</span></td><td>Use Agent ID object-ID (not name) as primary key for agent identification. Cross-reference via PowerShell script against Power Platform Admin Environment URL. Monitor for Microsoft fix — no timeline confirmed.</td></tr>
 <tr><td><strong>No MCP server authentication standard</strong> — MCP spec doesn't mandate cryptographic server binding</td><td>Defender for Cloud Apps MCP server registry + anomaly detection; network segmentation; Foundry Guardrails tool whitelist (Foundry agents only); Sentinel MCP Entity Analyzer (GA April) for investigation</td></tr>
 <tr><td><strong>Foundry Guardrails in preview, Foundry agents only</strong> — no equivalent control for Copilot Studio agents</td><td>Power Platform admin controls for Copilot Studio agents (authentication enforcement, sharing limits); Defender for Cloud Apps for API-layer controls</td></tr>
@@ -508,23 +514,23 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <tr><td><strong>ZT Assessment AI pillar now available</strong> <span style="color:var(--green2);font-weight:700;">(RESOLVED)</span></td><td>Use the AI pillar of the Microsoft Zero Trust Assessment — see <a href="https://learn.microsoft.com/entra/fundamentals/zero-trust-ai" target="_blank" style="color:var(--blue);">Configure agent identity security with the Zero Trust Assessment</a>. Microsoft identifies three common agent issues the assessment helps surface: auth/policy mismatch, overpermissioned access, lifecycle gaps.</td></tr>
 <tr><td><strong>No built-in platform kill switch — open-source option now available</strong><br><span style="font-size:11px;color:var(--text3);">Microsoft has no single-click kill switch for all agent types. The Agent Governance Toolkit (open-source, MIT, April 2026) provides an automated kill switch with ring isolation and trust decay via Agent Runtime package. For platform controls: Entra CA for Modern Agents, Power Platform admin can disable Classic agents, Defender Predictive Shielding (preview).</span></td><td>Adopt Agent Governance Toolkit for programmatic kill switch capability. Pre-plan incident response runbook for agent compromise scenarios. Entra CA for Modern Agents provides policy-based blocking. Power Platform admin can disable Classic agents manually. See <a href="playbooks.html#playbook4" style="color:var(--blue);">Playbook 04</a> for incident response.</td></tr>
 <tr><td><strong>Cross-user context contamination in shared agents</strong></td><td>Architecture control: enforce session isolation in agent design; no native Microsoft platform control</td></tr>
-<tr><td><strong>Org-wide sharing default enables blast radius</strong></td><td>Power Platform Managed Environments: set sharing limits; require end-user auth; AIAgentsInfo KQL to detect widely-shared no-auth agents</td></tr>
+<tr><td><strong>Org-wide sharing default enables blast radius</strong></td><td>Power Platform Managed Environments: set sharing limits; require end-user auth; AgentsInfo KQL to detect widely-shared no-auth agents</td></tr>
 </tbody>
 </table>
 
 <div class="section-label">KQL Detection Queries</div>
-<h2>🔍 Key Advanced Hunting Queries (AIAgentsInfo table)</h2>
+<h2>🔍 Key Advanced Hunting Queries (AgentsInfo table)</h2>
 <p>These queries require the AI Agent Inventory to be enabled in Defender for Cloud Apps (requires Defender admin + Power Platform admin collaboration).</p>
 <div class="card-grid">
   <a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/configuration-end-user-authentication" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.2);">
     <div class="card-name">No-Auth Agents</div>
     <div class="card-desc">Finds agents accessible without user authentication — highest blast radius risk combined with maker credentials.</div>
-    <div style="background:var(--surface3);border-radius:6px;padding:10px 12px;margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--blue2);line-height:1.7;">AIAgentsInfo<br>| summarize arg_max(Timestamp, *) by AIAgentId<br>| where UserAuthenticationType == "None"<br>| project AgentCreationTime, AIAgentName,<br>&nbsp;&nbsp;AIAgentId, AgentStatus, CreatorAccountUpn</div>
+    <div style="background:var(--surface3);border-radius:6px;padding:10px 12px;margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--blue2);line-height:1.7;">AgentsInfo<br>| summarize arg_max(Timestamp, *) by AgentId<br>| where tostring(ToolsAuthenticationType) contains "None"<br>| project CreatedDateTime, AgentName,<br>&nbsp;&nbsp;AgentId, PublishedStatus, Owners</div>
   <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
   <a href="https://learn.microsoft.com/en-us/defender-cloud-apps/ai-agent-inventory" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.2);">
     <div class="card-name">Ownerless Published Agents</div>
     <div class="card-desc">Finds published agents with no accountable owner — governance blind spots that can persist indefinitely.</div>
-    <div style="background:var(--surface3);border-radius:6px;padding:10px 12px;margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--blue2);line-height:1.7;">AIAgentsInfo<br>| where AgentStatus == "Published"<br>| where isempty(OwnerAccountUpns)<br>| project AgentCreationTime, AIAgentName,<br>&nbsp;&nbsp;AIAgentId, AgentStatus, CreatorAccountUpn</div>
+    <div style="background:var(--surface3);border-radius:6px;padding:10px 12px;margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--blue2);line-height:1.7;">AgentsInfo<br>| where PublishedStatus == "Published"<br>| where array_length(Owners) == 0<br>| project CreatedDateTime, AgentName,<br>&nbsp;&nbsp;AgentId, PublishedStatus, Owners</div>
   <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
 </div>
 

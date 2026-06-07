@@ -39,7 +39,9 @@ LEARN_MCP_URL = "https://learn.microsoft.com/api/mcp"
 # Microsoft Learn URLs follow naming conventions but are NOT always predictable.
 # Do NOT construct URLs from table/feature names - always search first.
 # Known correct URLs (verified):
-#   AIAgentsInfo table: learn.microsoft.com/en-us/defender-xdr/advanced-hunting-aiagentsinfo-table
+#   AgentsInfo table: learn.microsoft.com/en-us/defender-xdr/advanced-hunting-agentsinfo-table
+#   (Previously AIAgentsInfo - transitioning per learn.microsoft.com/en-us/defender-xdr/advanced-hunting-schema-changes;
+#    AIAgentsInfo remains accessible until July 1, 2026)
 #   Copilot Data Connector: techcommunity.microsoft.com/blog/microsoftsentinelblog/...4491986
 #   Agent 365 GA blog: microsoft.com/en-us/security/blog/2026/05/01/...
 #   Work IQ MCP: learn.microsoft.com/en-us/microsoft-agent-365/tooling-servers-overview
@@ -85,7 +87,7 @@ SEARCH_QUERIES = [
     "Defender XDR detect block investigate AI agent threats security-for-ai",
     "Defender AI agent threat detection real-time protection ATG",
     "Defender AI agent inventory posture assessment discovery",
-    "AIAgentsInfo Advanced Hunting table schema agent inventory",
+    "AgentsInfo Advanced Hunting table schema agent inventory",
     "AlertEvidence Advanced Hunting AI agent investigation",
     "Defender AI security posture management ASPM multicloud",
     "Defender Copilot Studio integration Cloud Apps AI agent",
@@ -206,9 +208,12 @@ AGENT 365
 ═══════════════════════════════════════════════════════════════
 DETECTION, KQL & SENTINEL
 ═══════════════════════════════════════════════════════════════
-- AIAgentsInfo table: all agent types, all platforms. Key columns: AIAgentId, AIAgentName,
-  AgentStatus, UserAuthenticationType, OwnerAccountUpns, RegistrySource, RawAgentInfo
-- Playbook 01 KQL: no-auth agents, ownerless agents, maker credentials, auth-type change
+- AgentsInfo table (Preview, replaces AIAgentsInfo July 1, 2026): unified across all
+  agent types and platforms. Key columns: AgentId, AgentName, Platform, PublishedStatus
+  (Draft/Published), LifecycleStatus (Active/Blocked/Uninstalled/Deleted),
+  ToolsAuthenticationType (dynamic), Owners (dynamic array), CreatedDateTime,
+  EntraAgentId, EntraBlueprintId, McpServers, ConnectedAgents, RawAgentInfo (JSON)
+- Playbook 01 KQL Step 8 (8a-8h): all A365 agents, no-instructions agents, MCP tools configured, non-HTTPS endpoints, nonstandard ports, Graph/Azure management endpoints, generative orchestration + email send (XPIA risk), hard-coded credentials regex. Plus Step 1-7: no-auth agents, ownerless agents, maker credentials, auth-type change
   detection, A365 agents with no instructions, MCP tools, non-HTTPS endpoints,
   agent model inventory with EUDB status (extract modelNameHint from RawAgentInfo)
 - CloudAppEvents table (Defender Advanced Hunting): M365 Copilot + Security Copilot audit.
@@ -230,7 +235,7 @@ DETECTION, KQL & SENTINEL
 - Sentinel GDAP + unified RBAC (cross-tenant): Preview — MSSP/partner scenarios
 - Copilot Data Connector: single-tenant only (MSSP limitation)
 - "Defender for AI" = umbrella term covering Defender for Cloud Apps (CloudAppEvents),
-  Security for AI portal (AIAgentsInfo + ATG), Defender for Cloud AI Workloads (Foundry)
+  Security for AI portal (AgentsInfo + ATG), Defender for Cloud AI Workloads (Foundry)
 
 ═══════════════════════════════════════════════════════════════
 DATA SECURITY (PURVIEW)
@@ -313,15 +318,62 @@ NOVEMBER 2025 WAVE — covered as of June 5, 2026:
 - Microsoft Copilot Studio AI agent protection in Defender (Preview, GA June 2026)
 - External threat detection for Copilot Studio (Preview Sep 4 2025, GA June 2026)
 - Foundry Control Plane "Operate" pane structure (Overview/Assets/Compliance/Quota/Monitoring)
-- Agent 365 Sentinel data connector (unifies Agent 365 + Foundry + Copilot telemetry)
-- M365 admin center "Agents at risk" card (4 risk types: shadow agent, no owner,
-  excessive permissions, security misconfiguration)
+- Agent 365 Sentinel data connector (unifies Agent 365 + Foundry + Copilot)
+- M365 admin center "Agents at risk" card (4 risk types)
 - Purview role groups for AI: Data Security Management, Viewers, IRM Triage Agent
 - Microsoft Foundry naming (formerly Azure AI Foundry)
-- Custom security attributes for CA at scale (Environment, Department, DataSensitivity)
-- OBO flow risk attribution detail (user not agent in delegated flows)
+- Custom security attributes for CA at scale
+- OBO flow risk attribution detail
 - Microsoft Sentinel MCP server + Windows On-device Agent Registry (ODR)
 - ID Protection for agents: 5 offline risk detections, 4 actions, 90-day retention
+
+JUNE 2026 PURVIEW WAVE — covered as of June 5, 2026:
+- Purview for Local & Endpoint Agents (Preview) — GitHub Copilot CLI, Claude Code,
+  OpenAI Codex, OpenClaw. DSPM + DLP + IRM at endpoint, full interaction logs.
+- DLP runtime controls for Microsoft Foundry (Preview) — inline DLP at prompt
+  handling, SIT detection during execution, block requests pre-execution.
+- Purview insights in Foundry Control Plane (GA) — sensitive data detection,
+  share of sensitive interactions, high-risk user indicators surfaced in dev workflow.
+- Purview ↔ GitHub Copilot integration (Preview) — audit data streaming, repos +
+  PRs + developer sessions visibility, consolidated AI activity monitoring.
+- Microsoft Purview SDK for .NET (Preview) — drop-in toolkit for content inspection,
+  DLP enforcement, sensitivity labelling. Activity feeds back into central Purview.
+
+JUNE 2026 SCHEMA TRANSITION — covered as of June 5, 2026:
+- AIAgentsInfo → AgentsInfo table migration (cutover July 1, 2026)
+- BehaviorInfo table for real-time protection alerts (cutover July 1, 2026)
+- Microsoft Agent 365 license required for Copilot Studio + Foundry agent security (July 1)
+- Block rules need redefining under Settings → Security for AI → Policies (July 1)
+
+BUILD 2026 WAVE (June 2, 2026) — covered as of June 5, 2026:
+- "Claws" — skills loaded into OpenClaw runtime via ClawHub registry
+- ClawHub — public skills registry. Supply chain attack vector documented by MS Threat Intel.
+- OpenClaw — self-hosted agent runtime, open-source. Runs on Windows via MXC.
+- Microsoft Execution Containers (MXC) SDK — Early Preview. Policy-driven execution layer
+  with composable isolation. Developers declare what agent can access.
+- Agent 365 + MXC native integration (Preview July 2026) — Defender + Entra + Intune
+  + Purview protections via MXC.
+- Native Windows + Agent 365 integration — Intune policies gate agent runtime execution.
+- Defender local agent discovery (Preview June 2026) — discovers/profiles local AI agents
+  on Defender-onboarded Windows devices. Maps to device+user identity. Shadow AI in M365 admin.
+  5 categories: CLI agents, Desktop apps, Agentic IDEs, VS Code extensions, Claw-based agents.
+  20+ specific products including Claude Code, GitHub Copilot CLI, Cursor, Windsurf, ChatGPT
+  Desktop, OpenClaw, etc. Three views: inventory, exposure map, Advanced Hunting (KQL).
+- Defender AI agent runtime protection (Preview June 2026) — inline prompt-injection detection
+  at 3 hook points (user prompt, pre-tool call, post-tool response). 3 modes: Block/Audit/Disabled.
+  Tamper-protected. Alert: "Suspicious AI prompt injection". Currently supports Claude Code +
+  GitHub Copilot CLI via their published hooks frameworks. Coverage expanding.
+- Defender multi-cloud agent discovery — cloud/platform agents from Copilot Studio, Foundry,
+  AWS Bedrock, GCP Vertex AI also covered.
+- Defender advanced hunting + exposure graph for agents (Preview coming soon)
+- Defender AI model scanning (Preview) — inspect models in registries, workspaces, CI/CD
+- Foundry Agent Service hosted agents (Public Preview) — instant-on per-agent sandboxes
+- ASSERT — Adaptive Spec-driven Scoring for Evaluation and Regression Testing (open source)
+- Agent Control Specification (ACS) — open spec for control hook points in agent loop
+- Codename MDASH — Microsoft defence-side project (limited detail)
+- NVIDIA OpenShell on Windows via MXC; Hermes Agent (Nous Research) integrating with both
+- Claude Code GitHub Action prompt injection finding (Microsoft Threat Intel, Feb 2026)
+- Malicious skills on ClawHub — documented supply chain attack pattern
 
 ═══════════════════════════════════════════════════════════════
 PRODUCTS COVERED (do not flag these as new)
@@ -377,7 +429,7 @@ CRITICAL URL RULES — failure to follow these rules produces wrong URLs that wa
   results provided above. The MCP server returns real URLs — use them.
 - NEVER construct, guess, or infer a URL from a document title or feature name.
   Microsoft Learn URL slugs do NOT follow predictable patterns.
-  Example of what NOT to do: seeing "AIAgentsInfo table" and guessing
+  Example of what NOT to do: seeing "AgentsInfo table" and guessing
   "advanced-hunting-aiagentstable" — the real URL is "advanced-hunting-aiagentsinfo-table".
 - If a search result has no URL, set "url" to "" (empty string). Do not fabricate one.
 - If you are uncertain about a URL, set it to "" rather than guess.

@@ -363,6 +363,12 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 <div class="page">
 
+<!-- AGENTSINFO MIGRATION NOTE -->
+<div style="background:#fff4d6;border:1.5px solid #e8b840;border-left:5px solid #e89500;border-radius:8px;padding:12px 18px;margin-bottom:20px;font-size:12px;color:#2e3d5e;line-height:1.7;">
+  ⚠ <strong>Schema migration in progress:</strong> All KQL queries on this page have been migrated from <code>AIAgentsInfo</code> to the new unified <code>AgentsInfo</code> table per Microsoft Learn (<a href="https://learn.microsoft.com/en-us/defender-xdr/advanced-hunting-schema-changes" target="_blank" style="color:var(--blue);">schema changes notice, June 2026</a>). Old table accessible until <strong>July 1, 2026</strong>. New schema is in Preview. See the <a href="playbooks.html#playbook1" style="color:var(--blue);">full column mapping on playbooks.html</a> if you encounter query issues.
+</div>
+
+
 <style>
 /* Agent 365 page styles */
 .a365-hero-badge{display:inline-flex;align-items:center;gap:6px;
@@ -464,7 +470,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <div class="a365-what-card">
     <div class="a365-what-icon">📊</div>
     <div class="a365-what-title">OpenTelemetry Observability</div>
-    <div class="a365-what-desc">Agent interactions, inference events, and tool usage are instrumented automatically via the Agent 365 SDK. All events routed to Microsoft 365 audit logs — visible in Defender Advanced Hunting via the AIAgentsInfo table.</div>
+    <div class="a365-what-desc">Agent interactions, inference events, and tool usage are instrumented automatically via the Agent 365 SDK. All events routed to Microsoft 365 audit logs — visible in Defender Advanced Hunting via the AgentsInfo table.</div>
   </div>
   <div class="a365-what-card">
     <div class="a365-what-icon">📋</div>
@@ -479,7 +485,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <div class="a365-what-card">
     <div class="a365-what-icon">🛡️</div>
     <div class="a365-what-title">Defender Integration</div>
-    <div class="a365-what-desc">Agents registered with Agent 365 appear in the AIAgentsInfo Advanced Hunting table (<code>RegistrySource == "A365"</code>). Near-real-time threat detection, incident alerts, and investigation via Defender portal → Settings → Security for AI.</div>
+    <div class="a365-what-desc">Agents registered with Agent 365 appear in the AgentsInfo Advanced Hunting table (<code>Platform == "Microsoft Agent 365"</code>). Near-real-time threat detection, incident alerts, and investigation via Defender portal → Settings → Security for AI.</div>
   </div>
 </div>
 
@@ -551,7 +557,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
       <div class="a365-lic-item">Defender Security for AI integration</div>
       <div class="a365-lic-item">Agent Tooling Gateway (ATG) real-time protection</div>
       <div class="a365-lic-item">Agent 365 SDK and CLI</div>
-      <div class="a365-lic-item">AIAgentsInfo Advanced Hunting (A365 agents)</div>
+      <div class="a365-lic-item">AgentsInfo Advanced Hunting (A365 agents)</div>
     </div>
     <div class="callout callout-warn" style="margin-top:14px;padding:10px 14px;">
       <p style="font-size:11px;margin:0;"><strong>⚠️ Per-user, not per-agent.</strong> Governance scope doesn't automatically scale with agent count. An organisation with 50 licensed users but 500 deployed agents has a coverage gap. Plan accordingly.</p>
@@ -649,7 +655,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   </div>
   <div class="a365-flow-step">
     <div class="a365-flow-num">3</div>
-    <div class="a365-flow-text"><strong>Connect Defender</strong> — Defender portal → <a href="https://security.microsoft.com/securitysettings/security_for_ai" target="_blank" style="color:var(--blue);">Settings → Security for AI agents</a> → enable and connect your Agent 365 tenant. Agents registered with Agent 365 start appearing in AIAgentsInfo.</div>
+    <div class="a365-flow-text"><strong>Connect Defender</strong> — Defender portal → <a href="https://security.microsoft.com/securitysettings/security_for_ai" target="_blank" style="color:var(--blue);">Settings → Security for AI agents</a> → enable and connect your Agent 365 tenant. Agents registered with Agent 365 start appearing in AgentsInfo.</div>
   </div>
   <div class="a365-flow-step">
     <div class="a365-flow-num">4</div>
@@ -664,7 +670,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <table class="a365-coverage-table">
 <thead><tr>
   <th>Agent type</th>
-  <th>Discovery (AIAgentsInfo)</th>
+  <th>Discovery (AgentsInfo)</th>
   <th>Threat detection</th>
   <th>Real-time protection (ATG)</th>
   <th>Requires</th>
@@ -672,14 +678,14 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <tbody>
 <tr>
   <td>Copilot Studio agents</td>
-  <td><span class="green-inline">✓ Automatic</span><br><code style="font-size:9px;">RegistrySource == "PowerPlatform"</code></td>
+  <td><span class="green-inline">✓ Automatic</span><br><code style="font-size:9px;">Platform == "Copilot Studio"</code></td>
   <td><span class="green-inline">✓ Extended alert set</span><br>Audit logs sent by default</td>
   <td><span class="green-inline">✓ Available</span></td>
   <td>Power Platform connector enabled in Defender</td>
 </tr>
 <tr>
   <td>Agent 365 SDK agents</td>
-  <td><span class="green-inline">✓</span><br><code style="font-size:9px;">RegistrySource == "A365"</code></td>
+  <td><span class="green-inline">✓</span><br><code style="font-size:9px;">Platform == "Microsoft Agent 365"</code></td>
   <td><span class="green-inline">✓ Near-real-time</span><br>Requires M365 audit log routing</td>
   <td><span class="green-inline">✓ ATG</span></td>
   <td>Agent 365 licence + SDK integration</td>
@@ -848,11 +854,11 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <div class="callout-title">⚠️ Orphaned agents — employees who left the company</div>
   <p>The most common real-world orphaned agent scenario is not Blueprint deletion (the Entra identity case) — it is employees who built agents in Copilot Studio and then left the organisation. Those agents continue running with the builder's original permissions, full access to the tools and data they were connected to, and no accountable owner. Microsoft does not detect or flag these automatically. The Agent 365 portal surfaces them in the Ownerless Agents view and the Agent Map.</p>
   <p><strong>Detection KQL:</strong></p>
-  <pre style="background:var(--code-bg);border:1px solid var(--border2);border-radius:4px;padding:12px;font-size:11px;color:#9cdcfe;overflow-x:auto;">AIAgentsInfo
-| summarize arg_max(Timestamp, *) by AIAgentId
-| where AgentStatus == "Published"
-| where isempty(OwnerAccountUpns)
-| project AIAgentName, CreatorAccountUpn, AgentCreationTime, UserAuthenticationType</pre>
+  <pre style="background:var(--code-bg);border:1px solid var(--border2);border-radius:4px;padding:12px;font-size:11px;color:#9cdcfe;overflow-x:auto;">AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where PublishedStatus == "Published"
+| where array_length(Owners) == 0
+| project AgentName, CreatedDateTime, ToolsAuthenticationType</pre>
 </div>
 
 <div class="section-label" style="margin-top:48px;">Stateful Agents</div>
@@ -865,32 +871,29 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 <div class="section-label" style="margin-top:48px;">Key KQL — Agent 365 Agents</div>
 <h2>Essential Advanced Hunting queries</h2>
-<p>Use <code>RegistrySource == "A365"</code> to target Agent 365-registered agents specifically. See <a href="playbooks.html" style="color:var(--blue);">Playbook 01 Step 8</a> for the full query set.</p>
+<p>Use <code>Platform == "Microsoft Agent 365"</code> to target Agent 365-registered agents specifically. See <a href="playbooks.html" style="color:var(--blue);">Playbook 01 Step 8</a> for the full query set.</p>
 
 <div style="background:#f0f4fb;border:1px solid var(--border);border-radius:8px;padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:10px;color:#0d1526;line-height:1.8;overflow-x:auto;margin:8px 0;">
 <pre style="margin:0;white-space:pre;">// All A365 registered agents
-AIAgentsInfo
-| where RegistrySource == "A365"
-| summarize arg_max(Timestamp, *) by AIAgentId
-| where AgentStatus != "Deleted"
-| project AIAgentId, AIAgentName, AgentStatus, IsBlocked, AIModel, Instructions
+AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where LifecycleStatus != "Deleted"
+| project AgentId, AgentName, PublishedStatus, IsBlocked, AIModel, Instructions
 
 // Agents with no instructions — prompt injection risk
-AIAgentsInfo
-| where RegistrySource == "A365"
-| summarize arg_max(Timestamp, *) by AIAgentId
+AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
 | where isempty(Instructions) or Instructions == "N/A"
-| project AIAgentId, AIAgentName, Instructions
+| project AgentId, AgentName, Instructions
 
 // Agents with MCP tools — expanded attack surface
-AIAgentsInfo
-| where RegistrySource == "A365"
-| summarize arg_max(Timestamp, *) by AIAgentId
-| where isnotempty(AgentActionTriggers)
-| extend Triggers = parse_json(AgentActionTriggers)
+AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where isnotempty(Triggers)
+| extend Triggers = parse_json(Triggers)
 | mv-expand Trigger = Triggers
 | where Trigger.type == "RemoteMCPServer"
-| project AIAgentId, AIAgentName, Trigger.type</pre>
+| project AgentId, AgentName, Trigger.type</pre>
 </div>
 
 <!-- ════════════════════════════════════════════════════════════════════════ -->
@@ -933,6 +936,31 @@ AIAgentsInfo
   <p><strong>Audit an agent instance as you would a user</strong> — all interactions appear in the unified audit log, including agent-to-human, human-to-agent, agent-to-tools, and agent-to-agent. <strong>Activity Explorer in DSPM (and DSPM for AI)</strong> shows agent activity under the AI activities tab, including prompts and responses where applicable. <strong>Sensitivity labels</strong> applied to data the agent accesses are captured in the audit record. Search via <a href="https://learn.microsoft.com/purview/audit-log-activities#agent-365-activities" target="_blank" style="color:var(--blue);">Agent 365 audit activities</a> in the Purview portal.</p>
 </div>
 
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- BUILD 2026 — NATIVE WINDOWS + MXC INTEGRATION -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:48px;">Build 2026 — Native Windows integration</div>
+<h2>Agent 365 + Windows + MXC — a unified control plane for local agents</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">At Build 2026 Microsoft announced <strong>native Windows integration with Agent 365</strong> — providing a common foundation for observability, security, and governance of agents that run locally on Windows endpoints. This is the convergence of four governance pillars (identity, threat, device, data) at the runtime boundary for local agents, not just cloud agents.</p>
+
+<table>
+<thead><tr><th>Component</th><th>What it provides</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td><strong>Microsoft Execution Containers (MXC) SDK</strong></td><td>Policy-driven execution layer. Developers declare what an agent can access (files, network, processes); containment boundaries enforced at runtime. Composable isolation — light when low-risk, full sandbox when sensitive.</td><td><span class="caution-inline">Early Preview</span></td></tr>
+<tr><td><strong>Agent 365 + MXC native integration</strong></td><td>Defender, Entra, Intune, and Purview protections delivered <strong>via MXC</strong>. Agents on Windows start secure and stay secure. The four pillars converge at the runtime boundary.</td><td><span class="caution-inline">Preview · July 2026</span></td></tr>
+<tr><td><strong>Native Intune integration</strong></td><td>Intune sets policies that <strong>gate agent runtime execution</strong> — controlling how agents run, what permissions they have, what they can reach. Same Intune surface IT already uses for device and application management.</td><td><span class="caution-inline">Preview</span></td></tr>
+<tr><td><strong>Defender local agent discovery</strong></td><td>Defender for Endpoint discovers and profiles supported local AI agents on Defender-onboarded <strong>Windows endpoints</strong>. Each agent surfaces as a security asset (not just an OS process), defined by user + device + agent type. Five categories covered: CLI agents, Desktop apps, Agentic IDEs, VS Code extensions, Claw-based agents. 20+ specific tools today (full list on <a href="mcp.html" style="color:var(--blue);">MCP page</a>). Three views: inventory, exposure map, Advanced Hunting. M365 admin center Shadow AI detection shows unmanaged agents + publishers across the tenant.</td><td><span class="caution-inline">Preview · June 2026</span></td></tr>
+<tr><td><strong>Defender AI agent runtime protection</strong></td><td>Inline prompt-injection detection at three hook points in the agent loop: user prompt, pre-tool call, post-tool response. Three modes: Block (stops action + notifies + alerts), Audit (continues + alerts — recommended starting mode), Disabled. Tamper-protected setting. Alert name: "Suspicious AI prompt injection." Currently supports <strong>Claude Code + GitHub Copilot CLI</strong> via their published hooks frameworks. Coverage expanding.</td><td><span class="caution-inline">Preview · June 2026</span></td></tr>
+<tr><td><strong>Defender advanced hunting + exposure graph for agents</strong></td><td>Trace how agents are connected across the network. Investigate agent activity using the same endpoint telemetry security teams already use in Defender.</td><td><span class="caution-inline">Preview coming soon</span></td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 The architectural shift</div>
+  <p>Until Build 2026, Agent 365 governance was strongest for cloud-hosted agents (Copilot Studio, Foundry). Local agents on developer machines were observable through Purview's June 2026 endpoint-agents wave but governance was still split across multiple control planes. With native Windows + MXC integration, <strong>Agent 365 becomes a single control plane that spans cloud-hosted agents AND local agents</strong>. Same identity, same telemetry pipeline, same policy surface — whether the agent runs in Foundry, in OpenClaw on a developer laptop, or in Windows 365 for Agents in the cloud.</p>
+  <p style="margin-top:10px;"><strong>For architects:</strong> this is the moment Microsoft completes its "agent = first-class enterprise asset" model. An agent has an identity (Entra Agent ID), runs in a managed device/environment (Intune-controlled MXC, or Windows 365 for Agents, or Foundry hosted), has its data interactions observed (Purview), and is monitored for risk (Defender). Phase 4 (Runtime Protection) and Phase 5 (Monitoring & Detection) of the six-phase strategy converge on this stack for local agents specifically.</p>
+</div>
+
 <div class="page-nav">
   <a href="product-map.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Products</span></a>
   <a href="identity.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Identity</span></a>
@@ -968,7 +996,7 @@ AIAgentsInfo
       <div class="platform-item"><strong>What it produces:</strong> Copilot Studio agents published to Teams, SharePoint, websites — conversational agents connecting to M365 data</div>
       <div class="platform-item"><strong>Critical distinction:</strong> Classic agents (most existing deployments) sit outside the Entra security perimeter. Modern agents (new) get full Entra coverage</div>
       <div class="platform-item"><strong>Primary risk surface:</strong> Maker credentials, no-auth agents, org-wide sharing, agent sprawl, any-user-can-change-auth</div>
-      <div class="platform-item"><strong>Primary detection surface:</strong> AIAgentsInfo table in Defender Advanced Hunting</div>
+      <div class="platform-item"><strong>Primary detection surface:</strong> AgentsInfo table in Defender Advanced Hunting</div>
     </div>
   </div>
   <div class="platform-card platform-foundry">
@@ -1003,15 +1031,15 @@ AIAgentsInfo
 <tr><td>ID Protection for Agents</td><td>❌ Classic agents only — Modern agents supported</td><td>✅ Supported</td></tr>
 <tr><td>Identity Governance (lifecycle)</td><td>⚠️ Modern agents only</td><td>✅ Supported via Entra ID Governance</td></tr>
 <tr><td>Defender real-time protection</td><td>✅ Copilot Studio agents (Defender for Cloud Apps)</td><td>✅ Defender for Cloud AI security posture</td></tr>
-<tr><td>Sentinel analytics rules</td><td>✅ AIAgentsInfo table queries</td><td>✅ Azure Monitor + App Insights tables</td></tr>
+<tr><td>Sentinel analytics rules</td><td>✅ AgentsInfo table queries</td><td>✅ Azure Monitor + App Insights tables</td></tr>
 <tr><td>Prompt Shield / Content Safety</td><td>✅ Built-in via M365 Copilot layer</td><td>✅ Content Safety SDK — opt-in per agent</td></tr>
 <tr><td>DLP / Purview (policy layer)</td><td>✅ DLP for M365 Copilot (GA March 31 2026) — covers Copilot experiences</td><td>✅ Azure data governance applies</td></tr>
 <tr><td>Browser-layer DLP</td><td>✅ Edge for Business inline protection — inspects typed prompts to any GenAI app incl. shadow AI. Works on BYOD if signed into Edge for Business profile</td><td>✅ Same — applies to any browser-based interaction</td></tr>
 <tr><td>Network-layer DLP</td><td>⚠️ Preview — Network Data Security via Global Secure Access. Covers unmanaged devices, desktop apps, API calls</td><td>⚠️ Preview — same coverage</td></tr>
 <tr><td>SharePoint oversharing controls (SAM)</td><td>✅ SharePoint Advanced Management included with Copilot licence — RCD, Site Access Reviews, Content Assessment, RAC. Primary tool for Copilot data exposure remediation.</td><td>⚠️ Not applicable at the same level — Foundry agents access data via explicit connections, not broad SharePoint indexing</td></tr>
 <tr><td>Agentic data governance</td><td>✅ DLP extends to agent-to-human, agent-to-tools, agent-to-agent. Sensitive files blocked from grounding data. Auto-enrolled for audit at creation</td><td>✅ Same — agent instances enrolled as auditable entities</td></tr>
-<tr><td>Inventory / discovery</td><td>✅ Agent 365 + AIAgentsInfo table</td><td>⚠️ Azure Resource Manager + Entra Agent ID — no unified agent-level inventory table equivalent</td></tr>
-<tr><td>Logging — default state</td><td>✅ Some data in AIAgentsInfo automatically</td><td>⚠️ Nothing collected by default — all logging is opt-in</td></tr>
+<tr><td>Inventory / discovery</td><td>✅ Agent 365 + AgentsInfo table</td><td>⚠️ Azure Resource Manager + Entra Agent ID — no unified agent-level inventory table equivalent</td></tr>
+<tr><td>Logging — default state</td><td>✅ Some data in AgentsInfo automatically</td><td>⚠️ Nothing collected by default — all logging is opt-in</td></tr>
 <tr><td>Red teaming</td><td>⚠️ No native Copilot Studio red teaming tool</td><td>✅ AI Red Teaming Agent in Microsoft Foundry</td></tr>
 <tr><td>Supply chain scanning</td><td>⚠️ Limited — connector risk is the main vector</td><td>✅ Defender for Cloud CSPM, AI model scanning</td></tr>
 </tbody>
@@ -1033,13 +1061,13 @@ AIAgentsInfo
     <div class="auth-num">①</div>
     <div><div class="auth-name">End User Credentials (OBO)</div><div class="auth-sub">Auth with Microsoft → End user credentials</div></div>
     <div class="risk-badge risk-low">LOW RISK</div>
-    <code style="font-size:9px;background:#f0f4fb;padding:2px 6px;border-radius:3px;">UserAuthenticationType == "Integrated"</code>
+    <code style="font-size:9px;background:#f0f4fb;padding:2px 6px;border-radius:3px;">ToolsAuthenticationType == "Integrated"</code>
   </div>
   <div class="auth-row">
     <div class="auth-num">②</div>
     <div><div class="auth-name">Maker-Provided Credentials</div><div class="auth-sub">Auth with Microsoft → Maker-provided credentials</div></div>
     <div class="risk-badge risk-high">HIGH RISK</div>
-    <code style="font-size:9px;background:#f0f4fb;padding:2px 6px;border-radius:3px;">AgentToolsDetails.mode == "Maker"</code>
+    <code style="font-size:9px;background:#f0f4fb;padding:2px 6px;border-radius:3px;">DeclaredTools.mode == "Maker"</code>
   </div>
   <div class="auth-row">
     <div class="auth-num">③</div>
@@ -1096,48 +1124,48 @@ AIAgentsInfo
 <p>Run these in Defender Advanced Hunting to get immediate visibility. Any result from Query 1 or 2 is a critical finding.</p>
 
 <div class="code-block">// Query 1: No-auth agents (critical — run first)
-AIAgentsInfo
-| summarize arg_max(Timestamp, *) by AIAgentId
-| where AgentStatus == "Published"
-| where UserAuthenticationType == "None"
-| project AIAgentName, CreatorAccountUpn, OwnerAccountUpns, AgentCreationTime</div>
+AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where PublishedStatus == "Published"
+| where tostring(ToolsAuthenticationType) contains "None"
+| project AgentName, Owners, CreatedDateTime</div>
 
 <div class="code-block">// Query 2: Change-detection — auth downgraded to None (use as Sentinel Analytics Rule)
-AIAgentsInfo
-| summarize arg_max(Timestamp, *) by AIAgentId
-| where AgentStatus == "Published"
-| order by AIAgentName
-| extend PreviousAuthType = prev(UserAuthenticationType, 1)
-| where UserAuthenticationType == "None" and PreviousAuthType != "None"
-| project AIAgentName, PreviousAuthType, UserAuthenticationType, ReportId = tostring(AIAgentId), Timestamp</div>
+AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where PublishedStatus == "Published"
+| order by AgentName
+| extend PreviousAuthType = prev(ToolsAuthenticationType, 1)
+| where tostring(ToolsAuthenticationType) contains "None" and PreviousAuthType != "None"
+| project AgentName, PreviousAuthType, ToolsAuthenticationType, ReportId = tostring(AgentId), Timestamp</div>
 
 <div class="code-block">// Query 3: Maker credentials (field-validated — checks both Tools and Topics)
-let base = AIAgentsInfo
-| summarize arg_max(Timestamp, *) by AIAgentId
-| where AgentStatus == "Published";
+let base = AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where PublishedStatus == "Published";
 let directActions = base
-| mv-expand detail = AgentToolsDetails
+| mv-expand detail = DeclaredTools
 | where detail.action.connectionProperties.mode == "Maker"
 | extend ActionType = "FromTools"
-| project-reorder AgentCreationTime, AIAgentId, AIAgentName, UserAuthenticationType, CreatorAccountUpn;
+| project-reorder CreatedDateTime, AgentId, AgentName, ToolsAuthenticationType, Owners;
 let topicActions = base
-| mv-expand topic = AgentTopicsDetails
+| mv-expand topic = Capabilities
 | extend topicActionsArray = topic.beginDialog.actions
 | mv-expand Action = topicActionsArray
 | where Action.connectionProperties.mode == "Maker"
 | extend ActionType = "FromTopic"
-| project-reorder AgentCreationTime, AIAgentId, AIAgentName, AgentStatus, CreatorAccountUpn, OwnerAccountUpns, Action;
-directActions | union topicActions | sort by AIAgentId, Timestamp desc</div>
+| project-reorder CreatedDateTime, AgentId, AgentName, PublishedStatus, Owners, Action;
+directActions | union topicActions | sort by AgentId, Timestamp desc</div>
 
 <h2 style="margin-top:28px;">Copilot Studio — Critical Gaps</h2>
 <table>
 <thead><tr><th>Gap</th><th>Risk</th><th>Interim Mitigation</th></tr></thead>
 <tbody>
-<tr><td><strong>Classic agents outside Entra perimeter</strong></td><td><span class="severity-critical">⚠️ Critical</span></td><td>Inventory via AIAgentsInfo; enforce end-user auth in Power Platform admin; manually recreate critical agents as Modern</td></tr>
+<tr><td><strong>Classic agents outside Entra perimeter</strong></td><td><span class="severity-critical">⚠️ Critical</span></td><td>Inventory via AgentsInfo; enforce end-user auth in Power Platform admin; manually recreate critical agents as Modern</td></tr>
 <tr><td><strong>Any user can change another agent's auth type to None</strong></td><td><span class="severity-critical">⚠️ Critical</span></td><td>Deploy change-detection Sentinel Analytics Rule; restrict Copilot Studio access via Managed Environments</td></tr>
 <tr><td><strong>Maker credentials blast radius</strong></td><td><span class="severity-high">⚠️ High</span></td><td>Enforce end-user auth per agent; PAM hygiene on developers who build agents; audit via Query 3 above</td></tr>
-<tr><td><strong>Portal inventory count inconsistency</strong></td><td><span class="severity-high">⚠️ High</span></td><td>Trust AIAgentsInfo table as primary source; treat portal counts as approximate</td></tr>
-<tr><td><strong>Agent sprawl — no lifecycle enforcement</strong></td><td><span class="severity-high">⚠️ High</span></td><td>Assign owners to all agents; use access packages for time-bound permissions; quarterly AIAgentsInfo audit</td></tr>
+<tr><td><strong>Portal inventory count inconsistency</strong></td><td><span class="severity-high">⚠️ High</span></td><td>Trust AgentsInfo table as primary source; treat portal counts as approximate</td></tr>
+<tr><td><strong>Agent sprawl — no lifecycle enforcement</strong></td><td><span class="severity-high">⚠️ High</span></td><td>Assign owners to all agents; use access packages for time-bound permissions; quarterly AgentsInfo audit</td></tr>
 </tbody>
 </table>
 
