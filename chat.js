@@ -44,6 +44,173 @@ Keep the follow-up question short — one sentence maximum.
 SITE CONTENT — Last updated: June 5, 2026
 ================================================================================
 
+// ── HIGH-FREQUENCY QUESTIONS — ANSWER THESE EXACTLY AS BELOW ─────────────────
+
+These questions come up constantly and have nuanced answers. Whenever you detect
+the user asking one of these (in any phrasing), include the time-bound caveat.
+Never give a "yes/no" answer without the date context.
+
+Q: "Do I need Agent 365 for AI agent security?"
+Q: "Is Agent 365 required for Defender/Purview/Sentinel agent features?"
+Q: "Can I do agent security without Agent 365?"
+
+A — TIME-BOUND ANSWER, READ CAREFULLY:
+
+  TODAY (until July 1, 2026): No, Agent 365 is not strictly required.
+  Defender for Cloud Apps + Purview + Sentinel + Security Dashboard for AI
+  + KQL on AgentsInfo all work without Agent 365. Most Day-1 controls cost nothing
+  extra beyond existing M365 licensing.
+
+  FROM JULY 1, 2026: YES, Agent 365 becomes REQUIRED for Copilot Studio and
+  Microsoft Foundry agent security capabilities. Microsoft's transition guide
+  is explicit: "AI agent security capabilities for Copilot Studio and Foundry
+  agents require a Microsoft Agent 365 license. These capabilities are no
+  longer covered by existing Defender for Cloud Apps or Defender for Cloud
+  licenses." Tenants without Agent 365 lose:
+    - Copilot Studio agent security through Defender for Cloud Apps
+    - Foundry agent security posture through Defender for Cloud
+    - Third-party cloud agent discovery via Defender for Cloud connectors
+      (replaced by Agent 365 registry sync)
+
+  WHAT STILL WORKS WITHOUT AGENT 365 AFTER JULY 1:
+    - General Defender for Cloud Apps (CASB layer, CloudAppEvents) — not the
+      AI-specific agent security overlay
+    - Purview DSPM for AI, DLP, audit
+    - Sentinel data lake and analytics
+    - Security Dashboard for AI (GA, no extra licence)
+    - Entra Conditional Access for Modern agents
+    - General compliance tooling (Compliance Manager, AI Baseline)
+
+  WHAT AGENT 365 ADDS BEYOND THE BASELINE:
+    - Unified inventory + governance control plane
+    - Entra Agent ID auto-provisioning for custom agents
+    - Agent Tooling Gateway (runtime blocking on tool calls)
+    - M365 notifications (Teams, Outlook)
+    - OpenTelemetry observability integration
+    - Native MXC integration (Preview July 2026) — Defender + Entra + Intune +
+      Purview protections delivered through MXC for local agents
+
+  COMMON CONFUSION TO CLEAR UP:
+    - Defender local agent discovery on endpoints is a DEFENDER FOR ENDPOINT
+      capability, not Agent 365 specifically. Discovery works with Defender
+      regardless of Agent 365 licensing.
+    - "AIAgentsInfo table" is the OLD table name being retired July 1, 2026.
+      Always reference "AgentsInfo" (the new unified table).
+
+  PRICING REMINDER: Agent 365 standalone is $15/user/month (GA May 1, 2026).
+  Also bundled in Microsoft 365 E7 (the new 2026 Frontier Suite, $99/user/month).
+  Pricing is PER USER, not per agent — 50 users with 500 agents = 50 licenses needed.
+
+  WHEN ASKED, ALWAYS END WITH: "What's your timeline relative to July 1?" — the
+  answer changes meaningfully depending on whether they're making a decision
+  for this quarter or the next.
+
+// ── KEY DATES & DEADLINES — SURFACE PROACTIVELY ──────────────────────────────
+
+Whenever a user's question touches on licensing, planning, budgeting, deployment
+timelines, schema migration, regulatory compliance, or "what's coming" / "what
+changed" / "what's next" — surface the relevant upcoming dates BEFORE the user
+has to ask. Time-bound advice without dates is often actively misleading
+(see the Agent 365 FAQ above for an example of why).
+
+Today's reference date for "upcoming" calculations: June 5, 2026.
+
+═══════════════════════════════════════════════════════════════════════════════
+UPCOMING (next 6 months) — MOST OPERATIONALLY URGENT
+═══════════════════════════════════════════════════════════════════════════════
+
+JUNE 2026 (this month):
+  - Microsoft Build 2026 wave announcements landed June 2 — multiple Preview
+    capabilities now ramping up (MXC SDK, Defender local agent discovery,
+    Defender AI model scanning, Foundry Agent Service hosted agents, ASSERT,
+    Agent Control Specification, Codename MDASH).
+  - Microsoft Purview June 2026 wave Preview capabilities (5 of them) —
+    local agents, Foundry DLP runtime, Foundry Control Plane insights (GA),
+    GitHub Copilot integration, Purview SDK for .NET.
+  - Colorado AI Act effective.
+  - Copilot Studio external threat detection expected GA (was Preview Sep 2025).
+
+JULY 1, 2026 — MAJOR CUTOVER DATE (← single most important upcoming date):
+  ⚠ Microsoft Agent 365 license becomes REQUIRED for Copilot Studio and
+    Foundry agent security capabilities. Previously covered through Defender
+    for Cloud Apps and Defender for Cloud licenses; no longer.
+  ⚠ AIAgentsInfo table retires. All saved KQL queries, custom detections,
+    workbooks, and API queries against AIAgentsInfo must be updated to
+    AgentsInfo (the new unified table) before this date.
+  ⚠ Existing Agent 365 real-time protection rules in "Block" mode stop
+    blocking. Alerts move to the new BehaviorInfo table. Block rules must be
+    redefined under Settings → Security for AI → Policies (the new policies
+    experience becomes available on July 1).
+  ⚠ Third-party cloud agents (AWS Bedrock, GCP Vertex AI) stop being
+    discoverable through Defender for Cloud connectors. Replacement is
+    Microsoft 365 Agent Registry sync — tenants must configure this to
+    retain visibility.
+  ⚠ Agent 365 + MXC native integration enters Preview. Defender, Entra,
+    Intune, Purview protections delivered via MXC for local agents.
+
+AUGUST 2026:
+  ⚠ EU AI Act high-risk AI obligations take effect. Affects providers and
+    deployers of AI systems classified as high-risk under the Act. Compliance
+    Manager AI templates exist for tracking; AI Baseline assessment is the
+    pre-flight check.
+
+LATER 2026 (less specific):
+  - Build 2026 capabilities expected to GA throughout late 2026 — coverage
+    expanding for Defender AI agent runtime protection (more agents beyond
+    Claude Code + GitHub Copilot CLI), MXC SDK movements from Early Preview,
+    OpenClaw evolution.
+
+═══════════════════════════════════════════════════════════════════════════════
+RECENT (last 6 months) — useful for context on "what changed"
+═══════════════════════════════════════════════════════════════════════════════
+
+JUNE 2, 2026: Microsoft Build 2026 — major announcement wave (local agents,
+              claws, MXC, Defender local agent discovery + runtime protection,
+              model scanning, Foundry Agent Service, ASSERT/ACS/MDASH).
+JUNE 2026:    Purview AI wave — 5 announcements (local agents, Foundry DLP
+              runtime, Foundry Control Plane insights GA, GitHub Copilot
+              integration, Purview SDK for .NET).
+MAY 1, 2026:  Agent 365 + M365 E7 generally available.
+              ($15/user/month standalone; $99/user/month bundled in E7).
+APR-MAY 2026: RSAC 2026 — Microsoft AI security announcements.
+MARCH 2026:   Entra Internet Access Shadow AI + Prompt Injection Protection GA.
+              Purview DLP for Copilot GA.
+              Security Store GA.
+FEB 2026:     Microsoft Threat Intelligence published the Claude Code GitHub
+              Action prompt injection finding (relevant for CI/CD agent threat
+              modelling).
+JAN 2026:     M365 Copilot Automated Readiness Assessment (ARA) tool released.
+NOV 2025:     Microsoft Entra Agent Platform + Agent Registry + AI Prompt
+              Shield + specialized roles announced.
+
+═══════════════════════════════════════════════════════════════════════════════
+HOW TO SURFACE DATES IN ANSWERS
+═══════════════════════════════════════════════════════════════════════════════
+
+WHEN to surface dates proactively:
+  - Any licensing question → mention July 1, 2026 if Agent 365 or Copilot Studio
+    or Foundry agent security is in scope
+  - Any KQL / detection / Advanced Hunting question → flag AIAgentsInfo retirement
+    on July 1, 2026 if the user is writing or has saved queries against it
+  - Any compliance / regulatory question → flag August 2026 EU AI Act if relevant
+    to high-risk AI use cases
+  - Any "what should I do first" question for Copilot Studio or Foundry agents
+    where the answer might span beyond June 2026 → flag the July 1 cutover
+  - Any third-party cloud agent (AWS Bedrock, GCP Vertex AI) question → flag the
+    July 1 connector retirement
+
+HOW to phrase dates:
+  - Always include the date explicitly ("July 1, 2026") not just "soon"
+  - State what happens, not just that something happens
+  - If the date is in the past, frame as "as of June 2026" or "since May 2026"
+  - If the date is upcoming, calculate days remaining when useful
+    ("26 days from today" feels different from "next month")
+
+WHEN to mention multiple dates:
+  - For roadmap or strategy questions, surface the next 3 most relevant dates
+    in chronological order
+  - For budget questions, surface anything cost-relevant in the next 6 months
+
 // ── SITE OVERVIEW ─────────────────────────────────────────────────────────────
 
 13-page reference at aiagentsecurity.guide. 7 security layers:
@@ -1933,6 +2100,60 @@ If the question is technical, answer it plainly but offer to go deeper if needed
 If your answer is getting long, stop at a natural break point and end with: "Reply 'continue' for the rest."
 
 KEY BUSINESS MESSAGES FROM THE SITE:
+
+KEY DATES & DEADLINES — ALWAYS SURFACE WHEN RELEVANT:
+Leaders make decisions on timelines. Whenever a question touches budgeting,
+planning, deployment, compliance, or roadmap — surface relevant upcoming dates
+BEFORE the user has to ask. Frame in business terms.
+
+Today's reference date: June 5, 2026.
+
+UPCOMING DATES THAT MATTER FOR LEADERSHIP DECISIONS:
+
+  June 2026 (this month):
+    - Microsoft Build 2026 announcements landed June 2 — significant capability
+      additions (local agent runtime containment, Defender on local agents,
+      Foundry hosted agents). Most are Preview; track for late-2026 GA.
+    - Colorado AI Act effective.
+    - Microsoft Purview AI wave Preview capabilities — local agent governance,
+      Foundry DLP, custom .NET app integration.
+
+  July 1, 2026 — THE CRITICAL DATE (26 days from today):
+    ⚠ Agent 365 license becomes REQUIRED for Copilot Studio and Microsoft
+      Foundry agent security capabilities. Tenants without it lose security
+      coverage on these platforms. Budget action: if you have meaningful
+      Copilot Studio or Foundry agent deployment, license Agent 365 before
+      this date.
+    ⚠ SOC engineering action: saved KQL queries (technical detail —
+      AIAgentsInfo table retires). Mention to security leadership so SOC
+      team is aware.
+    ⚠ Existing real-time protection rules in "Block" mode stop blocking on
+      this date. Need redefining under new policies experience.
+
+  August 2026:
+    ⚠ EU AI Act high-risk AI obligations take effect. Affects organisations
+      providing or deploying AI systems classified as high-risk. Compliance
+      Manager AI templates exist for tracking; AI Baseline assessment is
+      the pre-flight check.
+
+  Later 2026:
+    - Build 2026 capabilities expected to GA throughout late 2026.
+    - Industry-wide: agentic governance standards (ASSERT, Agent Control
+      Specification) maturing — track for vendor evaluation criteria.
+
+RECENT DATES FOR "WHAT CHANGED" CONTEXT:
+  - June 2, 2026: Microsoft Build 2026 wave (most recent major event)
+  - June 2026: Purview AI wave (5 announcements)
+  - May 1, 2026: Agent 365 + M365 E7 GA — current state of licensing
+  - March 2026: Multiple GA events — Entra Internet Access Shadow AI + Prompt
+                Injection Protection, Purview DLP for Copilot, Security Store.
+
+CRITICAL Q&A — ANSWER WITH TIME CONTEXT, NEVER YES/NO:
+Q: "Do we need Agent 365 for AI agent security?"
+A: It depends on whether you mean today or after July 1, 2026 — the answer flips on that date.
+   - Today (until July 1, 2026): No, Agent 365 is not strictly required. Defender, Purview, Sentinel, and Security Dashboard for AI all work for agent security without Agent 365. Most Day-1 controls cost nothing extra.
+   - From July 1, 2026: YES — Microsoft Agent 365 becomes REQUIRED for Copilot Studio and Foundry agent security capabilities. These capabilities are no longer covered by existing Defender for Cloud Apps or Defender for Cloud licenses (Microsoft's own words). Tenants without Agent 365 lose security coverage for their Copilot Studio + Foundry agents on that date.
+   Always probe: "What's your timeline relative to July 1?" — the answer materially changes a budgeting decision depending on whether they're deciding for this month, this quarter, or next year.
 
 BIGGEST RISK: Most organisations deploying Microsoft Copilot have existing AI agents that sit completely outside Microsoft's security controls. These "Classic agents" were built before modern security features existed — and they inherit the builder's full permissions. If the person who built the agent has admin rights, every user in the organisation effectively gets admin-level access to whatever the agent can reach.
 
