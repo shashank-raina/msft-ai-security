@@ -409,10 +409,14 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 
 <div class="section-label" style="margin-top:40px;">JUNE 5, 2026</div>
-<h2>Microsoft Learn Comparison Pass · 21 Updates Across 14 Files</h2>
+<h2>Microsoft Learn Comparison Pass · 22 Updates Across 14 Files</h2>
 <table>
 <thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
 <tbody>
+
+<tr><td><span class="tag blue">🔔 Date awareness</span></td>
+<td><strong>Chatbot now proactively surfaces relevant dates and deadlines</strong>. After testing revealed the chatbot would give a "yes/no" answer to "do I need Agent 365" without flagging the July 1, 2026 transition, two changes were made: <strong>(1) Added a "KEY DATES & DEADLINES" registry near the top of both technical and business SYSTEM_PROMPTs</strong> — covers upcoming dates (June 2026 Build wave, July 1 Agent 365 mandate + AIAgentsInfo retirement + RT protection block-mode change + third-party connector retirement + MXC Preview, August 2026 EU AI Act, Colorado AI Act, etc.) and recent dates for context. Includes explicit instructions on when to surface dates proactively (licensing questions → July 1; KQL questions → AIAgentsInfo retirement; compliance questions → AI Act dates; etc.) and how to phrase them (explicit date, what happens, days remaining when relevant). <strong>(2) Added a "FREQUENTLY ASKED LICENSING QUESTION" section</strong> earlier in the technical SYSTEM_PROMPT giving Q&A pattern for "do I need Agent 365?" that the chatbot is instructed to answer with explicit time-bound context (today vs. after July 1, 2026), what's lost without Agent 365 after July 1, and pricing reminders. Same pattern added to the business prompt's KEY BUSINESS MESSAGES. <strong>(3) Chat widget chips updated</strong> — added "⏰ July 1, 2026 cutover" to both technical and business modes (replacing the technical "Microsoft's MCP servers" chip); business mode "Compliance deadlines" chip broadened to "Key dates ahead" covering both regulatory and tech cutover dates.</td>
+<td>chat.js, all 15 HTML files (chip refresh)</td></tr>
 
 <tr><td><span class="tag blue">🆕 Defender deep-dive</span></td>
 <td><strong>Defender local AI agent discovery + runtime protection — full detail added from the authoritative Microsoft Learn docs and the Microsoft Threat Protection blog</strong>. Earlier in this session the site had general coverage of "Defender local agent discovery"; this round adds the specifics. Sources: <a href="https://learn.microsoft.com/en-us/defender-endpoint/local-agent-discovery-overview" target="_blank" style="color:var(--blue);">local agent discovery overview</a>, <a href="https://learn.microsoft.com/en-us/defender-endpoint/ai-agent-runtime-protection-overview" target="_blank" style="color:var(--blue);">runtime protection overview</a>, and <a href="https://techcommunity.microsoft.com/blog/microsoftthreatprotectionblog/the-next-frontier-in-endpoint-security-securing-local-ai-agents-with-microsoft-d/4524651" target="_blank" style="color:var(--blue);">the Microsoft Threat Protection blog post</a>. <strong>Additions:</strong> (1) Full 5-category taxonomy of supported agents — CLI agents (Claude Code, Codex CLI, Gemini CLI, GitHub Copilot CLI, OpenCode, Antigravity CLI), Desktop apps (ChatGPT, Claude, Codex, Ollama, Poe), Agentic IDEs (Cursor, Antigravity, Windsurf), VS Code extensions (Claude Code, Cline, Codex, Gemini Code Assist, GitHub Copilot, Roo Code), Claw-based agents (OpenClaw, Clawpilot, Claw/Nanobot) — 20+ specific products. (2) <strong>Agent definition clarified</strong>: combination of user + device + agent type (one entry per triple, not per project folder). (3) <strong>Runtime protection mechanics</strong>: 3 hook points (user prompt, pre-tool call, post-tool response); 3 modes (Block/Audit/Disabled with Audit as recommended starting mode); Tamper Protection; alert name "Suspicious AI prompt injection"; currently supports Claude Code + GitHub Copilot CLI via their published hooks frameworks. (4) <strong>Three views in the Defender portal</strong>: inventory, exposure map (visual relationships between agents/devices/identities/resources), Advanced Hunting. (5) <strong>Microsoft's canonical example</strong> documented — coding agent fetches doc → hidden inject instructs read of <code>.env</code> + POST to external URL → Defender blocks at post-tool response. (6) <strong>Platform clarification</strong>: Learn doc is explicit on Windows-only today (blog mentions macOS, likely planned but not in the Learn-authoritative state). product-map.html now has two Defender cards (Discovery + Runtime Protection) instead of one; mcp.html has a new "Endpoint inventory & runtime protection" section since most discovered agents are MCP clients; agent365.html Native Windows table updated with the discovery + runtime protection rows in full detail; chat.js SYSTEM_PROMPT expanded with the full agent list + hooks framework references + canonical example.</td>
@@ -2139,26 +2143,26 @@ document.addEventListener('DOMContentLoaded', function(){
     technical: [
       {q:'What should I set up on Day 1?', label:'Day 1 setup'},
       {q:'What is the six-phase AI security rollout?', label:'Six-phase rollout'},
-      {q:"What's new in the November 2025 Microsoft AI security wave?", label:'Latest from Microsoft'},
+      {q:'What changes on July 1, 2026 across Microsoft AI security?', label:'⏰ July 1, 2026 cutover'},
+      {q:"What's new in the latest Microsoft AI security waves (Nov 2025 + June 2026 Build)?", label:'Latest from Microsoft'},
       {q:'How do I classify agents by risk tier (High / Medium / Low)?', label:'Risk tier H/M/L'},
       {q:'What are the four AI security KPIs to track weekly?', label:'Four KPIs'},
       {q:'What are the five risk detections in ID Protection for Agents?', label:'ID Protection detections'},
       {q:"What's the difference between Classic and Modern agents?", label:'Classic vs Modern'},
       {q:'Does CA for Agents apply to Copilot Studio?', label:'CA for Agents?'},
       {q:'What is the Owner / Sponsor / Approver role model for agents?', label:'Owner/Sponsor/Approver'},
-      {q:"What MCP servers does Microsoft provide and how do they compare?", label:"Microsoft's MCP servers"},
     ],
     business: [
       {q:"We're rolling out Microsoft Copilot — what are the main security risks we should know about?", label:'Copilot risks'},
       {q:'What do we need to do on day one before anything else?', label:'Day one priority'},
+      {q:'What changes for our organisation on July 1, 2026 across Microsoft AI security?', label:'⏰ July 1, 2026 cutover'},
       {q:"What's new in Microsoft AI security that leadership should know about?", label:'Latest from Microsoft'},
       {q:'Can you explain the six-phase AI security rollout in simple terms?', label:'Six-phase rollout (simple)'},
       {q:'What four AI security metrics should we report to the board?', label:'Four KPIs for the board'},
       {q:'What should be in a quarterly AI risk report to the board?', label:'Quarterly board pack'},
       {q:'What governance forums do we need to oversee AI agents?', label:'Governance forums'},
       {q:'What licences do we need to secure our AI agents?', label:'Licences needed'},
-      {q:'Are there any compliance or regulatory deadlines we should be aware of?', label:'Compliance deadlines'},
-      {q:'How do I explain AI security risk to my board or leadership team?', label:'Explaining to the board'},
+      {q:'What compliance and regulatory dates should we be tracking (EU AI Act, Colorado AI Act, July 1 cutover)?', label:'Key dates ahead'},
     ]
   };
 
