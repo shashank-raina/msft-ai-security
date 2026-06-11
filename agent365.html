@@ -546,6 +546,28 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <div class="section-label" style="margin-top:48px;">Licensing</div>
 <h2>Two ways to get Agent 365</h2>
 
+<div class="callout callout-warn" style="margin-top:8px;background:#fff8e6;border-color:#e8b840;">
+  <div class="callout-title">⚠ Critical date — July 1, 2026: Agent 365 becomes required for Copilot Studio + Foundry agent security</div>
+  <p>Until July 1, 2026, Agent 365 is <strong>optional</strong> — Defender for Cloud Apps, Purview, Sentinel, Security Dashboard for AI, and Entra Conditional Access all provide meaningful agent security coverage using existing licensing. From July 1, 2026, that changes. Per Microsoft's <a href="https://learn.microsoft.com/en-us/defender-xdr/security-for-ai/transition-agent-security-to-agent-365" target="_blank" style="color:var(--blue);">transition guide</a>: <em>"AI agent security capabilities for Copilot Studio and Foundry agents require a Microsoft Agent 365 license. These capabilities are no longer covered by existing Defender for Cloud Apps or Defender for Cloud licenses."</em></p>
+  <p style="margin-top:10px;"><strong>What's no longer covered after July 1 (requires Agent 365):</strong></p>
+  <ul style="margin:6px 0 0 18px;font-size:13px;line-height:1.8;">
+    <li>Copilot Studio agent security through Defender for Cloud Apps</li>
+    <li>Foundry agent security posture through Defender for Cloud</li>
+    <li>Third-party cloud agent discovery (AWS Bedrock, GCP Vertex AI) via Defender for Cloud connectors — replaced by <strong>Agent 365 Registry sync</strong></li>
+    <li>Existing real-time protection rules in "Block" mode stop blocking — alerts move to BehaviorInfo; block rules need redefining under Settings → Security for AI → Policies (the new policies experience launches July 1)</li>
+  </ul>
+  <p style="margin-top:10px;"><strong>What still works without Agent 365 after July 1:</strong></p>
+  <ul style="margin:6px 0 0 18px;font-size:13px;line-height:1.8;">
+    <li>General Defender for Cloud Apps (CASB layer, CloudAppEvents) — not the AI-specific agent security overlay</li>
+    <li>Purview DSPM for AI, DLP, audit, Compliance Manager, AI Baseline</li>
+    <li>Sentinel data lake and analytics</li>
+    <li>Security Dashboard for AI (GA, no extra licence — Day 1 setup)</li>
+    <li>Entra Conditional Access for Modern agents</li>
+    <li>Defender for Endpoint local agent discovery + AI agent runtime protection (these are Defender for Endpoint capabilities, not Agent 365)</li>
+  </ul>
+  <p style="margin-top:10px;"><strong>Budget action:</strong> if you have meaningful Copilot Studio or Microsoft Foundry agent deployment in your environment, license Agent 365 before July 1, 2026. The pricing cards below are the two options.</p>
+</div>
+
 <div class="a365-lic-grid">
   <div class="a365-lic-card standalone">
     <div class="a365-lic-price">$15</div>
@@ -579,6 +601,40 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
       <p style="font-size:11px;margin:0;"><strong>💡 When E7 makes sense:</strong> If you're buying M365 Copilot + E5 + Entra Suite anyway, E7 likely costs less than the sum of parts. Run the numbers — the break-even depends on your existing licence baseline.</p>
     </div>
   </div>
+</div>
+
+<div class="section-label" style="margin-top:48px;">Going Forward</div>
+<h2>How Agent 365 is positioned post-July 1, 2026</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">Once the July 1, 2026 transition completes, Agent 365 becomes the <strong>unified control plane</strong> for agent security across the Microsoft stack. The architectural picture is cleaner than today's overlapping coverage from Defender for Cloud Apps + Defender for Cloud + Purview signals.</p>
+
+<table>
+<thead><tr><th>Capability</th><th>Today (until July 1)</th><th>From July 1, 2026 onwards</th></tr></thead>
+<tbody>
+<tr><td><strong>Copilot Studio agent security</strong></td><td>Defender for Cloud Apps + Agent 365 (overlapping)</td><td><strong>Agent 365 only</strong> (Defender for Cloud Apps no longer carries the AI overlay for these)</td></tr>
+<tr><td><strong>Foundry agent security posture</strong></td><td>Defender for Cloud + Agent 365 (overlapping)</td><td><strong>Agent 365 only</strong> (Defender for Cloud no longer carries it)</td></tr>
+<tr><td><strong>Third-party cloud agent discovery (AWS Bedrock, GCP Vertex AI)</strong></td><td>Defender for Cloud connectors</td><td><strong>Agent 365 Registry sync</strong> (configure before July 1 to maintain visibility)</td></tr>
+<tr><td><strong>Real-time protection block rules</strong></td><td>Existing rules continue blocking</td><td><strong>Block rules need redefining</strong> under Settings → Security for AI → Policies (new experience launches July 1)</td></tr>
+<tr><td><strong>Advanced Hunting</strong></td><td>AIAgentsInfo table (works until July 1)</td><td><strong>AgentsInfo</strong> (unified across all platforms — Copilot Studio, Foundry, M365 Copilot, third-party, endpoint-discovered)</td></tr>
+<tr><td><strong>Real-time protection alerts</strong></td><td>Surface in existing alert tables</td><td>Move to <strong>BehaviorInfo</strong> table</td></tr>
+<tr><td><strong>Defender + Entra + Intune + Purview protections for local agents</strong></td><td>Separate signals from each product</td><td><strong>Delivered through MXC (Microsoft Execution Containers)</strong> — native Agent 365 + MXC integration enters Preview July 2026</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 The architectural promise — Agent 365 as single agent control plane</div>
+  <p>Microsoft's positioning post-July 1: agent identity (via Entra Agent ID), runtime environment (Intune-controlled MXC for local agents, Foundry Agent Service for hosted, Windows 365 for Agents for managed Cloud PCs), data interactions observed (Purview), and threat monitoring (Defender) all converge through Agent 365 as the central plane. <strong>Same control surface regardless of where the agent runs</strong> — on a developer laptop, in Foundry, in Copilot Studio, in a partner cloud, or in a Windows 365 for Agents instance.</p>
+  <p style="margin-top:8px;">This isn't a marketing claim — it's reflected in concrete product mechanics. The new Agent 365 admin centre in M365 (entering Preview alongside the July 1 transition) is where you'll see your tenant's full agent inventory, governance state, security posture, and incident timeline from <em>any</em> agent platform.</p>
+</div>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 What this means for architecture decisions today</div>
+  <p>If you're standing up an AI agent practice now, three things to plan for:</p>
+  <ol style="margin:8px 0 0 22px;font-size:13px;line-height:1.9;">
+    <li><strong>License Agent 365 before July 1</strong> if you have meaningful Copilot Studio or Foundry deployment. Don't wait for the cutover — preview features (Agent 365 + MXC native integration, Foundry Agent Service hosted agents) ramp through July 2026 and onwards.</li>
+    <li><strong>Migrate KQL queries</strong> from AIAgentsInfo to AgentsInfo now. The translation table is on the <a href="playbooks.html#playbook1" style="color:var(--blue);">playbooks page</a>. Saved detections, custom workbooks, scheduled rules — all need updating before the old table retires.</li>
+    <li><strong>Inventory existing block rules</strong> in your tenant's real-time protection configuration. Document what they block and why; you'll need to recreate them under the new policies experience after July 1.</li>
+  </ol>
+  <p style="margin-top:8px;font-size:12px;color:var(--text2);">If you're not yet deploying Copilot Studio or Foundry agents at scale, the July 1 transition is less urgent — but the architectural picture for any future agent deployment is shaped by Agent 365 as the control plane. Defender + Purview + Entra + Intune still play their roles; Agent 365 stitches them together for agents specifically.</p>
 </div>
 
 <div class="section-label" style="margin-top:48px;">Registry Convergence</div>
