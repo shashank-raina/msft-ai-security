@@ -764,6 +764,70 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <p>Both findings share a pattern: <strong>the agent runtime is a trust boundary</strong>. CI/CD context-injection works because the agent has secrets and the developer didn't realise prompts were untrusted input. Malicious skills work because OpenClaw skills run with full user permissions and developers didn't realise installation was a security event. The fix for both isn't to abandon the technology — it's to apply the same hygiene to agent-adjacent surfaces that's already standard for traditional software: minimum-privilege scopes, vetted dependencies, runtime containment, monitored execution.</p>
 </div>
 
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- THE DEFENDER FLIP-SIDE — MICROSOFT'S MDASH -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:48px;">Defender flip-side</div>
+<h2>Codename MDASH — Microsoft's autonomous vulnerability discovery, in production</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">On May 12, 2026, Microsoft <a href="https://www.microsoft.com/en-us/security/blog/2026/05/12/defense-at-ai-speed-microsofts-new-multi-model-agentic-security-system-tops-leading-industry-benchmark/" target="_blank" style="color:var(--blue);">disclosed that its new multi-model agentic scanning harness (codename MDASH)</a> found <strong>16 new vulnerabilities</strong> across the Windows networking and authentication stack — including four Critical remote code execution flaws in the Windows kernel TCP/IP stack and the IKEv2 service. All shipped as that day's Patch Tuesday. For security architects, this is the most important defensive AI announcement of 2026 because it crosses a threshold: <strong>AI-powered vulnerability discovery is no longer a research curiosity but a production-grade defender capability at enterprise scale.</strong></p>
+
+<div class="callout callout-info" style="margin-top:8px;">
+  <div class="callout-title">📌 What MDASH actually is</div>
+  <p>MDASH is an <strong>autonomous vulnerability discovery and remediation pipeline</strong> built by Microsoft's Autonomous Code Security (ACS) team — several of whom came from Team Atlanta, the team that won the DARPA AI Cyber Challenge (AIxCC) by building autonomous cyber-reasoning systems. Led by Taesoo Kim (VP Agentic Security, Microsoft; Georgia Tech professor on leave). It's currently used by Microsoft engineering teams and tested by a small set of customers as part of a <strong>limited private preview</strong>.</p>
+  <p style="margin-top:8px;"><strong>The architectural pattern:</strong> rather than relying on a single best model, MDASH orchestrates <strong>more than 100 specialised AI agents</strong> across an ensemble of frontier and distilled models — auditors, debaters, dedupers, provers. Pipeline stages: <strong>Prepare → Scan → Validate → Dedupe → Prove</strong>. Each stage has its own role, prompts, tools, and stop criteria. Disagreement between models is itself a signal: when an auditor flags something and the debater can't refute it, the finding's credibility goes up.</p>
+</div>
+
+<h2 style="margin-top:32px;">The May 12, 2026 Patch Tuesday cohort — 16 CVEs found by AI</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">The full cohort spans 10 kernel-mode and 6 user-mode CVEs, the majority reachable from a network position with no credentials. A selected set:</p>
+
+<table>
+<thead><tr><th>CVE</th><th>Component</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><strong>CVE-2026-33827</strong></td><td>tcpip.sys</td><td>Remote unauth use-after-free via crafted IPv4 SSRR packets (race-driven, requires winning a timing window in kernel)</td></tr>
+<tr><td><strong>CVE-2026-33824</strong></td><td>ikeext.dll</td><td>Unauthenticated IKEv2 SA_INIT + fragmentation → deterministic double-free → <strong>LocalSystem RCE</strong>. Reachable on RRAS VPN, DirectAccess, Always-On VPN, IPsec connection security rules.</td></tr>
+<tr><td><strong>CVE-2026-40406</strong></td><td>tcpip.sys</td><td>Use-after-free in Ipv4pReassembleDatagram leading to disclosure</td></tr>
+<tr><td><strong>CVE-2026-40415</strong></td><td>tcpip.sys</td><td>Pre-auth remote UAF via SA double-decrement</td></tr>
+<tr><td><strong>CVE-2026-33096</strong></td><td>http.sys</td><td>Unauth remote QUIC control-stream out-of-bounds read</td></tr>
+<tr><td><strong>CVE-2026-41089</strong></td><td>netlogon.dll</td><td>Unauthenticated CLDAP User= filter stack overflow</td></tr>
+<tr><td><strong>CVE-2026-40399</strong></td><td>tcpip.sys</td><td>Kernel stack buffer overflow via RPC blob</td></tr>
+<tr><td><strong>CVE-2026-41096</strong></td><td>dnsapi.dll</td><td>Crafted UDP DNS response triggers heap OOB</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 Why this matters more than the individual CVEs</div>
+  <p>These bugs aren't visible to a model handed a single function. Two patterns explain why a single-model approach misses them:</p>
+  <ul style="margin:8px 0 0 18px;font-size:13px;line-height:1.8;">
+    <li><strong>Cross-file lifetime reasoning.</strong> The IKEv2 double-free spans <em>six source files</em>. The bug is only visible against the contrast of the correctly-handled version of the same pattern elsewhere in the codebase. Detection requires comparing the missing step at one site to the present step at another.</li>
+    <li><strong>Multi-step reachability + race conditions.</strong> The tcpip.sys UAF requires composing an SSRR-flagged packet, a default config that allows the path, AND concurrent subsystems racing to reclaim the freed object. Single-shot analysis collapses these steps and loses the interaction.</li>
+  </ul>
+  <p style="margin-top:8px;">Validation is the difference between a finding and a fix. A scanner that flags candidates produces a triage backlog. MDASH's prove stage <strong>constructs and executes triggering inputs</strong> dynamically — turning candidate findings into proven vulnerabilities that survive being argued against by a debater agent and reproduced by a prover agent.</p>
+</div>
+
+<h2 style="margin-top:32px;">Benchmark performance</h2>
+<table>
+<thead><tr><th>Benchmark</th><th>Result</th><th>Significance</th></tr></thead>
+<tbody>
+<tr><td><strong>StorageDrive</strong> (Microsoft interview test driver, private codebase, 21 planted vulnerabilities)</td><td>21/21 found · 0 false positives</td><td>Proves the system isn't memorising — code never seen by any model</td></tr>
+<tr><td><strong>clfs.sys</strong> 5-year MSRC historical recall (28 cases)</td><td>96% recall</td><td>The bugs that <em>actually mattered</em> — required real Patch Tuesdays</td></tr>
+<tr><td><strong>tcpip.sys</strong> 5-year MSRC historical recall (7 cases)</td><td>100% recall</td><td>Same — bugs real attackers exploited, perfectly recovered</td></tr>
+<tr><td><strong>CyberGym</strong> (public benchmark — 1,507 real-world vulns across 188 OSS-Fuzz projects)</td><td><strong>88.45%</strong> success rate</td><td><strong>Top score on the leaderboard</strong>, ~5 points ahead of next entry (Anthropic at 83.1%). Achieved with generally available models — the surrounding agentic system contributed substantially beyond raw model capability.</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-warn" style="margin-top:14px;">
+  <div class="callout-title">⚠ The strategic implication for any security architect</div>
+  <p>Microsoft is telling the industry something specific: <strong>"the harness around the model is most of the engineering, not the model itself."</strong> The system absorbs model improvements — new models drop in with an A/B config flip; the targeting, validation, dedupe, and proof stages don't get rewritten. Customer investment (scope files, plugins, configurations, calibrations) carries over.</p>
+  <p style="margin-top:8px;">For your own AI security tooling decisions, the question to ask vendors changes from <em>"which model does it use?"</em> to <strong>"what does it do with the model, and what survives when the next model arrives?"</strong> Tools whose value is gated on a particular model become obsolete every six months as the frontier shifts. Tools with a durable harness pattern carry forward.</p>
+  <p style="margin-top:8px;">Practical: when evaluating AI vulnerability scanners, AI red-teaming tools, AI SOC agents — ask about the orchestration pattern. Multi-agent + specialised roles + ensemble disagreement + plugin extensibility = durable. Single-prompt-against-best-model = ephemeral.</p>
+</div>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 What MDASH means for attackers — and how to think about it</div>
+  <p>The honest read: attackers can build similar systems. The asymmetry today is that Microsoft has the proprietary code (Windows, Hyper-V, Azure are not in any model's training corpus) and the engineering scale; attackers have to start from public code. But the technique is generalisable. Within 12–24 months, expect AI-powered vulnerability discovery on the offensive side to compress the discover-to-exploit window further.</p>
+  <p style="margin-top:8px;"><strong>What defenders should do now:</strong> stay current on patches (the discover-to-patch window is what protects you); reduce attack surface; secure your source code; for organisations that develop software at scale, evaluate the MDASH private preview when it opens more broadly — or equivalent multi-agent vulnerability discovery from other vendors.</p>
+</div>
+
 <div class="page-nav"><a href="mcp.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">MCP</span></a><a href="frameworks.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Frameworks</span></a></div>
 <div style="text-align:center;margin:32px 0 0;padding:24px 0;border-top:1px solid var(--border2);">
   <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text3);margin-bottom:10px;">STAY UPDATED</div>

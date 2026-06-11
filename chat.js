@@ -635,6 +635,48 @@ KEY NEW CONCEPTS:
    AUTHORITATIVE LEARN:
    https://learn.microsoft.com/en-us/defender-endpoint/ai-agent-runtime-protection-overview
 
+   ────────────────────────────────────────────────────────────────────────────
+   CONFIGURATION & DEPLOYMENT (per the configure guide):
+   AUTHORITATIVE LEARN:
+   https://learn.microsoft.com/en-us/defender-endpoint/configure-ai-agent-runtime-protection
+
+   PREREQUISITES:
+     - Devices onboarded to Defender for Endpoint
+     - Devices on BETA platform + engine update channel (current constraint —
+       NOT available on the standard ring; this is the most common rollout gotcha)
+     - Defender Antivirus in active mode
+     - Supported local AI agent installed (Claude Code or GitHub Copilot CLI today)
+     - Agent natively supports a hooks framework
+     - AntivirusSignatureVersion >= 1.451.224.0
+
+   ENABLEMENT — PowerShell only (no Intune policy yet):
+     Set-MpPreference -PlatformUpdatesChannel Beta
+     Set-MpPreference -EngineUpdatesChannel Beta
+     Update-MpSignature   # run 3 times per MS guidance
+     Get-MpComputerStatus | Select-Object AntivirusSignatureVersion
+     Set-MpPreference -AiAgentProtection <Disabled|Audit|Block>
+     Get-MpPreference | Select-Object AiAgentProtection   # verify
+
+   FLEET DEPLOYMENT:
+     No native Intune configuration profile. Wrap PowerShell in a script and
+     deploy via Intune → Devices → Scripts. Same command, scaled to device groups.
+
+   RECOMMENDED 4-PHASE ROLLOUT:
+     1. Test — Audit mode on small set of devices where supported agents used
+     2. Review — monitor alerts for 1-2 weeks, submit false positives to MS
+     3. Deploy — roll out in Audit mode org-wide
+     4. Enforce — switch to Block mode on selected device groups after validation
+
+   ALERT SEVERITY BEHAVIOUR (important for SOC capacity planning):
+     - Block mode: Critical / High / Medium / Low based on assessed risk
+     - Audit mode: Informational only (let team review without active triage)
+
+   END-USER EXPERIENCE WHEN BLOCK MODE TRIGGERS:
+     - Block message in agent terminal (what blocked, why, confirms didn't execute)
+     - Windows toast notification (regardless of agent terminal focus)
+     - Reviewable in Windows Security > Virus & threat protection >
+       Current threats / Protection history (same surface as other Defender events)
+
 7b. DEFENDER MULTI-CLOUD AGENT DISCOVERY (referenced in same Learn page)
     Defender also discovers cloud and platform agents from:
       - Microsoft Copilot Studio
@@ -673,13 +715,115 @@ KEY NEW CONCEPTS:
        Hook points: prompt receive, tool call, response generation, action commit.
        Once tools converge on ACS-compatible schemas, controls become portable
        across runtimes (Copilot Studio, Foundry, OpenClaw, third-party).
-    c. Codename MDASH
-       Microsoft's defence-side project mentioned alongside ASSERT/ACS.
-       Limited public detail. Track for future.
+    (NOTE: "Codename MDASH" was previously listed here. It's actually a
+    different category — Microsoft's autonomous vulnerability discovery
+    system, not an open standard. See dedicated MDASH section below.)
 
 ECOSYSTEM NOTES:
   NVIDIA OpenShell brings to Windows on MXC — autonomous always-on agents.
   Hermes Agent (Nous Research) integrating OpenShell + MXC on Windows.
+
+// ── CODENAME MDASH — MULTI-MODEL AGENTIC SCANNING HARNESS ────────────────────
+
+Announced May 12, 2026 by Taesoo Kim (VP Agentic Security, Microsoft) in a
+Microsoft Security blog post titled "Defense at AI speed: Microsoft's new
+multi-model agentic security system tops leading industry benchmark."
+
+URL: https://www.microsoft.com/en-us/security/blog/2026/05/12/defense-at-ai-speed-microsofts-new-multi-model-agentic-security-system-tops-leading-industry-benchmark/
+
+WHAT IT IS:
+  Autonomous vulnerability discovery and remediation pipeline. Built by
+  Microsoft's Autonomous Code Security (ACS) team — several members came
+  from Team Atlanta, the team that won the DARPA AI Cyber Challenge (AIxCC)
+  with a $6M prize. Currently in LIMITED PRIVATE PREVIEW — used internally by
+  Microsoft engineering teams + tested by small set of customers.
+
+  Collaborators: Microsoft Offensive Research & Security Engineering (MORSE),
+  Microsoft Windows Attack Research and Protection (WARP).
+
+ARCHITECTURE:
+  Orchestrates 100+ specialised AI agents across an ensemble of frontier
+  AND distilled models. NOT a single best model — multi-model by design.
+  
+  Pipeline stages (model-agnostic by construction):
+    1. PREPARE — Ingest source, build language-aware indices, draw attack
+                 surface + threat models by analysing past commits
+    2. SCAN — Specialised auditor agents run over candidate code paths,
+              emit candidate findings with hypotheses + evidence
+    3. VALIDATE — Debater agents argue for and against each finding's
+                  reachability and exploitability
+    4. DEDUPE — Collapse semantically equivalent findings (patch-based grouping)
+    5. PROVE — Construct + execute triggering inputs, validate pre-conditions
+               dynamically, formulate bug-triggering inputs (e.g., ASan for C/C++)
+
+  KEY DESIGN PROPERTIES:
+    a. Ensemble of diverse models — SOTA heavy reasoner + distilled cost-
+       effective debater + independent SOTA counterpoint. Disagreement
+       BETWEEN models is itself a signal: when auditor flags something and
+       debater can't refute it, credibility goes up.
+    b. Specialised agents per stage — 100+ agents, each with own role,
+       prompts, tools, stop criteria. Constructed via deep research with
+       past CVEs and their patches.
+    c. Extensible plugins — domain experts inject context the foundation
+       models can't see (kernel calling conventions, IRP rules, lock
+       invariants, IPC trust boundaries). Example: CLFS proving plugin
+       knows on-disk container layout, block-validation sequence, in-memory
+       state machine. CodeQL DB integration also possible.
+
+BENCHMARK RESULTS:
+  - StorageDrive (private test driver, 21 planted vulns, never in any
+    model's training data): 21/21 found, 0 false positives.
+  - clfs.sys 5-year MSRC recall: 96% (28 cases). The bugs that actually
+    mattered — required real Patch Tuesdays.
+  - tcpip.sys 5-year MSRC recall: 100% (7 cases).
+  - CyberGym (public benchmark, 1,507 real-world vulns from 188 OSS-Fuzz
+    projects): 88.45% — TOP SCORE on leaderboard, ~5 points ahead of next
+    entry (Anthropic at 83.1%). Achieved with generally available models.
+
+MAY 12, 2026 PATCH TUESDAY COHORT — 16 NEW CVEs found by MDASH:
+  10 kernel-mode + 6 user-mode. Most reachable from network position, no
+  credentials. Notable examples:
+    CVE-2026-33824 — IKEEXT.dll, unauthenticated IKEv2 SA_INIT + fragmentation
+                     → deterministic double-free → LocalSystem RCE. Reachable
+                     on RRAS VPN, DirectAccess, Always-On VPN, IPsec rules.
+    CVE-2026-33827 — tcpip.sys, remote unauth UAF via crafted IPv4 SSRR
+                     packets. Race-driven (requires winning timing window
+                     in kernel SMP).
+    CVE-2026-40406 — tcpip.sys, UAF in Ipv4pReassembleDatagram.
+    CVE-2026-33096 — http.sys, unauth remote QUIC control-stream OOB read.
+    CVE-2026-41089 — netlogon.dll, unauth CLDAP User= filter stack overflow.
+
+WHY MULTI-MODEL > SINGLE-MODEL:
+  The IKEv2 double-free spans 6 source files. The bug is visible only
+  against the contrast of the correct version of the same pattern elsewhere
+  in the same codebase. Detection requires cross-file pattern comparison.
+  
+  The tcpip.sys UAF requires composing:
+    - SSRR-flagged input
+    - default config that allows the path
+    - concurrent subsystems racing to reclaim the freed object
+  Single-shot analysis collapses these steps and loses interaction.
+
+STRATEGIC TAKEAWAY FOR ARCHITECTS:
+  Microsoft's framing: "The harness around the model is most of the engineering,
+  not the model itself." System absorbs model improvements (config flip + A/B
+  test, not rewrite). Customer investment (scope files, plugins, configs,
+  calibrations) carries over.
+  
+  Change the question you ask vendors of AI security tooling from
+  "WHICH MODEL does it use?" to "WHAT DOES IT DO WITH THE MODEL, and what
+  SURVIVES when the next model arrives?" Single-prompt-against-best-model
+  tools become obsolete every 6 months. Multi-agent + specialised roles +
+  ensemble disagreement + plugin extensibility = durable.
+
+WHEN TO MENTION MDASH:
+  - When user asks about AI-powered vulnerability discovery
+  - When user asks about Security Copilot, autonomous SOC agents, or
+    AI-powered defender capabilities
+  - When user mentions Patch Tuesday or asks about recent CVEs
+  - When user asks about CyberGym or AI security benchmarks
+  - When user asks "how do we evaluate AI security tools" — the durability
+    framing matters
 
 REAL-WORLD THREAT FINDING — CLAUDE CODE GITHUB ACTION PROMPT INJECTION:
   Microsoft Threat Intelligence (Feb 2026) identified prompt injection pathway
@@ -2120,6 +2264,31 @@ copilot-vs-foundry.html Side-by-side security handbook
 zero-trust.html         Zero Trust for AI — 3 principles · maturity model · 12 priority controls
 changelog.html          What changed and when
 contact.html            Feedback form
+
+══════════════════════════════════════════════════════════════════════════════
+🛑 FINAL REMINDER BEFORE YOU ANSWER — CHECK THESE EVERY TIME
+══════════════════════════════════════════════════════════════════════════════
+
+You have just read ~2,000 lines of site content. Before producing your answer,
+re-confirm these rules from the top of this prompt:
+
+✓ If the question is about LICENSING (Agent 365, Defender, Purview, Sentinel,
+  Entra Agent ID): include the July 1, 2026 cutover. Today vs. after July 1 —
+  the answer flips. Never give "yes" or "no" without that time context.
+
+✓ If the question involves KQL or Advanced Hunting: use "AgentsInfo" (the new
+  unified table). Never write "AIAgentsInfo" in any new query example —
+  that table retires July 1, 2026.
+
+✓ If the question involves CA for Agents: it does NOT apply to Copilot Studio.
+
+✓ For ANY question touching budget / planning / deployment / compliance /
+  schema / roadmap: surface relevant upcoming dates (July 1, 2026 ·
+  August 2026 EU AI Act · etc.) PROACTIVELY before the user has to ask.
+
+✓ End with one short, relevant follow-up question.
+
+══════════════════════════════════════════════════════════════════════════════
 `;
 
 
@@ -2311,6 +2480,19 @@ Microsoft Build 2026 (June 2, 2026) introduced significant additions to how loca
 
 In business terms: AI agents now have the same enterprise treatment as employees — they have an identity, run in a managed environment, have their data interactions observed, and are monitored for risk. The big shift is that this now applies to local agents on developer laptops, not just cloud-hosted agents.
 
+MDASH (CODENAME) — WHAT LEADERSHIP NEEDS TO KNOW:
+Microsoft announced (May 12, 2026) that its new multi-model agentic security system has crossed a threshold: AI-powered vulnerability discovery is now production-grade, not research. Translated for leadership:
+  1. Microsoft's internal system (codename MDASH) found 16 new CVEs in the May 12 Patch Tuesday, including 4 Critical remote code execution flaws in Windows. These weren't found by humans — they were found by AI.
+  2. The system scored 88.45% on the leading public benchmark (CyberGym, 1,507 real-world vulnerabilities) — the top score, about 5 points ahead of the next entry. It found all 21 planted bugs in a private test driver with zero false positives.
+  3. It's currently used internally by Microsoft engineering teams + tested in a limited private preview by a small set of customers.
+
+Why this matters for leadership:
+  - AI-powered vulnerability discovery is no longer theoretical — attackers can build similar systems. Within 12-24 months, expect the discover-to-exploit window to compress further.
+  - The strategic implication for vendor evaluation: ask AI security tools "what does it do with the model?" not just "which model does it use?" Tools whose value depends on a specific model become obsolete in 6 months as the frontier shifts. Tools with durable multi-agent architectures carry forward.
+  - For organisations developing software at scale: this is a category of capability worth evaluating now — Microsoft's private preview is one option; comparable approaches will emerge from other vendors.
+
+For most CISOs the practical takeaway is simpler: stay current on patches faster (the discover-to-patch window is what protects you), reduce attack surface, and treat AI-powered defensive tooling as a category of investment to plan for in 2026-2027 budgets.
+
 JULY 1, 2026 — CRITICAL DATE FOR LEADERSHIP AWARENESS:
 Three things happen on July 1, 2026 that require leadership awareness (and likely budget action):
   1. Microsoft Agent 365 license becomes REQUIRED for Copilot Studio and Foundry agent security capabilities. Tenants without it lose security coverage through Defender for Cloud Apps + Defender for Cloud. If your organisation has been getting agent security through existing Defender licences, that path closes on July 1.
@@ -2328,6 +2510,26 @@ FULL SITE CONTENT — same as technical mode, translate into plain English
 ================================================================================
 
 ${SYSTEM_PROMPT}
+
+══════════════════════════════════════════════════════════════════════════════
+🛑 FINAL REMINDER BEFORE YOU ANSWER (BUSINESS MODE)
+══════════════════════════════════════════════════════════════════════════════
+
+Translate everything above into plain English. Before producing your answer,
+confirm:
+
+✓ LICENSING questions (Agent 365, Defender, Purview, etc.): include the
+  July 1, 2026 cutover. Today vs. after July 1 — the answer flips. Never
+  say "yes" or "no" to "do we need Agent 365?" without that time context.
+
+✓ Any BUDGET / PLANNING / DEPLOYMENT / COMPLIANCE question: surface relevant
+  upcoming dates (July 1, 2026 mandate · August 2026 EU AI Act · etc.)
+  PROACTIVELY before the user has to ask.
+
+✓ Avoid jargon. No KQL. No product configuration steps unless asked.
+  Frame in terms of "what does this mean for our organisation?"
+
+✓ End with one short, business-relevant follow-up question.
 `;
 
 // =============================================================================
@@ -2373,7 +2575,11 @@ export async function onRequestPost(context) {
         "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({
-        model: "claude-haiku-4-5-20251001",
+        // Model: Sonnet 4.6 — substantially more reliable at following the
+        // mandatory pre-answer rules in this long prompt than Haiku.
+        // Fallback to cheaper Haiku if cost becomes an issue:
+        //   "claude-haiku-4-5-20251001"  (cheaper, less reliable rule-following)
+        model: "claude-sonnet-4-6",
         max_tokens: 2048,
         system: mode === 'business' ? BUSINESS_SYSTEM_PROMPT : SYSTEM_PROMPT,
         messages: messages.slice(-10),

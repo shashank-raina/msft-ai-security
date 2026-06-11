@@ -644,7 +644,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <div class="callout callout-info" style="margin-top:14px;">
   <div class="callout-title">📌 How the inspection works in practice</div>
   <p>Defender uses each agent's published <strong>hooks framework</strong> (<a href="https://code.claude.com/docs/en/hooks" target="_blank" style="color:var(--blue);">Claude Code hooks</a>, <a href="https://docs.github.com/copilot/how-tos/copilot-cli/customize-copilot/use-hooks" target="_blank" style="color:var(--blue);">GitHub Copilot CLI hooks</a>) — Defender registers as a hook consumer at the three inspection points. This means added latency is minimal because each scan is a fast inline check, not continuous monitoring of the agent process.</p>
-  <p style="margin-top:8px;"><strong>Modes:</strong> <em>Block</em> (Defender stops the action, notifies the user via agent UI + Windows toast, raises an alert correlated into Defender incidents); <em>Audit</em> (action continues, alert still raised — recommended starting mode); <em>Disabled</em>. The setting is protected by Tamper Protection so it can't be silently disabled. Alert name: <strong>Suspicious AI prompt injection</strong>.</p>
+  <p style="margin-top:8px;"><strong>Modes:</strong> <em>Block</em> (Defender stops the action, notifies the user via agent UI + Windows toast, raises an alert correlated into Defender incidents; the detection is also recorded in Defender protection history on the device); <em>Audit</em> (action continues, alert still raised — recommended starting mode); <em>Disabled</em>. The setting is protected by Tamper Protection so it can't be silently disabled. Alert name: <strong>Suspicious AI prompt injection</strong>. Once enabled, Defender inspects supported agents at their hook points <strong>without changing how users run the agent</strong> — no wrapping, no interception of the agent process, no behavioural change to the developer workflow.</p>
   <p style="margin-top:8px;"><strong>Currently supported agents</strong> for runtime protection: Claude Code, GitHub Copilot CLI. Coverage expanding — any agent that exposes a hooks framework can in principle be added. Worth noting: until coverage broadens, runtime protection is a meaningful capability only for organisations whose developers actually use these two specific tools. Discovery (above) covers the much broader 20+ list.</p>
 </div>
 
@@ -652,6 +652,52 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <div class="callout-title">⚠ Example scenario from Microsoft's documentation</div>
   <p style="font-size:13px;color:#2e3d5e;"><em>"A coding agent fetches a project's documentation to answer a question, and the page contains hidden text that instructs the agent to read the local <code>.env</code> file and post its contents to an external URL. The agent treats the instruction as part of the page and is about to comply, but Defender detects the prompt injection in the tool response and blocks the action before any data leaves the device."</em></p>
   <p style="margin-top:8px;font-size:13px;color:var(--text2);">This is the canonical local agent threat — and the canonical case for why runtime protection earns its place in any tenant where developers use Claude Code or GitHub Copilot CLI against real production data.</p>
+</div>
+
+<h2 style="margin-top:32px;">Configuration in practice — prerequisites, phased rollout, deployment</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">Per the <a href="https://learn.microsoft.com/en-us/defender-endpoint/configure-ai-agent-runtime-protection" target="_blank" style="color:var(--blue);">configuration guide</a>, enabling runtime protection isn't a single switch — it has prerequisites, a recommended phased rollout, and PowerShell-only enablement today.</p>
+
+<div class="callout callout-warn" style="margin-top:8px;">
+  <div class="callout-title">⚠ Prerequisites — the Beta channel gotcha</div>
+  <p>The most important constraint: runtime protection is currently available <strong>only on devices configured to receive Beta platform and engine updates</strong>. Production fleets on the standard ring won't see the capability. Other prerequisites are routine — devices onboarded to Defender for Endpoint, Defender Antivirus in active mode, supported local AI agent installed, agent natively supports a hooks framework (Claude Code or GitHub Copilot CLI today). Minimum <code>AntivirusSignatureVersion</code> is <code>1.451.224.0</code>.</p>
+</div>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 Microsoft's recommended 4-phase rollout</div>
+  <ol style="margin:8px 0 0 22px;font-size:13px;line-height:1.9;">
+    <li><strong>Test</strong> — enable in <em>Audit</em> mode on a small set of devices where supported agents are actively used.</li>
+    <li><strong>Review</strong> — monitor alerts in the Defender portal for <strong>1-2 weeks</strong>. Submit false positives to Microsoft for analysis.</li>
+    <li><strong>Deploy</strong> — roll out in <em>Audit</em> mode to additional device groups across the organisation.</li>
+    <li><strong>Enforce</strong> — after validating alert accuracy, switch to <em>Block</em> mode on the device groups where you want active enforcement.</li>
+  </ol>
+  <p style="margin-top:10px;font-size:12px;color:var(--text2);">In Audit mode, alerts are <strong>Informational severity</strong> — your team can review what would have been blocked without triaging it as an active threat. In Block mode, alerts carry a <strong>Critical / High / Medium / Low severity</strong> based on assessed risk. Plan SOC capacity accordingly.</p>
+</div>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 Enablement is PowerShell — no Intune policy yet</div>
+  <p>There is no native Intune configuration profile for runtime protection at present. Single-device enablement is via PowerShell:</p>
+  <p style="margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:12px;background:#0d1526;color:#e0e6f0;padding:10px 14px;border-radius:4px;line-height:1.7;"># Switch to Beta channel<br>
+  Set-MpPreference -PlatformUpdatesChannel Beta<br>
+  Set-MpPreference -EngineUpdatesChannel Beta<br><br>
+  # Force signature refresh (run 3 times per Microsoft's guidance)<br>
+  Update-MpSignature; Update-MpSignature; Update-MpSignature<br><br>
+  # Verify signature version &gt;= 1.451.224.0<br>
+  Get-MpComputerStatus | Select-Object AntivirusSignatureVersion<br><br>
+  # Enable runtime protection (Disabled / Audit / Block)<br>
+  Set-MpPreference -AiAgentProtection Audit<br><br>
+  # Verify current setting<br>
+  Get-MpPreference | Select-Object AiAgentProtection</p>
+  <p style="margin-top:10px;">For fleet deployment, wrap this in a PowerShell script and deploy via Intune's <strong>PowerShell scripts</strong> feature (not a configuration profile). Same command, scaled to device groups.</p>
+</div>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 What end users see when Block mode triggers</div>
+  <p>Two notifications appear in parallel:</p>
+  <ul style="margin:8px 0 0 18px;font-size:13px;line-height:1.8;">
+    <li><strong>In the agent terminal</strong> — block message showing what was blocked, why, and confirmation that the action didn't execute. Developer-friendly framing.</li>
+    <li><strong>Windows toast notification</strong> — appears regardless of whether the agent terminal is in focus.</li>
+  </ul>
+  <p style="margin-top:8px;">Users can also review detections under <strong>Windows Security &gt; Virus &amp; threat protection &gt; Current threats / Protection history</strong> — same surface as other Defender detections. This means runtime protection events look familiar to users who've seen any other Defender intervention.</p>
 </div>
 
 <div class="page-nav"><a href="identity.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Identity</span></a><a href="threats.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Threats</span></a></div>
