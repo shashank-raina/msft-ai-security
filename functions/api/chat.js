@@ -2559,6 +2559,30 @@ function buildCorsHeaders(request, extra = {}) {
   };
 }
 
+// Soft per-IP rate limit to protect the Anthropic budget from abuse (the only
+// other gate is a shared passphrase that every widget user can see). Backed by
+// a Cloudflare KV namespace bound as RATE_LIMIT_KV. If the binding is absent
+// (e.g. not yet configured in the Pages project) this fails open so the chat
+// keeps working — see README for the one-time binding setup.
+const RATE_LIMIT_MAX = 30; // requests per window, per IP
+const RATE_LIMIT_WINDOW = 60; // window length, seconds
+
+async function checkRateLimit(env, request) {
+  const kv = env.RATE_LIMIT_KV;
+  if (!kv) return { ok: true }; // not configured — fail open
+
+  const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+  const windowId = Math.floor(Date.now() / 1000 / RATE_LIMIT_WINDOW);
+  const key = `rl:${ip}:${windowId}`;
+
+  const count = parseInt(await kv.get(key), 10) || 0;
+  if (count >= RATE_LIMIT_MAX) return { ok: false };
+
+  // TTL of two windows so the key always outlives the window it counts.
+  await kv.put(key, String(count + 1), { expirationTtl: RATE_LIMIT_WINDOW * 2 });
+  return { ok: true };
+}
+
 export async function onRequestPost(context) {
   const { request, env } = context;
 
@@ -2567,6 +2591,17 @@ export async function onRequestPost(context) {
   });
 
   try {
+    const limit = await checkRateLimit(env, request);
+    if (!limit.ok) {
+      return new Response(
+        JSON.stringify({ error: "Rate limit exceeded. Please slow down." }),
+        {
+          status: 429,
+          headers: { ...corsHeaders, "Retry-After": String(RATE_LIMIT_WINDOW) },
+        }
+      );
+    }
+
     const body = await request.json();
     const { messages, password, mode } = body;
 
