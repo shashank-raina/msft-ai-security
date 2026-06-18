@@ -408,6 +408,19 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 
 
+<div class="section-label" style="margin-top:40px;">JUNE 9, 2026</div>
+<h2>AI Incident Response Investigator Playbook · Detect &amp; Respond</h2>
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag blue">🆕 AI IR playbook</span></td>
+<td><strong>Added coverage of Microsoft's new AI Incident Response investigator playbook</strong>. Source: <a href="https://www.microsoft.com/en-us/security/blog/2026/06/09/reconstructing-ai-activity-investigations/" target="_blank" style="color:var(--blue);">Microsoft Security blog, June 9, 2026</a> ("Reconstructing AI activity in investigations"), by Phillip Misner (Head of AI Incident Detection &amp; Response) and the Microsoft AI Red Team. <strong>What it is:</strong> a structured investigator playbook for Microsoft 365 Copilot and Azure AI services that turns telemetry already available across <strong>Purview, Defender, and Sentinel</strong> into a coherent investigation. <strong>Methodology:</strong> a <strong>Scope → Context → Signal</strong> sequence — (1) scope: who interacted with AI systems, when, and which services; (2) context: what the system accessed, what data may have been exposed, and how that aligns with expected behavior; (3) signal: detection signals such as prompt injection attempts, anomalous usage patterns, and credential-exposure alerts evaluated within that broader chain. AI telemetry is treated as <strong>metadata-first</strong> (identity, time, resource context), moving investigations from isolated signals to an account of what happened — normal usage, policy violation, or indicator of compromise. Bundles schema references, KQL queries, and detection logic into one working model and <strong>extends to agent-based systems</strong> (which agents are deployed, how configured, what data they are authorized to access, and whether that authorization was used as expected). Download: <a href="https://aka.ms/AIIRplaybook" target="_blank" style="color:var(--blue);">aka.ms/AIIRplaybook</a>. <strong>Added:</strong> new card under the Detect &amp; Respond / Security Copilot &amp; Autonomous Agents section of product-map.html; chat.js SYSTEM_PROMPT section (technical) plus a plain-language note for business mode.</td>
+<td>product-map.html, chat.js, changelog.html</td></tr>
+
+</tbody>
+</table>
+
 <div class="section-label" style="margin-top:40px;">JUNE 5, 2026</div>
 <h2>Microsoft Learn Comparison Pass · 23 Updates Across 14 Files</h2>
 <table>
@@ -1917,7 +1930,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  <a href="changelog.html" style="color:var(--text3);">Changelog</a> · Last updated: June 5, 2026 · Analysis covers publicly announced Microsoft security capabilities only
+  <a href="changelog.html" style="color:var(--text3);">Changelog</a> · Last updated: June 9, 2026 · Analysis covers publicly announced Microsoft security capabilities only
 </div>
 </div>
 

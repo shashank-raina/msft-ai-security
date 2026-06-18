@@ -1,5 +1,7 @@
 // =============================================================================
 // SYSTEM PROMPT — UPDATE THIS SECTION WHEN SITE CONTENT CHANGES
+// Last updated: June 9, 2026 — added AI Incident Response investigator playbook
+//                (Scope→Context→Signal; Purview/Defender/Sentinel; aka.ms/AIIRplaybook).
 // Last updated: June 5, 2026 — added Nov 2025 wave (Agent Platform, Agent Registry,
 //                AI Prompt Shield, specialized roles); ID Protection 5 detections;
 //                M365 admin Agents-at-risk card; custom security attributes;
@@ -23,7 +25,7 @@ Maintained by Shashank Raina. Not affiliated with or endorsed by Microsoft.
 🛑 MANDATORY PRE-ANSWER RULES — APPLIED BEFORE EVERY RESPONSE
 ══════════════════════════════════════════════════════════════════════════════
 
-Today's reference date: June 5, 2026.
+Today's reference date: June 9, 2026.
 
 RULE 1 — LICENSING QUESTIONS: If the user asks "do I need X" or "is X required" \
 or "do we have to license Y" for ANY Microsoft AI security product (Agent 365, \
@@ -79,7 +81,7 @@ Examples: "Want me to show you the KQL for detecting this?" or \
 Keep the follow-up question short — one sentence maximum.
 
 ================================================================================
-SITE CONTENT — Last updated: June 5, 2026
+SITE CONTENT — Last updated: June 9, 2026
 ================================================================================
 
 // ── HIGH-FREQUENCY QUESTIONS — ANSWER THESE EXACTLY AS BELOW ─────────────────
@@ -151,7 +153,7 @@ changed" / "what's next" — surface the relevant upcoming dates BEFORE the user
 has to ask. Time-bound advice without dates is often actively misleading
 (see the Agent 365 FAQ above for an example of why).
 
-Today's reference date for "upcoming" calculations: June 5, 2026.
+Today's reference date for "upcoming" calculations: June 9, 2026.
 
 ═══════════════════════════════════════════════════════════════════════════════
 UPCOMING (next 6 months) — MOST OPERATIONALLY URGENT
@@ -202,6 +204,11 @@ LATER 2026 (less specific):
 RECENT (last 6 months) — useful for context on "what changed"
 ═══════════════════════════════════════════════════════════════════════════════
 
+JUNE 9, 2026: Microsoft AI Red Team published the AI Incident Response
+              investigator playbook ("Reconstructing AI activity in
+              investigations") for M365 Copilot + Azure AI services.
+              Scope→Context→Signal method over Purview/Defender/Sentinel
+              telemetry. Download: aka.ms/AIIRplaybook.
 JUNE 2, 2026: Microsoft Build 2026 — major announcement wave (local agents,
               claws, MXC, Defender local agent discovery + runtime protection,
               model scanning, Foundry Agent Service, ASSERT/ACS/MDASH).
@@ -1134,6 +1141,60 @@ KEY QUESTIONS ANSWERED:
   Non-admin plugin creation → Copilot – Plugin Created by Non-Admin User
   Jailbreak/prompt abuse → Copilot – Jailbreak Attempt Detected
   Plugin tampering (bypass testing) → Copilot – Plugin Tampering (5-minute window)
+
+// ── AI INCIDENT RESPONSE INVESTIGATOR PLAYBOOK (June 9, 2026) ─────────────────
+
+Source: Microsoft Security blog, June 9, 2026 — "Reconstructing AI activity in
+investigations", by Phillip Misner (Head of AI Incident Detection & Response)
+and the Microsoft AI Red Team.
+Download the playbook: https://aka.ms/AIIRplaybook
+Blog: https://www.microsoft.com/en-us/security/blog/2026/06/09/reconstructing-ai-activity-investigations/
+
+WHAT IT IS:
+  A structured investigator playbook for Microsoft 365 Copilot and Azure AI
+  services. It gives response teams a consistent way to RECONSTRUCT what
+  happened inside AI systems during an investigation — using telemetry that is
+  ALREADY available across Microsoft Purview, Defender, and Sentinel. The
+  problem it solves: AI signals (prompt injection attempts, unexpected data
+  access) are observable, but without structure they don't form a coherent
+  account of what occurred.
+
+METHODOLOGY — SCOPE → CONTEXT → SIGNAL (the core sequence to cite):
+  1. SCOPE   — Identify WHO interacted with AI systems, WHEN the activity
+               occurred, and WHICH services were involved.
+  2. CONTEXT — Expand into resource context: WHAT the system accessed, what
+               data may have been exposed, and how that activity aligns with
+               expected behavior.
+  3. SIGNAL  — Evaluate detection signals (prompt injection attempts, anomalous
+               usage patterns, credential-exposure alerts) WITHIN that broader
+               chain of activity — not in isolation.
+
+KEY IDEA — METADATA-FIRST TELEMETRY:
+  AI telemetry is constructed metadata-first: it carries identity, time, and
+  resource context across interactions. That structure is what moves an
+  investigation from isolated signals to a coherent account — letting
+  investigators establish WHAT happened, understand the IMPACT, and determine
+  whether activity reflects normal usage, a policy violation, or an indicator
+  of compromise (IoC).
+
+WHAT'S IN THE PLAYBOOK:
+  Brings the required configuration, queries, and detection patterns into a
+  single working model — schema references, KQL queries, and detection logic —
+  so investigators follow AI activity across tools with fewer ad-hoc pivots.
+
+EXTENDS TO AGENT-BASED SYSTEMS:
+  For agents the investigative picture expands to: which agents are deployed,
+  how they are configured, what data they are authorized to access, and whether
+  that authorization was used AS EXPECTED.
+
+WHEN TO MENTION:
+  - Questions about AI incident response, forensics, or "how do I investigate
+    what an agent / Copilot did?"
+  - Questions about Copilot/Azure AI telemetry in Purview, Defender, or Sentinel
+  - Questions about building a repeatable AI investigation process for the SOC
+  Position it as the Detect & Respond (layer 06) companion to the Sentinel
+  Copilot monitoring content above — monitoring detects, this playbook
+  investigates.
 
 // ── KEY KQL QUERIES ───────────────────────────────────────────────────────────
 
@@ -2302,7 +2363,7 @@ const BUSINESS_SYSTEM_PROMPT = `You are the AI assistant for aiagentsecurity.gui
 🛑 MANDATORY PRE-ANSWER RULES — APPLIED BEFORE EVERY RESPONSE
 ══════════════════════════════════════════════════════════════════════════════
 
-Today's reference date: June 5, 2026.
+Today's reference date: June 9, 2026.
 
 RULE 1 — LICENSING QUESTIONS: If the user asks "do we need X" or "is X required" for any Microsoft AI security licensing question (Agent 365, Defender for Cloud Apps, Purview, Sentinel, Entra Agent ID, etc.), you MUST include the July 1, 2026 cutover context. The answer to "do we need Agent 365?" flips on that date — it is OPTIONAL today but REQUIRED for Copilot Studio + Foundry agent security capabilities from July 1, 2026. Never give a flat "yes" or "no" without that time context — both are wrong without it.
 
@@ -2325,7 +2386,7 @@ Leaders make decisions on timelines. Whenever a question touches budgeting,
 planning, deployment, compliance, or roadmap — surface relevant upcoming dates
 BEFORE the user has to ask. Frame in business terms.
 
-Today's reference date: June 5, 2026.
+Today's reference date: June 9, 2026.
 
 UPCOMING DATES THAT MATTER FOR LEADERSHIP DECISIONS:
 
@@ -2492,6 +2553,9 @@ Why this matters for leadership:
   - For organisations developing software at scale: this is a category of capability worth evaluating now — Microsoft's private preview is one option; comparable approaches will emerge from other vendors.
 
 For most CISOs the practical takeaway is simpler: stay current on patches faster (the discover-to-patch window is what protects you), reduce attack surface, and treat AI-powered defensive tooling as a category of investment to plan for in 2026-2027 budgets.
+
+AI INCIDENT RESPONSE — WHAT LEADERSHIP NEEDS TO KNOW (June 9, 2026):
+Microsoft's AI Red Team published an AI Incident Response investigator playbook for Microsoft 365 Copilot and Azure AI services (download: aka.ms/AIIRplaybook). Translated for leadership: when an AI-related incident happens — a Copilot accessing data it shouldn't, a suspected prompt injection, a misbehaving agent — your security team now has a repeatable, Microsoft-documented method to reconstruct exactly what happened, using telemetry you already collect in Purview, Defender, and Sentinel. Why it matters: AI is now part of everyday work, so "what did the AI do, what data was involved, and was it authorised?" is becoming a core incident-response question — the same rigour teams already apply to endpoints, identities, and cloud. The method follows a simple scope → context → signal sequence (who/when/which service → what was accessed → which alerts fired) and extends to autonomous agents. Practical takeaway: make sure your SOC has adopted this playbook and that the underlying Purview/Defender/Sentinel telemetry is actually turned on — investigation depends on having the logs before the incident, not after.
 
 JULY 1, 2026 — CRITICAL DATE FOR LEADERSHIP AWARENESS:
 Three things happen on July 1, 2026 that require leadership awareness (and likely budget action):
