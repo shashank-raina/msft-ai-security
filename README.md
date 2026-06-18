@@ -98,4 +98,4 @@ External content referenced on the site (Microsoft documentation, third-party bl
 
 ---
 
-*Maintained by [@shashank-raina](https://github.com/shashank-raina). Independent of any employer.*
+*Maintained independently as [aiagentsecurity.guide](https://aiagentsecurity.guide). Independent of any employer.*
