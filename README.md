@@ -43,8 +43,21 @@ The site assumes working familiarity with the Microsoft security stack — it is
 
 - Static HTML / CSS / JavaScript
 - Hosted on **Cloudflare Pages**
+- Chat assistant via a Cloudflare Pages Function (`functions/api/chat.js`) calling the Anthropic API
 - Contact form via **Formspree**
 - No tracking, no ads, no analytics beyond Cloudflare's edge metrics
+
+### Chat API configuration
+
+The `/api/chat` function reads these from the Pages project settings:
+
+- **Environment variables** — `ANTHROPIC_API_KEY`, `CHAT_PASSWORD`
+- **KV namespace binding** (optional but recommended) — bind a KV namespace as
+  `RATE_LIMIT_KV` to enable per-IP rate limiting (default: 30 requests / 60s).
+  Create it under **Workers & Pages → KV**, then add the binding under
+  **Pages project → Settings → Functions → KV namespace bindings**. If the
+  binding is absent the function fails open (no rate limiting), so the chat
+  keeps working without it.
 
 ---
 

@@ -715,13 +715,115 @@ KEY NEW CONCEPTS:
        Hook points: prompt receive, tool call, response generation, action commit.
        Once tools converge on ACS-compatible schemas, controls become portable
        across runtimes (Copilot Studio, Foundry, OpenClaw, third-party).
-    c. Codename MDASH
-       Microsoft's defence-side project mentioned alongside ASSERT/ACS.
-       Limited public detail. Track for future.
+    (NOTE: "Codename MDASH" was previously listed here. It's actually a
+    different category — Microsoft's autonomous vulnerability discovery
+    system, not an open standard. See dedicated MDASH section below.)
 
 ECOSYSTEM NOTES:
   NVIDIA OpenShell brings to Windows on MXC — autonomous always-on agents.
   Hermes Agent (Nous Research) integrating OpenShell + MXC on Windows.
+
+// ── CODENAME MDASH — MULTI-MODEL AGENTIC SCANNING HARNESS ────────────────────
+
+Announced May 12, 2026 by Taesoo Kim (VP Agentic Security, Microsoft) in a
+Microsoft Security blog post titled "Defense at AI speed: Microsoft's new
+multi-model agentic security system tops leading industry benchmark."
+
+URL: https://www.microsoft.com/en-us/security/blog/2026/05/12/defense-at-ai-speed-microsofts-new-multi-model-agentic-security-system-tops-leading-industry-benchmark/
+
+WHAT IT IS:
+  Autonomous vulnerability discovery and remediation pipeline. Built by
+  Microsoft's Autonomous Code Security (ACS) team — several members came
+  from Team Atlanta, the team that won the DARPA AI Cyber Challenge (AIxCC)
+  with a $6M prize. Currently in LIMITED PRIVATE PREVIEW — used internally by
+  Microsoft engineering teams + tested by small set of customers.
+
+  Collaborators: Microsoft Offensive Research & Security Engineering (MORSE),
+  Microsoft Windows Attack Research and Protection (WARP).
+
+ARCHITECTURE:
+  Orchestrates 100+ specialised AI agents across an ensemble of frontier
+  AND distilled models. NOT a single best model — multi-model by design.
+  
+  Pipeline stages (model-agnostic by construction):
+    1. PREPARE — Ingest source, build language-aware indices, draw attack
+                 surface + threat models by analysing past commits
+    2. SCAN — Specialised auditor agents run over candidate code paths,
+              emit candidate findings with hypotheses + evidence
+    3. VALIDATE — Debater agents argue for and against each finding's
+                  reachability and exploitability
+    4. DEDUPE — Collapse semantically equivalent findings (patch-based grouping)
+    5. PROVE — Construct + execute triggering inputs, validate pre-conditions
+               dynamically, formulate bug-triggering inputs (e.g., ASan for C/C++)
+
+  KEY DESIGN PROPERTIES:
+    a. Ensemble of diverse models — SOTA heavy reasoner + distilled cost-
+       effective debater + independent SOTA counterpoint. Disagreement
+       BETWEEN models is itself a signal: when auditor flags something and
+       debater can't refute it, credibility goes up.
+    b. Specialised agents per stage — 100+ agents, each with own role,
+       prompts, tools, stop criteria. Constructed via deep research with
+       past CVEs and their patches.
+    c. Extensible plugins — domain experts inject context the foundation
+       models can't see (kernel calling conventions, IRP rules, lock
+       invariants, IPC trust boundaries). Example: CLFS proving plugin
+       knows on-disk container layout, block-validation sequence, in-memory
+       state machine. CodeQL DB integration also possible.
+
+BENCHMARK RESULTS:
+  - StorageDrive (private test driver, 21 planted vulns, never in any
+    model's training data): 21/21 found, 0 false positives.
+  - clfs.sys 5-year MSRC recall: 96% (28 cases). The bugs that actually
+    mattered — required real Patch Tuesdays.
+  - tcpip.sys 5-year MSRC recall: 100% (7 cases).
+  - CyberGym (public benchmark, 1,507 real-world vulns from 188 OSS-Fuzz
+    projects): 88.45% — TOP SCORE on leaderboard, ~5 points ahead of next
+    entry (Anthropic at 83.1%). Achieved with generally available models.
+
+MAY 12, 2026 PATCH TUESDAY COHORT — 16 NEW CVEs found by MDASH:
+  10 kernel-mode + 6 user-mode. Most reachable from network position, no
+  credentials. Notable examples:
+    CVE-2026-33824 — IKEEXT.dll, unauthenticated IKEv2 SA_INIT + fragmentation
+                     → deterministic double-free → LocalSystem RCE. Reachable
+                     on RRAS VPN, DirectAccess, Always-On VPN, IPsec rules.
+    CVE-2026-33827 — tcpip.sys, remote unauth UAF via crafted IPv4 SSRR
+                     packets. Race-driven (requires winning timing window
+                     in kernel SMP).
+    CVE-2026-40406 — tcpip.sys, UAF in Ipv4pReassembleDatagram.
+    CVE-2026-33096 — http.sys, unauth remote QUIC control-stream OOB read.
+    CVE-2026-41089 — netlogon.dll, unauth CLDAP User= filter stack overflow.
+
+WHY MULTI-MODEL > SINGLE-MODEL:
+  The IKEv2 double-free spans 6 source files. The bug is visible only
+  against the contrast of the correct version of the same pattern elsewhere
+  in the same codebase. Detection requires cross-file pattern comparison.
+  
+  The tcpip.sys UAF requires composing:
+    - SSRR-flagged input
+    - default config that allows the path
+    - concurrent subsystems racing to reclaim the freed object
+  Single-shot analysis collapses these steps and loses interaction.
+
+STRATEGIC TAKEAWAY FOR ARCHITECTS:
+  Microsoft's framing: "The harness around the model is most of the engineering,
+  not the model itself." System absorbs model improvements (config flip + A/B
+  test, not rewrite). Customer investment (scope files, plugins, configs,
+  calibrations) carries over.
+  
+  Change the question you ask vendors of AI security tooling from
+  "WHICH MODEL does it use?" to "WHAT DOES IT DO WITH THE MODEL, and what
+  SURVIVES when the next model arrives?" Single-prompt-against-best-model
+  tools become obsolete every 6 months. Multi-agent + specialised roles +
+  ensemble disagreement + plugin extensibility = durable.
+
+WHEN TO MENTION MDASH:
+  - When user asks about AI-powered vulnerability discovery
+  - When user asks about Security Copilot, autonomous SOC agents, or
+    AI-powered defender capabilities
+  - When user mentions Patch Tuesday or asks about recent CVEs
+  - When user asks about CyberGym or AI security benchmarks
+  - When user asks "how do we evaluate AI security tools" — the durability
+    framing matters
 
 REAL-WORLD THREAT FINDING — CLAUDE CODE GITHUB ACTION PROMPT INJECTION:
   Microsoft Threat Intelligence (Feb 2026) identified prompt injection pathway
@@ -2378,6 +2480,19 @@ Microsoft Build 2026 (June 2, 2026) introduced significant additions to how loca
 
 In business terms: AI agents now have the same enterprise treatment as employees — they have an identity, run in a managed environment, have their data interactions observed, and are monitored for risk. The big shift is that this now applies to local agents on developer laptops, not just cloud-hosted agents.
 
+MDASH (CODENAME) — WHAT LEADERSHIP NEEDS TO KNOW:
+Microsoft announced (May 12, 2026) that its new multi-model agentic security system has crossed a threshold: AI-powered vulnerability discovery is now production-grade, not research. Translated for leadership:
+  1. Microsoft's internal system (codename MDASH) found 16 new CVEs in the May 12 Patch Tuesday, including 4 Critical remote code execution flaws in Windows. These weren't found by humans — they were found by AI.
+  2. The system scored 88.45% on the leading public benchmark (CyberGym, 1,507 real-world vulnerabilities) — the top score, about 5 points ahead of the next entry. It found all 21 planted bugs in a private test driver with zero false positives.
+  3. It's currently used internally by Microsoft engineering teams + tested in a limited private preview by a small set of customers.
+
+Why this matters for leadership:
+  - AI-powered vulnerability discovery is no longer theoretical — attackers can build similar systems. Within 12-24 months, expect the discover-to-exploit window to compress further.
+  - The strategic implication for vendor evaluation: ask AI security tools "what does it do with the model?" not just "which model does it use?" Tools whose value depends on a specific model become obsolete in 6 months as the frontier shifts. Tools with durable multi-agent architectures carry forward.
+  - For organisations developing software at scale: this is a category of capability worth evaluating now — Microsoft's private preview is one option; comparable approaches will emerge from other vendors.
+
+For most CISOs the practical takeaway is simpler: stay current on patches faster (the discover-to-patch window is what protects you), reduce attack surface, and treat AI-powered defensive tooling as a category of investment to plan for in 2026-2027 budgets.
+
 JULY 1, 2026 — CRITICAL DATE FOR LEADERSHIP AWARENESS:
 Three things happen on July 1, 2026 that require leadership awareness (and likely budget action):
   1. Microsoft Agent 365 license becomes REQUIRED for Copilot Studio and Foundry agent security capabilities. Tenants without it lose security coverage through Defender for Cloud Apps + Defender for Cloud. If your organisation has been getting agent security through existing Defender licences, that path closes on July 1.
@@ -2421,18 +2536,72 @@ confirm:
 // WORKER LOGIC — no need to edit below this line
 // =============================================================================
 
+// Restrict the chat API to the site's own origins. Same-origin requests from
+// the site don't need CORS at all; the previous wildcard ("*") let any website
+// call this endpoint and burn the Anthropic budget. Echo the Origin back only
+// when it's on the allowlist (production domain + Cloudflare Pages previews).
+const ALLOWED_ORIGINS = [
+  "https://aiagentsecurity.guide",
+  "https://www.aiagentsecurity.guide",
+];
+
+function buildCorsHeaders(request, extra = {}) {
+  const origin = request.headers.get("Origin") || "";
+  const allowed =
+    ALLOWED_ORIGINS.includes(origin) ||
+    /^https:\/\/[a-z0-9-]+\.pages\.dev$/.test(origin);
+  return {
+    "Access-Control-Allow-Origin": allowed ? origin : ALLOWED_ORIGINS[0],
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Vary": "Origin",
+    ...extra,
+  };
+}
+
+// Soft per-IP rate limit to protect the Anthropic budget from abuse (the only
+// other gate is a shared passphrase that every widget user can see). Backed by
+// a Cloudflare KV namespace bound as RATE_LIMIT_KV. If the binding is absent
+// (e.g. not yet configured in the Pages project) this fails open so the chat
+// keeps working — see README for the one-time binding setup.
+const RATE_LIMIT_MAX = 30; // requests per window, per IP
+const RATE_LIMIT_WINDOW = 60; // window length, seconds
+
+async function checkRateLimit(env, request) {
+  const kv = env.RATE_LIMIT_KV;
+  if (!kv) return { ok: true }; // not configured — fail open
+
+  const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+  const windowId = Math.floor(Date.now() / 1000 / RATE_LIMIT_WINDOW);
+  const key = `rl:${ip}:${windowId}`;
+
+  const count = parseInt(await kv.get(key), 10) || 0;
+  if (count >= RATE_LIMIT_MAX) return { ok: false };
+
+  // TTL of two windows so the key always outlives the window it counts.
+  await kv.put(key, String(count + 1), { expirationTtl: RATE_LIMIT_WINDOW * 2 });
+  return { ok: true };
+}
+
 export async function onRequestPost(context) {
   const { request, env } = context;
 
-  const corsHeaders = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
-    "Access-Control-Allow-Credentials": "true",
+  const corsHeaders = buildCorsHeaders(request, {
     "Content-Type": "application/json",
-  };
+  });
 
   try {
+    const limit = await checkRateLimit(env, request);
+    if (!limit.ok) {
+      return new Response(
+        JSON.stringify({ error: "Rate limit exceeded. Please slow down." }),
+        {
+          status: 429,
+          headers: { ...corsHeaders, "Retry-After": String(RATE_LIMIT_WINDOW) },
+        }
+      );
+    }
+
     const body = await request.json();
     const { messages, password, mode } = body;
 
@@ -2495,13 +2664,8 @@ export async function onRequestPost(context) {
   }
 }
 
-export async function onRequestOptions() {
+export async function onRequestOptions(context) {
   return new Response(null, {
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
-      "Access-Control-Allow-Credentials": "true",
-    },
+    headers: buildCorsHeaders(context.request),
   });
 }
