@@ -2536,16 +2536,35 @@ confirm:
 // WORKER LOGIC — no need to edit below this line
 // =============================================================================
 
+// Restrict the chat API to the site's own origins. Same-origin requests from
+// the site don't need CORS at all; the previous wildcard ("*") let any website
+// call this endpoint and burn the Anthropic budget. Echo the Origin back only
+// when it's on the allowlist (production domain + Cloudflare Pages previews).
+const ALLOWED_ORIGINS = [
+  "https://aiagentsecurity.guide",
+  "https://www.aiagentsecurity.guide",
+];
+
+function buildCorsHeaders(request, extra = {}) {
+  const origin = request.headers.get("Origin") || "";
+  const allowed =
+    ALLOWED_ORIGINS.includes(origin) ||
+    /^https:\/\/[a-z0-9-]+\.pages\.dev$/.test(origin);
+  return {
+    "Access-Control-Allow-Origin": allowed ? origin : ALLOWED_ORIGINS[0],
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Vary": "Origin",
+    ...extra,
+  };
+}
+
 export async function onRequestPost(context) {
   const { request, env } = context;
 
-  const corsHeaders = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
-    "Access-Control-Allow-Credentials": "true",
+  const corsHeaders = buildCorsHeaders(request, {
     "Content-Type": "application/json",
-  };
+  });
 
   try {
     const body = await request.json();
@@ -2610,13 +2629,8 @@ export async function onRequestPost(context) {
   }
 }
 
-export async function onRequestOptions() {
+export async function onRequestOptions(context) {
   return new Response(null, {
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
-      "Access-Control-Allow-Credentials": "true",
-    },
+    headers: buildCorsHeaders(context.request),
   });
 }
