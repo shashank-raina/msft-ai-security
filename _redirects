@@ -1,0 +1,5 @@
+# Cloudflare Pages redirects
+# Privacy policy lives as a section on the contact page; keep the old
+# /privacy URLs working with a real 301 instead of a meta-refresh stub.
+/privacy       /contact.html#privacy   301
+/privacy.html  /contact.html#privacy   301
