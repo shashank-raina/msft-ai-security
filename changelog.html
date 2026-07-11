@@ -409,6 +409,19 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 
 <div class="section-label" style="margin-top:40px;">JULY 11, 2026</div>
+<h2>Agent 365 SDK — Deep-Dive Coverage</h2>
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Added a dedicated Agent 365 SDK deep-dive</strong>. Source: <a href="https://techcommunity.microsoft.com/blog/agent-365-blog/make-any-agent-enterprise-ready-with-the-agent-365-sdk/4524575" target="_blank" style="color:var(--blue);">"Make any agent enterprise-ready with the Agent 365 SDK"</a> (Aaron Bjork, co-authored by Jeremiah Follis · Jun 2, 2026). The SDK was previously mentioned only in passing across the site; this adds a structured section on agent365.html (<code>#agent365-sdk</code>). <strong>Documented:</strong> the <strong>automatic-vs-SDK distinction</strong> — Microsoft AI platform agents (Agent Builder, Copilot Studio, Foundry) get Agent 365 with zero effort, while external/open-source agents (e.g. OpenAI Agents SDK) integrate the SDK for the same controls; the <strong>three pillars</strong> — <em>Observability</em> (unified agent registry + Defender SOC hunting), <em>Governance</em> (agent lifecycle management, onboarding gates, <strong>policy templates</strong> bundling Entra/Purview/Defender/SharePoint policies, tenant-wide <strong>tool allow/block controls</strong>), and <em>Security</em> (Entra agent identity, Conditional Access + Identity Protection, Defender threat detection, <strong>threat-blocking on registered tool invocation</strong> via the ATG path); the <strong>three-step onboarding</strong> (install SDK in Python/TypeScript/.NET → register with the Agent 365 CLI → wrap the agent entry point); and the <strong>Microsoft Purview APIs</strong> add-on (prompt DLP, DSPM, Insider Risk, eDiscovery, Communication Compliance, Audit, DLM). Added a <strong>security-architect callout</strong> (the SDK is the enforcement boundary for non-Microsoft agents; un-instrumented agents sit outside ATG/Entra/CA/Defender — the existing Gaps-page coverage caveat), a new product-map.html card, an SDK block in both chat.js SYSTEM_PROMPTs, and updated the getting-started "Instrument custom agents" step with the three languages and a deep-dive link. Adopters named: Genspark, Zensai, Egnyte, Zendesk, Kore.ai, Kasisto, n8n.</td>
+<td>agent365.html, product-map.html, functions/api/chat.js, changelog.html</td></tr>
+
+</tbody>
+</table>
+
+<div class="section-label" style="margin-top:40px;">JULY 11, 2026</div>
 <h2>What's New in Agent 365 — June 2026 Blog Coverage</h2>
 <table>
 <thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>

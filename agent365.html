@@ -602,6 +602,52 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <p>You add the Agent 365 SDK to your agent code. Once instrumented, the agent registers with Agent 365 regardless of where it runs — Azure, AWS, GCP, or your own infrastructure. The SDK handles the Entra identity registration, OpenTelemetry event emission, and ATG integration automatically. You don't rewrite your agent; you add a governance layer around it.</p>
 </div>
 
+<div class="section-label" id="agent365-sdk" style="margin-top:40px;">Deep Dive</div>
+<h2>Agent 365 SDK — the on-ramp for agents Microsoft doesn't build</h2>
+<p style="font-size:12px;color:var(--text3);margin-bottom:14px;">Source: <a href="https://techcommunity.microsoft.com/blog/agent-365-blog/make-any-agent-enterprise-ready-with-the-agent-365-sdk/4524575" target="_blank" style="color:var(--blue);">"Make any agent enterprise-ready with the Agent 365 SDK"</a>, Microsoft Community Hub (Aaron Bjork, co-authored by Jeremiah Follis · Jun 2, 2026).</p>
+
+<div class="callout callout-info" style="margin-top:8px;">
+  <div class="callout-title">📌 Automatic vs. SDK — which agents need it</div>
+  <p>Agents built on the <strong>Microsoft AI platform — Agent Builder, Copilot Studio, and Microsoft Foundry — get Agent 365 capabilities automatically, with zero additional developer effort</strong>. For agents built on <strong>external platforms or open-source frameworks</strong> (e.g. the OpenAI Agents SDK), the <strong>Agent 365 SDK is the path in</strong>: it delivers the same observability, governance, and security, and the Agent 365 CLI provisions the agent identity and registers the agent from day one. A back-office Foundry agent and a customer-facing OpenAI-SDK agent end up managed through the same identity model, observability signals, and policy engine.</p>
+</div>
+
+<h3 style="margin-top:20px;">What the SDK gives you — three pillars</h3>
+<table style="margin:10px 0;font-size:12px;">
+<thead><tr><th>Pillar</th><th>Capability</th><th>What it does</th></tr></thead>
+<tbody>
+<tr><td rowspan="2"><strong>Observability</strong></td><td><strong>Unified agent registry</strong></td><td>Every agent registered through the SDK appears in one Agent 365 registry — ownership, usage, connected tools and knowledge sources, and assigned permissions. Additional signals also surface unmanaged local agents in the same control plane.</td></tr>
+<tr><td><strong>SOC visibility in Defender</strong></td><td>SOC teams use Microsoft Defender telemetry to hunt across agent activity, identify vulnerabilities, and investigate risks across the entire agent fleet.</td></tr>
+<tr><td rowspan="4"><strong>Governance</strong></td><td><strong>Agent lifecycle management</strong></td><td>Rules-based policies automatically <strong>expire inactive agents, flag ownerless agents, and block risky ones</strong>.</td></tr>
+<tr><td><strong>Onboarding &amp; agent governance</strong></td><td>Deploy agents to specific users or groups only after permissions, policies, and reviews are complete. Block, unblock, or remove agents on demand to control availability.</td></tr>
+<tr><td><strong>Policy templates</strong></td><td>Group existing policies from <strong>Entra, Purview, Defender, and SharePoint</strong> into reusable templates that apply automatically during agent approval or onboarding.</td></tr>
+<tr><td><strong>Tool controls for agents</strong></td><td>View, allow, or block tools across the tenant so agents only use approved tools — consistent governance without per-agent configuration.</td></tr>
+<tr><td rowspan="4"><strong>Security</strong></td><td><strong>Agent identity in Entra</strong></td><td>The SDK generates an Entra agent identity so policies and role assignments apply to the agent the same way they apply to users.</td></tr>
+<tr><td><strong>Access control</strong></td><td>Agents can be secured by <strong>Entra Conditional Access and Identity Protection</strong> for runtime protection as agent behaviour evolves.</td></tr>
+<tr><td><strong>Threat detection in Defender</strong></td><td>Agent activity surfaces in Defender alongside the rest of the estate, with alerts wired into the same incident pipeline the SOC already runs on.</td></tr>
+<tr><td><strong>Threat blocking on tool invocation</strong></td><td>When you register tools with Agent 365, calls to and responses from those tools are protected by Defender's runtime protection (the ATG path) — <strong>blocking high-risk tool calls and actions before they execute</strong>.</td></tr>
+</tbody>
+</table>
+
+<h3 style="margin-top:20px;">Onboard an existing agent in three steps</h3>
+<div class="callout callout-info" style="margin-top:8px;">
+  <ol style="margin:2px 0 0 18px;font-size:13px;line-height:1.8;">
+    <li><strong>Install the SDK</strong> in your agent project — <strong>Python, TypeScript, or .NET</strong>.</li>
+    <li><strong>Register the agent with the Agent 365 CLI</strong> to provision its identity and automatically onboard it into Agent 365.</li>
+    <li><strong>Wrap your agent entry point</strong> with the SDK to stream activity and telemetry into the Agent 365 control plane.</li>
+  </ol>
+  <p style="margin-top:10px;font-size:13px;">For data-security controls, integrate <strong>Microsoft Purview APIs</strong> to add prompt-based DLP, Data Security Posture Management, Insider Risk Management, and compliance capabilities (eDiscovery, Communication Compliance, Audit, Data Lifecycle Management) — these are opt-in on top of the core observe/govern/secure capabilities.</p>
+</div>
+
+<div class="callout callout-caution" style="margin-top:14px;">
+  <div class="callout-title">🔒 Security-architect read</div>
+  <ul style="margin:6px 0 0 18px;font-size:13px;line-height:1.7;">
+    <li><strong>The SDK is the enforcement boundary for non-Microsoft agents.</strong> ATG runtime blocking, Entra identity, Conditional Access, and Defender detection only reach an external/open-source agent <em>if it is SDK-instrumented</em>. An un-instrumented custom agent sits outside all of it — the same coverage gap already flagged on the <a href="gaps.html" style="color:var(--blue);">Gaps page</a>.</li>
+    <li><strong>Policy templates are the scale lever.</strong> Grouping Entra/Purview/Defender/SharePoint policies into templates applied at onboarding is how you avoid per-agent drift — treat template definition as a governance-critical control.</li>
+    <li><strong>Tool controls are tenant-wide allow/block.</strong> Combined with threat-blocking on registered tools, this is the practical way to enforce an approved-tool inventory across the fleet rather than per agent.</li>
+    <li><strong>Adoption is vendor-driven.</strong> AI-native vendors (Genspark, Zensai, Egnyte, Zendesk) and agent platforms (Kore.ai, Kasisto, n8n) integrate the SDK once so their agents arrive enterprise-ready — but coverage still depends on <em>the builder</em> having integrated it, which is worth verifying during vendor assessment.</li>
+  </ul>
+</div>
+
 
 <div class="section-label" style="margin-top:48px;">Partner Ecosystem</div>
 <h2>Enterprise partners and open-source frameworks already integrated</h2>
@@ -808,7 +854,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   </div>
   <div class="a365-flow-step">
     <div class="a365-flow-num">4</div>
-    <div class="a365-flow-text"><strong>Instrument custom agents</strong> — add the Agent 365 SDK to agents not on Copilot Studio. This gives them Entra identity, OpenTelemetry observability, and ATG real-time protection. Available on PyPI and npm.</div>
+    <div class="a365-flow-text"><strong>Instrument custom agents</strong> — add the Agent 365 SDK (<strong>Python, TypeScript, or .NET</strong>) to agents not on the Microsoft AI platform, register with the Agent 365 CLI, and wrap the agent entry point. This gives them Entra identity, OpenTelemetry observability, and ATG real-time protection. See the <a href="#agent365-sdk">SDK deep dive</a> for the three-pillar breakdown.</div>
   </div>
 </div>
 
