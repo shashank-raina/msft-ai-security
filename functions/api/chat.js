@@ -1708,7 +1708,7 @@ AGENT 365 SKILLS — accelerated onboarding (New; deep-dive blog Jun 22 2026 by 
   SECURITY GUARD-RAILS: additive + idempotent (never deletes/restructures code); state-aware
   workspace cache (skips completed steps); pre-tool hooks BLOCK edits outside the project dir;
   stop-hook validators verify the build passes before the session ends. Distributed via GitHub —
-  `gh skill add microsoft/agent365-skills` (repo: microsoft/agent365-skills) — treat the source repo
+  \`gh skill add microsoft/agent365-skills\` (repo: microsoft/agent365-skills) — treat the source repo
   + version as a privileged dev dependency.
 
 EXPANDED MICROSOFT GRAPH API — Agent Package Management (GA, v1.0):
@@ -1877,7 +1877,7 @@ AGENT 365 SKILLS — accelerated onboarding (New; deep-dive blog Jun 22 2026 by 
   SECURITY GUARD-RAILS: additive + idempotent (never deletes/restructures code); state-aware
   workspace cache (skips completed steps); pre-tool hooks BLOCK edits outside the project dir;
   stop-hook validators verify the build passes before the session ends. Distributed via GitHub —
-  `gh skill add microsoft/agent365-skills` (repo: microsoft/agent365-skills) — treat the source repo
+  \`gh skill add microsoft/agent365-skills\` (repo: microsoft/agent365-skills) — treat the source repo
   + version as a privileged dev dependency.
 
 EXPANDED MICROSOFT GRAPH API — Agent Package Management (GA, v1.0):
