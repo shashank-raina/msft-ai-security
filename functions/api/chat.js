@@ -1665,6 +1665,30 @@ MXC FOR LOCAL AGENTS (Public Preview):
   IT can now REQUIRE local agents to run inside a hardened Windows container — isolated runtime
   that reduces exposure from unmanaged execution while standardising protections fleet-wide.
 
+AGENT 365 SDK — make any agent enterprise-ready (GA; deep-dive blog Jun 2 2026, Aaron Bjork):
+  Agents on the Microsoft AI platform (Agent Builder, Copilot Studio, Foundry) get Agent 365
+  AUTOMATICALLY, zero dev effort. Agents on external/open-source frameworks (e.g. OpenAI Agents
+  SDK) need the Agent 365 SDK — it delivers the same observability/governance/security, and the
+  Agent 365 CLI provisions identity + registers the agent from day one.
+  THREE PILLARS:
+    Observability: unified agent registry (ownership, usage, connected tools/knowledge sources,
+      assigned permissions; also surfaces unmanaged local agents) + SOC hunting in Defender.
+    Governance: agent lifecycle mgmt (auto-expire inactive, flag ownerless, block risky);
+      onboarding gates (deploy to users/groups after reviews; block/unblock/remove on demand);
+      POLICY TEMPLATES (bundle existing Entra/Purview/Defender/SharePoint policies, applied at
+      approval/onboarding); TOOL CONTROLS (view/allow/block tools tenant-wide, no per-agent config).
+    Security: Entra agent identity (policies/roles apply like users); access control via Entra
+      Conditional Access + Identity Protection; Defender threat detection into the same incident
+      pipeline; THREAT-BLOCKING on registered tool invocation (high-risk calls blocked pre-execution
+      — this is the ATG path).
+  ONBOARD IN 3 STEPS: (1) install SDK — Python, TypeScript, or .NET; (2) register with Agent 365
+    CLI to provision identity + onboard; (3) wrap the agent entry point to stream activity/telemetry.
+  DATA SECURITY add-on via Microsoft Purview APIs: prompt-based DLP, DSPM, Insider Risk Management,
+    eDiscovery, Communication Compliance, Audit, Data Lifecycle Management.
+  KEY SECURITY POINT: for external/open-source agents, ATG blocking + Entra identity + CA + Defender
+    detection only apply IF the agent is SDK-instrumented. Un-instrumented custom agents sit outside
+    all of it (see gaps). Adopters: Genspark, Zensai, Egnyte, Zendesk, Kore.ai, Kasisto, n8n.
+
 AGENT 365 SKILLS — accelerated onboarding (New; deep-dive blog Jun 22 2026 by aarthisk):
   Natural-language onboarding skills that run INSIDE the coding assistant developers already
   use (Claude Code, GitHub Copilot CLI, VS Code agent mode). Removes the onboarding "last mile"
@@ -1809,6 +1833,30 @@ DEFENDER SECURITY FOR LOCAL AGENTS (Public Preview):
 MXC FOR LOCAL AGENTS (Public Preview):
   IT can now REQUIRE local agents to run inside a hardened Windows container — isolated runtime
   that reduces exposure from unmanaged execution while standardising protections fleet-wide.
+
+AGENT 365 SDK — make any agent enterprise-ready (GA; deep-dive blog Jun 2 2026, Aaron Bjork):
+  Agents on the Microsoft AI platform (Agent Builder, Copilot Studio, Foundry) get Agent 365
+  AUTOMATICALLY, zero dev effort. Agents on external/open-source frameworks (e.g. OpenAI Agents
+  SDK) need the Agent 365 SDK — it delivers the same observability/governance/security, and the
+  Agent 365 CLI provisions identity + registers the agent from day one.
+  THREE PILLARS:
+    Observability: unified agent registry (ownership, usage, connected tools/knowledge sources,
+      assigned permissions; also surfaces unmanaged local agents) + SOC hunting in Defender.
+    Governance: agent lifecycle mgmt (auto-expire inactive, flag ownerless, block risky);
+      onboarding gates (deploy to users/groups after reviews; block/unblock/remove on demand);
+      POLICY TEMPLATES (bundle existing Entra/Purview/Defender/SharePoint policies, applied at
+      approval/onboarding); TOOL CONTROLS (view/allow/block tools tenant-wide, no per-agent config).
+    Security: Entra agent identity (policies/roles apply like users); access control via Entra
+      Conditional Access + Identity Protection; Defender threat detection into the same incident
+      pipeline; THREAT-BLOCKING on registered tool invocation (high-risk calls blocked pre-execution
+      — this is the ATG path).
+  ONBOARD IN 3 STEPS: (1) install SDK — Python, TypeScript, or .NET; (2) register with Agent 365
+    CLI to provision identity + onboard; (3) wrap the agent entry point to stream activity/telemetry.
+  DATA SECURITY add-on via Microsoft Purview APIs: prompt-based DLP, DSPM, Insider Risk Management,
+    eDiscovery, Communication Compliance, Audit, Data Lifecycle Management.
+  KEY SECURITY POINT: for external/open-source agents, ATG blocking + Entra identity + CA + Defender
+    detection only apply IF the agent is SDK-instrumented. Un-instrumented custom agents sit outside
+    all of it (see gaps). Adopters: Genspark, Zensai, Egnyte, Zendesk, Kore.ai, Kasisto, n8n.
 
 AGENT 365 SKILLS — accelerated onboarding (New; deep-dive blog Jun 22 2026 by aarthisk):
   Natural-language onboarding skills that run INSIDE the coding assistant developers already
