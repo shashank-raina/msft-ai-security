@@ -443,7 +443,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <table style="margin:10px 0;font-size:12px;">
   <thead><tr><th>Capability</th><th>Status</th><th>Detail</th></tr></thead>
   <tbody>
-  <tr><td><strong>Registry sync — four external platforms</strong></td><td><span class="caution-inline">Preview · expanded June 2026</span></td><td>Automatically discover, inventory, and import agents from external platforms into the Agent 365 registry for centralised visibility and governance. Now supports <strong>Amazon Bedrock, Google Vertex AI (Gemini Enterprise Agent Platform), Salesforce Agentforce, and Databricks Genie</strong> — Salesforce and Databricks added in the June 2026 wave. Basic lifecycle governance (start, stop, delete) via each platform's APIs is now available. Managed from the <strong>Registry sync page in the Microsoft 365 admin center</strong> (Agents → All Agents → Registry sync). See the <a href="#registry-sync" style="color:var(--blue);">detail below</a>.</td></tr>
+  <tr><td><strong>Registry sync — external cloud platforms</strong></td><td><span class="caution-inline">Preview now</span></td><td>Automatically discover, inventory, and import agents from external platforms into the Agent 365 registry for centralised visibility and governance. Announced at GA for AWS Bedrock and Google Cloud; per <a href="https://learn.microsoft.com/en-us/microsoft-agent-365/admin/agent-registry" target="_blank" style="color:var(--blue);">Microsoft Learn</a> now covers four platforms — see the <a href="#registry-sync" style="color:var(--blue);">detail below</a>. Basic lifecycle governance (start, stop, delete) via each platform's APIs is available.</td></tr>
   <tr><td><strong>Defender agent context mapping</strong></td><td><span class="caution-inline">Preview June 2026</span></td><td>Relationship map per agent: devices it runs on, MCP servers configured, associated identities, cloud resources reachable. Blast radius analysis and endpoint-based behaviour investigation.</td></tr>
   <tr><td><strong>Intune integration — policy controls + runtime blocking</strong></td><td><span class="caution-inline">Preview June 2026</span></td><td>Policy-based controls and runtime blocking/alerting via Intune and Defender for agents on managed devices.</td></tr>
   </tbody>
@@ -453,25 +453,61 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 
 <div id="registry-sync" class="callout callout-info" style="margin-top:20px;">
-  <div class="callout-title">🔄 Registry sync — external platform connections (Preview, expanded June 2026)</div>
+  <div class="callout-title">🔄 Registry sync — external platform connections (Preview)</div>
   <p>AI agents are commonly built and hosted outside Microsoft. <strong>Registry sync</strong> lets an admin securely connect those external environments and pull their agents into the Agent 365 registry for centralised inventory, visibility, and basic lifecycle governance — without leaving the Microsoft 365 admin center. You authenticate once per environment, then sync agents on demand (scheduled sync is coming in a future release).</p>
-  <p style="margin-top:8px;"><strong>Supported platforms (June 2026):</strong></p>
+  <p style="margin-top:8px;"><strong>Supported platforms (per Microsoft Learn):</strong></p>
   <div class="a365-platform-grid" style="margin:8px 0 4px;">
     <div class="a365-platform-chip"><span>☁️</span>Amazon Bedrock</div>
     <div class="a365-platform-chip"><span>🌐</span>Google Vertex AI</div>
     <div class="a365-platform-chip"><span>⚡</span>Salesforce Agentforce</div>
     <div class="a365-platform-chip"><span>🧱</span>Databricks Genie</div>
   </div>
-  <p style="font-size:12px;color:var(--text3);margin-top:6px;">Salesforce Agentforce and Databricks Genie were added in the June 2026 wave, joining Amazon Bedrock and Google Vertex AI (Gemini Enterprise Agent Platform). Microsoft product teams are actively expanding platform coverage.</p>
+  <p style="font-size:12px;color:var(--text3);margin-top:6px;">AWS Bedrock and Google Cloud (Gemini Enterprise Agent Platform, formerly Vertex AI) were the GA-day platforms; Salesforce Agentforce and Databricks Genie are also listed as supported on Microsoft Learn. Microsoft product teams are actively expanding platform coverage.</p>
   <p style="margin-top:8px;"><strong>Set-up:</strong> M365 admin center → <strong>Agents → All Agents</strong> → in the <em>Registry sync</em> web part select <strong>Manage → + Connect a platform</strong> → name the connection, pick the platform and region, choose auto-import, enter and validate credentials, save. Each platform needs read/list (and delete, for lifecycle) permissions on its own side — e.g. an AWS IAM user with <code>bedrock:ListAgents</code>/<code>GetAgent</code>, a Google service account with the Vertex AI <code>reasoningEngines</code> permissions, a Salesforce connected app with client-credentials OAuth, or a Databricks service principal with workspace admin.</p>
   <div class="callout callout-warn" style="margin-top:10px;">
     <div class="callout-title">⚠ Security note — connection credentials are standing keys</div>
     <p style="font-size:13px;">Each connection stores long-lived credentials to a third-party cloud (AWS access keys, GCP service-account keys, Salesforce consumer secrets, Databricks client secrets). Scope them to the minimum agent-read/list/delete permissions above, rotate them, and treat the Registry sync connection list as a privileged inventory. From <strong>July 1, 2026</strong> registry sync is also the replacement discovery path for third-party cloud agents that were previously found via Defender for Cloud connectors — configure it before the cutover to avoid a visibility gap.</p>
   </div>
-  <p style="font-size:12px;color:var(--text3);margin-top:8px;">Source: <a href="https://learn.microsoft.com/en-us/microsoft-agent-365/admin/agent-registry" target="_blank" style="color:var(--blue);">Microsoft Learn — Registry sync in the Microsoft 365 agent registry (preview)</a>; <a href="https://techcommunity.microsoft.com/blog/agent-365-blog/whats-new-in-agent-365-%E2%80%93-june-2026/4535107" target="_blank" style="color:var(--blue);">What's new in Agent 365 — June 2026</a>.</p>
+  <p style="font-size:12px;color:var(--text3);margin-top:8px;">Source: <a href="https://learn.microsoft.com/en-us/microsoft-agent-365/admin/agent-registry" target="_blank" style="color:var(--blue);">Microsoft Learn — Registry sync in the Microsoft 365 agent registry (preview)</a>. <em>Note:</em> registry sync (external cloud platforms) is distinct from the June 2026 addition of <strong>local agents</strong> to the registry — see the <a href="#june-2026">June 2026 update</a> below.</p>
 </div>
 
-<div class="section-label">What Agent 365 Is</div>
+<div class="section-label" id="june-2026" style="margin-top:48px;">June 2026 Update</div>
+<h2>What's new in Agent 365 — June 2026</h2>
+<p style="font-size:12px;color:var(--text3);margin-bottom:14px;">Source: <a href="https://techcommunity.microsoft.com/blog/agent-365-blog/whats-new-in-agent-365-%E2%80%93-june-2026/4535107" target="_blank" style="color:var(--blue);">"What's new in Agent 365 — June 2026"</a>, Microsoft Community Hub (Alex Pozin, Samer Baroudi, Brendan Powers · published Jul 8, 2026). This month's wave centres on <strong>local agents</strong> — shadow AI running directly on user devices — plus faster onboarding and stronger programmatic governance.</p>
+
+<h3 style="margin-top:20px;">Visibility, controls and protection for local agents</h3>
+
+<table style="margin:10px 0;font-size:12px;">
+<thead><tr><th>Capability</th><th>Status</th><th>Detail</th></tr></thead>
+<tbody>
+<tr><td><strong>Local agents in the Agent 365 registry</strong></td><td><span class="caution-inline">Public Preview</span></td><td>Shadow local agents detected across the environment now surface in the registry — a unified view of each agent's <strong>publisher, detected device count, and last scanned date</strong>. A per-agent details pane lists <strong>every endpoint where the agent has been observed</strong>, with device name, model, and operating system. Lets teams pinpoint which shadow agents users run, scope the footprint by device, and accelerate investigations. <em>(Distinct from external-cloud <a href="#registry-sync">registry sync</a>, which imports agents from Bedrock/Vertex/Agentforce/Genie.)</em></td></tr>
+<tr><td><strong>Purview Audit for local &amp; developer agents</strong></td><td><span class="caution-inline">Expanding</span></td><td>Purview Audit in Agent 365 adds coverage for <strong>GitHub Copilot CLI, Claude Code, OpenAI Codex, and OpenClaw</strong>. Captures human-to-agent, agent-to-agent, and agent-to-tool interactions with contextual metadata on access, actions, and activity — closing audit gaps as agent usage becomes distributed.</td></tr>
+<tr><td><strong>Defender security for local agents</strong></td><td><span class="caution-inline">Public Preview</span></td><td>Since the June 2 release, Defender discovery of local agents and MCP servers spans managed <strong>Windows and macOS</strong> devices, now supporting <strong>more than 35 known agent types</strong> (preview). Adds <strong>exposure risk for local agents</strong> — identify and prioritise the riskiest agents by configuration, permissions, and exposure, with remediation recommendations. <strong>On-device runtime protection</strong> (public preview) covers Claude Code, GitHub Copilot CLI, GitHub Copilot app, Codex CLI, OpenClaw and similar Node-based claws, using agent-native event inspection plus on-device network-based runtime inspection: it can <strong>audit or block prompt-injection instructions</strong> and raises Defender XDR alerts. Purview integration audits or blocks prompts and tool calls in real time to prevent exfiltration per DLP policy. Advanced hunting correlates local-agent activity with endpoint telemetry.</td></tr>
+<tr><td><strong>Microsoft Execution Containers (MXC) for local agents</strong></td><td><span class="caution-inline">Public Preview</span></td><td>MXC now lets IT <strong>require local agents to run inside a hardened Windows container</strong> — an isolated runtime that reduces exposure from unmanaged execution while standardising protections across the fleet. Combines isolation with centralised policy enforcement. See the <a href="#build2026-mxc">Build 2026 MXC section</a> below for the fuller architecture.</td></tr>
+</tbody>
+</table>
+
+<h3 style="margin-top:24px;">Onboarding and fleet management</h3>
+
+<table style="margin:10px 0;font-size:12px;">
+<thead><tr><th>Capability</th><th>Status</th><th>Detail</th></tr></thead>
+<tbody>
+<tr><td><strong>Agent 365 skills — accelerated onboarding</strong></td><td><span class="caution-inline">New</span></td><td>Removes the onboarding "last mile" where builders previously had to manually wire up identity, observability, governance, and secure access to Microsoft 365 data. With Agent 365 skills, developers use <strong>natural language directly within their coding environment</strong> to request outcomes ("add observability", "integrate this tool") and the platform automatically applies and validates the required configuration — turning a multi-step setup into a guided, outcome-driven flow.</td></tr>
+<tr><td><strong>Expanded Microsoft Graph API — Agent Package Management</strong></td><td><span class="caution-inline">GA (v1.0)</span></td><td>Two foundational package-management APIs moved from beta to <strong>Microsoft Graph v1.0</strong>: <strong>List packages</strong> (<code>GET /copilot/admin/catalog/packages</code>) for a full agent inventory, and <strong>Get package details</strong> (<code>GET /copilot/admin/catalog/packages/{id}</code>) for per-agent config, ownership, and deployment metadata. These return <em>agents</em> (apps and add-ins are excluded). New: read-only access via <strong>Global Reader and AI Reader</strong> roles, and <strong>application (app-only) permissions</strong> for unattended automation. Broader Graph surface also supports inventory retrieval, auditing metadata, and management actions — block, unblock, reassign ownership — for integrating agent governance into existing toolchains.</td></tr>
+<tr><td><strong>Entra ID Governance for ecosystem partner agents</strong></td><td><span class="caution-inline">New</span></td><td>Entra ID Governance for agent entitlements now extends to <strong>ecosystem partner agents integrated through the Agent 365 SDK</strong> — so entitlement management (scoped permissions, ownership accountability, time-bound access) applies consistently across internally-built and third-party agents. Governs partner agents through <strong>access packages, lifecycle workflows, and least-privilege</strong>, reducing over-provisioning.</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 Security-architect takeaways</div>
+  <ul style="margin:6px 0 0 18px;font-size:13px;line-height:1.7;">
+    <li><strong>Local agents are now a first-class governed asset class.</strong> Discovery (registry + Defender), audit (Purview), runtime protection (Defender on-device inspection), and isolation (MXC) all landed in public preview this month — a full loop for shadow AI on developer laptops.</li>
+    <li><strong>The package-management Graph APIs going v1.0</strong> is the signal to automate agent inventory/compliance reporting instead of relying on the portal — and Global Reader / AI Reader / app-only permissions make read paths safe to delegate.</li>
+    <li><strong>Entra entitlement governance for partner agents</strong> closes a gap: SDK-integrated third-party agents can now be brought under the same access-package and lifecycle-review rigour as internal agents.</li>
+  </ul>
+</div>
+
+<div class="section-label" style="margin-top:48px;">What Agent 365 Is</div>
 <h2>The enterprise layer above your agent logic</h2>
 <p>Agent 365 is not an agent builder or hosting platform. It is a management and security layer that sits above whatever platform your agents run on — Copilot Studio, Microsoft Foundry, LangChain, OpenAI Agents SDK, or anything else. Once an agent is onboarded to Agent 365, it gains enterprise-grade controls it didn't have before.</p>
 
@@ -859,7 +895,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
   <strong>Coming soon — additional Shadow AI detections:</strong><br>
   Claude Code CLI · Ollama Desktop · OpenAI · Cursor · Poe Desktop<br><br>
-  <strong>Coming in June 2026:</strong> Defender asset context mapping per local agent — devices, MCP servers, identities, cloud resources reachable. Runtime blocking if malicious behaviour detected.</p>
+  <strong>Now in public preview (June 2026):</strong> Defender asset context mapping per local agent — devices, MCP servers, identities, cloud resources reachable — plus on-device runtime protection that can audit or block prompt-injection attacks. Local agents also now surface in the Agent 365 registry with device-level context. See the <a href="#june-2026">June 2026 update</a> above.</p>
 </div>
 
 <div class="section-label" style="margin-top:40px;">Windows 365 for Agents</div>
@@ -1014,7 +1050,7 @@ AgentsInfo
 <!-- ════════════════════════════════════════════════════════════════════════ -->
 <!-- BUILD 2026 — NATIVE WINDOWS + MXC INTEGRATION -->
 <!-- ════════════════════════════════════════════════════════════════════════ -->
-<div class="section-label" style="margin-top:48px;">Build 2026 — Native Windows integration</div>
+<div class="section-label" id="build2026-mxc" style="margin-top:48px;">Build 2026 — Native Windows integration</div>
 <h2>Agent 365 + Windows + MXC — a unified control plane for local agents</h2>
 <p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">At Build 2026 Microsoft announced <strong>native Windows integration with Agent 365</strong> — providing a common foundation for observability, security, and governance of agents that run locally on Windows endpoints. This is the convergence of four governance pillars (identity, threat, device, data) at the runtime boundary for local agents, not just cloud agents.</p>
 
@@ -1022,10 +1058,11 @@ AgentsInfo
 <thead><tr><th>Component</th><th>What it provides</th><th>Status</th></tr></thead>
 <tbody>
 <tr><td><strong>Microsoft Execution Containers (MXC) SDK</strong></td><td>Policy-driven execution layer. Developers declare what an agent can access (files, network, processes); containment boundaries enforced at runtime. Composable isolation — light when low-risk, full sandbox when sensitive.</td><td><span class="caution-inline">Early Preview</span></td></tr>
+<tr><td><strong>MXC for local agents — enforced isolation</strong></td><td><strong>June 2026 update:</strong> IT can now <strong>require local agents to run inside a hardened Windows container</strong>, reducing exposure from unmanaged execution while standardising protections across the fleet. Combines isolation with centralised policy enforcement.</td><td><span class="caution-inline">Public Preview · June 2026</span></td></tr>
 <tr><td><strong>Agent 365 + MXC native integration</strong></td><td>Defender, Entra, Intune, and Purview protections delivered <strong>via MXC</strong>. Agents on Windows start secure and stay secure. The four pillars converge at the runtime boundary.</td><td><span class="caution-inline">Preview · July 2026</span></td></tr>
 <tr><td><strong>Native Intune integration</strong></td><td>Intune sets policies that <strong>gate agent runtime execution</strong> — controlling how agents run, what permissions they have, what they can reach. Same Intune surface IT already uses for device and application management.</td><td><span class="caution-inline">Preview</span></td></tr>
-<tr><td><strong>Defender local agent discovery</strong></td><td>Defender for Endpoint discovers and profiles supported local AI agents on Defender-onboarded <strong>Windows endpoints</strong>. Each agent surfaces as a security asset (not just an OS process), defined by user + device + agent type. Five categories covered: CLI agents, Desktop apps, Agentic IDEs, VS Code extensions, Claw-based agents. 20+ specific tools today (full list on <a href="mcp.html" style="color:var(--blue);">MCP page</a>). Three views: inventory, exposure map, Advanced Hunting. M365 admin center Shadow AI detection shows unmanaged agents + publishers across the tenant.</td><td><span class="caution-inline">Preview · June 2026</span></td></tr>
-<tr><td><strong>Defender AI agent runtime protection</strong></td><td>Inline prompt-injection detection at three hook points in the agent loop: user prompt, pre-tool call, post-tool response. Three modes: Block (stops action + notifies + alerts), Audit (continues + alerts — recommended starting mode), Disabled. Tamper-protected setting. Alert name: "Suspicious AI prompt injection." Currently supports <strong>Claude Code + GitHub Copilot CLI</strong> via their published hooks frameworks. Coverage expanding.</td><td><span class="caution-inline">Preview · June 2026</span></td></tr>
+<tr><td><strong>Defender local agent discovery</strong></td><td>Defender for Endpoint discovers and profiles supported local AI agents on Defender-onboarded <strong>Windows endpoints</strong>. Each agent surfaces as a security asset (not just an OS process), defined by user + device + agent type. Five categories covered: CLI agents, Desktop apps, Agentic IDEs, VS Code extensions, Claw-based agents. Since the June 2 release, discovery spans managed <strong>Windows and macOS</strong> devices and supports <strong>more than 35 known agent types</strong> (full list on <a href="mcp.html" style="color:var(--blue);">MCP page</a>). Adds <strong>exposure risk for local agents</strong> — prioritises the riskiest agents by configuration, permissions, and exposure with remediation recommendations. Three views: inventory, exposure map, Advanced Hunting. M365 admin center Shadow AI detection shows unmanaged agents + publishers across the tenant.</td><td><span class="caution-inline">Preview · 35+ types</span></td></tr>
+<tr><td><strong>Defender AI agent runtime protection</strong></td><td>Inline prompt-injection detection at three hook points in the agent loop: user prompt, pre-tool call, post-tool response. Three modes: Block (stops action + notifies + alerts), Audit (continues + alerts — recommended starting mode), Disabled. Tamper-protected setting. Alert name: "Suspicious AI prompt injection." <strong>On-device runtime protection now in public preview</strong> — supports <strong>Claude Code, GitHub Copilot CLI, GitHub Copilot app, Codex CLI, OpenClaw</strong> and similar Node-based claws via agent-native event inspection plus on-device network-based inspection. Purview integration audits/blocks prompts and tool calls in real time to prevent exfiltration per DLP policy. Coverage expanding.</td><td><span class="caution-inline">Public Preview · June 2026</span></td></tr>
 <tr><td><strong>Defender advanced hunting + exposure graph for agents</strong></td><td>Trace how agents are connected across the network. Investigate agent activity using the same endpoint telemetry security teams already use in Defender.</td><td><span class="caution-inline">Preview coming soon</span></td></tr>
 </tbody>
 </table>
