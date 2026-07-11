@@ -352,7 +352,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <div class="page">
 
 <div class="hero">
-  <div class="hero-badge"><div class="live-dot"></div>SITE CHANGELOG · LAST UPDATED JUNE 5, 2026</div>
+  <div class="hero-badge"><div class="live-dot"></div>SITE CHANGELOG · LAST UPDATED JULY 11, 2026</div>
   <h1>What's Changed<br><span>& When</span></h1>
   <p style="color:#2e3d5e;font-size:17px;font-weight:400;max-width:640px;line-height:1.7;">
     This site is a living document. Microsoft updates products and capabilities frequently — this log tracks meaningful content changes, corrections, and additions. Minor fixes (typos, link corrections) are not listed.
@@ -407,6 +407,23 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 
 
+
+<div class="section-label" style="margin-top:40px;">JULY 11, 2026</div>
+<h2>What's New in Agent 365 — June 2026 Blog Coverage</h2>
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Reviewed and integrated the "What's new in Agent 365 — June 2026" blog</strong>. Source: <a href="https://techcommunity.microsoft.com/blog/agent-365-blog/whats-new-in-agent-365-%E2%80%93-june-2026/4535107" target="_blank" style="color:var(--blue);">Microsoft Community Hub</a> (Alex Pozin, Samer Baroudi, Brendan Powers · published Jul 8, 2026). The June wave centres on <strong>local agents</strong> plus onboarding and programmatic governance. Added a dated <em>June 2026 Update</em> section on agent365.html (<code>#june-2026</code> anchor) with two capability tables and an architect-takeaways callout, and three new product-map.html cards. <strong>New capabilities documented:</strong> (1) <strong>Local agents in the Agent 365 registry</strong> (public preview) — surfaces publisher, detected device count, last scanned date, and a per-agent pane listing every endpoint (device name, model, OS). (2) <strong>Purview Audit</strong> coverage for GitHub Copilot CLI, Claude Code, OpenAI Codex, OpenClaw. (3) <strong>Defender security for local agents</strong> (public preview) — discovery now spans Windows <em>and macOS</em>, supports <strong>35+ known agent types</strong>, adds <strong>exposure risk for local agents</strong>, and <strong>on-device runtime protection</strong> (Claude Code, GitHub Copilot CLI/app, Codex CLI, OpenClaw + Node-based claws) with prompt-injection audit/block, XDR alerts, and Purview real-time prompt/tool-call blocking. (4) <strong>MXC for local agents</strong> (public preview) — require local agents to run in a hardened Windows container. (5) <strong>Agent 365 skills</strong> — natural-language onboarding inside the coding environment. (6) <strong>Expanded Microsoft Graph API</strong> — package-management APIs (<code>List packages</code>, <code>Get package details</code>) moved beta → v1.0, with Global Reader / AI Reader roles and app-only permissions. (7) <strong>Entra ID Governance for ecosystem partner agents</strong> — entitlement management extends to SDK-integrated partner agents (access packages, lifecycle workflows, least-privilege). Existing Defender-discovery, runtime-protection, and MXC sections on agent365.html / product-map.html had their statuses refreshed to public preview with the new specifics; a matching <em>June 2026 update</em> block was added to both technical and business chat.js SYSTEM_PROMPTs.</td>
+<td>agent365.html, product-map.html, functions/api/chat.js, changelog.html</td></tr>
+
+<tr><td><span class="tag warn">⚠️ Correction</span></td>
+<td><strong>Registry-sync platform list re-sourced.</strong> An earlier draft of this update attributed the four-platform external-cloud registry sync (Amazon Bedrock, Google Vertex AI, Salesforce Agentforce, Databricks Genie) to the June 2026 blog. That blog does <strong>not</strong> cover external-cloud registry sync — its "registry" item is about <em>local</em> agents. The four supported external platforms are documented on <a href="https://learn.microsoft.com/en-us/microsoft-agent-365/admin/agent-registry" target="_blank" style="color:var(--blue);">Microsoft Learn</a> and remain useful (the site previously listed only two), so the <code>#registry-sync</code> callout on agent365.html was kept but re-sourced to Learn and no longer dated to the June blog, and the GA-day table row restored to its GA-accurate wording. The chat.js registry-sync sections were corrected to match and now explicitly distinguish external-cloud registry sync from the June local-agent registry addition.</td>
+<td>agent365.html, functions/api/chat.js, changelog.html</td></tr>
+
+</tbody>
+</table>
 
 <div class="section-label" style="margin-top:40px;">JUNE 9, 2026</div>
 <h2>AI Incident Response Investigator Playbook · Detect &amp; Respond</h2>

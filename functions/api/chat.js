@@ -692,6 +692,10 @@ KEY NEW CONCEPTS:
       - GCP Vertex AI
     The local-agent capability is the most novel addition; multi-cloud was already
     Microsoft's positioning.
+    NOTE: Agent 365 Registry sync (M365 admin center) is the admin-driven import path
+    for external-platform agents and supports FOUR platforms as of June 2026:
+    Amazon Bedrock, Google Vertex AI, Salesforce Agentforce, Databricks Genie.
+    See the REGISTRY SYNC section below.
 
 8. DEFENDER ADVANCED HUNTING + EXPOSURE GRAPH FOR AGENTS — Preview coming soon
    Trace how agents are connected across the network.
@@ -1608,14 +1612,78 @@ NETWORK CONTROLS — CORRECTION:
 
 GA Day new capabilities (Source: Microsoft Security Blog, Nirav Shah):
 
-REGISTRY SYNC — AWS Bedrock + Google Cloud (Preview NOW):
-  Automatically discover and inventory agents on AWS Bedrock and Google Gemini Enterprise
-  Agent Platform (formerly Vertex AI). Basic lifecycle governance (start/stop/delete) coming soon.
+REGISTRY SYNC — external cloud platforms (Preview):
+  Securely connect external agent environments and sync their agents into the Agent 365
+  registry (M365 admin center → Agents → All Agents → Registry sync → Manage → Connect a platform).
+  Announced at GA (May 1, 2026) for AWS Bedrock + Google Cloud. Microsoft Learn now lists
+  four supported source platforms:
+    - Amazon Bedrock
+    - Google Vertex AI (Gemini Enterprise Agent Platform, formerly Vertex AI)
+    - Salesforce Agentforce
+    - Databricks Genie
+  Authenticate once per environment (long-lived platform credentials — scope to minimum
+  agent list/get/delete permissions), then sync on demand. Basic lifecycle governance
+  (start/stop/delete via each platform's APIs) is available. Scheduled sync is coming
+  in a future release. From July 1, 2026 registry sync is also the replacement discovery
+  path for third-party cloud agents previously found via Defender for Cloud connectors.
+  NOTE: this external-cloud registry sync is DISTINCT from the June 2026 blog's addition of
+  LOCAL agents (shadow AI on user devices) into the Agent 365 registry — see JUNE 2026 UPDATE.
+  Source: Microsoft Learn — Registry sync in the Microsoft 365 agent registry (preview).
 
 DEFENDER AGENT CONTEXT MAPPING (Preview June 2026):
   Relationship map per agent: devices running it, MCP servers configured, associated identities,
   cloud resources reachable. Blast radius analysis. File/network behaviour investigation.
   Policy-based controls + runtime blocking via Intune also Preview June 2026.
+
+// ── JUNE 2026 UPDATE (Agent 365 blog, Jul 8 2026 — Pozin/Baroudi/Powers) ─────────
+// Theme this month: LOCAL AGENTS (shadow AI on user devices) + faster onboarding +
+// programmatic governance. Source: "What's new in Agent 365 — June 2026".
+
+LOCAL AGENTS IN THE AGENT 365 REGISTRY (Public Preview):
+  Shadow local agents detected across the environment now surface in the registry —
+  showing each agent's publisher, detected device count, and last scanned date. A per-agent
+  details pane lists every endpoint where the agent was observed (device name, model, OS).
+  NOTE: distinct from external-cloud REGISTRY SYNC (Bedrock/Vertex/Agentforce/Genie) above.
+
+PURVIEW AUDIT FOR LOCAL/DEVELOPER AGENTS:
+  Purview Audit in Agent 365 adds coverage for GitHub Copilot CLI, Claude Code, OpenAI Codex,
+  and OpenClaw. Captures human-to-agent, agent-to-agent, agent-to-tool interactions with
+  contextual metadata (access, actions, activity).
+
+DEFENDER SECURITY FOR LOCAL AGENTS (Public Preview):
+  Since the June 2 release, Defender discovery of local agents + MCP servers spans managed
+  Windows AND macOS, now supporting MORE THAN 35 known agent types (preview). Adds EXPOSURE
+  RISK for local agents (prioritise riskiest by config/permissions/exposure, with fixes).
+  ON-DEVICE RUNTIME PROTECTION (public preview) covers Claude Code, GitHub Copilot CLI,
+  GitHub Copilot app, Codex CLI, OpenClaw and similar Node-based claws via agent-native event
+  inspection + on-device network-based inspection: audits/blocks prompt-injection, raises XDR
+  alerts. Purview integration audits/blocks prompts + tool calls in real time to stop
+  exfiltration per DLP policy. Advanced hunting correlates local-agent activity with endpoint
+  telemetry.
+
+MXC FOR LOCAL AGENTS (Public Preview):
+  IT can now REQUIRE local agents to run inside a hardened Windows container — isolated runtime
+  that reduces exposure from unmanaged execution while standardising protections fleet-wide.
+
+AGENT 365 SKILLS — accelerated onboarding (New):
+  Removes the onboarding "last mile" (manually wiring identity, observability, governance,
+  secure M365 data access). Developers use natural language IN THEIR CODING ENVIRONMENT to
+  request outcomes ("add observability", "integrate this tool"); platform auto-applies and
+  validates the required config.
+
+EXPANDED MICROSOFT GRAPH API — Agent Package Management (GA, v1.0):
+  Two package-management APIs moved beta → Microsoft Graph v1.0:
+    - List packages:  GET /copilot/admin/catalog/packages         (full agent inventory)
+    - Get package details: GET /copilot/admin/catalog/packages/{id} (config/ownership/deploy)
+  Return AGENTS only (apps/add-ins excluded). New: read-only via Global Reader + AI Reader
+  roles; application (app-only) permissions for unattended automation. Broader Graph surface
+  also supports block/unblock/reassign-ownership management actions.
+
+ENTRA ID GOVERNANCE FOR ECOSYSTEM PARTNER AGENTS (New):
+  Entra ID Governance for agent entitlements (scoped permissions, ownership accountability,
+  time-bound access) now extends to partner agents integrated via the Agent 365 SDK — applied
+  consistently across internal + third-party agents through access packages, lifecycle
+  workflows, and least-privilege. Requires Microsoft Entra ID Governance.
 
 // ── SECURE WEB AND AI GATEWAY FOR AGENTS (Preview) ──────────────────────────────
 
@@ -1673,14 +1741,78 @@ NETWORK CONTROLS — CORRECTION:
 
 GA Day new capabilities (Source: Microsoft Security Blog, Nirav Shah):
 
-REGISTRY SYNC — AWS Bedrock + Google Cloud (Preview NOW):
-  Automatically discover and inventory agents on AWS Bedrock and Google Gemini Enterprise
-  Agent Platform (formerly Vertex AI). Basic lifecycle governance (start/stop/delete) coming soon.
+REGISTRY SYNC — external cloud platforms (Preview):
+  Securely connect external agent environments and sync their agents into the Agent 365
+  registry (M365 admin center → Agents → All Agents → Registry sync → Manage → Connect a platform).
+  Announced at GA (May 1, 2026) for AWS Bedrock + Google Cloud. Microsoft Learn now lists
+  four supported source platforms:
+    - Amazon Bedrock
+    - Google Vertex AI (Gemini Enterprise Agent Platform, formerly Vertex AI)
+    - Salesforce Agentforce
+    - Databricks Genie
+  Authenticate once per environment (long-lived platform credentials — scope to minimum
+  agent list/get/delete permissions), then sync on demand. Basic lifecycle governance
+  (start/stop/delete via each platform's APIs) is available. Scheduled sync is coming
+  in a future release. From July 1, 2026 registry sync is also the replacement discovery
+  path for third-party cloud agents previously found via Defender for Cloud connectors.
+  NOTE: this external-cloud registry sync is DISTINCT from the June 2026 blog's addition of
+  LOCAL agents (shadow AI on user devices) into the Agent 365 registry — see JUNE 2026 UPDATE.
+  Source: Microsoft Learn — Registry sync in the Microsoft 365 agent registry (preview).
 
 DEFENDER AGENT CONTEXT MAPPING (Preview June 2026):
   Relationship map per agent: devices running it, MCP servers configured, associated identities,
   cloud resources reachable. Blast radius analysis. File/network behaviour investigation.
   Policy-based controls + runtime blocking via Intune also Preview June 2026.
+
+// ── JUNE 2026 UPDATE (Agent 365 blog, Jul 8 2026 — Pozin/Baroudi/Powers) ─────────
+// Theme this month: LOCAL AGENTS (shadow AI on user devices) + faster onboarding +
+// programmatic governance. Source: "What's new in Agent 365 — June 2026".
+
+LOCAL AGENTS IN THE AGENT 365 REGISTRY (Public Preview):
+  Shadow local agents detected across the environment now surface in the registry —
+  showing each agent's publisher, detected device count, and last scanned date. A per-agent
+  details pane lists every endpoint where the agent was observed (device name, model, OS).
+  NOTE: distinct from external-cloud REGISTRY SYNC (Bedrock/Vertex/Agentforce/Genie) above.
+
+PURVIEW AUDIT FOR LOCAL/DEVELOPER AGENTS:
+  Purview Audit in Agent 365 adds coverage for GitHub Copilot CLI, Claude Code, OpenAI Codex,
+  and OpenClaw. Captures human-to-agent, agent-to-agent, agent-to-tool interactions with
+  contextual metadata (access, actions, activity).
+
+DEFENDER SECURITY FOR LOCAL AGENTS (Public Preview):
+  Since the June 2 release, Defender discovery of local agents + MCP servers spans managed
+  Windows AND macOS, now supporting MORE THAN 35 known agent types (preview). Adds EXPOSURE
+  RISK for local agents (prioritise riskiest by config/permissions/exposure, with fixes).
+  ON-DEVICE RUNTIME PROTECTION (public preview) covers Claude Code, GitHub Copilot CLI,
+  GitHub Copilot app, Codex CLI, OpenClaw and similar Node-based claws via agent-native event
+  inspection + on-device network-based inspection: audits/blocks prompt-injection, raises XDR
+  alerts. Purview integration audits/blocks prompts + tool calls in real time to stop
+  exfiltration per DLP policy. Advanced hunting correlates local-agent activity with endpoint
+  telemetry.
+
+MXC FOR LOCAL AGENTS (Public Preview):
+  IT can now REQUIRE local agents to run inside a hardened Windows container — isolated runtime
+  that reduces exposure from unmanaged execution while standardising protections fleet-wide.
+
+AGENT 365 SKILLS — accelerated onboarding (New):
+  Removes the onboarding "last mile" (manually wiring identity, observability, governance,
+  secure M365 data access). Developers use natural language IN THEIR CODING ENVIRONMENT to
+  request outcomes ("add observability", "integrate this tool"); platform auto-applies and
+  validates the required config.
+
+EXPANDED MICROSOFT GRAPH API — Agent Package Management (GA, v1.0):
+  Two package-management APIs moved beta → Microsoft Graph v1.0:
+    - List packages:  GET /copilot/admin/catalog/packages         (full agent inventory)
+    - Get package details: GET /copilot/admin/catalog/packages/{id} (config/ownership/deploy)
+  Return AGENTS only (apps/add-ins excluded). New: read-only via Global Reader + AI Reader
+  roles; application (app-only) permissions for unattended automation. Broader Graph surface
+  also supports block/unblock/reassign-ownership management actions.
+
+ENTRA ID GOVERNANCE FOR ECOSYSTEM PARTNER AGENTS (New):
+  Entra ID Governance for agent entitlements (scoped permissions, ownership accountability,
+  time-bound access) now extends to partner agents integrated via the Agent 365 SDK — applied
+  consistently across internal + third-party agents through access packages, lifecycle
+  workflows, and least-privilege. Requires Microsoft Entra ID Governance.
 
 // ── SECURE WEB AND AI GATEWAY FOR AGENTS (Preview) ──────────────────────────────
 
