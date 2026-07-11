@@ -352,7 +352,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <div class="page">
 
 <div class="hero">
-  <div class="hero-badge"><div class="live-dot"></div>SITE CHANGELOG · LAST UPDATED JUNE 5, 2026</div>
+  <div class="hero-badge"><div class="live-dot"></div>SITE CHANGELOG · LAST UPDATED JULY 11, 2026</div>
   <h1>What's Changed<br><span>& When</span></h1>
   <p style="color:#2e3d5e;font-size:17px;font-weight:400;max-width:640px;line-height:1.7;">
     This site is a living document. Microsoft updates products and capabilities frequently — this log tracks meaningful content changes, corrections, and additions. Minor fixes (typos, link corrections) are not listed.
@@ -407,6 +407,19 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 
 
+
+<div class="section-label" style="margin-top:40px;">JULY 11, 2026</div>
+<h2>Agent 365 Registry Sync Expanded to Four Platforms · June 2026 Blog</h2>
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag blue">✏️ Updated</span></td>
+<td><strong>Agent 365 registry sync expanded from two external platforms to four</strong>. Source: <a href="https://techcommunity.microsoft.com/blog/agent-365-blog/whats-new-in-agent-365-%E2%80%93-june-2026/4535107" target="_blank" style="color:var(--blue);">"What's new in Agent 365 — June 2026"</a> (Microsoft Community Hub) and the <a href="https://learn.microsoft.com/en-us/microsoft-agent-365/admin/agent-registry" target="_blank" style="color:var(--blue);">Microsoft Learn registry sync page (preview)</a>. At GA (May 1, 2026) registry sync discovered agents on <strong>Amazon Bedrock</strong> and <strong>Google Vertex AI</strong> only, with lifecycle governance flagged "coming soon". The June 2026 wave adds <strong>Salesforce Agentforce</strong> and <strong>Databricks Genie</strong> as supported source platforms, and basic lifecycle governance (start / stop / delete via each platform's APIs) is <strong>now available</strong>. Registry sync is managed from the M365 admin center (Agents → All Agents → Registry sync → Manage → + Connect a platform): name the connection, pick platform + region, choose auto-import, then enter and validate the platform credentials. Each connection stores <strong>long-lived third-party cloud credentials</strong> (AWS access keys, GCP service-account keys, Salesforce consumer secrets, Databricks client secrets) — the site flags these as a privileged inventory to scope to minimum agent list/get/delete permissions and rotate. Reminder retained that from <strong>July 1, 2026</strong> registry sync is the replacement discovery path for third-party cloud agents previously found via Defender for Cloud connectors. <strong>Changes:</strong> updated the GA-day capability table row on agent365.html; added a dedicated <em>Registry sync — external platform connections</em> callout (four-platform chip grid, set-up steps, per-platform permission notes, security caveat) with an <code>#registry-sync</code> anchor; updated both technical and business chat.js registry-sync sections plus the Defender multi-cloud discovery note. Defender context mapping and Intune runtime blocking (both Preview June 2026) were already documented from the GA-day coverage.</td>
+<td>agent365.html, functions/api/chat.js, changelog.html</td></tr>
+
+</tbody>
+</table>
 
 <div class="section-label" style="margin-top:40px;">JUNE 9, 2026</div>
 <h2>AI Incident Response Investigator Playbook · Detect &amp; Respond</h2>

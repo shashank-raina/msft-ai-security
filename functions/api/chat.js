@@ -692,6 +692,10 @@ KEY NEW CONCEPTS:
       - GCP Vertex AI
     The local-agent capability is the most novel addition; multi-cloud was already
     Microsoft's positioning.
+    NOTE: Agent 365 Registry sync (M365 admin center) is the admin-driven import path
+    for external-platform agents and supports FOUR platforms as of June 2026:
+    Amazon Bedrock, Google Vertex AI, Salesforce Agentforce, Databricks Genie.
+    See the REGISTRY SYNC section below.
 
 8. DEFENDER ADVANCED HUNTING + EXPOSURE GRAPH FOR AGENTS — Preview coming soon
    Trace how agents are connected across the network.
@@ -1608,9 +1612,21 @@ NETWORK CONTROLS — CORRECTION:
 
 GA Day new capabilities (Source: Microsoft Security Blog, Nirav Shah):
 
-REGISTRY SYNC — AWS Bedrock + Google Cloud (Preview NOW):
-  Automatically discover and inventory agents on AWS Bedrock and Google Gemini Enterprise
-  Agent Platform (formerly Vertex AI). Basic lifecycle governance (start/stop/delete) coming soon.
+REGISTRY SYNC — four external platforms (Preview, expanded June 2026):
+  Securely connect external agent environments and sync their agents into the Agent 365
+  registry (M365 admin center → Agents → All Agents → Registry sync → Manage → Connect a platform).
+  Supported platforms as of June 2026:
+    - Amazon Bedrock
+    - Google Vertex AI (Gemini Enterprise Agent Platform, formerly Vertex AI)
+    - Salesforce Agentforce   (added June 2026)
+    - Databricks Genie        (added June 2026)
+  Authenticate once per environment (long-lived platform credentials — scope to minimum
+  agent list/get/delete permissions), then sync on demand. Basic lifecycle governance
+  (start/stop/delete via each platform's APIs) is now available. Scheduled sync is coming
+  in a future release. From July 1, 2026 registry sync is also the replacement discovery
+  path for third-party cloud agents previously found via Defender for Cloud connectors.
+  Source: Microsoft Learn — Registry sync in the Microsoft 365 agent registry (preview);
+  "What's new in Agent 365 — June 2026" (Microsoft Community Hub).
 
 DEFENDER AGENT CONTEXT MAPPING (Preview June 2026):
   Relationship map per agent: devices running it, MCP servers configured, associated identities,
@@ -1673,9 +1689,21 @@ NETWORK CONTROLS — CORRECTION:
 
 GA Day new capabilities (Source: Microsoft Security Blog, Nirav Shah):
 
-REGISTRY SYNC — AWS Bedrock + Google Cloud (Preview NOW):
-  Automatically discover and inventory agents on AWS Bedrock and Google Gemini Enterprise
-  Agent Platform (formerly Vertex AI). Basic lifecycle governance (start/stop/delete) coming soon.
+REGISTRY SYNC — four external platforms (Preview, expanded June 2026):
+  Securely connect external agent environments and sync their agents into the Agent 365
+  registry (M365 admin center → Agents → All Agents → Registry sync → Manage → Connect a platform).
+  Supported platforms as of June 2026:
+    - Amazon Bedrock
+    - Google Vertex AI (Gemini Enterprise Agent Platform, formerly Vertex AI)
+    - Salesforce Agentforce   (added June 2026)
+    - Databricks Genie        (added June 2026)
+  Authenticate once per environment (long-lived platform credentials — scope to minimum
+  agent list/get/delete permissions), then sync on demand. Basic lifecycle governance
+  (start/stop/delete via each platform's APIs) is now available. Scheduled sync is coming
+  in a future release. From July 1, 2026 registry sync is also the replacement discovery
+  path for third-party cloud agents previously found via Defender for Cloud connectors.
+  Source: Microsoft Learn — Registry sync in the Microsoft 365 agent registry (preview);
+  "What's new in Agent 365 — June 2026" (Microsoft Community Hub).
 
 DEFENDER AGENT CONTEXT MAPPING (Preview June 2026):
   Relationship map per agent: devices running it, MCP servers configured, associated identities,

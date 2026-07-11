@@ -443,13 +443,32 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <table style="margin:10px 0;font-size:12px;">
   <thead><tr><th>Capability</th><th>Status</th><th>Detail</th></tr></thead>
   <tbody>
-  <tr><td><strong>Registry sync — AWS Bedrock + Google Cloud</strong></td><td><span class="caution-inline">Preview now</span></td><td>Automatically discover and inventory agents on AWS Bedrock and Google Gemini Enterprise Agent Platform. Basic lifecycle governance (start, stop, delete) coming soon.</td></tr>
+  <tr><td><strong>Registry sync — four external platforms</strong></td><td><span class="caution-inline">Preview · expanded June 2026</span></td><td>Automatically discover, inventory, and import agents from external platforms into the Agent 365 registry for centralised visibility and governance. Now supports <strong>Amazon Bedrock, Google Vertex AI (Gemini Enterprise Agent Platform), Salesforce Agentforce, and Databricks Genie</strong> — Salesforce and Databricks added in the June 2026 wave. Basic lifecycle governance (start, stop, delete) via each platform's APIs is now available. Managed from the <strong>Registry sync page in the Microsoft 365 admin center</strong> (Agents → All Agents → Registry sync). See the <a href="#registry-sync" style="color:var(--blue);">detail below</a>.</td></tr>
   <tr><td><strong>Defender agent context mapping</strong></td><td><span class="caution-inline">Preview June 2026</span></td><td>Relationship map per agent: devices it runs on, MCP servers configured, associated identities, cloud resources reachable. Blast radius analysis and endpoint-based behaviour investigation.</td></tr>
   <tr><td><strong>Intune integration — policy controls + runtime blocking</strong></td><td><span class="caution-inline">Preview June 2026</span></td><td>Policy-based controls and runtime blocking/alerting via Intune and Defender for agents on managed devices.</td></tr>
   </tbody>
   </table>
   <p style="font-size:12px;margin-top:8px;"><strong>Pricing:</strong> USD$15 per user per month. Each licence covers an individual who manages or sponsors agents, or uses agents to do work on their behalf. Also included in Microsoft 365 E7.<br>
   Source: <a href="https://www.microsoft.com/en-us/security/blog/2026/05/01/microsoft-agent-365-now-generally-available-expands-capabilities-and-integrations/" target="_blank" style="color:var(--blue);">Microsoft Security Blog — Agent 365 GA (May 1, 2026)</a></p>
+</div>
+
+<div id="registry-sync" class="callout callout-info" style="margin-top:20px;">
+  <div class="callout-title">🔄 Registry sync — external platform connections (Preview, expanded June 2026)</div>
+  <p>AI agents are commonly built and hosted outside Microsoft. <strong>Registry sync</strong> lets an admin securely connect those external environments and pull their agents into the Agent 365 registry for centralised inventory, visibility, and basic lifecycle governance — without leaving the Microsoft 365 admin center. You authenticate once per environment, then sync agents on demand (scheduled sync is coming in a future release).</p>
+  <p style="margin-top:8px;"><strong>Supported platforms (June 2026):</strong></p>
+  <div class="a365-platform-grid" style="margin:8px 0 4px;">
+    <div class="a365-platform-chip"><span>☁️</span>Amazon Bedrock</div>
+    <div class="a365-platform-chip"><span>🌐</span>Google Vertex AI</div>
+    <div class="a365-platform-chip"><span>⚡</span>Salesforce Agentforce</div>
+    <div class="a365-platform-chip"><span>🧱</span>Databricks Genie</div>
+  </div>
+  <p style="font-size:12px;color:var(--text3);margin-top:6px;">Salesforce Agentforce and Databricks Genie were added in the June 2026 wave, joining Amazon Bedrock and Google Vertex AI (Gemini Enterprise Agent Platform). Microsoft product teams are actively expanding platform coverage.</p>
+  <p style="margin-top:8px;"><strong>Set-up:</strong> M365 admin center → <strong>Agents → All Agents</strong> → in the <em>Registry sync</em> web part select <strong>Manage → + Connect a platform</strong> → name the connection, pick the platform and region, choose auto-import, enter and validate credentials, save. Each platform needs read/list (and delete, for lifecycle) permissions on its own side — e.g. an AWS IAM user with <code>bedrock:ListAgents</code>/<code>GetAgent</code>, a Google service account with the Vertex AI <code>reasoningEngines</code> permissions, a Salesforce connected app with client-credentials OAuth, or a Databricks service principal with workspace admin.</p>
+  <div class="callout callout-warn" style="margin-top:10px;">
+    <div class="callout-title">⚠ Security note — connection credentials are standing keys</div>
+    <p style="font-size:13px;">Each connection stores long-lived credentials to a third-party cloud (AWS access keys, GCP service-account keys, Salesforce consumer secrets, Databricks client secrets). Scope them to the minimum agent-read/list/delete permissions above, rotate them, and treat the Registry sync connection list as a privileged inventory. From <strong>July 1, 2026</strong> registry sync is also the replacement discovery path for third-party cloud agents that were previously found via Defender for Cloud connectors — configure it before the cutover to avoid a visibility gap.</p>
+  </div>
+  <p style="font-size:12px;color:var(--text3);margin-top:8px;">Source: <a href="https://learn.microsoft.com/en-us/microsoft-agent-365/admin/agent-registry" target="_blank" style="color:var(--blue);">Microsoft Learn — Registry sync in the Microsoft 365 agent registry (preview)</a>; <a href="https://techcommunity.microsoft.com/blog/agent-365-blog/whats-new-in-agent-365-%E2%80%93-june-2026/4535107" target="_blank" style="color:var(--blue);">What's new in Agent 365 — June 2026</a>.</p>
 </div>
 
 <div class="section-label">What Agent 365 Is</div>
