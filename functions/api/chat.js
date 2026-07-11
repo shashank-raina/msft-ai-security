@@ -1665,11 +1665,27 @@ MXC FOR LOCAL AGENTS (Public Preview):
   IT can now REQUIRE local agents to run inside a hardened Windows container — isolated runtime
   that reduces exposure from unmanaged execution while standardising protections fleet-wide.
 
-AGENT 365 SKILLS — accelerated onboarding (New):
-  Removes the onboarding "last mile" (manually wiring identity, observability, governance,
-  secure M365 data access). Developers use natural language IN THEIR CODING ENVIRONMENT to
-  request outcomes ("add observability", "integrate this tool"); platform auto-applies and
-  validates the required config.
+AGENT 365 SKILLS — accelerated onboarding (New; deep-dive blog Jun 22 2026 by aarthisk):
+  Natural-language onboarding skills that run INSIDE the coding assistant developers already
+  use (Claude Code, GitHub Copilot CLI, VS Code agent mode). Removes the onboarding "last mile"
+  (manually wiring identity, observability, governance, secure M365 data access). Every skill
+  follows a five-beat loop: describe -> detect -> ask -> apply -> validate.
+  SIX SKILLS:
+    - a365-setup: installs Agent 365 CLI, validates Azure prereqs, detects stack, routes onboarding
+    - make-a365-agent: registers a Blueprint (observability/catalog visibility, no full messaging)
+    - instrument-observability: wires OpenTelemetry + Agent 365 tracing exporter so spans appear in
+      Defender/Purview/M365 admin center. Auth modes: OBO, Agentic-User, S2S.
+    - add-workiq-tools: connects Work IQ (WorkIQ) MCP servers (Mail, Calendar, Word...) for M365 data
+    - make-ai-teammate: adds Messaging + Notifications (Teams, email, @mentions)
+    - test-local: launches agent with AgentsPlayground for local smoke testing (no cloud deploy)
+  Stacks: .NET (Agent Framework, Semantic Kernel, Azure AI Foundry); Node.js (LangChain, OpenAI
+  Agents SDK, Claude SDK, Semantic Kernel, Google ADK); Python (Agent Framework, LangChain, OpenAI,
+  Claude, Semantic Kernel, Google ADK). Stack auto-detected.
+  SECURITY GUARD-RAILS: additive + idempotent (never deletes/restructures code); state-aware
+  workspace cache (skips completed steps); pre-tool hooks BLOCK edits outside the project dir;
+  stop-hook validators verify the build passes before the session ends. Distributed via GitHub —
+  `gh skill add microsoft/agent365-skills` (repo: microsoft/agent365-skills) — treat the source repo
+  + version as a privileged dev dependency.
 
 EXPANDED MICROSOFT GRAPH API — Agent Package Management (GA, v1.0):
   Two package-management APIs moved beta → Microsoft Graph v1.0:
@@ -1794,11 +1810,27 @@ MXC FOR LOCAL AGENTS (Public Preview):
   IT can now REQUIRE local agents to run inside a hardened Windows container — isolated runtime
   that reduces exposure from unmanaged execution while standardising protections fleet-wide.
 
-AGENT 365 SKILLS — accelerated onboarding (New):
-  Removes the onboarding "last mile" (manually wiring identity, observability, governance,
-  secure M365 data access). Developers use natural language IN THEIR CODING ENVIRONMENT to
-  request outcomes ("add observability", "integrate this tool"); platform auto-applies and
-  validates the required config.
+AGENT 365 SKILLS — accelerated onboarding (New; deep-dive blog Jun 22 2026 by aarthisk):
+  Natural-language onboarding skills that run INSIDE the coding assistant developers already
+  use (Claude Code, GitHub Copilot CLI, VS Code agent mode). Removes the onboarding "last mile"
+  (manually wiring identity, observability, governance, secure M365 data access). Every skill
+  follows a five-beat loop: describe -> detect -> ask -> apply -> validate.
+  SIX SKILLS:
+    - a365-setup: installs Agent 365 CLI, validates Azure prereqs, detects stack, routes onboarding
+    - make-a365-agent: registers a Blueprint (observability/catalog visibility, no full messaging)
+    - instrument-observability: wires OpenTelemetry + Agent 365 tracing exporter so spans appear in
+      Defender/Purview/M365 admin center. Auth modes: OBO, Agentic-User, S2S.
+    - add-workiq-tools: connects Work IQ (WorkIQ) MCP servers (Mail, Calendar, Word...) for M365 data
+    - make-ai-teammate: adds Messaging + Notifications (Teams, email, @mentions)
+    - test-local: launches agent with AgentsPlayground for local smoke testing (no cloud deploy)
+  Stacks: .NET (Agent Framework, Semantic Kernel, Azure AI Foundry); Node.js (LangChain, OpenAI
+  Agents SDK, Claude SDK, Semantic Kernel, Google ADK); Python (Agent Framework, LangChain, OpenAI,
+  Claude, Semantic Kernel, Google ADK). Stack auto-detected.
+  SECURITY GUARD-RAILS: additive + idempotent (never deletes/restructures code); state-aware
+  workspace cache (skips completed steps); pre-tool hooks BLOCK edits outside the project dir;
+  stop-hook validators verify the build passes before the session ends. Distributed via GitHub —
+  `gh skill add microsoft/agent365-skills` (repo: microsoft/agent365-skills) — treat the source repo
+  + version as a privileged dev dependency.
 
 EXPANDED MICROSOFT GRAPH API — Agent Package Management (GA, v1.0):
   Two package-management APIs moved beta → Microsoft Graph v1.0:
