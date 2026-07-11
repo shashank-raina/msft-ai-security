@@ -1957,6 +1957,165 @@ jobs:
   <div class="step-tip" style="margin-top:16px;">💡 <strong>Standing veto:</strong> any of Owner / Sponsor / Approver / DPO can block a third-party agent at any step. The default for external agents is "not approved" — you have to actively decide to allow them in. This is the inverse of internally built agents, where the default is "permitted within environment policy."</div>
 </div>
 
+<!-- ═══════════════ PLAYBOOK 9 — PREVENT DATA LEAK TO SHADOW AI ═══════════════ -->
+<div class="pb-block" id="playbook9" style="margin-top:40px;">
+  <div class="pb-header" style="background:linear-gradient(135deg,#004d44 0%,#008575 100%);">
+    <div class="pb-header-eyebrow">PLAYBOOK 09</div>
+    <div class="pb-header-title">Prevent Data Leak to Shadow AI</div>
+    <div class="pb-header-sub">Shadow AI is the use of generative-AI tools without the knowledge, approval, or governance of IT and security. Unregulated use can undermine security controls even while boosting productivity — risking <strong>sensitive-data leak, regulatory non-compliance, and reputational harm</strong>. This is Microsoft's four-stage deployment model for preventing data leak to shadow AI, spanning Microsoft Purview, Defender for Cloud Apps, Entra, and Intune. Work the stages in order: you cannot block what you have not discovered, and you cannot govern what you have not brought into scope.</div>
+    <div class="pb-meta-row">
+      <span class="pb-meta-item">Purview · Defender for Cloud Apps · Entra · Intune</span>
+      <span class="pb-meta-item green">✓ 4 staged outcomes: Discover → Block access → Block data → Govern</span>
+      <span class="pb-meta-item warn">⚠ Blocking unsanctioned apps is not enough — sanctioned apps still need data controls</span>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">THE FOUR-STAGE MODEL — DISCOVER → BLOCK ACCESS → BLOCK DATA → GOVERN</div>
+    <div class="step">
+      <div class="step-num">!</div>
+      <div class="step-body">
+        <div class="step-title">Each stage has a distinct outcome — layer them, don't substitute</div>
+        <div class="step-desc"><strong>Stage 1 (Discover):</strong> unknown AI-app usage is surfaced. <strong>Stage 2 (Block access):</strong> unsanctioned AI apps are blocked at org, user, and device level. <strong>Stage 3 (Block data):</strong> sensitive data can't reach even <em>sanctioned</em> apps. <strong>Stage 4 (Govern):</strong> AI interactions are audited, retained, and investigable. Blocking (Stage 2) handles unsanctioned apps; data protection (Stage 3) handles the sanctioned apps you keep — both are needed.</div>
+        <div class="step-tip">💡 This complements the Agent 365 local-agent controls (Defender discovery, Purview audit for GitHub Copilot CLI / Claude Code / Codex / OpenClaw) covered on <a href="agent365.html#june-2026" style="color:var(--blue);">agent365.html</a> — that path governs <em>local coding agents</em>; this model governs <em>browser- and network-based generative-AI apps</em>.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STAGE 1 — DISCOVER AI APPS (BEFORE BLOCKING)</div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Discover and risk-rank AI apps with Defender for Cloud Apps</div>
+        <div class="step-desc">Filter the <strong>Cloud app catalog</strong> by <strong>App category → Generative AI</strong> to identify AI apps in use, review each app's risk score and usage details, then tag apps as <strong>Sanctioned</strong> or <strong>Unsanctioned</strong> per policy.</div>
+        <div class="step-code">Defender for Cloud Apps → Cloud app catalog
+→ Filter: App category = Generative AI
+→ Review risk score + usage per app
+→ Tag: Sanctioned / Unsanctioned</div>
+        <div class="step-tip">💡 Use the cloud discovery dashboard to read usage trends <em>before</em> making sanctioning decisions — understanding scope helps you prioritise which apps to address first.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">See whether sensitive data is being sent, with Purview DSPM for AI</div>
+        <div class="step-desc">Use <strong>Data Security Posture Management (DSPM) for AI</strong> reports and Activity Explorer to discover user interactions and whether sensitive data is flowing to AI apps. Extend visibility with three detection policies:</div>
+        <div class="step-desc" style="margin-top:8px;">• <strong>Detect AI-site visits</strong> — Insider Risk Management policy for when users visit AI application websites.<br>• <strong>Detect sensitive info in AI prompts in Edge</strong> — Purview <strong>Browser Data Security</strong>.<br>• <strong>Detect sensitive info pasted/uploaded to AI sites</strong> — Purview <strong>Endpoint DLP</strong>.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Baseline risky interactions with Insider Risk Management</div>
+        <div class="step-desc">Use Insider Risk Management to gain visibility into risky AI interactions in the browser or over the network — identifying users engaging in high-risk activity such as uploading sensitive content or interacting with unsanctioned AI services. This baseline feeds the Adaptive Protection controls used in Stages 2 and 4.</div>
+        <div class="step-tip">💡 <strong>End of Stage 1:</strong> visibility into which AI apps are used, user-interaction data flowing into DSPM for AI, and a baseline understanding of AI risk.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STAGE 2 — BLOCK ACCESS TO UNSANCTIONED AI APPS</div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Block org-wide with Defender for Cloud Apps</div>
+        <div class="step-desc">Select the apps you tagged Unsanctioned in Stage 1 and choose <strong>Unsanction</strong> to mark them blocked, then verify the block propagates to your network controls.</div>
+        <div class="step-warn">⚠ Org-level blocking prevents access through managed network connections only. Users can still reach these apps via <strong>unmanaged devices or personal networks</strong> — which is why device controls (below) and the data controls in Stage 3 are required, not optional.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Restrict specific users and groups with Entra Internet Access</div>
+        <div class="step-desc">Use <strong>Entra Internet Access</strong> for granular control — allow limited access to certain AI apps while restricting specific users and groups from unsanctioned ones. Combine with Insider Risk Management via <strong>Adaptive Protection + Conditional Access</strong> so users flagged high-risk are automatically restricted from AI apps.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Block installation on devices with Intune</div>
+        <div class="step-desc">Use Microsoft Intune to block installation of unsanctioned AI apps on managed devices — covering the case where users try to install AI applications directly rather than reaching them through a browser.</div>
+        <div class="step-tip">💡 <strong>End of Stage 2:</strong> org-wide blocking (Defender for Cloud Apps), user/group restrictions (Entra Internet Access), auto-block of elevated-risk users (Adaptive Protection + Conditional Access), and device-level install prevention (Intune).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STAGE 3 — BLOCK SENSITIVE DATA TO SANCTIONED AI APPS</div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Label content with sensitivity labels (encryption is the strongest control)</div>
+        <div class="step-desc">Apply Purview <strong>sensitivity labels</strong> to classify and protect content. Other AI apps <strong>can't decrypt content encrypted by Purview</strong> — so even if a user pastes or uploads labelled content into an AI app, the app can't process it. Labelling-with-encryption is one of the most effective protections against data leakage to shadow AI.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Block paste/upload of sensitive info with Endpoint DLP</div>
+        <div class="step-desc">Create a DLP policy scoped to <strong>Devices</strong>, with conditions detecting sensitive information types or sensitivity labels, and actions that <strong>block paste to browser, upload to cloud services, or copy to clipboard</strong> for AI application websites.</div>
+        <div class="step-code">Purview DLP → Create policy → Location: Devices
+→ Condition: content contains SITs / sensitivity labels
+→ Action: block paste-to-browser / upload / clipboard for AI sites
+→ Run in SIMULATION mode first, then enforce</div>
+        <div class="step-tip">💡 Review the DLP Activity Explorer to spot false positives and fine-tune conditions before switching out of simulation.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Block sensitive prompts in Edge; detect leakage elsewhere</div>
+        <div class="step-desc"><strong>Browser Data Security</strong> in Microsoft Edge inspects text users type or paste into AI prompts in real time and blocks sensitive submissions before they leave the browser — covering consumer apps including ChatGPT (consumer), Microsoft Copilot (consumer), DeepSeek, and Google Gemini. For everything outside Edge, <strong>Network Data Security</strong> policies detect sensitive data shared through non-Microsoft browsers, apps, APIs, and add-ins. Additionally, use Defender for Cloud Apps to monitor <strong>Microsoft 365 Copilot</strong> use for suspicious interactions.</div>
+        <div class="step-warn">⚠ Full coverage needs all three layers: Endpoint DLP (managed-device paste/upload), Browser Data Security (Edge prompt text), and Network Data Security (non-Edge / desktop / API paths). Each closes a gap the others can't see.</div>
+        <div class="step-tip">💡 <strong>End of Stage 3:</strong> sensitive data is protected even for the AI apps you sanctioned and keep.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pb-section">
+    <div class="pb-section-label">STAGE 4 — GOVERN DATA SENT TO AI APPS</div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Capture interactions with Purview Audit</div>
+        <div class="step-desc">Confirm <strong>Purview Audit</strong> is on (it's typically enabled by default) so all AI interactions — prompts, responses, and related actions by users and admins — are recorded. Auditing extends to Copilot activity and other AI applications.</div>
+        <div class="step-warn">⚠ Audit is usually on by default, but confirm it — a silent gap here means no record to investigate later.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Detect, retain, and investigate</div>
+        <div class="step-desc">• <strong>Communication Compliance</strong> — built-in classifiers detect inappropriate behaviours in AI prompts, including third-party AI tools accessed through the browser, not just M365 Copilot.<br>• <strong>Data Lifecycle Management</strong> — retention policies retain and delete AI prompts per your requirements (create a retention policy covering AI-interaction locations; set retention/deletion periods).<br>• <strong>eDiscovery</strong> — preserve, collect, analyse, review, and export AI prompts and responses; search interactions across the org, place holds to prevent deletion, and export for legal or internal investigations.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Keep an ongoing risk-based governance layer</div>
+        <div class="step-desc">As a standing control, use Insider Risk Management with <strong>Adaptive Protection</strong> to block elevated-risk users from submitting prompts to AI apps in Microsoft Edge — a dynamic layer that tightens protections based on user behaviour rather than a static rule.</div>
+        <div class="step-tip">💡 <strong>End of Stage 4:</strong> audit capture of all AI interactions, policy-violation detection, retention governance, eDiscovery for investigations, and adaptive restriction of high-risk users.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="checklist">
+    <div class="checklist-title">SHADOW AI DEPLOYMENT CHECKLIST</div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Generative-AI apps discovered and risk-ranked in Defender for Cloud Apps; each tagged Sanctioned/Unsanctioned</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">DSPM for AI reporting on; AI-site-visit, Edge-prompt, and endpoint paste/upload detection policies configured</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Insider Risk Management baseline established for risky AI interactions</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Unsanctioned apps blocked org-wide (Defender for Cloud Apps) + user/group restrictions (Entra Internet Access)</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Adaptive Protection + Conditional Access auto-blocking elevated-risk users; Intune blocking unsanctioned app installs</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Sensitivity labels with encryption applied to protect content from AI processing</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Endpoint DLP, Edge Browser Data Security, and Network Data Security all deployed (three-layer coverage)</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Purview Audit confirmed on; Communication Compliance, retention (DLM), and eDiscovery configured for AI interactions</div></div>
+    <div class="check-item"><input type="checkbox"><div class="check-label">Adaptive Protection restricting high-risk users from AI prompts in Edge as a standing control</div></div>
+  </div>
+
+  <div class="step-tip" style="margin-top:16px;">📚 <strong>Source:</strong> Microsoft Learn — <a href="https://learn.microsoft.com/en-us/purview/deploymentmodels/depmod-data-leak-shadow-ai-intro" target="_blank" style="color:var(--blue);">"Prevent data leak to shadow AI"</a> deployment model (Introduction + Steps 1–4).</div>
+</div>
+
 <div class="page-nav"><a href="gaps.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Gaps</span></a><a href="agent365.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Agent 365</span></a></div>
 
 <div style="text-align:center;margin:32px 0 0;padding:24px 0;border-top:1px solid var(--border2);">

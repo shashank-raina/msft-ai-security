@@ -409,6 +409,19 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 
 <div class="section-label" style="margin-top:40px;">JULY 11, 2026</div>
+<h2>New Playbook 09 — Prevent Data Leak to Shadow AI</h2>
+<table>
+<thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
+<tbody>
+
+<tr><td><span class="tag blue">🆕 New</span></td>
+<td><strong>Added Playbook 09 — Prevent Data Leak to Shadow AI</strong> on playbooks.html. Source: Microsoft Learn — <a href="https://learn.microsoft.com/en-us/purview/deploymentmodels/depmod-data-leak-shadow-ai-intro" target="_blank" style="color:var(--blue);">"Prevent data leak to shadow AI"</a> deployment model (Introduction + Steps 1–4). Renders the four-stage blueprint as a full playbook: <strong>Stage 1 Discover</strong> (Defender for Cloud Apps generative-AI discovery + risk scoring/sanctioning; Purview DSPM for AI; Insider Risk Management baseline), <strong>Stage 2 Block access</strong> (Defender for Cloud Apps org-wide unsanction; Entra Internet Access user/group + Adaptive Protection with Conditional Access; Intune install blocking), <strong>Stage 3 Block sensitive data to sanctioned apps</strong> (sensitivity labels with encryption; Endpoint DLP paste/upload blocking; Edge Browser Data Security for consumer AI prompts; Network Data Security for non-Edge paths; Defender for Cloud Apps monitoring of M365 Copilot), and <strong>Stage 4 Govern</strong> (Purview Audit; Communication Compliance; Data Lifecycle Management retention; eDiscovery; ongoing Adaptive Protection). Includes the three-layer DLP coverage caveat, the unmanaged-device/personal-network gap on org-level blocking, a nine-item deployment checklist, and a cross-link to the Agent 365 local-agent controls (which govern local coding agents, vs. this model's browser/network generative-AI apps). Built as a stacked <code>pb-block</code> section (id <code>#playbook9</code>) using the site's defined playbook styling.</td>
+<td>playbooks.html, changelog.html</td></tr>
+
+</tbody>
+</table>
+
+<div class="section-label" style="margin-top:40px;">JULY 11, 2026</div>
 <h2>Agent 365 SDK — Deep-Dive Coverage</h2>
 <table>
 <thead><tr><th>Type</th><th>Change</th><th>Page(s) Affected</th></tr></thead>
