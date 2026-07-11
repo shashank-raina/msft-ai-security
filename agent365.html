@@ -492,7 +492,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <table style="margin:10px 0;font-size:12px;">
 <thead><tr><th>Capability</th><th>Status</th><th>Detail</th></tr></thead>
 <tbody>
-<tr><td><strong>Agent 365 skills — accelerated onboarding</strong></td><td><span class="caution-inline">New</span></td><td>Removes the onboarding "last mile" where builders previously had to manually wire up identity, observability, governance, and secure access to Microsoft 365 data. With Agent 365 skills, developers use <strong>natural language directly within their coding environment</strong> to request outcomes ("add observability", "integrate this tool") and the platform automatically applies and validates the required configuration — turning a multi-step setup into a guided, outcome-driven flow.</td></tr>
+<tr><td><strong>Agent 365 skills — accelerated onboarding</strong></td><td><span class="caution-inline">New</span></td><td>Removes the onboarding "last mile" where builders previously had to manually wire up identity, observability, governance, and secure access to Microsoft 365 data. With Agent 365 skills, developers use <strong>natural language directly within their coding environment</strong> to request outcomes ("add observability", "integrate this tool") and the platform automatically applies and validates the required configuration — turning a multi-step setup into a guided, outcome-driven flow. See the <a href="#agent365-skills">six-skill breakdown and guard-rail model</a> below.</td></tr>
 <tr><td><strong>Expanded Microsoft Graph API — Agent Package Management</strong></td><td><span class="caution-inline">GA (v1.0)</span></td><td>Two foundational package-management APIs moved from beta to <strong>Microsoft Graph v1.0</strong>: <strong>List packages</strong> (<code>GET /copilot/admin/catalog/packages</code>) for a full agent inventory, and <strong>Get package details</strong> (<code>GET /copilot/admin/catalog/packages/{id}</code>) for per-agent config, ownership, and deployment metadata. These return <em>agents</em> (apps and add-ins are excluded). New: read-only access via <strong>Global Reader and AI Reader</strong> roles, and <strong>application (app-only) permissions</strong> for unattended automation. Broader Graph surface also supports inventory retrieval, auditing metadata, and management actions — block, unblock, reassign ownership — for integrating agent governance into existing toolchains.</td></tr>
 <tr><td><strong>Entra ID Governance for ecosystem partner agents</strong></td><td><span class="caution-inline">New</span></td><td>Entra ID Governance for agent entitlements now extends to <strong>ecosystem partner agents integrated through the Agent 365 SDK</strong> — so entitlement management (scoped permissions, ownership accountability, time-bound access) applies consistently across internally-built and third-party agents. Governs partner agents through <strong>access packages, lifecycle workflows, and least-privilege</strong>, reducing over-provisioning.</td></tr>
 </tbody>
@@ -505,6 +505,44 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
     <li><strong>The package-management Graph APIs going v1.0</strong> is the signal to automate agent inventory/compliance reporting instead of relying on the portal — and Global Reader / AI Reader / app-only permissions make read paths safe to delegate.</li>
     <li><strong>Entra entitlement governance for partner agents</strong> closes a gap: SDK-integrated third-party agents can now be brought under the same access-package and lifecycle-review rigour as internal agents.</li>
   </ul>
+</div>
+
+<div class="section-label" id="agent365-skills" style="margin-top:40px;">Deep Dive</div>
+<h2>Agent 365 Skills — the six-skill onboarding lifecycle</h2>
+<p style="font-size:12px;color:var(--text3);margin-bottom:14px;">Source: <a href="https://techcommunity.microsoft.com/blog/agent-365-blog/agent-365-skills-bring-your-agents-into-microsoft-agent-365-in-minutes/4529838" target="_blank" style="color:var(--blue);">"Agent 365 Skills: Bring your agents into Microsoft Agent 365 in minutes"</a>, Microsoft Community Hub (aarthisk · Jun 22, 2026). Repository: <a href="https://github.com/microsoft/agent365-skills" target="_blank" style="color:var(--blue);">github.com/microsoft/agent365-skills</a>.</p>
+
+<p>Agent 365 Skills are a set of natural-language onboarding skills that run <strong>inside the coding assistant a developer already uses</strong> — Claude Code, GitHub Copilot CLI, or VS Code agent mode. Instead of reading Microsoft Learn pages and running order-sensitive CLI commands, the developer describes an outcome ("add observability", "wire up WorkIQ Mail and Calendar", "test this agent locally") and the skill applies and validates the change. Every skill follows the same <strong>five-beat loop: describe → detect → ask → apply → validate</strong> — it detects the project stack, asks only the questions it must, applies the required manifest/config changes, and confirms the build still passes before the session ends.</p>
+
+<h3 style="margin-top:20px;">The six skills</h3>
+<table style="margin:10px 0;font-size:12px;">
+<thead><tr><th>Skill</th><th>What it does</th></tr></thead>
+<tbody>
+<tr><td><code>a365-setup</code></td><td>Installs the Agent 365 CLI, validates Azure prerequisites, detects the agent stack, and routes to the right onboarding path — in one guided flow.</td></tr>
+<tr><td><code>make-a365-agent</code></td><td>Registers a <strong>Blueprint</strong> for agents that need observability or catalog visibility <em>without</em> the full messaging layer.</td></tr>
+<tr><td><code>instrument-observability</code></td><td>Wires OpenTelemetry and the Agent 365 tracing exporter so agent spans appear in <strong>Defender, Purview, and the M365 admin center</strong>. Supports <strong>OBO, Agentic-User, and S2S</strong> authentication modes.</td></tr>
+<tr><td><code>add-workiq-tools</code></td><td>Connects <strong>Work Intelligence (WorkIQ) MCP servers</strong> — Mail, Calendar, Word, and more — so the agent can read and act on Microsoft 365 data.</td></tr>
+<tr><td><code>make-ai-teammate</code></td><td>Adds <strong>Messaging and Notifications</strong> so the agent can receive messages over Teams, email, and @mentions.</td></tr>
+<tr><td><code>test-local</code></td><td>Launches the agent alongside <strong>AgentsPlayground</strong> for local smoke testing — no cloud deployment required.</td></tr>
+</tbody>
+</table>
+<p style="font-size:12px;color:var(--text3);">Run only the skills an agent needs, or use the <code>make</code> skills to execute all required steps. The project stack is auto-detected — no hand-mapping.</p>
+
+<h3 style="margin-top:20px;">Supported stacks</h3>
+<div style="display:flex;flex-direction:column;gap:6px;margin:8px 0 4px;font-size:13px;">
+  <div><strong>.NET:</strong> Agent Framework, Semantic Kernel, Azure AI Foundry</div>
+  <div><strong>Node.js:</strong> LangChain, OpenAI Agents SDK, Claude SDK, Semantic Kernel, Google ADK</div>
+  <div><strong>Python:</strong> Agent Framework, LangChain, OpenAI, Claude, Semantic Kernel, Google ADK</div>
+</div>
+
+<div class="callout callout-caution" style="margin-top:16px;">
+  <div class="callout-title">🔒 Security-architect note — the guard-rail model matters</div>
+  <p>Agent 365 Skills are dev-time code that modifies a project, so their safety properties are worth understanding when you assess supply-chain and dev-environment risk:</p>
+  <ul style="margin:6px 0 8px 18px;font-size:13px;line-height:1.7;">
+    <li><strong>Additive and idempotent</strong> — skills don't delete or restructure existing code, and re-running a skill is safe by design.</li>
+    <li><strong>State-aware</strong> — a workspace detection cache tracks what's already wired, so completed steps are skipped, not duplicated.</li>
+    <li><strong>Guard-railed</strong> — <em>pre-tool hooks block modifications outside the project directory</em>, and <em>stop-hook validators verify the build passes</em> before the session ends.</li>
+  </ul>
+  <p style="font-size:13px;">Two practical implications: (1) the skills are distributed via GitHub — installed with <code>gh skill add microsoft/agent365-skills</code> — so treat the source repo and version as you would any privileged dev dependency. (2) The <code>instrument-observability</code> skill's three auth modes (<strong>OBO</strong> = on-behalf-of the signed-in user, <strong>Agentic-User</strong> = the agent's own Entra identity, <strong>S2S</strong> = service-to-service) are the same token-flow decisions you govern elsewhere — the skill surfaces the choice, but the security consequence (delegated vs. app-only reach into M365 data) is unchanged. See the <a href="identity.html" style="color:var(--blue);">Identity page</a> for the underlying credential model.</p>
 </div>
 
 <div class="section-label" style="margin-top:48px;">What Agent 365 Is</div>
