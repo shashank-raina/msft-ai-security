@@ -502,6 +502,32 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
     <div class="pb-nav-title">Respond to a Suspected Agent Compromise</div>
     <div class="pb-nav-meta">~1 hr · Security Engineer · Sentinel + Defender required</div>
   </div>
+  <div style="grid-column:1/-1;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:var(--text3);text-transform:uppercase;margin:8px 0 -2px;">Deployment &amp; operational playbooks — scroll to view</div>
+  <div class="pb-nav-card" onclick="document.getElementById('playbook5').scrollIntoView({behavior:'smooth',block:'start'})">
+    <div class="pb-nav-num">PLAYBOOK 05</div>
+    <div class="pb-nav-title">Microsoft Foundry — Enable Security Logging</div>
+    <div class="pb-nav-meta">Foundry · Azure Monitor · Sentinel</div>
+  </div>
+  <div class="pb-nav-card" onclick="document.getElementById('pb6').scrollIntoView({behavior:'smooth',block:'start'})">
+    <div class="pb-nav-num">PLAYBOOK 06</div>
+    <div class="pb-nav-title">Pre-Deployment Red Teaming with PyRIT</div>
+    <div class="pb-nav-meta">Adversarial testing · OWASP LLM Top 10 · CI/CD gate</div>
+  </div>
+  <div class="pb-nav-card" onclick="document.getElementById('pb7').scrollIntoView({behavior:'smooth',block:'start'})">
+    <div class="pb-nav-num">PLAYBOOK 07</div>
+    <div class="pb-nav-title">Brief Your Makers — Security Awareness</div>
+    <div class="pb-nav-meta">~33 min · Maker enablement · Live or recorded</div>
+  </div>
+  <div class="pb-nav-card" onclick="document.getElementById('pb8').scrollIntoView({behavior:'smooth',block:'start'})">
+    <div class="pb-nav-num">PLAYBOOK 08</div>
+    <div class="pb-nav-title">Vet a Third-Party Agent Before Publish</div>
+    <div class="pb-nav-meta">IT Approver + Security review · Per external agent</div>
+  </div>
+  <div class="pb-nav-card" onclick="document.getElementById('playbook9').scrollIntoView({behavior:'smooth',block:'start'})">
+    <div class="pb-nav-num">PLAYBOOK 09</div>
+    <div class="pb-nav-title">Prevent Data Leak to Shadow AI</div>
+    <div class="pb-nav-meta">Purview · Defender for Cloud Apps · Entra · Intune</div>
+  </div>
 </div>
 
 <!-- ═══════════════ PLAYBOOK 1 ═══════════════ -->
@@ -1542,7 +1568,7 @@ AppRequests      → inbound requests (if agent exposed via HTTP)</div>
 </div>
 
 <!-- ═══════════════ PLAYBOOK 6 — PyRIT ═══════════════ -->
-<div class="pb-panel" id="pb6" style="margin-top:40px;">
+<div class="pb-block" id="pb6" style="margin-top:40px;">
   <div class="pb-header" style="background:linear-gradient(135deg,#6a0000 0%,#a4262c 100%);">
     <div class="pb-header-eyebrow">PLAYBOOK 06</div>
     <div class="pb-header-title">Pre-Deployment AI Agent Red Teaming with PyRIT</div>
@@ -1749,7 +1775,7 @@ jobs:
 </div>
 
 <!-- ═══════════════ PLAYBOOK 7 — BRIEF YOUR MAKERS ═══════════════ -->
-<div class="pb-panel" id="pb7" style="margin-top:40px;">
+<div class="pb-block" id="pb7" style="margin-top:40px;">
   <div class="pb-header" style="background:linear-gradient(135deg,#005a3d 0%,#008575 100%);">
     <div class="pb-header-eyebrow">PLAYBOOK 07</div>
     <div class="pb-header-title">Brief Your Makers — 33-Minute Security Awareness</div>
@@ -1850,7 +1876,7 @@ jobs:
 </div>
 
 <!-- ═══════════════ PLAYBOOK 8 — VET A THIRD-PARTY AGENT ═══════════════ -->
-<div class="pb-panel" id="pb8" style="margin-top:40px;">
+<div class="pb-block" id="pb8" style="margin-top:40px;">
   <div class="pb-header" style="background:linear-gradient(135deg,#3a0066 0%,#5256a3 100%);">
     <div class="pb-header-eyebrow">PLAYBOOK 08</div>
     <div class="pb-header-title">Vet a Third-Party Agent Before Publish</div>
