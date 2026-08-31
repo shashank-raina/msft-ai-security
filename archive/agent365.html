@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Overview — Securing AI with Microsoft</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="site.css">
+<link rel="stylesheet" href="../site.css">
 <style>
 @media(max-width:700px){
   .topnav{padding:0 16px;}
@@ -39,28 +39,32 @@
     <div><div class="brand-text">Securing AI with Microsoft</div></div>
   </div>
   <div class="nav-links">
-<a href="index.html" class="">Home</a>
+<a href="../index.html" class="">Home</a>
 <a href="overview.html" class="">Overview</a>
 <a href="product-map.html" class="">Products</a>
 <a href="agent365.html" class="active">Agent 365</a>
 <a href="identity.html" class="">Identity</a>
 <a href="threats.html" class="">Threats</a>
 <a href="playbooks.html" class="">Playbooks</a>
-<a href="contact.html" class="">Contact</a>
+<a href="../contact.html" class="">Contact</a>
 </div>
   <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
   <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" class="substack-nav" style="flex-shrink:0;margin-left:10px;display:flex;align-items:center;gap:5px;background:var(--blue);color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:6px 13px;border-radius:6px;text-decoration:none;white-space:nowrap;letter-spacing:0.03em;">📬 Subscribe</a>
 </nav>
+<div style="background:#eef1f8;border-bottom:1px solid #b8c4de;padding:10px 32px;font-size:13px;color:#2e3d5e;text-align:center;">
+  📚 <strong>Archived deep dive.</strong> The main site is now a concise primer — <a href="../index.html" style="color:var(--blue);font-weight:600;">start there</a>. This page is kept as reference and still maintained for major corrections only.
+</div>
+
 <div class="mobile-drawer-overlay" id="drawerOverlay"></div>
 <div class="mobile-drawer" id="mobileDrawer">
-<a href="index.html" class="">Home</a>
+<a href="../index.html" class="">Home</a>
 <a href="overview.html" class="">Overview</a>
 <a href="product-map.html" class="">Products</a>
 <a href="agent365.html" class="active">Agent 365</a>
 <a href="identity.html" class="">Identity</a>
 <a href="threats.html" class="">Threats</a>
 <a href="playbooks.html" class="">Playbooks</a>
-<a href="contact.html" class="">Contact</a>
+<a href="../contact.html" class="">Contact</a>
 </div>
 <div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
   📌 <strong>Author's note:</strong> This site synthesises the author's own understanding from publicly available Microsoft documentation, official Microsoft Security blog posts, RSAC 2026 announcements, and insights from Microsoft Security professionals and MVPs. It is independent and not affiliated with or endorsed by Microsoft.
@@ -867,7 +871,7 @@ AgentsInfo
 
 <div class="callout callout-info" style="margin-top:14px;">
   <div class="callout-title">📌 Three routes to agent telemetry in a workbook — and a map of all of them</div>
-  <p>Since July 2026 there are three distinct query surfaces for agent data: <strong>Log Analytics</strong> (workspace tables), <strong>Defender advanced hunting</strong> (via the advanced-hunting workbook connector — <code>AgentsInfo</code>, <code>CloudAppEvents</code>, <code>BehaviorInfo</code> are queried live, never ingested), and the <strong>Sentinel data lake</strong> (both connectors above). A workbook tile queries exactly one surface — the wrong surface fails rather than degrades. The <a href="agent-telemetry-map.html" style="color:var(--blue);"><strong>Agent Telemetry Map</strong></a> on this site charts all of it interactively: seven creation paths, fourteen telemetry destinations, the licence gate on every table, and what each connection actually delivers.</p>
+  <p>Since July 2026 there are three distinct query surfaces for agent data: <strong>Log Analytics</strong> (workspace tables), <strong>Defender advanced hunting</strong> (via the advanced-hunting workbook connector — <code>AgentsInfo</code>, <code>CloudAppEvents</code>, <code>BehaviorInfo</code> are queried live, never ingested), and the <strong>Sentinel data lake</strong> (both connectors above). A workbook tile queries exactly one surface — the wrong surface fails rather than degrades. The <a href="../agent-telemetry-map.html" style="color:var(--blue);"><strong>Agent Telemetry Map</strong></a> on this site charts all of it interactively: seven creation paths, fourteen telemetry destinations, the licence gate on every table, and what each connection actually delivers.</p>
 </div>
 
 <!-- ════════════════════════════════════════════════════════════════════════ -->

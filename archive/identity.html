@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Identity & OBO — Securing AI with Microsoft</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="site.css">
+<link rel="stylesheet" href="../site.css">
 <style>
 @media(max-width:700px){
   .topnav{padding:0 16px;}
@@ -26,30 +26,34 @@
     <div><div class="brand-text">Securing AI with Microsoft</div></div>
   </div>
   <div class="nav-links">
-<a href="index.html" class="">Home</a>
+<a href="../index.html" class="">Home</a>
 <a href="overview.html" class="">Overview</a>
 <a href="product-map.html" class="">Products</a>
 <a href="agent365.html" class="">Agent 365</a>
 <a href="identity.html" class="active">Identity</a>
 <a href="threats.html" class="">Threats</a>
 <a href="playbooks.html" class="">Playbooks</a>
-<a href="contact.html" class="">Contact</a>
+<a href="../contact.html" class="">Contact</a>
 </div>
   <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
 
 <div class="mobile-drawer-overlay" id="drawerOverlay"></div>
 <div class="mobile-drawer" id="mobileDrawer">
-<a href="index.html" class="">Home</a>
+<a href="../index.html" class="">Home</a>
 <a href="overview.html" class="">Overview</a>
 <a href="product-map.html" class="">Products</a>
 <a href="agent365.html" class="">Agent 365</a>
 <a href="identity.html" class="active">Identity</a>
 <a href="threats.html" class="">Threats</a>
 <a href="playbooks.html" class="">Playbooks</a>
-<a href="contact.html" class="">Contact</a>
+<a href="../contact.html" class="">Contact</a>
 </div>
   <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" class="substack-nav" style="flex-shrink:0;margin-left:10px;display:flex;align-items:center;gap:5px;background:var(--blue);color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:6px 13px;border-radius:6px;text-decoration:none;white-space:nowrap;letter-spacing:0.03em;">📬 Subscribe</a>
 </nav>
+<div style="background:#eef1f8;border-bottom:1px solid #b8c4de;padding:10px 32px;font-size:13px;color:#2e3d5e;text-align:center;">
+  📚 <strong>Archived deep dive.</strong> The main site is now a concise primer — <a href="../index.html" style="color:var(--blue);font-weight:600;">start there</a>. This page is kept as reference and still maintained for major corrections only.
+</div>
+
 <div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
   📌 <strong>Author's note:</strong> This site synthesises the author's own understanding from publicly available Microsoft documentation, official Microsoft Security blog posts, RSAC 2026 announcements, and insights from Microsoft Security professionals and MVPs. It is independent and not affiliated with or endorsed by Microsoft. Microsoft updates products and documentation frequently — always verify current status directly with Microsoft before making architecture or purchasing decisions.
 </div>
@@ -104,7 +108,7 @@
 
 <div class="callout callout-warn">
   <div class="callout-title">⚠ Classic Agents Cannot Be Protected by Entra Security Products</div>
-  <p style="margin-bottom:8px;"><strong>Finding them:</strong> Classic agents appear in no agent view — not the registry, not Entra's agent blade. Enumerate them by the service principal tag <code>AgentCreatedBy:CopilotStudio</code> via Graph. For where every agent type does and doesn't leave a trace — including this blind spot — see the <a href="agent-telemetry-map.html" style="color:var(--blue);font-weight:600;">Agent Telemetry Map</a>.</p>
+  <p style="margin-bottom:8px;"><strong>Finding them:</strong> Classic agents appear in no agent view — not the registry, not Entra's agent blade. Enumerate them by the service principal tag <code>AgentCreatedBy:CopilotStudio</code> via Graph. For where every agent type does and doesn't leave a trace — including this blind spot — see the <a href="../agent-telemetry-map.html" style="color:var(--blue);font-weight:600;">Agent Telemetry Map</a>.</p>
   <p>Classic Agents are completely outside the Entra Agent ID security perimeter. They receive <strong>no ID Protection for Agents, no Conditional Access for Agents, no Agent lifecycle governance</strong>. The Entra security products that Microsoft markets for agent protection only work with <strong>Modern Agents</strong>. Microsoft has acknowledged a migration tool is planned — it does not exist yet. The only current workaround is to recreate agents from scratch as Modern Agents, which is impractical at scale.</p>
 </div>
 

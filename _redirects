@@ -1,28 +1,45 @@
-# Cloudflare Pages redirects
-# Privacy policy lives as a section on the contact page; keep the old
-# /privacy URLs working with a real 301 instead of a meta-refresh stub.
+# Cloudflare Pages redirects — aiagentsecurity.guide
+# The site became a primer (Aug 2026); deep dives moved to /archive/.
+
+# Privacy
 /privacy       /contact.html#privacy   301
 /privacy.html  /contact.html#privacy   301
 
-# Short alias for the interactive telemetry map
+# Map alias
 /agent-map     /agent-telemetry-map.html   301
 
-# Merged pages (site slim-down, Aug 2026)
-/risk.html                /overview.html#risk                301
-/risk                     /overview.html#risk                301
-/strategy.html            /overview.html#strategy            301
-/strategy                 /overview.html#strategy            301
-/zero-trust.html          /threats.html#zero-trust           301
-/zero-trust               /threats.html#zero-trust           301
-/copilot-vs-foundry.html  /agent365.html#studio-vs-foundry   301
-/copilot-vs-foundry       /agent365.html#studio-vs-foundry   301
+# Deep-dive pages -> archive
+/overview.html     /archive/overview.html     301
+/overview          /archive/overview.html     301
+/product-map.html  /archive/product-map.html  301
+/product-map       /archive/product-map.html  301
+/agent365.html     /archive/agent365.html     301
+/agent365          /archive/agent365.html     301
+/identity.html     /archive/identity.html     301
+/identity          /archive/identity.html     301
+/threats.html      /archive/threats.html      301
+/threats           /archive/threats.html      301
+/playbooks.html    /archive/playbooks.html    301
+/playbooks         /archive/playbooks.html    301
+/demo.html         /archive/demo.html         301
+/demo              /archive/demo.html         301
+/changelog.html    /archive/changelog.html    301
+/changelog         /archive/changelog.html    301
 
-# Round 2 merges (Aug 2026)
-/frameworks.html          /threats.html#frameworks           301
-/frameworks               /threats.html#frameworks           301
-/gaps.html                /overview.html#gaps                301
-/gaps                     /overview.html#gaps                301
-/foundry.html             /agent365.html#foundry             301
-/foundry                  /agent365.html#foundry             301
-/mcp.html                 /threats.html#mcp                  301
-/mcp                      /threats.html#mcp                  301
+# Pages merged before the archive move -> their archived homes
+/risk.html                /archive/overview.html#risk           301
+/risk                     /archive/overview.html#risk           301
+/strategy.html            /archive/overview.html#strategy       301
+/strategy                 /archive/overview.html#strategy       301
+/gaps.html                /archive/overview.html#gaps           301
+/gaps                     /archive/overview.html#gaps           301
+/zero-trust.html          /archive/threats.html#zero-trust      301
+/zero-trust               /archive/threats.html#zero-trust      301
+/frameworks.html          /archive/threats.html#frameworks      301
+/frameworks               /archive/threats.html#frameworks      301
+/mcp.html                 /archive/threats.html#mcp             301
+/mcp                      /archive/threats.html#mcp             301
+/copilot-vs-foundry.html  /archive/agent365.html#studio-vs-foundry  301
+/copilot-vs-foundry       /archive/agent365.html#studio-vs-foundry  301
+/foundry.html             /archive/agent365.html#foundry        301
+/foundry                  /archive/agent365.html#foundry        301

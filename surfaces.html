@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>The Five AI Threat Surfaces</title>
+<meta name="description" content="The five asset classes of an AI estate — what each is, its top risks, the Microsoft control that owns it, and the licence that gates that control.">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+<style>
+.surface-card{background:#ffffff;border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin:14px 0;}
+.surface-card .num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--blue);}
+.surface-card h3{font-size:17px;font-weight:700;color:#0d1526;margin:4px 0 8px;}
+.fact-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:20px 0;}
+.fact{background:#ffffff;border:1px solid var(--border);border-radius:10px;padding:14px 18px;font-size:13px;color:#2e3d5e;line-height:1.6;}
+.fact b{display:block;font-size:15px;color:#0d1526;}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-brand">
+    <div class="msft-logo"><div></div><div></div><div></div><div></div></div>
+    <div><div class="brand-text">Securing AI with Microsoft</div></div>
+  </div>
+  <div class="nav-links">
+<a href="index.html" class="">Home</a>
+<a href="surfaces.html" class="active">Five Surfaces</a>
+<a href="licensing.html" class="">Licensing</a>
+<a href="agent-telemetry-map.html" class="">Agent Map</a>
+<a href="start.html" class="">Start Here</a>
+<a href="contact.html" class="">Contact</a>
+</div>
+  <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+
+<div class="mobile-drawer-overlay" id="drawerOverlay"></div>
+<div class="mobile-drawer" id="mobileDrawer">
+<a href="index.html" class="">Home</a>
+<a href="surfaces.html" class="active">Five Surfaces</a>
+<a href="licensing.html" class="">Licensing</a>
+<a href="agent-telemetry-map.html" class="">Agent Map</a>
+<a href="start.html" class="">Start Here</a>
+<a href="contact.html" class="">Contact</a>
+</div>
+  <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" class="substack-nav" style="flex-shrink:0;margin-left:10px;display:flex;align-items:center;gap:5px;background:var(--blue);color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:6px 13px;border-radius:6px;text-decoration:none;white-space:nowrap;letter-spacing:0.03em;">📬 Subscribe</a>
+</nav>
+<div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
+  📌 <strong>Author's note:</strong> Independent, not affiliated with or endorsed by Microsoft. This site is a <strong>starting point</strong> — verify current product status against Microsoft documentation before architecture or purchasing decisions.
+</div>
+<div class="page">
+
+<div class="section-label" style="margin-top:24px;">The taxonomy</div>
+<h1>The five AI<br><span style="color:var(--blue);">threat surfaces</span></h1>
+<p style="font-size:15px;color:#2e3d5e;max-width:700px;">Never let an AI security conversation drift into "agents only". An enterprise AI estate is five asset classes; coverage on one never implies coverage on another, and each is gated by a different licence axis. This page is the whole taxonomy on one screen.</p>
+<div class="surface-card" id="s1"><div class="num">SURFACE 1</div><h3>AI apps &amp; assistants</h3>
+<p style="font-size:13.5px;margin:0 0 8px;">M365 Copilot, declarative agents, Security Copilot, GitHub Copilot, SaaS AI and shadow AI — the class every employee touches.</p>
+<table style="font-size:13px;">
+<tbody>
+<tr><td style="width:130px;"><strong>Top risks</strong></td><td>Prompt abuse (direct override, extractive abuse, indirect injection), sensitive data entering AI context, shadow AI outside any control</td></tr>
+<tr><td><strong>Owning controls</strong></td><td>Purview audit + DLP for Copilot (<code>CopilotActivity</code> carries per-interaction Jailbreak / XPIA verdicts) · Defender for Cloud Apps for SaaS AI discovery · Edge / network DLP for public LLMs</td></tr>
+<tr><td><strong>Licence gate</strong></td><td><strong>M365 E5 + M365 Copilot</strong> for the audited surface; browser and network DLP layers vary</td></tr>
+</tbody></table>
+<p style="font-size:12.5px;margin:8px 0 0;color:var(--text3);">Deep dive: <a href="archive/threats.html" style="color:var(--blue);">Threats</a> · <a href="archive/playbooks.html" style="color:var(--blue);">Playbooks</a></p></div>
+<div class="surface-card" id="s2"><div class="num">SURFACE 2</div><h3>AI platform &amp; workloads</h3>
+<p style="font-size:13.5px;margin:0 0 8px;">Microsoft Foundry accounts and projects, Azure OpenAI, custom LLM apps, RAG pipelines, vector stores and the grounding data they read.</p>
+<table style="font-size:13px;">
+<tbody>
+<tr><td style="width:130px;"><strong>Top risks</strong></td><td>Workload compromise, insecure grounding data, model endpoint abuse — and the budgeting error of assuming an M365 licence covers any of it</td></tr>
+<tr><td><strong>Owning controls</strong></td><td>Defender for Cloud (CSPM + AI Services plans) · Foundry guardrails and Prompt Shields · content-filter spans in workspace App Insights</td></tr>
+<tr><td><strong>Licence gate</strong></td><td><strong>Azure axis</strong> — per resource and per tokens scanned. No M365 tier covers this</td></tr>
+</tbody></table>
+<p style="font-size:12.5px;margin:8px 0 0;color:var(--text3);">Deep dive: <a href="archive/agent365.html#foundry" style="color:var(--blue);">Foundry control plane</a></p></div>
+<div class="surface-card" id="s3"><div class="num">SURFACE 3</div><h3>Agents</h3>
+<p style="font-size:13.5px;margin:0 0 8px;">Copilot Studio (Classic and Modern), Foundry agents, declarative agents, third-party SDK and registry-sync agents — things with identity and autonomy.</p>
+<table style="font-size:13px;">
+<tbody>
+<tr><td style="width:130px;"><strong>Top risks</strong></td><td>Sprawl and ungated creation · maker credentials · Classic agents outside the Entra perimeter · one blueprint secret compromising every agent under it</td></tr>
+<tr><td><strong>Owning controls</strong></td><td>Agent 365 registry + Entra Agent ID (Conditional Access, ID Protection, lifecycle) · <code>AgentsInfo</code> posture · runtime spans in <code>CloudAppEvents</code></td></tr>
+<tr><td><strong>Licence gate</strong></td><td><strong>Agent 365 or M365 E7</strong> — required for Copilot Studio and Foundry agent security since 1 July 2026. Identity objects readable at any Entra tier</td></tr>
+</tbody></table>
+<p style="font-size:12.5px;margin:8px 0 0;color:var(--text3);">Deep dive: <a href="archive/agent365.html" style="color:var(--blue);">Agent 365</a> · <a href="archive/identity.html" style="color:var(--blue);">Identity</a></p></div>
+<div class="surface-card" id="s4"><div class="num">SURFACE 4</div><h3>Tools, MCP servers &amp; connectors</h3>
+<p style="font-size:13.5px;margin:0 0 8px;">First-party, custom and third-party MCP servers; connectors, plugins and APIs — how agent decisions become real-world actions.</p>
+<table style="font-size:13px;">
+<tbody>
+<tr><td style="width:130px;"><strong>Top risks</strong></td><td>Supply-chain dependencies with tenant access · prompt injection converting to tool execution · unvetted third-party servers</td></tr>
+<tr><td><strong>Owning controls</strong></td><td>MCP vetting gates at procurement · Work IQ governed MCP servers · real-time protection evaluating onboarded MCP tools · <code>McpServers</code> in <code>AgentsInfo</code></td></tr>
+<tr><td><strong>Licence gate</strong></td><td>Varies — tool-call telemetry (<code>ExecuteToolBy*</code>) needs <strong>Agent 365</strong> instrumentation</td></tr>
+</tbody></table>
+<p style="font-size:12.5px;margin:8px 0 0;color:var(--text3);">Deep dive: <a href="archive/threats.html#mcp" style="color:var(--blue);">MCP security</a></p></div>
+<div class="surface-card" id="s5"><div class="num">SURFACE 5</div><h3>Endpoints running local AI</h3>
+<p style="font-size:13.5px;margin:0 0 8px;">Coding CLIs, desktop AI apps, local MCP configurations and local model runners on staff and developer devices.</p>
+<table style="font-size:13px;">
+<tbody>
+<tr><td style="width:130px;"><strong>Top risks</strong></td><td>Inference outside every prompt-logging and DLP path · unknown local MCP servers · a class-1 surface governed only by class-5 mechanisms</td></tr>
+<tr><td><strong>Owning controls</strong></td><td>Defender for Endpoint local-agent discovery (<code>AgentsInfo</code>, <code>Platform == "LocalAgents"</code> — vendor, version, host process, trust settings, local + remote MCP servers) · Intune policy · app control</td></tr>
+<tr><td><strong>Licence gate</strong></td><td><strong>MDE P2 (in E5)</strong> for discovery and inventory — no Agent 365 needed. Risk scoring needs <strong>E7 or A365 + MDE P2</strong></td></tr>
+</tbody></table>
+<p style="font-size:12.5px;margin:8px 0 0;color:var(--text3);">Deep dive: <a href="archive/playbooks.html" style="color:var(--blue);">Playbooks</a></p></div>
+
+<div class="callout callout-info" style="margin-top:20px;">
+  <div class="callout-title">📌 The test to run against any vendor pitch or internal plan</div>
+  <p>Which of the five surfaces does it cover, and which does it silently ignore? Most products cover one or two. The <a href="agent-telemetry-map.html" style="color:var(--blue);font-weight:600;">Agent Telemetry Map</a> shows surfaces 3–5 in motion: what each agent type emits, where it lands, and the licence gate on every table.</p>
+</div>
+
+<div class="footer">
+  Sources: Microsoft Learn · Microsoft Security Blog · Sentinel blog connector announcements<br>
+  <a href="archive/changelog.html" style="color:var(--text3);">Changelog</a> · <a href="archive/overview.html" style="color:var(--text3);">Deep-dive archive</a> · Last updated: August 31, 2026
+</div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var btn = document.getElementById('hamburgerBtn');
+  var drawer = document.getElementById('mobileDrawer');
+  var overlay = document.getElementById('drawerOverlay');
+  if(btn){btn.addEventListener('click',function(){drawer.classList.toggle('open');overlay.classList.toggle('open');});
+  overlay.addEventListener('click',function(){drawer.classList.remove('open');overlay.classList.remove('open');});}
+});
+</script>
+</body>
+</html>
