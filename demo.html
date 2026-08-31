@@ -987,7 +987,7 @@ body {
         <div id="a365-tab-overview">
           <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:4px;">
             <div style="font-size:22px;font-weight:700;color:#1a1a1a;">Agent 365 overview</div>
-            <div style="font-size:12px;color:#888;">Last updated: May 1, 2026 (Last 30 days)</div>
+            <div style="font-size:12px;color:#888;">Last updated: August 31, 2026 (Last 30 days)</div>
           </div>
           <div style="font-size:13px;color:#555;margin-bottom:20px;">Track agent usage across your organization and take steps to improve impact. Adjust settings, manage access, and help teams unlock more value while staying aligned with governance goals.</div>
 
@@ -1207,12 +1207,12 @@ body {
     <div style="flex:1;min-width:200px;background:white;border:1px solid #e1dfdd;border-top:3px solid #5c2d91;border-radius:4px;padding:16px;">
       <div style="font-size:20px;margin-bottom:8px;">📊</div>
       <div style="font-size:13px;font-weight:700;margin-bottom:6px;">Observability</div>
-      <div style="font-size:12px;color:#605e5c;line-height:1.6;">OpenTelemetry instrumentation via Agent 365 SDK. All inference events, tool usage, and interactions routed to M365 audit logs. Visible in Defender Advanced Hunting via AIAgentsInfo table with RegistrySource = "A365".</div>
+      <div style="font-size:12px;color:#605e5c;line-height:1.6;">OpenTelemetry instrumentation via Agent 365 SDK. All inference events, tool usage, and interactions routed to M365 audit logs. Visible in Defender Advanced Hunting via the AgentsInfo table with Platform = "Microsoft Agent 365".</div>
     </div>
     <div style="flex:1;min-width:200px;background:white;border:1px solid #e1dfdd;border-top:3px solid #ca5010;border-radius:4px;padding:16px;">
       <div style="font-size:20px;margin-bottom:8px;">📋</div>
       <div style="font-size:13px;font-weight:700;margin-bottom:6px;">Governance Registry</div>
-      <div style="font-size:12px;color:#605e5c;line-height:1.6;">All agents appear in M365 admin center → Agents → All agents. Roles: AI Administrator, AI Reader. No licence needed to view inventory — just the role. RegistrySource = "A365" in AIAgentsInfo.</div>
+      <div style="font-size:12px;color:#605e5c;line-height:1.6;">All agents appear in M365 admin center → Agents → All agents. Roles: AI Administrator, AI Reader. No licence needed to view inventory — just the role. Platform = "Microsoft Agent 365" in AgentsInfo.</div>
     </div>
   </div>
 
@@ -1281,7 +1281,7 @@ body {
         <td><span class="pill pill-orange">Entra P2 / E5</span></td>
       </tr>
       <tr>
-        <td><strong>Defender Advanced Hunting</strong><br><span style="font-size:11px;color:#a19f9d;">AIAgentsInfo table</span></td>
+        <td><strong>Defender Advanced Hunting</strong><br><span style="font-size:11px;color:#a19f9d;">AgentsInfo table</span></td>
         <td>All agents with RegistrySource column: "A365" or "PowerPlatform"</td>
         <td><span class="pill pill-blue">Security Reader</span></td>
         <td><span class="pill pill-orange">Defender P2</span></td>
@@ -1336,11 +1336,11 @@ body {
   <div style="background:#faf9f8;border:1px solid #e1dfdd;border-radius:4px;padding:16px;font-size:13px;line-height:1.8;">
     Before GA (May 1, 2026) and for advanced preview features, access is via the <strong>Microsoft Frontier programme</strong>.<br>
     Enrol at: <strong>adoption.microsoft.com/copilot/frontier-program</strong><br><br>
-    Once enrolled: onboard Copilot Studio agents automatically → instrument custom agents with Agent 365 SDK → agents appear in AIAgentsInfo with RegistrySource = "A365".
+    Once enrolled: onboard Copilot Studio agents automatically → instrument custom agents with Agent 365 SDK → agents appear in AgentsInfo with Platform = "Microsoft Agent 365".
   </div>
 
   <div class="section-title" style="margin-top:20px;">KQL — querying Agent 365 agents</div>
-  <div class="kql-block">// All Agent 365 registered agents<br>AIAgentsInfo<br>| summarize arg_max(Timestamp, *) by AIAgentId<br>| where RegistrySource == "A365"<br>| project AIAgentName, AgentStatus, UserAuthenticationType, OwnerAccountUpns<br><br>// A365 agents with no instructions (potential sprawl risk)<br>AIAgentsInfo<br>| where RegistrySource == "A365"<br>| where isempty(AgentInstructions)<br>| project AIAgentName, CreatorAccountUpn, AgentCreationTime</div>
+  <div class="kql-block">// All Agent 365 registered agents<br>AgentsInfo<br>| summarize arg_max(Timestamp, *) by AgentId<br>| where LifecycleStatus != "Deleted"<br>| where Platform == "Microsoft Agent 365"<br>| project AgentName, PublishedStatus, ToolsAuthenticationType, Owners<br><br>// A365 agents with no owner (sprawl risk)<br>AgentsInfo<br>| summarize arg_max(Timestamp, *) by AgentId<br>| where LifecycleStatus != "Deleted"<br>| where Platform == "Microsoft Agent 365"<br>| where isempty(tostring(Owners)) or tostring(Owners) in ("", "[]")<br>| project AgentName, CreatedDateTime</div>
 </div>
 
 <!-- ══ FOUNDRY CONTROL PLANE ══ -->
@@ -1498,7 +1498,7 @@ body {
       <div class="step-title">Verify — run KQL in Advanced Hunting</div>
       <span class="step-role sr-defender">🔵 Defender Admin</span>
       <div class="step-desc">Allow 30–60 minutes after setup for first agents to appear.</div>
-      <div class="kql-block">AIAgentsInfo<br>| summarize arg_max(Timestamp, *) by AIAgentId<br>| where AgentStatus == "Published"<br>| project AIAgentName, UserAuthenticationType, OwnerAccountUpns<br>| order by AgentCreationTime desc</div>
+      <div class="kql-block">AgentsInfo<br>| summarize arg_max(Timestamp, *) by AgentId<br>| where LifecycleStatus != "Deleted"<br>| where PublishedStatus == "Published"<br>| project AgentName, ToolsAuthenticationType, Owners, CreatedDateTime<br>| order by CreatedDateTime desc</div>
     </div>
   </div>
 </div>
@@ -1586,7 +1586,7 @@ var MODAL_CONTENT = {
     html: `
       <div class="modal-section">
         <div class="modal-section-title">What counts as an AI asset</div>
-        <div class="modal-source-row"><span class="modal-source-icon">🤖</span><div><div class="modal-source-text"><strong>AI Agents (84)</strong></div><div class="modal-source-detail">Copilot Studio agents via Power Platform connector (RegistrySource = PowerPlatform) + Agent 365-registered agents (RegistrySource = A365). Sourced from AIAgentsInfo Advanced Hunting table.</div></div></div>
+        <div class="modal-source-row"><span class="modal-source-icon">🤖</span><div><div class="modal-source-text"><strong>AI Agents (84)</strong></div><div class="modal-source-detail">Copilot Studio agents via Power Platform connector (Platform = "Copilot Studio") + Agent 365-registered agents (Platform = "Microsoft Agent 365"). Sourced from the AgentsInfo Advanced Hunting table.</div></div></div>
         <div class="modal-source-row"><span class="modal-source-icon">🧠</span><div><div class="modal-source-text"><strong>AI Models (31)</strong></div><div class="modal-source-detail">Azure OpenAI deployments, Foundry model registrations, and third-party model API usage detected via Defender for Cloud Apps shadow AI discovery.</div></div></div>
         <div class="modal-source-row"><span class="modal-source-icon">🔌</span><div><div class="modal-source-text"><strong>MCP Servers (18)</strong></div><div class="modal-source-detail">Model Context Protocol servers detected via Sentinel MCP Entity Analyzer and Defender Cloud Apps. Includes Microsoft catalog and unverified external servers.</div></div></div>
         <div class="modal-source-row"><span class="modal-source-icon">💻</span><div><div class="modal-source-text"><strong>Other AI Apps (14)</strong></div><div class="modal-source-detail">Third-party GenAI apps (ChatGPT, Gemini, Claude.ai) detected via Entra Internet Access shadow AI detection. Shows who is using unsanctioned AI on corporate devices.</div></div></div>
@@ -1604,13 +1604,13 @@ var MODAL_CONTENT = {
     html: `
       <div class="modal-section">
         <div class="modal-section-title">What drives this number (23)</div>
-        <div class="modal-source-row"><span class="modal-source-icon">🔴</span><div><div class="modal-source-text"><strong>7 agents with No Authentication</strong></div><div class="modal-source-detail">Publicly reachable — anyone with the URL can interact with the agent and all its tools. Detected via: AIAgentsInfo | where UserAuthenticationType == "None"</div></div></div>
+        <div class="modal-source-row"><span class="modal-source-icon">🔴</span><div><div class="modal-source-text"><strong>7 agents with No Authentication</strong></div><div class="modal-source-detail">Publicly reachable — anyone with the URL can interact with the agent and all its tools. Detected via: AgentsInfo | where tostring(ToolsAuthenticationType) has "None"</div></div></div>
         <div class="modal-source-row"><span class="modal-source-icon">🔴</span><div><div class="modal-source-text"><strong>11 agents with Maker Credentials + Org-wide sharing</strong></div><div class="modal-source-detail">Agent authenticates as builder — if builder is admin, every user gets admin-level access. Detected via AgentToolsDetails.mode == "Maker" + OrgWideSharing = true.</div></div></div>
         <div class="modal-source-row"><span class="modal-source-icon">🟡</span><div><div class="modal-source-text"><strong>5 agents with no Owner assigned</strong></div><div class="modal-source-detail">No accountable person for incidents, credential rotation, or decommissioning. Detected via isempty(OwnerAccountUpns).</div></div></div>
       </div>
       <div class="modal-section">
         <div class="modal-section-title">KQL to replicate this in your tenant</div>
-        <div class="modal-kql">// No-auth agents<br>AIAgentsInfo<br>| summarize arg_max(Timestamp, *) by AIAgentId<br>| where AgentStatus == "Published"<br>| where UserAuthenticationType == "None"<br>| project AIAgentName, CreatorAccountUpn, OwnerAccountUpns</div>
+        <div class="modal-kql">// No-auth agents<br>AgentsInfo<br>| summarize arg_max(Timestamp, *) by AgentId<br>| where LifecycleStatus != "Deleted"<br>| where PublishedStatus == "Published"<br>| where tostring(ToolsAuthenticationType) has "None"<br>| project AgentName, Owners, CreatedDateTime</div>
       </div>
       <div class="modal-section">
         <div class="modal-section-title">To remediate</div>

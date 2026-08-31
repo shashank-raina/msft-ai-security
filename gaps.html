@@ -437,6 +437,11 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <thead><tr><th>Gap</th><th>Interim Mitigation</th></tr></thead>
 <tbody>
 <tr>
+  <td><strong>Agent identity lake tables ship without published schemas</strong><br>
+  <span style="font-size:11px;color:var(--text3);">The Microsoft Agent Identities connector (Preview) lands <code>EntraAgentUsers</code>, <code>EntraAgentIdentities</code>, <code>EntraAgentIdentityBlueprints</code> and <code>EntraAgentIdentityBlueprintPrincipals</code> in the Sentinel data lake — but no column-level schema exists on Microsoft Learn, and the lake copy does not carry blueprint credential detail (secret/certificate counts stay on the Graph application object).</span></td>
+  <td>Guard every column with <code>column_ifexists()</code> and validate against live tenant data before any detection rests on these tables. Keep blueprint credential audit as a Graph/Entra exercise. Re-check Learn for the schema pages before each reuse.</td>
+</tr>
+<tr>
   <td><strong>Orphaned agents — two distinct scenarios, both undetected by default</strong><br>
   <span style="font-size:11px;color:var(--text3);"><strong>Scenario A — Blueprint deleted (Entra):</strong> When a Blueprint is deleted, the Modern Agent Identities it created are not automatically removed. They retain all permissions (Graph API, Azure RBAC, Entra roles) but can no longer authenticate. Orphaned Agent Users remain as normal user accounts with no flag or indicator.<br><br><strong>Scenario B — Builder left the company (most common in practice):</strong> Agents built in Copilot Studio by employees who have since left the organisation continue running with the builder's original permissions, full tool access, and no accountable owner. The agent remains active and accessible to anyone it was shared with. Microsoft does not detect or flag either scenario automatically — detection requires active KQL queries against AgentsInfo and cross-referencing against current employee lists.</span></td>
   <td>Run quarterly Graph API sweep to detect orphaned Agent Identities (Agent Identities whose Blueprint Principal no longer exists). Use PowerShell with AgentIdentity.Read.All scope — note Global Reader gets 403, requires Agent ID Administrator. Remove orphaned identities and revoke their permissions. See Identity page for detection scripts.</td>
@@ -606,7 +611,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  <a href="changelog.html" style="color:var(--text3);">Changelog</a> · Last updated: June 5, 2026 · Analysis covers publicly announced Microsoft security capabilities only
+  <a href="changelog.html" style="color:var(--text3);">Changelog</a> · Last updated: August 31, 2026 · Analysis covers publicly announced Microsoft security capabilities only
 </div>
 </div>
 

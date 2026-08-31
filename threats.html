@@ -669,6 +669,19 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <!-- ════════════════════════════════════════════════════════════════════════ -->
 <!-- EXTERNAL THREAT DETECTION FOR COPILOT STUDIO -->
 <!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:48px;">Prompt abuse in the wild</div>
+<h2>How attackers actually abuse prompts — the DART taxonomy</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">Microsoft's Defender Experts (DART) published a field taxonomy of prompt abuse observed in real tenants (<a href="https://www.microsoft.com/en-us/security/blog/" target="_blank" style="color:var(--blue);">Microsoft Security Blog, March 2026</a>). Three classes, each with a different detection surface:</p>
+<table>
+<thead><tr><th>Class</th><th>What it looks like</th><th>Where it shows up</th></tr></thead>
+<tbody>
+<tr><td><strong>Direct override</strong></td><td>The user or attacker instructs the model to ignore its system prompt or safety rules</td><td>Jailbreak verdicts in Copilot interaction audit; Prompt Shields</td></tr>
+<tr><td><strong>Extractive abuse</strong></td><td>Systematic prompting to pull training data, system prompts, or grounding content out of the model</td><td>Volume and pattern anomalies in interaction logs</td></tr>
+<tr><td><strong>Indirect injection</strong></td><td>Instructions planted in content the agent will read — documents, email, web pages. Includes <strong>HashJack</strong> (payload hidden in a URL fragment)</td><td>XPIA verdicts; cross-referencing accessed resources against interaction outcomes</td></tr>
+</tbody>
+</table>
+<p style="font-size:13px;color:#5a6a8a;margin:8px 0 0;">DART's playbook for it is a five-step visibility-to-oversight loop — worth mapping onto the monitoring phase of any agent security programme.</p>
+
 <div class="section-label" style="margin-top:48px;">External threat detection</div>
 <h2>External threat detection for Copilot Studio — pluggable runtime control</h2>
 <p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">Beyond the built-in UPIA / XPIA protections, Copilot Studio now lets organisations plug in <strong>external threat detection systems</strong> at runtime. The agent calls a customer-configured REST API endpoint every time the orchestrator considers invoking a tool. The endpoint evaluates the proposed tool use and returns an allow/block decision. This gives security teams a hook point to apply organisation-specific policy that Microsoft's built-in classifiers can't cover — third-party threat intel, custom prompt injection detectors, sector-specific guardrails.</p>
@@ -840,7 +853,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  <a href="changelog.html" style="color:var(--text3);">Changelog</a> · Last updated: June 5, 2026
+  <a href="changelog.html" style="color:var(--text3);">Changelog</a> · Last updated: August 31, 2026
 <script>
 document.addEventListener('DOMContentLoaded', function(){
   var btn = document.getElementById('hamburgerBtn');

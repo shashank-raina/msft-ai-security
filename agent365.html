@@ -685,10 +685,15 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <div class="section-label" style="margin-top:48px;">Licensing</div>
 <h2>Two ways to get Agent 365</h2>
 
+<div class="callout callout-info" style="margin-top:8px;">
+  <div class="callout-title">📌 Licensing runs on three independent axes — movement on one never implies coverage on another</div>
+  <p><strong>Microsoft 365</strong> (per user — Agent 365 lives here) · <strong>Azure Defender plans</strong> (per resource and per tokens scanned — Foundry workload security lives here) · <strong>Sentinel</strong> (ingestion, retention, and the data lake tier — the deepest agent telemetry lives here). The most common budgeting error is assuming an M365 purchase covers Azure AI workloads or the Sentinel lake. It never does: Agent 365 <em>writes into</em> the data lake but does not include it.</p>
+</div>
+
 <div class="callout callout-warn" style="margin-top:8px;background:#fff8e6;border-color:#e8b840;">
-  <div class="callout-title">⚠ Critical date — July 1, 2026: Agent 365 becomes required for Copilot Studio + Foundry agent security</div>
-  <p>Until July 1, 2026, Agent 365 is <strong>optional</strong> — Defender for Cloud Apps, Purview, Sentinel, Security Dashboard for AI, and Entra Conditional Access all provide meaningful agent security coverage using existing licensing. From July 1, 2026, that changes. Per Microsoft's <a href="https://learn.microsoft.com/en-us/defender-xdr/security-for-ai/transition-agent-security-to-agent-365" target="_blank" style="color:var(--blue);">transition guide</a>: <em>"AI agent security capabilities for Copilot Studio and Foundry agents require a Microsoft Agent 365 license. These capabilities are no longer covered by existing Defender for Cloud Apps or Defender for Cloud licenses."</em></p>
-  <p style="margin-top:10px;"><strong>What's no longer covered after July 1 (requires Agent 365):</strong></p>
+  <div class="callout-title">⚠ Since July 1, 2026: Agent 365 is required for Copilot Studio + Foundry agent security</div>
+  <p>This date has now passed. Before July 1, 2026, Agent 365 was <strong>optional</strong> — Defender for Cloud Apps, Purview, Sentinel, Security Dashboard for AI, and Entra Conditional Access all provide meaningful agent security coverage using existing licensing. From July 1, 2026, that changes. Per Microsoft's <a href="https://learn.microsoft.com/en-us/defender-xdr/security-for-ai/transition-agent-security-to-agent-365" target="_blank" style="color:var(--blue);">transition guide</a>: <em>"AI agent security capabilities for Copilot Studio and Foundry agents require a Microsoft Agent 365 license. These capabilities are no longer covered by existing Defender for Cloud Apps or Defender for Cloud licenses."</em></p>
+  <p style="margin-top:10px;"><strong>What is no longer covered without Agent 365 (since July 1):</strong></p>
   <ul style="margin:6px 0 0 18px;font-size:13px;line-height:1.8;">
     <li>Copilot Studio agent security through Defender for Cloud Apps</li>
     <li>Foundry agent security posture through Defender for Cloud</li>
@@ -778,6 +783,11 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 <div class="section-label" style="margin-top:48px;">Registry Convergence</div>
 <h2>Two portals — one for inventory, one for identity</h2>
+
+<div class="callout callout-warn" style="margin-top:8px;">
+  <div class="callout-title">⚠ Four screens count agents — and they disagree by design</div>
+  <p>The <strong>Agent Registry</strong> counts published catalogue titles (blind to locally installed agents). <strong>Defender's AI Agents page</strong> counts cloud agents on its Agents tab, with local agents on a second tab. <strong><code>AgentsInfo</code></strong> sees every platform including local, but needs Agent 365 for the cloud side and retains deleted agents in its snapshot window. <strong>Entra agent identities</strong> cover only agents holding a directory principal. Always say which screen a number came from — reconciling the four is the finding, not a data-quality bug. For scale context: Microsoft reports visibility of <strong>more than 500,000 agents</strong> in its own tenant (Customer Zero report, Aug 2026).</p>
+</div>
 <p>Agent visibility was previously split across the Entra admin center and the M365 admin center. Microsoft has converged the registry under Agent 365 as the single control plane. Each portal now has a distinct role:</p>
 
 <table class="a365-coverage-table">
@@ -899,8 +909,20 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <td><span class="green-inline">✓ Existing Defender RT</span></td>
   <td>No Agent 365 needed — but no Entra Agent ID</td>
 </tr>
+<tr>
+  <td>Locally installed agents (coding CLIs, desktop AI)</td>
+  <td><span class="green-inline">✓ Automatic</span><br><code style="font-size:9px;">Platform == "LocalAgents"</code></td>
+  <td><span class="caution-inline">⚠ Inventory + endpoint alerts</span></td>
+  <td><span class="green-inline">✓ Defender for Endpoint</span></td>
+  <td><strong>MDE Plan 2 (in E5) — no Agent 365 licence.</strong> Risk levels, risk indicators and recommendations need M365 E7, or Agent 365 + MDE P2</td>
+</tr>
 </tbody>
 </table>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 One table, two populations, two licences — state the split precisely</div>
+  <p><code>AgentsInfo</code>: <strong>local</strong> agents populate on E5 / MDE P2 with no Agent 365 licence (verified in a live tenant, Aug 2026 — seven local agents with full metadata); the <strong>cloud</strong>-agent side is gated behind Agent 365. <code>CloudAppEvents</code> splits the same way: Copilot interaction <strong>verdict</strong> rows (JailbreakDetected, XPIA) arrive on <strong>E5</strong>, while the Agent 365 runtime action types — <code>InvokeAgent</code>, <code>InferenceCall</code>, <code>ExecuteToolBySDK / ByGateway / ByMCPServer</code> — do not exist in the tenant until Agent 365 instruments an agent. An empty result can be a licence boundary, not a data gap.</p>
+</div>
 
 
 
@@ -1102,6 +1124,7 @@ AgentsInfo
 <thead><tr><th>Capability</th><th>Detail</th></tr></thead>
 <tbody>
 <tr><td><strong>Data sources unified</strong></td><td>Agent 365 + Microsoft Foundry + Copilot — all in the Sentinel data lake</td></tr>
+<tr><td><strong>Where it lands</strong></td><td><code>UnifiedAgentObservability</code> in the <strong>data lake tier only</strong> — full-fidelity spans (prompts, tool arguments, session reconstruction). The connector lists no Log Analytics tables and does not support data collection rules, so the lake tier is a prerequisite, not an optimisation</td></tr>
 <tr><td><strong>Telemetry types</strong></td><td>Agent behaviour, tool usage, execution metrics, runtime events</td></tr>
 <tr><td><strong>Workflows enabled</strong></td><td>Hunting (KQL + natural language via Sentinel MCP), graph relationships (agent-to-agent, agent-to-tool), MCP server interactions</td></tr>
 <tr><td><strong>Supported by</strong></td><td>Microsoft Corporation (first-party connector)</td></tr>
@@ -1117,6 +1140,30 @@ AgentsInfo
 <div class="callout callout-warn" style="margin-top:14px;">
   <div class="callout-title">⚠ Deactivation cascade</div>
   <p>Per Microsoft's documentation: "Data from this connector is used to investigate AI agent behavior, tool usage, and execution in Microsoft Sentinel. If you have enabled these workflows, deactivating this connector will prevent those investigations from being performed." Hunting queries, graphs, and MCP investigations all depend on the connector being live — treat it as a first-class production dependency for SOC, not an optional add-on.</p>
+</div>
+
+<div class="section-label" style="margin-top:32px;">Identity Graph to Sentinel</div>
+<h2>Agent Identities connector — the identity graph lands beside the activity</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">A second public-preview connector, <strong>Microsoft Agent Identities</strong>, ingests four identity asset tables into the Sentinel data lake — a connected graph you can trace from owner to identity to blueprint to permissions, and join directly to activity data:</p>
+
+<table>
+<thead><tr><th>Table</th><th>Represents</th></tr></thead>
+<tbody>
+<tr><td><code>EntraAgentUsers</code></td><td>Human principals responsible for agents — owners, sponsors, administrators</td></tr>
+<tr><td><code>EntraAgentIdentities</code></td><td>The agent itself as a first-class identity — lifecycle and configuration</td></tr>
+<tr><td><code>EntraAgentIdentityBlueprints</code></td><td>How agents are constructed and what capabilities they are intended to have</td></tr>
+<tr><td><code>EntraAgentIdentityBlueprintPrincipals</code></td><td>The service principals tied to blueprints — permissions and execution boundaries</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-warn" style="margin-top:14px;">
+  <div class="callout-title">⚠ Two caveats before you build on it</div>
+  <p><strong>Column schemas are not yet published</strong> on Microsoft Learn — guard columns with <code>column_ifexists()</code> and validate in-tenant before any detection rests on them. And the lake copy does <strong>not</strong> carry blueprint credential detail (secret and certificate counts) — that lives on the Graph <code>application</code> object, so credential audit remains an Entra exercise, not a Sentinel query.</p>
+</div>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 Three routes to agent telemetry in a workbook — and a map of all of them</div>
+  <p>Since July 2026 there are three distinct query surfaces for agent data: <strong>Log Analytics</strong> (workspace tables), <strong>Defender advanced hunting</strong> (via the advanced-hunting workbook connector — <code>AgentsInfo</code>, <code>CloudAppEvents</code>, <code>BehaviorInfo</code> are queried live, never ingested), and the <strong>Sentinel data lake</strong> (both connectors above). A workbook tile queries exactly one surface — the wrong surface fails rather than degrades. The <a href="agent-telemetry-map.html" style="color:var(--blue);"><strong>Agent Telemetry Map</strong></a> on this site charts all of it interactively: seven creation paths, fourteen telemetry destinations, the licence gate on every table, and what each connection actually delivers.</p>
 </div>
 
 <!-- ════════════════════════════════════════════════════════════════════════ -->
@@ -1448,7 +1495,7 @@ directActions | union topicActions | sort by AgentId, Timestamp desc</div>
 
 <div class="footer">
   SOURCES: Microsoft Agent 365 documentation · Cloudpartner.fi Defender + Agent 365 integration (April 2026) · Microsoft RSAC 2026 announcements<br>
-  <a href="changelog.html" style="color:var(--text3);">Changelog</a> · Last updated: June 5, 2026
+  <a href="changelog.html" style="color:var(--text3);">Changelog</a> · Last updated: August 31, 2026
 </div>
 </div>
 

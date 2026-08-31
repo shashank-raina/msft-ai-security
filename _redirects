@@ -3,3 +3,6 @@
 # /privacy URLs working with a real 301 instead of a meta-refresh stub.
 /privacy       /contact.html#privacy   301
 /privacy.html  /contact.html#privacy   301
+
+# Short alias for the interactive telemetry map
+/agent-map     /agent-telemetry-map.html   301

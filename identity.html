@@ -400,6 +400,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 <div class="callout callout-warn">
   <div class="callout-title">⚠ Classic Agents Cannot Be Protected by Entra Security Products</div>
+  <p style="margin-bottom:8px;"><strong>Finding them:</strong> Classic agents appear in no agent view — not the registry, not Entra's agent blade. Enumerate them by the service principal tag <code>AgentCreatedBy:CopilotStudio</code> via Graph. For where every agent type does and doesn't leave a trace — including this blind spot — see the <a href="agent-telemetry-map.html" style="color:var(--blue);font-weight:600;">Agent Telemetry Map</a>.</p>
   <p>Classic Agents are completely outside the Entra Agent ID security perimeter. They receive <strong>no ID Protection for Agents, no Conditional Access for Agents, no Agent lifecycle governance</strong>. The Entra security products that Microsoft markets for agent protection only work with <strong>Modern Agents</strong>. Microsoft has acknowledged a migration tool is planned — it does not exist yet. The only current workaround is to recreate agents from scratch as Modern Agents, which is impractical at scale.</p>
 </div>
 
@@ -1183,7 +1184,7 @@ Disconnect-MgGraph</pre>
 </div>
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  <a href="changelog.html" style="color:var(--text3);">Changelog</a> · Last updated: June 5, 2026 · Analysis covers publicly announced Microsoft security capabilities only
+  <a href="changelog.html" style="color:var(--text3);">Changelog</a> · Last updated: August 31, 2026 · Analysis covers publicly announced Microsoft security capabilities only
 </div>
 </div>
 
