@@ -46,10 +46,7 @@
 <a href="identity.html" class="">Identity</a>
 <a href="mcp.html" class="">MCP</a>
 <a href="threats.html" class="">Threats</a>
-<a href="frameworks.html" class="">Frameworks</a>
-<a href="gaps.html" class="">Gaps</a>
 <a href="playbooks.html" class="">Playbooks</a>
-<a href="foundry.html" class="">Foundry</a>
 <a href="contact.html" class="">Contact</a>
 </div>
   <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
@@ -64,10 +61,7 @@
 <a href="identity.html" class="">Identity</a>
 <a href="mcp.html" class="">MCP</a>
 <a href="threats.html" class="">Threats</a>
-<a href="frameworks.html" class="">Frameworks</a>
-<a href="gaps.html" class="">Gaps</a>
 <a href="playbooks.html" class="">Playbooks</a>
-<a href="foundry.html" class="">Foundry</a>
 <a href="contact.html" class="">Contact</a>
 </div>
 <div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
@@ -353,7 +347,7 @@
 <div class="callout callout-caution" style="margin-top:14px;">
   <div class="callout-title">🔒 Security-architect read</div>
   <ul style="margin:6px 0 0 18px;font-size:13px;line-height:1.7;">
-    <li><strong>The SDK is the enforcement boundary for non-Microsoft agents.</strong> ATG runtime blocking, Entra identity, Conditional Access, and Defender detection only reach an external/open-source agent <em>if it is SDK-instrumented</em>. An un-instrumented custom agent sits outside all of it — the same coverage gap already flagged on the <a href="gaps.html" style="color:var(--blue);">Gaps page</a>.</li>
+    <li><strong>The SDK is the enforcement boundary for non-Microsoft agents.</strong> ATG runtime blocking, Entra identity, Conditional Access, and Defender detection only reach an external/open-source agent <em>if it is SDK-instrumented</em>. An un-instrumented custom agent sits outside all of it — the same coverage gap already flagged on the <a href="overview.html#gaps" style="color:var(--blue);">Gaps page</a>.</li>
     <li><strong>Policy templates are the scale lever.</strong> Grouping Entra/Purview/Defender/SharePoint policies into templates applied at onboarding is how you avoid per-agent drift — treat template definition as a governance-critical control.</li>
     <li><strong>Tool controls are tenant-wide allow/block.</strong> Combined with threat-blocking on registered tools, this is the practical way to enforce an approved-tool inventory across the fleet rather than per agent.</li>
     <li><strong>Adoption is vendor-driven.</strong> AI-native vendors (Genspark, Zensai, Egnyte, Zendesk) and agent platforms (Kore.ai, Kasisto, n8n) integrate the SDK once so their agents arrive enterprise-ready — but coverage still depends on <em>the builder</em> having integrated it, which is worth verifying during vendor assessment.</li>
@@ -1203,6 +1197,277 @@ directActions | union topicActions | sort by AgentId, Timestamp desc</div>
   <div class="callout-title">📌 Sources</div>
   <p>Copilot Studio content: field research by Derk van der Woude (Microsoft Security MVP) · Microsoft Entra security for AI overview (April 2026) · Microsoft Zero Trust Assessment Workshop AI section.<br>
   Microsoft Foundry logging: <a href="https://www.cyphora.io/blog/microsoft-foundry/microsoft-foundry-logging-overview/" target="_blank" style="color:var(--blue);">Cyphora.io — Microsoft Foundry Logging (April 2026)</a> · Microsoft Learn documentation.</p>
+</div>
+
+<div class="section-label" id="foundry" style="margin-top:48px;">Foundry Control Plane — full detail</div>
+<h2>Microsoft Foundry Control Plane</h2>
+<p style="font-size:14px;color:#2e3d5e;">The developer-side platform in full: capabilities, agent lifecycle, and what to enable for SecOps. (Merged from the former Foundry page.)</p>
+<div class="section-label" style="margin-top:40px;">Four Capabilities</div>
+<h2>What Foundry Control Plane provides</h2>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0 28px;">
+  <div style="background:#ffffff;border:1px solid var(--border);border-top:3px solid var(--blue);border-radius:10px;padding:18px;">
+    <div style="font-size:22px;margin-bottom:8px;">📊</div>
+    <div style="font-size:14px;font-weight:700;margin-bottom:6px;">End-to-End Observability</div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.6;">OpenTelemetry instrumentation for every agent. Traces, metrics, and logs from development through production. Distributed tracing across multi-agent workflows. Integration with Azure Monitor and Application Insights. Agent action tracing for accountability — who did what, when, and why.</div>
+  </div>
+  <div style="background:#ffffff;border:1px solid var(--border);border-top:3px solid var(--teal);border-radius:10px;padding:18px;">
+    <div style="font-size:22px;margin-bottom:8px;">🔧</div>
+    <div style="font-size:14px;font-weight:700;margin-bottom:6px;">Guardrails and Controls</div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.6;">System prompt enforcement, prompt shielding, content safety filters, task adherence controls, and custom blocklists. The same configurable controls used by Microsoft Copilot — now available to developers building custom agents. Applied consistently at both inputs and outputs.</div>
+  </div>
+  <div style="background:#ffffff;border:1px solid var(--border);border-top:3px solid var(--green);border-radius:10px;padding:18px;">
+    <div style="font-size:22px;margin-bottom:8px;">🛡️</div>
+    <div style="font-size:14px;font-weight:700;margin-bottom:6px;">Integrated Security</div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.6;">Entra identity per agent (auto-provisioned), Purview data governance, Defender runtime threat protection. Network isolation via managed VNet and private endpoints. Credential-less storage access. AI Red Teaming Agent for pre-deployment vulnerability probing.</div>
+  </div>
+  <div style="background:#ffffff;border:1px solid var(--border);border-top:3px solid var(--purple);border-radius:10px;padding:18px;">
+    <div style="font-size:22px;margin-bottom:8px;">🚀</div>
+    <div style="font-size:14px;font-weight:700;margin-bottom:6px;">Fleet-Wide Operations</div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.6;">Manage agents across clouds, frameworks, and teams from one control plane. Projects model for simplified setup. A/B experimentation. CI/CD automation. Weights & Biases integration for fine-tuned model evaluation. Organisational quota and compute management.</div>
+  </div>
+</div>
+
+<div class="section-label" style="margin-top:40px;">Agent Lifecycle</div>
+<h2>From define to operate — the full lifecycle</h2>
+<table>
+<thead><tr><th>Stage</th><th>Developer (Foundry Control Plane)</th><th>IT/Security (Agent 365)</th></tr></thead>
+<tbody>
+<tr><td><strong>Define</strong></td><td>Inherit enterprise policies, set guardrails, configure evaluators</td><td>Define enterprise policies, set allowed templates</td></tr>
+<tr><td><strong>Build</strong></td><td>Develop with SDK, run evals, integrate Content Safety, AI Red Teaming</td><td>—</td></tr>
+<tr><td><strong>Approve</strong></td><td>Deploy agent to Agent 365 (triggers IT approval workflow)</td><td>Onboard agent, apply guardrails, enforce policies</td></tr>
+<tr><td><strong>Operate</strong></td><td>Monitor performance, quality, cost, risk via Foundry dashboards</td><td>Monitor all deployed agents: usage, performance, risk</td></tr>
+<tr><td><strong>Govern</strong></td><td>Continuous evaluation, tracing, debugging, A/B experimentation</td><td>Manage policies (access, data security, compliance), defend against threats</td></tr>
+</tbody>
+</table>
+
+<div class="section-label" style="margin-top:40px;">Evaluation Framework</div>
+<h2>Three evaluation categories — automated and manual</h2>
+<p>Foundry Control Plane provides structured evaluation of agents before and after deployment. Evaluations run locally during development, in CI/CD on every commit, and in production against real user inputs.</p>
+
+<table>
+<thead><tr><th>Category</th><th>Evaluators</th><th>What they measure</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>Quality</strong></td>
+  <td>Groundedness · Coherence · Fluency · Relevance · Retrieval Score · Similarity · NLP Metrics (F1)</td>
+  <td>Is the agent response accurate, relevant, and well-formed? Does it faithfully use grounded sources?</td>
+</tr>
+<tr>
+  <td><strong>Risk &amp; Safety</strong></td>
+  <td>Jailbreak Defect · Hate and Unfairness · Sexual · Violence · Self-Harm · Protected Material · Ungrounded Attributes · Code Vulnerability</td>
+  <td>Does the agent produce harmful, unsafe, or legally problematic outputs? Can it be manipulated?</td>
+</tr>
+<tr>
+  <td><strong>Agent-Specific</strong></td>
+  <td>Intent Resolution · Tool Call Accuracy · Task Adherence · Response Completeness</td>
+  <td>Does the agent correctly understand user intent, use tools accurately, and complete tasks as instructed?</td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:12px;">
+  <div class="callout-title">📌 Evaluation workflow</div>
+  <p><strong>Test data:</strong> Generate adversarial and non-adversarial test datasets using the Foundry evaluation client library, or upload your own domain-specific prompts.<br>
+  <strong>Evaluator:</strong> Metric instructions + Azure OpenAI model → scores each response with reasoning for human review.<br>
+  <strong>CI/CD integration:</strong> Batch evaluation runs on every check-in and deployment. Production evaluations run against real user inputs using traces to debug issues.<br>
+  <strong>A/B experimentation:</strong> Compare models, prompts, and workflows at scale before committing to a change.</p>
+</div>
+
+<div class="section-label" style="margin-top:40px;">AI Red Teaming Agent</div>
+<h2>Automated vulnerability probing — built into Foundry</h2>
+<p>The Foundry Control Plane includes a built-in AI Red Teaming Agent powered by PyRIT integration. Distinct from running PyRIT manually — the Foundry Red Teaming Agent is a managed, scheduled service that automatically probes your agents for content risks and security vulnerabilities as part of the development lifecycle.</p>
+
+<table>
+<thead><tr><th>Capability</th><th>Detail</th></tr></thead>
+<tbody>
+<tr><td><strong>Automated content risk scans</strong></td><td>Scheduled adversarial probing across harmful content categories, jailbreak attempts, and sensitive information extraction</td></tr>
+<tr><td><strong>Evaluate probing success</strong></td><td>LLM-as-judge scoring on whether attacks succeeded — not just whether the attack ran</td></tr>
+<tr><td><strong>Reporting and logging</strong></td><td>Structured findings linked to OWASP LLM Top 10 categories; exportable for compliance evidence</td></tr>
+<tr><td><strong>PyRIT integration</strong></td><td>Built on the same Microsoft PyRIT framework — 53+ adversarial datasets, 70+ converters, 6 attack strategies</td></tr>
+<tr><td><strong>When to use</strong></td><td>Pre-deployment (gate on result), post-deployment (continuous monitoring), after system prompt changes</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-warn" style="margin-top:12px;">
+  <div class="callout-title">⚠ Foundry Red Teaming Agent vs PyRIT directly</div>
+  <p>The Foundry Red Teaming Agent is a managed service — scheduled, governed, and integrated with Foundry observability. PyRIT standalone (Playbook 06) is a flexible research library you wrap yourself for custom CI/CD pipelines. For organisations using Foundry, the managed agent is the right starting point. For custom agents on other platforms, PyRIT standalone is the tool.</p>
+</div>
+
+<div class="section-label" style="margin-top:40px;">Content Safety</div>
+<h2>Configurable guardrails — same stack as Microsoft Copilot</h2>
+<p>Azure AI Content Safety is integrated directly into the Foundry Control Plane, providing the same configurable content filters used by Microsoft's own Copilot products. Applied at both input (prompt) and output (response) layers.</p>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0;">
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:16px;">
+    <div style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">Content categories blocked</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.8;">
+      <strong>Violence:</strong> Weapons, bullying, terrorism, stalking<br>
+      <strong>Sexual:</strong> Vulgar content, prostitution, nudity<br>
+      <strong>Hate &amp; Unfairness:</strong> Race, gender, religion, disability, harassment<br>
+      <strong>Self-harm:</strong> Eating disorders, bullying facilitation<br>
+      <strong>Child safety:</strong> Exploitation, abuse, grooming<br>
+      <strong>Protected materials:</strong> Copyrighted content<br>
+      <strong>Ungrounded attributes:</strong> Fabricated/inaccurate claims<br>
+      <strong>Prompt injection:</strong> Direct, indirect, spotlighting, agent-specific
+    </div>
+  </div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:16px;">
+    <div style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">Control mechanisms</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.8;">
+      <strong>System message:</strong> Ground and constrain agent behaviour<br>
+      <strong>Prompt Shields:</strong> Direct and indirect injection detection<br>
+      <strong>Custom categories:</strong> Block entire topics, not just specific words<br>
+      <strong>Custom blocklists:</strong> Domain-specific terms and phrases<br>
+      <strong>Groundedness detection:</strong> Flag responses not in source materials<br>
+      <strong>Task adherence:</strong> Detect when agent goes off-task<br>
+      <strong>Multimodal filtering:</strong> Scan text, images, and multimedia<br>
+      <strong>Protected material detection:</strong> Avoid known/owned text content
+    </div>
+  </div>
+</div>
+
+<div class="callout callout-info" style="margin-top:4px;">
+  <div class="callout-title">📌 Content Safety runtime flow</div>
+  <p>User prompt → Content Safety evaluates → Modified/filtered prompt → Foundry model → Filtered response → App response. Purview data governance and Defender threat detection run alongside this pipeline — not instead of it.</p>
+</div>
+
+<div class="section-label" style="margin-top:40px;">Observability &amp; Tracing</div>
+<h2>End-to-end visibility into agent behaviour</h2>
+<p>Foundry Control Plane provides comprehensive tracing of every agent action — enabling debugging, performance optimisation, and accountability. All traces are stored and queryable, forming an audit trail of what the agent did and why.</p>
+
+<table>
+<thead><tr><th>Layer</th><th>What is traced</th><th>Why it matters for security</th></tr></thead>
+<tbody>
+<tr><td><strong>Model inference</strong></td><td>Every LLM call: model, tokens, latency, prompt, response</td><td>Detects unusual inference patterns, cost anomalies, model substitution</td></tr>
+<tr><td><strong>Tool invocations</strong></td><td>Every tool/MCP call: name, parameters, result, duration</td><td>ATG blocks happen here; traces show what was attempted vs blocked</td></tr>
+<tr><td><strong>Memory operations</strong></td><td>Reads/writes to agent memory (Dataverse)</td><td>Memory is a persistent data store — sensitive context accumulates over sessions</td></tr>
+<tr><td><strong>Agent-to-agent</strong></td><td>Orchestrator calls to sub-agents in multi-agent workflows</td><td>Lateral movement risk; trust propagation between agents</td></tr>
+<tr><td><strong>User interactions</strong></td><td>Session start/end, message counts, satisfaction signals</td><td>Behavioural baseline for ID Protection anomaly detection</td></tr>
+</tbody>
+</table>
+
+<div class="section-label" style="margin-top:40px;">Security Architecture</div>
+<h2>Network isolation and data protection</h2>
+
+<table>
+<thead><tr><th>Control</th><th>Detail</th></tr></thead>
+<tbody>
+<tr><td><strong>Managed VNet</strong></td><td>AI hub and projects run within a managed virtual network. Private endpoints for all connected resources (Azure Storage, Key Vault, Container Registry, Foundry models). No public internet exposure for managed resources.</td></tr>
+<tr><td><strong>ExpressRoute / VPN</strong></td><td>On-premises connectivity to Foundry via ExpressRoute or VPN Gateway to your Azure VNet.</td></tr>
+<tr><td><strong>Credential-less storage</strong></td><td>Foundry supports credential-less access to Azure Storage and Foundry IQ using managed identity — no stored secrets, no rotation required. Generally available.</td></tr>
+<tr><td><strong>Customer-managed encryption</strong></td><td>Add your own encryption layer on top of Microsoft-managed encryption. Customer-managed key (CMK) for Blob Storage, Foundry IQ, and Azure CosmosDB resources.</td></tr>
+<tr><td><strong>Entra Agent ID</strong></td><td>Every Foundry agent is automatically provisioned with an Entra Agent Identity. CA for Agents, ID Protection, and lifecycle governance apply at the identity layer.</td></tr>
+</tbody>
+</table>
+
+<div class="section-label" style="margin-top:40px;">Foundry Projects Model</div>
+<h2>Simplified setup replacing the Hub/Project architecture</h2>
+<p>The new Foundry projects model significantly simplifies the previous Hub → Project → Resource hierarchy that made setup and coding complex.</p>
+
+<table>
+<thead><tr><th></th><th>Old: Hub + Projects</th><th>New: Foundry Projects</th></tr></thead>
+<tbody>
+<tr><td><strong>Entry point</strong></td><td>AI Hub → Projects → Multiple SDKs</td><td>Single Foundry Resource → Foundry SDK or API</td></tr>
+<tr><td><strong>Resources</strong></td><td>Many different resources needed upfront</td><td>Multi-tenant services by default; attach dedicated resources optionally</td></tr>
+<tr><td><strong>SDK</strong></td><td>Azure ML SDK, Azure OpenAI SDK, various others</td><td>Single Foundry SDK (or Azure OpenAI SDK for compatibility)</td></tr>
+<tr><td><strong>Optional attachments</strong></td><td>All required</td><td>Azure OpenAI, AI Search, Storage, Fabric, Azure Monitor — attach as needed</td></tr>
+<tr><td><strong>Scale</strong></td><td>Complex enterprise configuration required from start</td><td>Start simple, add enterprise controls as needed</td></tr>
+</tbody>
+</table>
+
+<div class="section-label" style="margin-top:40px;">Purview Data Security Investigations</div>
+<h2>AI-powered investigation workflow for data incidents</h2>
+<p>Microsoft Purview Data Security Investigations (Preview) is a three-stage workflow for investigating data security incidents involving AI — enabling security teams to find impacted data, analyse risks, and coordinate remediation without moving data between tools.</p>
+
+<table>
+<thead><tr><th>Stage</th><th>What you do</th><th>Key capability</th></tr></thead>
+<tbody>
+<tr><td><strong>1 — Identify</strong></td><td>Find incident-relevant data across the M365 estate</td><td>Search documents, emails, Copilot prompts/responses, and Teams messages. Launch directly from a Purview IRM case or a Defender XDR incident — pre-scoped to relevant data.</td></tr>
+<tr><td><strong>2 — Investigate</strong></td><td>Analyse impacted data for security risks</td><td>AI-powered content categorisation, severity assessment, vector search (find all content related to a subject based on context and meaning, not just keywords), key risk identification.</td></tr>
+<tr><td><strong>3 — Mitigate</strong></td><td>Coordinate remediation across teams</td><td>View data/user/activity correlations, create a mitigation plan, add reviewers from partner teams securely, use incident learnings to improve security practices.</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:12px;">
+  <div class="callout-title">📌 What makes this different from Advanced Hunting</div>
+  <p>Advanced Hunting (AgentsInfo, CloudAppEvents) gives you metadata and telemetry. Purview Data Security Investigations gives you the actual content — prompt text, response text, document content, emails — with AI-powered analysis to understand what sensitive data was exposed and to whom. The two tools are complementary: use Advanced Hunting to detect the incident, Purview DSI to investigate what was actually in the data.</p>
+</div>
+
+<div class="section-label" style="margin-top:40px;">AI Baseline — Compliance Manager</div>
+<h2>Automated compliance posture assessment for AI deployments</h2>
+<p>The AI Baseline assessment in Microsoft Compliance Manager provides an out-of-the-box trust assessment that automatically evaluates your AI deployment against global AI regulations (EU AI Act, NIST AI RMF) and surfaces gaps with recommended remediation actions.</p>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0;">
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:16px;">
+    <div style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">AI Baseline provides</div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.8;">
+      ✓ Automatic compliance posture evaluation<br>
+      ✓ Regulatory gap identification (EU AI Act, NIST AI RMF)<br>
+      ✓ Remediation actions (configure Purview, Entra, Defender)<br>
+      ✓ Real-time AI Compliance Score<br>
+      ✓ Audit-ready reporting
+    </div>
+  </div>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:16px;">
+    <div style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">Access paths</div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.8;">
+      <strong>M365 admin center:</strong><br>
+      Admin center → Compliance → AI Baseline<br><br>
+      <strong>Purview DSPM:</strong><br>
+      Purview portal → DSPM for AI → AI Baseline tab<br><br>
+      Requires: Compliance Administrator or Global Administrator role
+    </div>
+  </div>
+</div>
+
+<div style="background:rgba(0,120,212,0.06);border:1px solid rgba(0,120,212,0.2);border-radius:8px;padding:16px;font-size:13px;line-height:1.7;margin-top:4px;">
+  <strong>Pre-built AI regulatory templates:</strong> Upload PDF regulatory documents → automatically converted to actionable controls → mapped to Microsoft 365, Azure, and Foundry settings. AI-powered regulatory intelligence keeps you current as regulations evolve. Templates available: EU AI Act, NIST AI RMF 1.0, ISO/IEC 42001:2023, ISO/IEC 23894:2023.
+</div>
+
+<div class="section-label" style="margin-top:40px;">Agent 365 MCP Tool Catalog</div>
+<h2>Certified MCP servers for Agent 365 agents</h2>
+<p>Agent 365 provides a managed MCP tooling gateway that integrates certified tools for a consistent developer and governance experience. These tools are available to agents built with any SDK — Foundry, Copilot Studio, LangChain, or custom.</p>
+
+<table>
+<thead><tr><th>Category</th><th>MCP Tool (Work IQ naming)</th><th>Key capabilities</th><th>Typical use</th></tr></thead>
+<tbody>
+<tr><td><strong>Search &amp; AI</strong></td><td>Work IQ Copilot <span style="font-size:10px;color:var(--text3);">(was: Copilot Search)</span></td><td>Chat, multi-turn conversations, grounding with files</td><td>Knowledge retrieval</td></tr>
+<tr><td><strong>Business Data</strong></td><td>Dataverse</td><td>Dynamics 365 CRUD operations, domain actions</td><td>Business workflows</td></tr>
+<tr><td><strong>Communication</strong></td><td>Work IQ Calendar · Work IQ Teams <span style="font-size:10px;color:var(--text3);">(was: Outlook/Teams MCP)</span></td><td>Messaging, meetings, channel operations</td><td>Collaboration</td></tr>
+<tr><td><strong>Content &amp; Files</strong></td><td>Work IQ SharePoint Lists · Work IQ SharePoint &amp; OneDrive <span style="font-size:10px;color:var(--text3);">(Frontier)</span></td><td>Upload, search, metadata management, lists</td><td>Content management</td></tr>
+<tr><td><strong>Identity</strong></td><td>User Profile</td><td>Manager reports, profile lookup, org chart</td><td>Organisational context</td></tr>
+<tr><td><strong>Documents</strong></td><td>Microsoft Word</td><td>Create/read documents, comments</td><td>Document workflows</td></tr>
+</tbody>
+</table>
+<p style="font-size:12px;color:var(--text3);margin-top:6px;">⚠️ Note: Microsoft is renaming MCP servers to Work IQ branding. Existing connections using previous names (e.g. Microsoft Teams MCP Server) remain supported. For new connections, use the Work IQ named servers. Source: <a href="https://learn.microsoft.com/en-us/microsoft-agent-365/tooling-servers-overview" target="_blank" style="color:var(--blue);">Microsoft Learn — Work IQ MCP overview</a>.</p>
+
+<div class="callout callout-info" style="margin-top:12px;">
+  <div class="callout-title">📌 MCP tool governance</div>
+  <p><strong>Central admin control:</strong> Admins manage MCP servers via Microsoft 365 admin center — blocking a server blocks it for all users and agents.<br>
+  <strong>Scoped permissions:</strong> Each MCP server = one app permission requiring admin consent during onboarding.<br>
+  <strong>Observability:</strong> Full tool call tracing — tool invoked, parameters, execution outcome.<br>
+  <strong>Security:</strong> Rate limits, payload checks, security scans on all MCP traffic.<br>
+  <strong>Admin tasks:</strong> View activated MCP servers, allow/block servers, apply scoped permissions.</p>
+</div>
+
+<div class="section-label" style="margin-top:40px;">Shadow AI Discovery — Setup</div>
+<h2>Four-step setup for Global Secure Access Shadow AI detection</h2>
+<p>Source: Agent 365 Training Day 3 — Module 5</p>
+
+<table>
+<thead><tr><th>Step</th><th>Action</th><th>Detail</th></tr></thead>
+<tbody>
+<tr><td><strong>1</strong></td><td>Enable Internet Access traffic forwarding</td><td>Global Secure Access → Traffic forwarding → Enable Internet Access profile. Routes internet traffic through GSA client for inspection.</td></tr>
+<tr><td><strong>2</strong></td><td>Assign users and groups</td><td>Assign the Internet Access profile to target users/groups. Can scope to specific users for phased rollout or POC before tenant-wide deployment.</td></tr>
+<tr><td><strong>3</strong></td><td>Install the GSA client</td><td>Deploy Global Secure Access client to user devices. Verify in Connections view: Status should show connected, Channels configured.</td></tr>
+<tr><td><strong>4</strong></td><td>Access Shadow AI discovery</td><td>Global Secure Access portal → App discovery → Use Generative AI apps filter. See detected AI applications with usage statistics and risk scores.</td></tr>
+</tbody>
+</table>
+
+<div class="page-nav">
+  <a href="playbooks.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Playbooks</span></a>
+  <a href="overview.html#strategy"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Strategy</span></a>
 </div>
 
 <div class="footer">

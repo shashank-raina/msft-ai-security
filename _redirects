@@ -12,7 +12,15 @@
 /risk                     /overview.html#risk                301
 /strategy.html            /overview.html#strategy            301
 /strategy                 /overview.html#strategy            301
-/zero-trust.html          /frameworks.html#zero-trust        301
-/zero-trust               /frameworks.html#zero-trust        301
+/zero-trust.html          /threats.html#zero-trust           301
+/zero-trust               /threats.html#zero-trust           301
 /copilot-vs-foundry.html  /agent365.html#studio-vs-foundry   301
 /copilot-vs-foundry       /agent365.html#studio-vs-foundry   301
+
+# Round 2 merges (Aug 2026)
+/frameworks.html          /threats.html#frameworks           301
+/frameworks               /threats.html#frameworks           301
+/gaps.html                /overview.html#gaps                301
+/gaps                     /overview.html#gaps                301
+/foundry.html             /agent365.html#foundry             301
+/foundry                  /agent365.html#foundry             301

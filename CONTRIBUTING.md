@@ -19,14 +19,12 @@ The maintainer will review the gap against the current site content and implemen
 | File | Content |
 |---|---|
 | `index.html` | Home — persona guide |
-| `overview.html` | Stack overview, the eight risk properties + tiering, and the six-phase rollout |
+| `overview.html` | Stack overview, risk properties + tiering, six-phase rollout, and the gap register |
 | `product-map.html` | 32+ products with GA/Preview status |
-| `agent365.html` | Microsoft Agent 365 deep dive |
+| `agent365.html` | Agent 365 deep dive + Foundry control plane |
 | `identity.html` | Auth patterns, Classic/Modern, Blueprint/FIC, KQL |
 | `mcp.html` | MCP security architecture |
-| `threats.html` | 8 threat scenarios |
-| `frameworks.html` | NIST AI RMF, OWASP, ZT4AI, compliance |
-| `gaps.html` | Gap register |
+| `threats.html` | Threat scenarios + the frameworks layer (OWASP, NIST, ISO, ZT4AI) |
 | `playbooks.html` | 5 operational playbooks with KQL |
 | `demo.html` | Portal tour — the five screens that see agents (fictional data) |
 | `agent-telemetry-map.html` | Interactive map: creation paths → telemetry surfaces → licences |
