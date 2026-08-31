@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Overview — Securing AI with Microsoft</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="site.css">
+<link rel="stylesheet" href="../site.css">
 <style>
 @media(max-width:700px){
   .topnav{padding:0 16px;}
@@ -40,30 +40,34 @@
     <div><div class="brand-text">Securing AI with Microsoft</div></div>
   </div>
   <div class="nav-links">
-<a href="index.html" class="">Home</a>
+<a href="../index.html" class="">Home</a>
 <a href="overview.html" class="active">Overview</a>
 <a href="product-map.html" class="">Products</a>
 <a href="agent365.html" class="">Agent 365</a>
 <a href="identity.html" class="">Identity</a>
 <a href="threats.html" class="">Threats</a>
 <a href="playbooks.html" class="">Playbooks</a>
-<a href="contact.html" class="">Contact</a>
+<a href="../contact.html" class="">Contact</a>
 </div>
   <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
 
 <div class="mobile-drawer-overlay" id="drawerOverlay"></div>
 <div class="mobile-drawer" id="mobileDrawer">
-<a href="index.html" class="">Home</a>
+<a href="../index.html" class="">Home</a>
 <a href="overview.html" class="active">Overview</a>
 <a href="product-map.html" class="">Products</a>
 <a href="agent365.html" class="">Agent 365</a>
 <a href="identity.html" class="">Identity</a>
 <a href="threats.html" class="">Threats</a>
 <a href="playbooks.html" class="">Playbooks</a>
-<a href="contact.html" class="">Contact</a>
+<a href="../contact.html" class="">Contact</a>
 </div>
   <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" class="substack-nav" style="flex-shrink:0;margin-left:10px;display:flex;align-items:center;gap:5px;background:var(--blue);color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:6px 13px;border-radius:6px;text-decoration:none;white-space:nowrap;letter-spacing:0.03em;">📬 Subscribe</a>
 </nav>
+<div style="background:#eef1f8;border-bottom:1px solid #b8c4de;padding:10px 32px;font-size:13px;color:#2e3d5e;text-align:center;">
+  📚 <strong>Archived deep dive.</strong> The main site is now a concise primer — <a href="../index.html" style="color:var(--blue);font-weight:600;">start there</a>. This page is kept as reference and still maintained for major corrections only.
+</div>
+
 <div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
   📌 <strong>Author's note:</strong> This site synthesises the author's own understanding from publicly available Microsoft documentation, official Microsoft Security blog posts, RSAC 2026 announcements, and insights from Microsoft Security professionals and MVPs. It is independent and not affiliated with or endorsed by Microsoft. Microsoft updates products and documentation frequently — always verify current status directly with Microsoft before making architecture or purchasing decisions.
 </div>
@@ -410,7 +414,7 @@
 <tr><td><strong>02 · Identity &amp; Governance</strong></td><td>Classic: Managed Environments, enforced end-user auth, sharing limits, owner/sponsor model, Power Platform DLP. Modern: Conditional Access, ID Protection, access packages (Agent 365)</td><td>Governed maker estate · CA-protected Modern agents · auth baseline</td></tr>
 <tr><td><strong>03 · Data Security</strong></td><td>DSPM oversharing assessment; regulated SITs; label inheritance; Purview DLP for Copilot; retention on agent output; browser DLP for public LLMs</td><td>Oversharing remediated · DLP active · label coverage measured</td></tr>
 <tr><td><strong>04 · Runtime Protection</strong></td><td>Defender real-time protection; Entra Internet Access prompt-injection controls; Prompt Shields; pre-deployment red teaming (PyRIT / Foundry Red Teaming Agent)</td><td>Runtime guardrails live · red-team evidence</td></tr>
-<tr><td><strong>05 · Monitoring &amp; Detection</strong></td><td>Sentinel connectors (Copilot, Defender XDR, Agent 365 + Agent Identities lake connectors); analytics rules; hunting via <code>AgentsInfo</code> / <code>CloudAppEvents</code>; the <a href="agent-telemetry-map.html" style="color:var(--blue);">Agent Telemetry Map</a> shows which sources need which licence</td><td>Detections firing · investigation paths proven</td></tr>
+<tr><td><strong>05 · Monitoring &amp; Detection</strong></td><td>Sentinel connectors (Copilot, Defender XDR, Agent 365 + Agent Identities lake connectors); analytics rules; hunting via <code>AgentsInfo</code> / <code>CloudAppEvents</code>; the <a href="../agent-telemetry-map.html" style="color:var(--blue);">Agent Telemetry Map</a> shows which sources need which licence</td><td>Detections firing · investigation paths proven</td></tr>
 <tr><td><strong>06 · Compliance &amp; Governance</strong></td><td>Agent lifecycle board; access reviews; Compliance Manager AI assessments; quarterly reporting</td><td>Standing governance cadence</td></tr>
 </tbody>
 </table>
@@ -703,7 +707,7 @@
   <p>Microsoft's <a href="https://learn.microsoft.com/security/security-for-ai/whats-new" target="_blank" style="color:var(--blue);">official "What's new in Microsoft AI security"</a> page is the authoritative source for capability landings. Key recent additions: <strong>Microsoft Entra Agent Platform</strong> (developer-first identity platform), <strong>Microsoft Entra Agent Registry</strong> (complete inventory including third-party agents), <strong>AI Prompt Shield</strong> (network-layer prompt injection blocking, Preview), <strong>specialized roles for Agent ID management</strong>, and <strong>Microsoft Copilot Studio AI agent protection in Defender</strong> (Preview, GA expected June 2026). The platform is also now called <strong>Microsoft Foundry</strong> (formerly Azure AI Foundry) — Microsoft is using the new name consistently in Learn from Q4 2025 onward.</p>
 </div>
 
-<div class="page-nav"><a href="index.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Home</span></a><a href="overview.html#risk"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">AI Risk</span></a></div>
+<div class="page-nav"><a href="../index.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Home</span></a><a href="overview.html#risk"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">AI Risk</span></a></div>
 <div style="text-align:center;margin:32px 0 0;padding:24px 0;border-top:1px solid var(--border2);">
   <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text3);margin-bottom:10px;">STAY UPDATED</div>
   <div style="font-size:15px;font-weight:700;color:#0d1526;margin-bottom:6px;">Get notified when Microsoft AI security changes</div>
