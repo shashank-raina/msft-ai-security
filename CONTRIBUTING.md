@@ -23,8 +23,7 @@ The maintainer will review the gap against the current site content and implemen
 | `product-map.html` | 32+ products with GA/Preview status |
 | `agent365.html` | Agent 365 deep dive + Foundry control plane |
 | `identity.html` | Auth patterns, Classic/Modern, Blueprint/FIC, KQL |
-| `mcp.html` | MCP security architecture |
-| `threats.html` | Threat scenarios + the frameworks layer (OWASP, NIST, ISO, ZT4AI) |
+| `threats.html` | Threat scenarios + MCP security + the frameworks layer (OWASP, NIST, ISO, ZT4AI) |
 | `playbooks.html` | 5 operational playbooks with KQL |
 | `demo.html` | Portal tour — the five screens that see agents (fictional data) |
 | `agent-telemetry-map.html` | Interactive map: creation paths → telemetry surfaces → licences |

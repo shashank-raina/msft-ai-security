@@ -31,7 +31,6 @@
 <a href="product-map.html" class="">Products</a>
 <a href="agent365.html" class="">Agent 365</a>
 <a href="identity.html" class="">Identity</a>
-<a href="mcp.html" class="">MCP</a>
 <a href="threats.html" class="active">Threats</a>
 <a href="playbooks.html" class="">Playbooks</a>
 <a href="contact.html" class="">Contact</a>
@@ -45,7 +44,6 @@
 <a href="product-map.html" class="">Products</a>
 <a href="agent365.html" class="">Agent 365</a>
 <a href="identity.html" class="">Identity</a>
-<a href="mcp.html" class="">MCP</a>
 <a href="threats.html" class="active">Threats</a>
 <a href="playbooks.html" class="">Playbooks</a>
 <a href="contact.html" class="">Contact</a>
@@ -547,7 +545,7 @@
   <p style="margin-top:8px;"><strong>What defenders should do now:</strong> stay current on patches (the discover-to-patch window is what protects you); reduce attack surface; secure your source code; for organisations that develop software at scale, evaluate the MDASH private preview when it opens more broadly — or equivalent multi-agent vulnerability discovery from other vendors.</p>
 </div>
 
-<div class="page-nav"><a href="mcp.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">MCP</span></a><a href="threats.html#frameworks"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Frameworks</span></a></div>
+<div class="page-nav"><a href="threats.html#mcp"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">MCP</span></a><a href="threats.html#frameworks"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Frameworks</span></a></div>
 <div style="text-align:center;margin:32px 0 0;padding:24px 0;border-top:1px solid var(--border2);">
   <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text3);margin-bottom:10px;">STAY UPDATED</div>
   <div style="font-size:15px;font-weight:700;color:#0d1526;margin-bottom:6px;">Get notified when Microsoft AI security changes</div>
@@ -1074,6 +1072,357 @@
 </div>
 
 <div class="page-nav"><a href="threats.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Threats</span></a><a href="overview.html#gaps"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Gaps</span></a></div>
+<div style="text-align:center;margin:32px 0 0;padding:24px 0;border-top:1px solid var(--border2);">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text3);margin-bottom:10px;">STAY UPDATED</div>
+  <div style="font-size:15px;font-weight:700;color:#0d1526;margin-bottom:6px;">Get notified when Microsoft AI security changes</div>
+  <div style="font-size:13px;color:#2e3d5e;margin-bottom:14px;">Monthly updates on new controls, GA announcements, and critical gaps — direct to your inbox.</div>
+  <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#ffffff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;padding:12px 24px;border-radius:8px;text-decoration:none;transition:opacity 0.15s;" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">
+    Subscribe to updates →
+  </a>
+  <div style="font-size:11px;color:var(--text3);margin-top:10px;font-family:'JetBrains Mono',monospace;">aiagentsecurity.substack.com · Free · No spam</div>
+</div>
+
+
+<hr style="border:none;border-top:1px solid var(--border2);margin:56px 0 8px;">
+<div class="section-label" id="mcp" style="margin-top:24px;">MCP &amp; the tool supply chain</div>
+<h2>MCP security — architecture, attack vectors and controls</h2>
+<p style="font-size:14px;color:#2e3d5e;">Tools are how agent threats become real-world actions: every MCP server is a supply-chain dependency with tenant access. (Merged from the former MCP page.)</p>
+<div class="section-label">MCP Architecture</div>
+<h2>The Three-Layer MCP Model</h2>
+<p>MCP defines how AI agents discover, connect to, and invoke tools, data sources, and services across a standard protocol. With Microsoft's official server catalog, MCP is now enterprise infrastructure — not a prototype technology.</p>
+<div class="mcp-layer">
+  <div class="mcp-layer-header" style="background:rgba(0,120,212,0.1);">
+    <div class="mcp-layer-title" style="color:var(--blue2);">Layer 1 — MCP Host (the AI agent / client)</div>
+  </div>
+  <div class="mcp-layer-body">
+    <div class="mcp-item control">Copilot Studio agent (MCP tools natively supported)</div>
+    <div class="mcp-item control">Microsoft Foundry agent</div>
+    <div class="mcp-item control">GitHub Copilot (VS Code / Visual Studio)</div>
+    <div class="mcp-item control">Custom LLM application</div>
+    <div class="mcp-item risk">Shadow / unsanctioned agents with unreviewed MCP tools</div>
+  </div>
+</div>
+<div class="mcp-layer">
+  <div class="mcp-layer-header" style="background:rgba(98,100,167,0.1);">
+    <div class="mcp-layer-title" style="color:#a4a8d8;">Layer 2 — MCP Server (the tool/connector layer)</div>
+  </div>
+  <div class="mcp-layer-body">
+    <div class="mcp-item control">Microsoft Azure MCP Server</div>
+    <div class="mcp-item control">GitHub MCP Server</div>
+    <div class="mcp-item control">SharePoint / M365 MCP Server</div>
+    <div class="mcp-item control">Azure DevOps MCP Server</div>
+    <div class="mcp-item control">SQL Server MCP Server</div>
+    <div class="mcp-item risk">Third-party / community MCP servers (unvetted)</div>
+    <div class="mcp-item risk">Often lacks authentication in OSS implementations</div>
+    <div class="mcp-item risk">Tool descriptions (used by agent for routing) can be poisoned</div>
+  </div>
+</div>
+<div class="mcp-layer">
+  <div class="mcp-layer-header" style="background:rgba(0,133,117,0.1);">
+    <div class="mcp-layer-title" style="color:var(--teal2);">Layer 3 — Backend Resources</div>
+  </div>
+  <div class="mcp-layer-body">
+    <div class="mcp-item">Azure subscriptions / resource groups</div>
+    <div class="mcp-item">GitHub repositories / issues / PRs</div>
+    <div class="mcp-item">SharePoint / OneDrive / Exchange</div>
+    <div class="mcp-item">SQL databases</div>
+    <div class="mcp-item">Salesforce, ServiceNow, Jira (via third-party servers)</div>
+    <div class="mcp-item risk">All accessed using the agent's credentials — in Copilot Studio, this is maker credentials by default</div>
+  </div>
+</div>
+
+<div class="section-label">Copilot Studio + MCP</div>
+<h2>Copilot Studio MCP Tools — A Specific Risk Pattern</h2>
+<p>When a Copilot Studio agent is configured with MCP tools, the agent authenticates to those MCP servers using maker credentials by default. This means:</p>
+<div class="card-grid">
+  <a href="https://www.microsoft.com/en-us/security/blog/2026/02/12/copilot-studio-agent-security-top-10-risks-detect-prevent/" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.3);">
+    <div class="card-name">⚠ Maker Credentials × MCP Tools</div>
+    <div class="card-desc">The maker (developer/admin) connects an Azure MCP server to a Copilot Studio agent. The agent authenticates to Azure as the maker. If the agent is shared org-wide with no authentication, every employee can trigger Azure resource queries or management actions — using the maker's Azure permissions.</div>
+    <div class="tag-row"><span class="tag warn">CRITICAL COMBINATION</span><span class="tag">Copilot Studio</span></div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://github.com/microsoft/mcp" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.3);">
+    <div class="card-name">⚠ Unreviewed MCP Tool Lifecycle</div>
+    <div class="card-desc">MCP tools added to a Copilot Studio agent are not subject to the same App Registration review as traditional app permissions. Microsoft recommends using the "MCP Tool Configured" Advanced Hunting query and enforcing lifecycle reviews for every MCP tool configuration in the environment.</div>
+    <div class="tag-row"><span class="tag warn">Governance Gap</span><span class="tag">KQL Detectable</span></div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+</div>
+
+<div class="section-label">Attack Vectors</div>
+<h2>MCP-Specific Attack Vectors</h2>
+<table>
+<thead><tr><th>Attack</th><th>How It Works</th><th>Impact</th><th>Primary Control</th></tr></thead>
+<tbody>
+<tr><td><strong>Tool Poisoning</strong></td><td>Malicious MCP server returns poisoned tool descriptions. Agent reads descriptions to decide which tool to invoke — poisoned descriptions redirect agent to attacker-controlled tools.</td><td><span class="severity-critical">CRITICAL</span> Full agent hijack</td><td>Foundry Guardrails (whitelist); Defender for Cloud Apps (MCP server governance)</td></tr>
+<tr><td><strong>MCP Server Impersonation</strong></td><td>Attacker substitutes a malicious MCP server (DNS hijack, supply chain, local server swap). Agent connects to attacker's server and receives malicious tool outputs.</td><td><span class="severity-critical">CRITICAL</span> Data exfiltration, action hijack</td><td>Defender for Cloud Apps (MCP server registry); no cryptographic binding standard in MCP spec</td></tr>
+<tr><td><strong>Indirect Prompt Injection via MCP</strong></td><td>Malicious instructions embedded in data returned by an MCP tool. Agent treats the embedded text as legitimate instruction and acts on it using maker credentials.</td><td><span class="severity-critical">CRITICAL</span> Data exfiltration, lateral movement</td><td>Prompt Shields (XPIA detection); Entra Internet Access Prompt Injection Protection (GA Mar 31 2026)</td></tr>
+<tr><td><strong>OAuth Scope Abuse</strong></td><td>Agent inherits overly broad OAuth scopes from maker credentials when connecting to MCP-backed SaaS. Broad token enables lateral movement across multiple services.</td><td><span class="severity-high">HIGH</span> Lateral movement across SaaS</td><td>Defender for Cloud Apps OAuth governance; enforce end-user auth per agent</td></tr>
+<tr><td><strong>Unauthenticated MCP Server</strong></td><td>Many community MCP servers have no authentication. Any agent or attacker on the network can call them without credentials.</td><td><span class="severity-high">HIGH</span> Unauthorised tool execution</td><td>Network segmentation; Entra Internet Access; security review of MCP server implementations</td></tr>
+<tr><td><strong>MCP Supply Chain Attack</strong></td><td>Malicious package in MCP server registry. Enterprise deploys a compromised MCP server — attacker gains persistent access to the agent's tool layer.</td><td><span class="severity-high">HIGH</span> Persistent backdoor in agent tooling</td><td>Defender for Cloud (supply chain scanning); Security Dashboard AI Inventory; GitHub Advanced Security</td></tr>
+<tr><td><strong>Unreviewed MCP Tool in Copilot Studio</strong></td><td>Developer adds a community MCP server to a Copilot Studio agent without security review. Agent runs with maker credentials against unvetted tool surface.</td><td><span class="severity-high">HIGH</span> Uncontrolled action surface</td><td>"MCP Tool Configured" Advanced Hunting query; enforce MCP tool lifecycle reviews</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-warn">
+  <div class="callout-title">⚠ Critical Gap: No Strong MCP Server Authentication Standard</div>
+  <p>The MCP specification (as of early 2026) does not mandate strong cryptographic authentication for MCP server-to-client binding. Microsoft's official MCP catalog servers use standard OAuth where supported, but third-party and community servers vary widely. There is no platform-enforced way to guarantee the MCP server an agent connects to is the legitimate, unmodified server it expects. This requires defence-in-depth at the network, CASB, and orchestration layers — no single product closes it.</p>
+</div>
+
+<div class="section-label">Microsoft Controls</div>
+<h2>How Microsoft Secures the MCP Boundary</h2>
+<div class="card-grid">
+  <a href="https://learn.microsoft.com/en-us/defender-cloud-apps/ai-agent-protection" target="_blank" class="card-link"><div class="card" style="border-color:rgba(0,120,212,0.2);">
+    <div class="card-name">Defender for Cloud Apps (CASB)</div>
+    <div class="card-desc">Primary control for MCP-to-SaaS boundary. Discovers MCP-connected SaaS apps. Governs OAuth permissions. Detects anomalous access from agent-driven API calls. Can block or alert on risky MCP-to-SaaS connections. For Copilot Studio specifically: provides real-time protection — blocks tool invocations if prompt is suspicious (1-second timeout, then allow if no decision).</div>
+    <div class="tag-row"><span class="tag green">GA</span><span class="tag">OAuth Governance</span><span class="tag">RT Protection</span></div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://learn.microsoft.com/en-us/security/security-for-ai/security-dashboard-for-ai" target="_blank" class="card-link"><div class="card" style="border-color:rgba(84,176,84,0.15);">
+    <div class="card-name">Security Dashboard — AI Inventory</div>
+    <div class="card-desc">Includes MCP servers in AI inventory — now GA. Discovery and risk assessment of MCP servers across the environment including those deployed without IT knowledge. Coverage extends to third-party AI including ChatGPT, Gemini, and MCP servers.</div>
+    <div class="tag-row"><span class="tag green">✓ Now GA · RSAC 2026</span><span class="tag">MCP Server Discovery</span></div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://azure.microsoft.com/en-us/products/ai-foundry" target="_blank" class="card-link"><div class="card" style="border-color:rgba(252,225,0,0.15);">
+    <div class="card-name">Foundry Guardrails</div>
+    <div class="card-desc">For Foundry-deployed agents — define which MCP tools the agent is allowed to invoke. Whitelist at the orchestration layer. Does not apply to Copilot Studio agents — each platform has its own governance model.</div>
+    <div class="tag-row"><span class="tag caution">Preview</span><span class="tag">Tool Whitelist</span><span class="tag warn">⚠ Foundry only — not Copilot Studio</span></div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://learn.microsoft.com/en-us/azure/ai-services/content-safety/concepts/jailbreak-detection" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.15);">
+    <div class="card-name">Prompt Shields</div>
+    <div class="card-desc">Primary defence against indirect prompt injection via MCP tool outputs. Inspects content flowing from MCP responses into agent context before reaching the model.</div>
+    <div class="tag-row"><span class="tag green">GA</span><span class="tag">XPIA Defence</span><span class="tag">Tool Output Inspection</span></div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://learn.microsoft.com/en-us/entra/global-secure-access/how-to-manage-microsoft-profile" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.15);">
+    <div class="card-name">Entra Internet Access — Prompt Injection Protection</div>
+    <div class="card-desc">Network-layer enforcement blocking malicious AI prompts across apps and agents. Complements Prompt Shields at the network boundary. GA March 31 2026, 2026.</div>
+    <div class="tag-row"><span class="tag green">GA March 31 2026</span><span class="tag">Network Layer</span></div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://learn.microsoft.com/en-us/azure/sentinel/overview" target="_blank" class="card-link"><div class="card" style="border-color:rgba(84,176,84,0.15);">
+    <div class="card-name">Sentinel MCP Entity Analyzer</div>
+    <div class="card-desc">Natural language querying of MCP entity data within Sentinel investigations. GA April 2026. Enables analysts to explore MCP-connected entity relationships without writing KQL from scratch.</div>
+    <div class="tag-row"><span class="tag blue">GA April 2026</span><span class="tag">Natural Language</span><span class="tag">Sentinel</span></div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+</div>
+
+<div class="section-label">Defence Architecture</div>
+<h2>Layered MCP Defence-in-Depth</h2>
+<table>
+<thead><tr><th>Layer</th><th>What It Covers</th><th>Microsoft Control</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td><strong>Catalog governance</strong></td><td>Vetting which MCP servers are approved for use; lifecycle reviews</td><td>Internal policy + "MCP Tool Configured" Advanced Hunting query</td><td><span class="caution-inline">Process control — no product enforcement</span></td></tr>
+<tr><td><strong>Network</strong></td><td>Control which MCP servers agents can reach; block malicious prompts</td><td>Entra Internet Access</td><td><span class="green-inline">GA Mar 31 2026</span></td></tr>
+<tr><td><strong>Identity</strong></td><td>Authenticate which agents can invoke which MCP tools; prevent maker credential blast radius</td><td>Enforce end-user auth (Power Platform admin)</td><td><span class="green-inline">Available now</span></td></tr>
+<tr><td><strong>Orchestration</strong></td><td>Whitelist allowed tools per agent (Foundry only)</td><td>Foundry Guardrails</td><td><span class="caution-inline">Preview · Foundry only</span></td></tr>
+<tr><td><strong>Content Inspection</strong></td><td>Detect adversarial instructions in MCP tool outputs</td><td>Prompt Shields</td><td><span class="green-inline">GA</span></td></tr>
+<tr><td><strong>Runtime Protection</strong></td><td>Block tool invocations during suspicious Copilot Studio agent activity</td><td>Defender for Cloud Apps real-time protection</td><td><span class="caution-inline">Preview · Copilot Studio only</span></td></tr>
+<tr><td><strong>SaaS Governance</strong></td><td>OAuth scope governance; anomalous API usage detection</td><td>Defender for Cloud Apps</td><td><span class="green-inline">GA</span></td></tr>
+<tr><td><strong>Inventory &amp; Posture</strong></td><td>Discover all MCP servers; assess risk</td><td>Security Dashboard for AI</td><td><span class="green-inline">Now GA</span></td></tr>
+<tr><td><strong>Investigation</strong></td><td>NL querying of MCP entity relationships in Sentinel</td><td>Sentinel MCP Entity Analyzer</td><td><span class="green-inline">GA April</span></td></tr>
+</tbody>
+</table>
+
+
+
+<div class="section-label" style="margin-top:32px;">Agent-to-Agent (A2A) Protocol</div>
+<h2>Beyond MCP — A2A for Inter-Agent Communication</h2>
+<p>While MCP governs how agents connect to external tools and data sources, <strong>A2A (Agent-to-Agent)</strong> is an emerging protocol for authenticated communication between agents themselves. Microsoft's Entra Agent ID platform now supports A2A for agent-to-agent discovery and authorisation — enabling orchestration agents to delegate tasks to sub-agents with verified identities. This is separate from MCP and addresses a different attack surface: the communication channels between agents in multi-agent architectures.</p>
+<div class="card-grid" style="grid-template-columns:1fr 1fr;margin-top:16px;">
+  <div class="card">
+    <div class="card-name">MCP (Model Context Protocol)</div>
+    <div class="card-desc">Governs agent-to-tool and agent-to-data-source connections. An agent calls an external tool (file system, API, database) via MCP. Standardised by Anthropic, adopted by Microsoft.</div>
+    <div class="tag-row"><span class="tag green">Widely adopted</span><span class="tag">Agent → Tool</span></div>
+  </div>
+  <div class="card">
+    <div class="card-name">A2A (Agent-to-Agent Protocol)</div>
+    <div class="card-desc">Governs agent-to-agent communication and delegation. An orchestration agent delegates tasks to sub-agents via A2A with identity verification. Emerging standard supported by Entra Agent ID.</div>
+    <div class="tag-row"><span class="tag caution">Emerging</span><span class="tag">Agent → Agent</span><span class="tag">Entra Agent ID</span></div>
+  </div>
+</div>
+<div class="callout callout-warn" style="margin-top:16px;">
+  <div class="callout-title">⚠️ Most multi-agent architectures today have no A2A verification</div>
+  <p>Copilot Studio agent chains, Power Automate flows that call agents, and custom orchestration built on Microsoft Foundry typically have no formal A2A authentication. This means a compromised orchestrator can issue malicious delegations to sub-agents without any identity check. Until A2A becomes standard, treat every inter-agent boundary as an untrusted boundary and apply least-privilege scoping per agent.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- MICROSOFT-PROVIDED MCP SERVERS — THE LANDSCAPE NOW -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:48px;">Microsoft's MCP servers</div>
+<h2>What Microsoft now ships as first-party MCP servers</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 18px;">As of late 2025, Microsoft has shipped or previewed several first-party MCP servers, each with different security boundaries and trust models. Understanding what each one is — and where the authoritative auth/audit lives — is critical for designing safe MCP integrations.</p>
+
+<table>
+<thead><tr><th>MCP server</th><th>What it provides</th><th>Auth / boundary</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td><strong>Microsoft Sentinel MCP server</strong></td><td>Scenario-focused collections of security tools — query Sentinel data lake and Defender in natural language, build security agents, automate triage and threat hunting. Includes Security Copilot agent creation tools.</td><td>Fully hosted by Microsoft. Microsoft Entra for identity. No infrastructure deployment needed.</td><td><span class="green-inline">Available</span></td></tr>
+<tr><td><strong>Microsoft Learn MCP server</strong></td><td>Three tools: <code>microsoft_docs_search</code>, <code>microsoft_docs_fetch</code>, <code>microsoft_code_sample_search</code>. Searches official Microsoft docs.</td><td>Hosted by Microsoft. Authless.</td><td><span class="green-inline">Available</span> at <code>learn.microsoft.com/api/mcp</code></td></tr>
+<tr><td><strong>Foundry MCP integration</strong> (client side)</td><td>Foundry agents consume remote MCP servers. Each tool added with unique <code>server_label</code> + <code>server_url</code>. Some pre-validated MCP servers (e.g. Azure DevOps) are in the Foundry Add Tools catalog.</td><td>Custom headers (including auth tokens) pass per-run only — not persisted. Foundry approval and audit mechanisms apply.</td><td><span class="green-inline">Available</span></td></tr>
+<tr><td><strong>Windows On-device Agent Registry (ODR)</strong></td><td>Local registry of MCP servers on Windows endpoints. Apps and agents discover MCP servers via the ODR. Includes built-in connectors (e.g. File Explorer MCP).</td><td>MCP servers run in <strong>contained environment by default</strong>. User and IT admin control via Windows Settings and Intune. Logging and auditing for client↔server interactions.</td><td><span class="caution-inline">Preview</span></td></tr>
+<tr><td><strong>Copilot Studio MCP onboarding wizard</strong></td><td>Add existing MCP servers to Copilot Studio agents via guided OAuth wizard. Generates callback URLs for identity provider registration. Handles authorization code → access token → refresh token flow.</td><td>Per-agent OAuth 2.0 configuration. Identity provider remains the trust anchor.</td><td><span class="green-inline">Available</span></td></tr>
+<tr><td><strong>Microsoft Agent Framework MCP tools</strong></td><td>.NET/Java/Python SDKs for connecting custom agents to MCP servers, including local MCP servers. Used to build framework-based agents.</td><td>Developer chooses transport and auth; Microsoft provides SDK primitives.</td><td><span class="green-inline">Available</span></td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;">
+  <div class="callout-title">📌 Authoritative Microsoft security guidance for MCP</div>
+  <p>Microsoft repeatedly cites two sources across all MCP-related docs: (1) <a href="https://modelcontextprotocol.io/specification/draft/basic/security_best_practices" target="_blank" style="color:var(--blue);">MCP Security Best Practices</a> on the Model Context Protocol website, and (2) the Microsoft Security Community Blog post <a href="https://techcommunity.microsoft.com/blog/microsoft-security-blog/understanding-and-mitigating-security-risks-in-mcp-implementations/4404667" target="_blank" style="color:var(--blue);">Understanding and mitigating security risks in MCP implementations</a>. Both are required reading for anyone integrating MCP into an enterprise estate.</p>
+</div>
+
+<div class="callout callout-warn" style="margin-top:14px;">
+  <div class="callout-title">⚠ Microsoft's stated stance on third-party MCP servers</div>
+  <p>From Microsoft's own Agent Framework documentation: "The remote MCP servers that you decide to use with the MCP tool described in this article were created by third parties, not Microsoft. Microsoft hasn't tested or verified these servers. Microsoft has no responsibility to you or others in relation to your use of any remote MCP servers." This is the framing to use when third-party MCP servers come up in governance discussions — Microsoft treats them as supply-chain risk you own. Recommended: track every MCP server added to any agent in your estate, rely on servers hosted by trusted providers (not proxies), and log all data shared with remote MCP servers for auditing.</p>
+</div>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 Windows ODR — the local MCP control plane Microsoft is now shipping</div>
+  <p>The Windows On-device Agent Registry is the local equivalent of what Entra Agent Registry does for cloud agents — it tracks MCP servers on Windows endpoints. Key security properties: MCP servers run <strong>contained</strong> by default (separate environment, can only access approved resources), users and IT admins control access per agent via Windows Settings or Intune, and interactions between MCP clients and servers are logged and auditable. The <code>odr.exe</code> command-line tool lets users and admins view and manage MCP servers. For endpoints where users may install MCP-enabled apps, this is the control point to manage centrally.</p>
+</div>
+
+<div class="callout callout-info" style="margin-top:14px;background:#fff8e6;border-color:#e8b840;">
+  <div class="callout-title">🆕 June 2026 — Purview now governs MCP clients on developer endpoints</div>
+  <p>Until June 2026, MCP clients running on developer endpoints — <strong>GitHub Copilot CLI, Claude Code, OpenAI Codex, OpenClaw</strong> — were largely outside the reach of Microsoft's central security tooling. Activity happened on a developer's laptop and stayed there. Purview's <strong>local & endpoint agents</strong> preview (June 2026) changes this. The same DSPM, DLP, and Insider Risk capabilities that govern cloud-side agents now extend to these local agents, with full interaction context flowing back to Purview.</p>
+  <p style="margin-top:8px;">Four protections come together: <strong>(1) DSPM visibility</strong> into prompts, responses, and actions taken by the local agent; <strong>(2) real-time DLP enforcement</strong> during execution — sensitive content can be blocked mid-flow; <strong>(3) Insider Risk signal generation</strong> from risky local-agent behaviour (data being moved out of policy boundaries); <strong>(4) full interaction logs</strong> in the unified audit log for forensics. This is the same governance plane that already covers cloud Copilot and Foundry agents — extended to the build environment.</p>
+  <p style="margin-top:8px;font-size:12px;color:var(--text2);">Why it matters: developers using Claude Code or GitHub Copilot CLI to ground an agent against sensitive source code, internal docs, or production data were a real gap. The data left the corporate perimeter via the agent and Purview had no view. This closes that gap for any MCP client Microsoft supports as a local-agent endpoint. See <a href="product-map.html#data-security" style="color:var(--blue);">Purview for Local & Endpoint Agents</a> on the product map for full details.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- CLAWS + CLAWHUB -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:48px;">Claws · the new agent skill primitive</div>
+<h2>What are "claws" — and what's the security model</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">Build 2026 introduced a new agent-runtime vocabulary worth knowing for any security architect designing for local AI agents.</p>
+
+<table>
+<thead><tr><th>Concept</th><th>Definition</th><th>Security implication</th></tr></thead>
+<tbody>
+<tr><td><strong>OpenClaw</strong></td><td>A self-hosted agent runtime that runs on a workstation, VM, or container. Loads skills and interacts with local and cloud resources. <strong>Open-source.</strong></td><td>Inherits the trust (and risk) of the machine and the identities it can use. Same operational model as installing a desktop application with elevated privileges.</td></tr>
+<tr><td><strong>Claws</strong></td><td>Skills loaded into OpenClaw. Each claw is a discrete capability — read files, query a database, call an API, write code. Composed by the user to build a working agent.</td><td><strong>Installing a skill is basically installing privileged code.</strong> The skill operates inside the OpenClaw runtime with the user's permissions to local apps, files, and accounts.</td></tr>
+<tr><td><strong>ClawHub</strong></td><td>Public skills registry for OpenClaw. Skills are discovered and installed through ClawHub — by search, by recommendation, by community channels.</td><td><strong>Supply chain attack surface.</strong> Microsoft Threat Intelligence has already observed attackers publishing malicious skills disguised as utilities, and promoting them through community channels. Skills can also be discovered organically via search and installed by users who don't recognise the risk.</td></tr>
+<tr><td><strong>OpenClaw on Windows via MXC</strong></td><td>Windows node and gateway for OpenClaw run inside Microsoft Execution Containers (MXC). Windows companion app available to set up and connect claws. Available open-source.</td><td>Containment is now native to the platform on Windows — the OpenClaw runtime can't reach beyond what MXC policy permits. Compare to running OpenClaw bare on a developer's machine where the runtime has whatever permissions the user has.</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-warn" style="margin-top:14px;">
+  <div class="callout-title">⚠ Treat ClawHub like a package registry, not an app store</div>
+  <p>The same threat model applies as for npm, PyPI, VS Code Marketplace, or any other third-party code source. Microsoft's <a href="https://www.microsoft.com/en-us/security/blog/2026/02/19/running-openclaw-safely-identity-isolation-runtime-risk/" target="_blank" style="color:var(--blue);">February 2026 OpenClaw security research</a> documented the pattern: malicious skills disguised as utilities, organic discovery via search, social engineering via community channels. Recommended controls before any developer team adopts OpenClaw: maintain an approved-claws list, prefer skills from verified publishers, run OpenClaw inside MXC on Windows (not bare), and ensure Purview's local-agent observability is enabled so risky behaviour at skill execution time generates Insider Risk signals.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- MICROSOFT EXECUTION CONTAINERS (MXC) -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:48px;">Runtime containment</div>
+<h2>Microsoft Execution Containers (MXC) — the policy-driven runtime layer</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">MXC SDK is a new layer introduced at Build 2026 that sits between the agent runtime and the OS. Developers <strong>declare what an agent can access</strong> (files, network, processes) and MXC enforces those declarations at runtime. The model is similar to seccomp on Linux or App Container on Windows, but designed specifically for agentic workloads where behaviour is non-deterministic.</p>
+
+<div class="callout callout-info" style="margin-top:8px;">
+  <div class="callout-title">📌 Composable isolation by intent and risk</div>
+  <p>MXC offers a <strong>spectrum of isolation semantics</strong> — light containment when an agent's task is low-risk, full sandboxing when it touches sensitive data or invokes high-impact tools. Composition is dynamic: a single agent can run light when summarising a doc and switch to strict containment when invoking a connector that could exfiltrate data. The point: containment policy follows the operation, not the agent identity.</p>
+  <p style="margin-top:10px;"><strong>Agent 365 + MXC integration</strong> (Preview, July 2026) brings Defender, Entra, Intune, and Purview protections through MXC so agents start secure and stay secure. This is the moment when the four governance pillars (identity, threat, device, data) converge at the runtime boundary for local agents — not just cloud agents.</p>
+</div>
+
+<div class="callout callout-warn" style="margin-top:14px;">
+  <div class="callout-title">⚠ Real-world finding — Claude Code GitHub Action prompt injection</div>
+  <p>Microsoft Threat Intelligence identified a <strong>prompt injection pathway in the Claude Code GitHub Action</strong> that allowed access to workflow secrets under specific conditions (research published February 2026). The attack pattern: untrusted content (e.g., an issue body) becomes input to the agent's prompt; the injected prompt redirects the agent to dump <code>secrets.*</code> values or call out to attacker-controlled endpoints. The fix in CI/CD: treat any LLM agent invocation as a trust boundary — never pass untrusted content directly into prompts that have access to secrets, and scope <code>GITHUB_TOKEN</code> permissions to the minimum the agent actually needs. This is the same threat class as <a href="threats.html" style="color:var(--blue);">Threat Scenario 6 (XPIA via untrusted data sources)</a>, manifesting in a code-automation context.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- DEFENDER'S VIEW OF LOCAL AI AGENTS (Build 2026) -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:48px;">Endpoint inventory & runtime protection</div>
+<h2>Defender's view of local AI agents — 20+ tools surfaced as security assets</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">Microsoft Defender for Endpoint now discovers and protects local AI agents on Defender-onboarded Windows endpoints — <strong>treating each agent as a first-class security asset rather than just an OS process</strong>. Per the authoritative <a href="https://learn.microsoft.com/en-us/defender-endpoint/local-agent-discovery-overview" target="_blank" style="color:var(--blue);">Microsoft Learn local agent discovery page</a>, Defender currently identifies five categories of local AI agents. Many of these are MCP clients — the inventory is the central place to see what agents users have installed and what MCP server configurations they've added.</p>
+
+<table>
+<thead><tr><th>Category</th><th>Agents discovered today</th></tr></thead>
+<tbody>
+<tr><td><strong>CLI agents</strong></td><td>Claude Code · Codex CLI · Gemini CLI · GitHub Copilot CLI · OpenCode · Antigravity CLI</td></tr>
+<tr><td><strong>Desktop apps</strong></td><td>ChatGPT Desktop · Claude Desktop · Codex Desktop · Ollama Desktop · Poe Desktop</td></tr>
+<tr><td><strong>Agentic IDEs</strong></td><td>Cursor · Antigravity IDE · Windsurf</td></tr>
+<tr><td><strong>VS Code extensions</strong></td><td>Claude Code · Cline · Codex · Gemini Code Assist · GitHub Copilot · Roo Code</td></tr>
+<tr><td><strong>Claw-based agents</strong></td><td>OpenClaw · Clawpilot · Claw/Nanobot</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 How Defender defines an "agent"</div>
+  <p>An agent is the combination of <strong>user + device + agent type</strong>. So if Claude Code runs in 15 different project folders on the same user/device, it's <em>one</em> agent in the inventory — not 15. This keeps the inventory tractable while still giving SOC analysts the dimensions they need to pivot during investigation (which user is running what on which machine).</p>
+  <p style="margin-top:8px;">Three views available in the Microsoft Defender portal:</p>
+  <ul style="margin:8px 0 0 18px;font-size:13px;line-height:1.8;">
+    <li><strong>Local AI agent inventory</strong> — centralised list across the tenant, with device and user associations, MCP server configurations (local AND remote), and discovery metadata.</li>
+    <li><strong>Exposure map</strong> — visual relationships between local agents, devices, identities, and the resources those identities can reach. The exposure map is the answer to "if this agent is compromised, what can it touch?"</li>
+    <li><strong>Advanced Hunting</strong> — KQL queries against discovery data. Hunt for risky configurations (e.g., agents in auto-approve mode under a privileged identity with access to production, source code, or CI/CD), then convert hunting queries into custom detection rules.</li>
+  </ul>
+</div>
+
+<h2 style="margin-top:32px;">Runtime protection — inline prompt-injection detection in the agent loop</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">Discovery surfaces what's running; <strong>runtime protection</strong> stops malicious instructions before the agent acts on them. Per the <a href="https://learn.microsoft.com/en-us/defender-endpoint/ai-agent-runtime-protection-overview" target="_blank" style="color:var(--blue);">AI agent runtime protection overview</a>, Defender inspects three points in the agent loop where content enters or leaves reasoning:</p>
+
+<table>
+<thead><tr><th>Hook point</th><th>What Defender inspects</th><th>What's caught</th></tr></thead>
+<tbody>
+<tr><td><strong>① User prompt</strong></td><td>The prompt submitted to the agent</td><td>Direct prompt injection via user input</td></tr>
+<tr><td><strong>② Pre-tool call</strong></td><td>The tool invocation request before execution</td><td>Hidden instructions in fetched content (file, web page, repo) attempting to redirect a tool call</td></tr>
+<tr><td><strong>③ Post-tool response</strong></td><td>The tool response after execution completes</td><td>Tool output containing injection payload aimed at the next reasoning step</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 How the inspection works in practice</div>
+  <p>Defender uses each agent's published <strong>hooks framework</strong> (<a href="https://code.claude.com/docs/en/hooks" target="_blank" style="color:var(--blue);">Claude Code hooks</a>, <a href="https://docs.github.com/copilot/how-tos/copilot-cli/customize-copilot/use-hooks" target="_blank" style="color:var(--blue);">GitHub Copilot CLI hooks</a>) — Defender registers as a hook consumer at the three inspection points. This means added latency is minimal because each scan is a fast inline check, not continuous monitoring of the agent process.</p>
+  <p style="margin-top:8px;"><strong>Modes:</strong> <em>Block</em> (Defender stops the action, notifies the user via agent UI + Windows toast, raises an alert correlated into Defender incidents; the detection is also recorded in Defender protection history on the device); <em>Audit</em> (action continues, alert still raised — recommended starting mode); <em>Disabled</em>. The setting is protected by Tamper Protection so it can't be silently disabled. Alert name: <strong>Suspicious AI prompt injection</strong>. Once enabled, Defender inspects supported agents at their hook points <strong>without changing how users run the agent</strong> — no wrapping, no interception of the agent process, no behavioural change to the developer workflow.</p>
+  <p style="margin-top:8px;"><strong>Currently supported agents</strong> for runtime protection: Claude Code, GitHub Copilot CLI. Coverage expanding — any agent that exposes a hooks framework can in principle be added. Worth noting: until coverage broadens, runtime protection is a meaningful capability only for organisations whose developers actually use these two specific tools. Discovery (above) covers the much broader 20+ list.</p>
+</div>
+
+<div class="callout callout-warn" style="margin-top:14px;">
+  <div class="callout-title">⚠ Example scenario from Microsoft's documentation</div>
+  <p style="font-size:13px;color:#2e3d5e;"><em>"A coding agent fetches a project's documentation to answer a question, and the page contains hidden text that instructs the agent to read the local <code>.env</code> file and post its contents to an external URL. The agent treats the instruction as part of the page and is about to comply, but Defender detects the prompt injection in the tool response and blocks the action before any data leaves the device."</em></p>
+  <p style="margin-top:8px;font-size:13px;color:var(--text2);">This is the canonical local agent threat — and the canonical case for why runtime protection earns its place in any tenant where developers use Claude Code or GitHub Copilot CLI against real production data.</p>
+</div>
+
+<h2 style="margin-top:32px;">Configuration in practice — prerequisites, phased rollout, deployment</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">Per the <a href="https://learn.microsoft.com/en-us/defender-endpoint/configure-ai-agent-runtime-protection" target="_blank" style="color:var(--blue);">configuration guide</a>, enabling runtime protection isn't a single switch — it has prerequisites, a recommended phased rollout, and PowerShell-only enablement today.</p>
+
+<div class="callout callout-warn" style="margin-top:8px;">
+  <div class="callout-title">⚠ Prerequisites — the Beta channel gotcha</div>
+  <p>The most important constraint: runtime protection is currently available <strong>only on devices configured to receive Beta platform and engine updates</strong>. Production fleets on the standard ring won't see the capability. Other prerequisites are routine — devices onboarded to Defender for Endpoint, Defender Antivirus in active mode, supported local AI agent installed, agent natively supports a hooks framework (Claude Code or GitHub Copilot CLI today). Minimum <code>AntivirusSignatureVersion</code> is <code>1.451.224.0</code>.</p>
+</div>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 Microsoft's recommended 4-phase rollout</div>
+  <ol style="margin:8px 0 0 22px;font-size:13px;line-height:1.9;">
+    <li><strong>Test</strong> — enable in <em>Audit</em> mode on a small set of devices where supported agents are actively used.</li>
+    <li><strong>Review</strong> — monitor alerts in the Defender portal for <strong>1-2 weeks</strong>. Submit false positives to Microsoft for analysis.</li>
+    <li><strong>Deploy</strong> — roll out in <em>Audit</em> mode to additional device groups across the organisation.</li>
+    <li><strong>Enforce</strong> — after validating alert accuracy, switch to <em>Block</em> mode on the device groups where you want active enforcement.</li>
+  </ol>
+  <p style="margin-top:10px;font-size:12px;color:var(--text2);">In Audit mode, alerts are <strong>Informational severity</strong> — your team can review what would have been blocked without triaging it as an active threat. In Block mode, alerts carry a <strong>Critical / High / Medium / Low severity</strong> based on assessed risk. Plan SOC capacity accordingly.</p>
+</div>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 Enablement is PowerShell — no Intune policy yet</div>
+  <p>There is no native Intune configuration profile for runtime protection at present. Single-device enablement is via PowerShell:</p>
+  <p style="margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:12px;background:#0d1526;color:#e0e6f0;padding:10px 14px;border-radius:4px;line-height:1.7;"># Switch to Beta channel<br>
+  Set-MpPreference -PlatformUpdatesChannel Beta<br>
+  Set-MpPreference -EngineUpdatesChannel Beta<br><br>
+  # Force signature refresh (run 3 times per Microsoft's guidance)<br>
+  Update-MpSignature; Update-MpSignature; Update-MpSignature<br><br>
+  # Verify signature version &gt;= 1.451.224.0<br>
+  Get-MpComputerStatus | Select-Object AntivirusSignatureVersion<br><br>
+  # Enable runtime protection (Disabled / Audit / Block)<br>
+  Set-MpPreference -AiAgentProtection Audit<br><br>
+  # Verify current setting<br>
+  Get-MpPreference | Select-Object AiAgentProtection</p>
+  <p style="margin-top:10px;">For fleet deployment, wrap this in a PowerShell script and deploy via Intune's <strong>PowerShell scripts</strong> feature (not a configuration profile). Same command, scaled to device groups.</p>
+</div>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 What end users see when Block mode triggers</div>
+  <p>Two notifications appear in parallel:</p>
+  <ul style="margin:8px 0 0 18px;font-size:13px;line-height:1.8;">
+    <li><strong>In the agent terminal</strong> — block message showing what was blocked, why, and confirmation that the action didn't execute. Developer-friendly framing.</li>
+    <li><strong>Windows toast notification</strong> — appears regardless of whether the agent terminal is in focus.</li>
+  </ul>
+  <p style="margin-top:8px;">Users can also review detections under <strong>Windows Security &gt; Virus &amp; threat protection &gt; Current threats / Protection history</strong> — same surface as other Defender detections. This means runtime protection events look familiar to users who've seen any other Defender intervention.</p>
+</div>
+
+<div class="page-nav"><a href="identity.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Identity</span></a><a href="threats.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Threats</span></a></div>
 <div style="text-align:center;margin:32px 0 0;padding:24px 0;border-top:1px solid var(--border2);">
   <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text3);margin-bottom:10px;">STAY UPDATED</div>
   <div style="font-size:15px;font-weight:700;color:#0d1526;margin-bottom:6px;">Get notified when Microsoft AI security changes</div>
