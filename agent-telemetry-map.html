@@ -205,6 +205,16 @@ section.notes{border-top:1px solid var(--rule);padding:30px 0 60px;background:va
   </section>
 </div>
 
+<div class="wrap">
+  <section class="matrix" id="four-screens" style="padding:8px 0 44px">
+    <h2>Four screens, four counts</h2>
+    <p>Ask a tenant how many agents it has and you can collect four defensible answers in one afternoon. The <strong>Agent Registry</strong> counts published titles — things people <em>could</em> run, whether or not anyone does. <strong>Defender's inventory</strong> counts what security tooling can see, and is the only screen that includes agents living on laptops. <strong>Entra</strong> counts what holds a directory principal — an identity that can actually be governed. And the registry's own catalog API has been observed disagreeing with the registry's portal tile for the same tenant, in Microsoft's own documentation.</p>
+    <p>The numbers disagree <em>by design</em>, not by defect. Each screen answers a different question: could it run (registry) · can we see it (Defender) · can we govern it (Entra) · what actually ran (the runtime tables on this map). Treating any one of them as <em>the</em> inventory is how an estate ends up confidently wrong.</p>
+    <p>So the reconciliation itself is the finding, and it's how I open every engagement. Present the spread, not a number — because each gap between two screens names its own work item. Registry-but-not-Entra is the ungoverned population (Classic Copilot Studio lives here). Defender-local-but-nowhere-else is the endpoint estate nobody put on the risk register. Entra-but-telemetry-silent means observability was never instrumented. A single count tells you none of that.</p>
+    <p><strong>The rule that falls out: never quote an agent count without saying which screen it came from.</strong></p>
+  </section>
+</div>
+
 <section class="notes">
   <div class="wrap cols">
     <div>
