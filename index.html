@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Home — Securing AI with Microsoft</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
 <style>
 :root{
   --bg:#f5f7fc;--surface:#ffffff;--surface2:#eef1f8;--surface3:#e4e9f4;
@@ -14,51 +15,30 @@
   --nav-h:52px;
   --warn-text:#c23000;--green2:#0a5a0a;--caution-text:#6e4500;
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;
   font-size:15.5px;line-height:1.8;padding-top:var(--nav-h);}
-body::before{content:'';position:fixed;inset:0;
-  background-image:linear-gradient(rgba(0,80,180,0.05) 1px,transparent 1px),
-  linear-gradient(90deg,rgba(0,80,180,0.05) 1px,transparent 1px);
-  background-size:48px 48px;pointer-events:none;z-index:0;}
-
 /* NAV */
 .topnav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);
   background:rgba(245,247,252,0.97);border-bottom:1px solid var(--border2);
   backdrop-filter:blur(12px);z-index:200;box-shadow:0 1px 10px rgba(0,0,0,0.07);
   display:flex;align-items:center;padding:0 32px;gap:0;}
-.nav-brand{display:flex;align-items:center;gap:8px;margin-right:20px;flex-shrink:0;}
-.msft-logo{width:18px;height:18px;display:grid;grid-template-columns:1fr 1fr;gap:2px;}
-.msft-logo div:nth-child(1){background:#f25022;border-radius:1px;}
-.msft-logo div:nth-child(2){background:#7fba00;border-radius:1px;}
-.msft-logo div:nth-child(3){background:#00a4ef;border-radius:1px;}
-.msft-logo div:nth-child(4){background:#ffb900;border-radius:1px;}
 .brand-text{font-size:13px;font-weight:800;color:#0d1526;white-space:nowrap;}
 .brand-sub{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--text3);letter-spacing:0.06em;}
-.nav-links{display:flex;align-items:stretch;height:100%;flex:1;overflow-x:auto;gap:2px;}
-.nav-links::-webkit-scrollbar{display:none;}
 .nav-links a{display:flex;align-items:center;gap:5px;padding:0 9px;
   text-decoration:none;color:#1a2a4a;font-size:11.5px;font-weight:600;
   border-bottom:2px solid transparent;white-space:nowrap;transition:color 0.15s,border-color 0.15s;}
-.nav-links a:hover{color:#0d1526;}
-.nav-links a.active{color:var(--blue);border-bottom-color:var(--blue);}
 .nav-links a .n{font-family:'JetBrains Mono',monospace;font-size:11px;color:#4a6a9a;font-weight:700;}
-
 /* DISCLAIMER */
 .disclaimer{background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;
   font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;}
-
 /* LAYOUT */
 .page{max-width:960px;margin:0 auto;padding:48px 40px 100px;position:relative;z-index:1;}
-
 /* HERO */
 .start-hero{text-align:center;padding:48px 0 40px;}
 .start-hero h1{font-size:44px;font-weight:800;letter-spacing:-0.03em;color:#0d1526;line-height:1.06;margin-bottom:14px;}
 .start-hero h1 span{background:linear-gradient(135deg,var(--blue),#004fa8);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .start-hero p{font-size:17px;color:#2e3d5e;max-width:580px;margin:0 auto 32px;line-height:1.7;}
-
 /* PERSONA SELECTOR */
 .persona-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:48px;}
 .persona-btn{background:#ffffff;border:2px solid var(--border);border-radius:14px;
@@ -69,11 +49,9 @@ body::before{content:'';position:fixed;inset:0;
 .persona-icon{font-size:34px;line-height:1;}
 .persona-name{font-size:13px;font-weight:700;color:#0d1526;line-height:1.3;}
 .persona-sub{font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;letter-spacing:0.06em;margin-top:2px;}
-
 /* CONTENT PANELS */
 .persona-panel{display:none;}
 .persona-panel.active{display:block;}
-
 /* DIAGRAM */
 .diagram{margin:32px 0;position:relative;}
 .diagram-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;
@@ -103,7 +81,6 @@ body::before{content:'';position:fixed;inset:0;
 .path-arrow{display:flex;align-items:center;justify-content:center;
   color:#b0bcd4;font-size:18px;flex-shrink:0;width:20px;}
 .path-connector{text-align:center;color:#b0bcd4;font-size:14px;padding:2px 0;}
-
 /* READING PATH CARDS */
 .reading-path{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:32px;}
 .rp-card{background:#ffffff;border:1.5px solid var(--border);border-radius:10px;
@@ -120,7 +97,6 @@ body::before{content:'';position:fixed;inset:0;
   letter-spacing:0.06em;margin-bottom:6px;}
 .rp-section-item{font-size:11px;color:#004a9e;margin-bottom:3px;}
 .rp-section-item::before{content:"→ ";}
-
 /* KEY QUESTIONS */
 .key-qs{background:#f0f6ff;border:1.5px solid rgba(0,120,212,0.2);border-radius:10px;
   padding:20px 24px;margin:24px 0;}
@@ -131,40 +107,13 @@ body::before{content:'';position:fixed;inset:0;
 .key-q:last-child{border-bottom:none;}
 .key-q::before{content:"?";font-family:'JetBrains Mono',monospace;font-size:10px;
   color:var(--blue);font-weight:700;margin-top:3px;flex-shrink:0;}
-
 .footer{text-align:center;margin-top:60px;padding-top:24px;border-top:1px solid var(--border2);
   font-family:'JetBrains Mono',monospace;font-size:10px;color:#5a6a8a;line-height:1.9;}
-
 @media(max-width:700px){
   .persona-grid{grid-template-columns:repeat(3,1fr);}
   .reading-path{grid-template-columns:1fr;}
   .page{padding:28px 20px 80px;}
   h1{font-size:28px;}
-}
-
-/* HAMBURGER */
-.hamburger{display:none;background:none;border:none;cursor:pointer;
-  padding:6px;flex-direction:column;gap:5px;margin-left:auto;flex-shrink:0;}
-.hamburger span{display:block;width:22px;height:2px;background:#0d1526;
-  border-radius:2px;transition:all 0.2s;}
-.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
-.hamburger.open span:nth-child(2){opacity:0;}
-.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
-.mobile-drawer{display:none;position:fixed;top:var(--nav-h);left:0;right:0;
-  background:rgba(245,247,252,0.98);border-bottom:1px solid var(--border2);
-  backdrop-filter:blur(16px);z-index:199;padding:12px 20px 20px;
-  flex-direction:column;gap:2px;box-shadow:0 8px 32px rgba(0,0,0,0.1);}
-.mobile-drawer.open{display:flex;}
-.mobile-drawer a{display:block;padding:10px 12px;border-radius:8px;
-  font-size:14px;font-weight:600;color:#1a2a4a;text-decoration:none;
-  transition:background 0.12s;}
-.mobile-drawer a:hover,.mobile-drawer a.active{background:#f0f6ff;color:var(--blue);}
-.mobile-drawer-overlay{display:none;position:fixed;inset:0;z-index:198;
-  background:rgba(0,0,0,0.2);}
-.mobile-drawer-overlay.open{display:block;}
-@media(max-width:900px){
-  .nav-links{display:none !important;}
-  .hamburger{display:flex;}
 }
 </style>
 </head>
@@ -179,7 +128,6 @@ body::before{content:'';position:fixed;inset:0;
   <div class="nav-links">
 <a href="index.html" class="active">Home</a>
 <a href="overview.html" class="">Overview</a>
-<a href="risk.html" class="">AI Risk</a>
 <a href="product-map.html" class="">Products</a>
 <a href="agent365.html" class="">Agent 365</a>
 <a href="identity.html" class="">Identity</a>
@@ -189,7 +137,6 @@ body::before{content:'';position:fixed;inset:0;
 <a href="gaps.html" class="">Gaps</a>
 <a href="playbooks.html" class="">Playbooks</a>
 <a href="foundry.html" class="">Foundry</a>
-<a href="strategy.html" class="">Strategy</a>
 <a href="contact.html" class="">Contact</a>
 </div>
   <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
@@ -199,7 +146,6 @@ body::before{content:'';position:fixed;inset:0;
 <div class="mobile-drawer" id="mobileDrawer">
 <a href="index.html" class="active">Home</a>
 <a href="overview.html" class="">Overview</a>
-<a href="risk.html" class="">AI Risk</a>
 <a href="product-map.html" class="">Products</a>
 <a href="agent365.html" class="">Agent 365</a>
 <a href="identity.html" class="">Identity</a>
@@ -209,7 +155,6 @@ body::before{content:'';position:fixed;inset:0;
 <a href="gaps.html" class="">Gaps</a>
 <a href="playbooks.html" class="">Playbooks</a>
 <a href="foundry.html" class="">Foundry</a>
-<a href="strategy.html" class="">Strategy</a>
 <a href="contact.html" class="">Contact</a>
 </div>
 
@@ -307,7 +252,7 @@ body::before{content:'';position:fixed;inset:0;
           <div class="path-why">NIST AI RMF and ISO 42001 mapping — directly answers board and audit questions.</div>
         </a>
         <div class="path-arrow">→</div>
-        <a href="risk.html" class="path-node secondary">
+        <a href="overview.html#risk" class="path-node secondary">
           <div class="path-label secondary">RECOMMENDED</div>
           <div class="path-name">AI Risk Reality</div>
           <div class="path-why">The risk taxonomy and Classic vs Modern agent distinction are critical for board conversations.</div>
@@ -404,7 +349,7 @@ body::before{content:'';position:fixed;inset:0;
       </div>
       <div class="path-connector">↓ reference</div>
       <div class="path-row">
-        <a href="risk.html" class="path-node secondary" style="opacity:0.7;">
+        <a href="overview.html#risk" class="path-node secondary" style="opacity:0.7;">
           <div class="path-label secondary">REFERENCE</div>
           <div class="path-name">AI Risk</div>
           <div class="path-why">Risk taxonomy and attack surface model.</div>
@@ -464,7 +409,7 @@ body::before{content:'';position:fixed;inset:0;
     <div class="diagram-title">YOUR READING PATH</div>
     <div class="path-wrap">
       <div class="path-row">
-        <a href="risk.html" class="path-node primary">
+        <a href="overview.html#risk" class="path-node primary">
           <div class="path-label primary">START HERE · ESSENTIAL</div>
           <div class="path-name">AI Risk Reality</div>
           <div class="path-why">The Copilot Studio Specific Risks section — no-auth agents, org-wide sharing, maker credentials, Classic vs Modern — is written for you.</div>
@@ -537,7 +482,7 @@ body::before{content:'';position:fixed;inset:0;
     <div class="diagram-title">YOUR READING PATH</div>
     <div class="path-wrap">
       <div class="path-row">
-        <a href="risk.html" class="path-node primary">
+        <a href="overview.html#risk" class="path-node primary">
           <div class="path-label primary">START HERE · ESSENTIAL</div>
           <div class="path-name">AI Risk Reality</div>
           <div class="path-why">Maker credentials, no-auth, org-wide sharing — these are risks you create at build time. Read this first.</div>
@@ -626,7 +571,7 @@ body::before{content:'';position:fixed;inset:0;
           <div class="path-why">GA vs Preview status for every control — evidences what's production-ready vs in-flight.</div>
         </a>
         <div class="path-arrow">→</div>
-        <a href="risk.html" class="path-node secondary">
+        <a href="overview.html#risk" class="path-node secondary">
           <div class="path-label secondary">RECOMMENDED</div>
           <div class="path-name">AI Risk Reality</div>
           <div class="path-why">Risk taxonomy maps to GOVERN and MAP functions. Classic agent gap is a key compliance exposure.</div>

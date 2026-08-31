@@ -19,8 +19,7 @@ The maintainer will review the gap against the current site content and implemen
 | File | Content |
 |---|---|
 | `index.html` | Home — persona guide |
-| `overview.html` | 7-layer stack overview |
-| `risk.html` | AI Risk taxonomy |
+| `overview.html` | Stack overview, the eight risk properties + tiering, and the six-phase rollout |
 | `product-map.html` | 32+ products with GA/Preview status |
 | `agent365.html` | Microsoft Agent 365 deep dive |
 | `identity.html` | Auth patterns, Classic/Modern, Blueprint/FIC, KQL |
@@ -29,8 +28,9 @@ The maintainer will review the gap against the current site content and implemen
 | `frameworks.html` | NIST AI RMF, OWASP, ZT4AI, compliance |
 | `gaps.html` | Gap register |
 | `playbooks.html` | 5 operational playbooks with KQL |
-| `copilot-vs-foundry.html` | Copilot Studio vs Microsoft Foundry comparison |
-| `changelog.html` | Dated change log |
+| `demo.html` | Portal tour — the five screens that see agents (fictional data) |
+| `agent-telemetry-map.html` | Interactive map: creation paths → telemetry surfaces → licences |
+| `changelog.html` | Dated change log (May 2026 onward; older history in git) |
 | `contact.html` | Feedback form + Privacy policy |
 
 ## What fits this site
