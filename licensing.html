@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AI Security Licensing — what actually gates what</title>
+<meta name="description" content="The three independent licence axes for Microsoft AI security, and the E5 / Agent 365 / E7 splits that decide which tables and controls you actually have.">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+<style>
+.surface-card{background:#ffffff;border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin:14px 0;}
+.surface-card .num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--blue);}
+.surface-card h3{font-size:17px;font-weight:700;color:#0d1526;margin:4px 0 8px;}
+.fact-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:20px 0;}
+.fact{background:#ffffff;border:1px solid var(--border);border-radius:10px;padding:14px 18px;font-size:13px;color:#2e3d5e;line-height:1.6;}
+.fact b{display:block;font-size:15px;color:#0d1526;}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-brand">
+    <div class="msft-logo"><div></div><div></div><div></div><div></div></div>
+    <div><div class="brand-text">Securing AI with Microsoft</div></div>
+  </div>
+  <div class="nav-links">
+<a href="index.html" class="">Home</a>
+<a href="surfaces.html" class="">Five Surfaces</a>
+<a href="licensing.html" class="active">Licensing</a>
+<a href="agent-telemetry-map.html" class="">Agent Map</a>
+<a href="start.html" class="">Start Here</a>
+<a href="contact.html" class="">Contact</a>
+</div>
+  <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+
+<div class="mobile-drawer-overlay" id="drawerOverlay"></div>
+<div class="mobile-drawer" id="mobileDrawer">
+<a href="index.html" class="">Home</a>
+<a href="surfaces.html" class="">Five Surfaces</a>
+<a href="licensing.html" class="active">Licensing</a>
+<a href="agent-telemetry-map.html" class="">Agent Map</a>
+<a href="start.html" class="">Start Here</a>
+<a href="contact.html" class="">Contact</a>
+</div>
+  <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" class="substack-nav" style="flex-shrink:0;margin-left:10px;display:flex;align-items:center;gap:5px;background:var(--blue);color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:6px 13px;border-radius:6px;text-decoration:none;white-space:nowrap;letter-spacing:0.03em;">📬 Subscribe</a>
+</nav>
+<div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
+  📌 <strong>Author's note:</strong> Independent, not affiliated with or endorsed by Microsoft. This site is a <strong>starting point</strong> — verify current product status against Microsoft documentation before architecture or purchasing decisions.
+</div>
+<div class="page">
+
+<div class="section-label" style="margin-top:24px;">The money question</div>
+<h1>What licences<br><span style="color:var(--blue);">actually gate what</span></h1>
+<p style="font-size:15px;color:#2e3d5e;max-width:700px;">Licensing runs on <strong>three independent axes</strong>, and movement on one never implies coverage on another. Most AI security budgeting errors are one of two assumptions: that an M365 purchase covers Azure AI workloads, or that Agent 365 includes the Sentinel data lake. Neither is true.</p>
+
+<table>
+<thead><tr><th>Axis</th><th>Billed</th><th>What lives here</th></tr></thead>
+<tbody>
+<tr><td><strong>Microsoft 365</strong></td><td>Per user</td><td>Copilot audit, Purview, Defender XDR, Agent 365 / E7 — the agent control plane</td></tr>
+<tr><td><strong>Azure — Defender plans</strong></td><td>Per resource + per tokens scanned</td><td>Foundry and Azure OpenAI workload security (surface 2)</td></tr>
+<tr><td><strong>Sentinel</strong></td><td>Ingestion, retention, and the data lake tier</td><td>SIEM correlation — and the lake tier that carries the deepest agent telemetry. Agent 365 <em>writes into</em> the lake; it does not include it</td></tr>
+</tbody>
+</table>
+
+<div class="section-label" style="margin-top:36px;">The split that causes the most confusion</div>
+<h2>One table, two populations, two licences</h2>
+<div class="callout callout-warn">
+  <div class="callout-title">⚠ An empty result can be a licence boundary, not a data gap</div>
+  <p><strong><code>AgentsInfo</code></strong> — <em>local</em> agents populate on E5 / MDE P2 with no Agent 365 licence (tenant-verified); <em>cloud</em> agents need Agent 365.<br>
+  <strong><code>CloudAppEvents</code></strong> — Copilot interaction <em>verdict</em> rows (Jailbreak, XPIA) arrive on E5; the Agent 365 <em>runtime</em> rows (<code>InvokeAgent</code>, <code>InferenceCall</code>, <code>ExecuteToolBy*</code>) do not exist until Agent 365 instruments an agent.</p>
+</div>
+
+<h2 style="margin-top:28px;">What each tier actually buys</h2>
+<table>
+<thead><tr><th>You hold</th><th>You can already do</th><th>What the next tier adds</th></tr></thead>
+<tbody>
+<tr><td><strong>M365 E5</strong></td><td>Copilot interaction audit with safety verdicts · free security alerts · local-agent discovery and inventory (MDE P2) · read every agent identity in Entra · shadow-AI discovery</td><td rowspan="2"><strong>Agent 365 / E7:</strong> cloud-agent inventory and posture · Conditional Access, ID Protection and lifecycle <em>for agents</em> · runtime telemetry (invocations, tool calls) · the registry's Risks column and Security tab · local-agent risk scoring</td></tr>
+<tr><td><strong>+ M365 Copilot</strong></td><td><code>CopilotActivity</code> populated per interaction</td></tr>
+<tr><td><strong>Sentinel + lake tier</strong></td><td colspan="2">Two preview connectors land the deepest data lake-side: <code>UnifiedAgentObservability</code> (full spans — prompts, tool arguments, session reconstruction) and the four-table <code>EntraAgent*</code> identity graph. Without the lake, the richest agent telemetry has nowhere to land</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;">
+  <div class="callout-title">📌 Two rules for quoting any of this</div>
+  <p><strong>Never quote a price from a web page</strong> — including this one; verify against the current Microsoft price list. And when a screen shows nothing, check the licence gate before declaring a data gap — the <a href="agent-telemetry-map.html" style="color:var(--blue);font-weight:600;">Agent Telemetry Map</a> carries the gate on every table for exactly this reason.</p>
+</div>
+
+<div class="footer">
+  Sources: Microsoft Learn · Microsoft Security Blog · Sentinel blog connector announcements<br>
+  <a href="archive/changelog.html" style="color:var(--text3);">Changelog</a> · <a href="archive/overview.html" style="color:var(--text3);">Deep-dive archive</a> · Last updated: August 31, 2026
+</div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var btn = document.getElementById('hamburgerBtn');
+  var drawer = document.getElementById('mobileDrawer');
+  var overlay = document.getElementById('drawerOverlay');
+  if(btn){btn.addEventListener('click',function(){drawer.classList.toggle('open');overlay.classList.toggle('open');});
+  overlay.addEventListener('click',function(){drawer.classList.remove('open');overlay.classList.remove('open');});}
+});
+</script>
+</body>
+</html>
