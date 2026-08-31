@@ -14,6 +14,11 @@
 .fact-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:20px 0;}
 .fact{background:#ffffff;border:1px solid var(--border);border-radius:10px;padding:14px 18px;font-size:13px;color:#2e3d5e;line-height:1.6;}
 .fact b{display:block;font-size:15px;color:#0d1526;}
+.kq{margin:18px 0;}
+.kq .why{font-size:13.5px;color:#2e3d5e;margin:0 0 6px;}
+.kq .why b{color:#0d1526;}
+.kq pre{background:#0d1526;color:#dce4f2;border-radius:10px;padding:14px 16px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.65;margin:0;}
+.kq .surf{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--teal);}
 </style>
 </head>
 <body>
@@ -28,6 +33,7 @@
 <a href="surfaces.html" class="">Five Surfaces</a>
 <a href="licensing.html" class="">Licensing</a>
 <a href="agent-telemetry-map.html" class="">Agent Map</a>
+<a href="field-notes.html" class="">Field Notes</a>
 <a href="start.html" class="active">Start Here</a>
 <a href="contact.html" class="">Contact</a>
 </div>
@@ -39,6 +45,7 @@
 <a href="surfaces.html" class="">Five Surfaces</a>
 <a href="licensing.html" class="">Licensing</a>
 <a href="agent-telemetry-map.html" class="">Agent Map</a>
+<a href="field-notes.html" class="">Field Notes</a>
 <a href="start.html" class="active">Start Here</a>
 <a href="contact.html" class="">Contact</a>
 </div>
@@ -53,8 +60,8 @@
 <h1>Where to<br><span style="color:var(--blue);">start</span></h1>
 
 <div class="callout callout-warn" style="margin-top:8px;">
-  <div class="callout-title">⚠ Rule zero — four screens count agents, and they disagree by design</div>
-  <p>The <strong>Agent Registry</strong> counts published titles. <strong>Defender's AI Agents page</strong> counts cloud agents. <strong><code>AgentsInfo</code></strong> sees every platform including local. <strong>Entra</strong> sees only agents holding a directory principal. Reconciling the four <em>is</em> the finding — present the spread, and always say which screen a number came from.</p>
+  <div class="callout-title">⚠ Rule zero — never quote an agent count without saying which screen it came from</div>
+  <p>Four screens count agents and they disagree by design: the reconciliation is the finding. The full walkthrough of the four screens and the gaps between them is on the <a href="agent-telemetry-map.html#four-screens" style="color:inherit;font-weight:600;">Agent Map</a>.</p>
 </div>
 
 <h2 style="margin-top:28px;">Six phases — each produces the evidence the next consumes</h2>
@@ -71,7 +78,7 @@
 </table>
 
 <h2 style="margin-top:28px;">The first week — five checks on what you already own</h2>
-<p>All five run on E5, no procurement:</p>
+<p>These are the five questions I ask of any tenant in the first week. All five run on E5 — no procurement conversation required:</p>
 <ol style="font-size:14px;line-height:2;margin-left:20px;">
 <li><strong>Which AI agents run on our laptops?</strong> <code>AgentsInfo | where Platform == "LocalAgents"</code> — vendor, version, MCP servers, device, account</li>
 <li><strong>Which agents have no authentication?</strong> — publicly reachable, anyone with the URL</li>
@@ -79,7 +86,62 @@
 <li><strong>Who owns nothing?</strong> — ownerless agents are unremediable agents</li>
 <li><strong>What shadow AI is in use?</strong> — cloud app catalogue, sanctioned vs not</li>
 </ol>
-<p style="font-size:13px;color:var(--text3);">The canonical KQL for each lives in the <a href="archive/playbooks.html" style="color:var(--blue);">Playbooks archive</a>; snapshot rule throughout: <code>summarize arg_max(Timestamp, *) by AgentId | where LifecycleStatus != "Deleted"</code>.</p>
+<p style="font-size:13px;color:var(--text3);">Longer-form versions of these live in the <a href="archive/playbooks.html" style="color:var(--blue);">Playbooks archive</a>.</p>
+
+<h2 style="margin-top:32px;">Five queries I actually run</h2>
+<p style="font-size:14px;max-width:700px;">Not a query library — those exist. These five earn their place because each one teaches something about how this telemetry behaves. Preview schemas move; verify against your tenant's schema tab before wiring any of these into a dashboard.</p>
+
+<div class="kq">
+<p class="why"><b>1 · What runs on our laptops?</b> The first question worth answering, and it runs on licences you already own (Defender for Endpoint P2).</p>
+<pre><span class="surf">ADVANCED HUNTING</span>
+AgentsInfo
+| where Platform == "LocalAgents"
+| summarize arg_max(Timestamp, *) by AgentId
+| where LifecycleStatus !in~ ("Deleted", "Uninstalled")
+| extend M = RawAgentInfo.localAgentMetadata
+| project AgentId, Vendor = tostring(M.vendor), Process = tostring(M.relatedProcess),
+          Device = tostring(M.deviceName), Account = tostring(M.accountName), McpServers</pre>
+</div>
+
+<div class="kq">
+<p class="why"><b>2 · The fleet, by platform.</b> The lesson is in line two: <code>AgentsInfo</code> stores snapshots, so a bare <code>arg_max(Timestamp, *)</code> without <code>by AgentId</code> collapses the whole fleet to one row. I know because I shipped it.</p>
+<pre><span class="surf">ADVANCED HUNTING</span>
+AgentsInfo
+| summarize arg_max(Timestamp, *) by AgentId
+| where LifecycleStatus != "Deleted"
+| summarize Agents = count() by Platform</pre>
+</div>
+
+<div class="kq">
+<p class="why"><b>3 · What did agents actually do?</b> The Agent 365 runtime rows. An empty result here is usually the licence/instrumentation gate, not quiet agents — these ActionTypes only exist for instrumented agents. Note the key juggling: <code>RawEventData</code> names the agent differently per operation.</p>
+<pre><span class="surf">ADVANCED HUNTING</span>
+CloudAppEvents
+| where ActionType in ("InvokeAgent", "InferenceCall",
+    "ExecuteToolBySDK", "ExecuteToolByGateway", "ExecuteToolByMCPServer")
+| extend rd = parse_json(tostring(RawEventData))
+| extend Agent = tostring(rd.TargetAgentName)
+| extend Agent = iff(isempty(Agent), tostring(rd.AgentName), Agent)
+| summarize Calls = count() by Agent, ActionType</pre>
+</div>
+
+<div class="kq">
+<p class="why"><b>4 · Is anyone already probing our Copilot?</b> Per-interaction safety verdicts arrive on E5 — look at what's already being flagged before buying anything new.</p>
+<pre><span class="surf">LOG ANALYTICS</span>
+CopilotActivity
+| where RecordType == "CopilotInteraction"
+| mv-expand m = LLMEventData.Messages
+| where tobool(m.JailbreakDetected) == true
+| project TimeGenerated, AgentId, ActorName</pre>
+</div>
+
+<div class="kq">
+<p class="why"><b>5 · Which blueprint hurts most if it leaks?</b> Blueprints hold the credentials, agents don't — so the blueprint with the most agents is the biggest blast radius. The identity tables are preview with unpublished schemas, hence the <code>column_ifexists()</code> guard.</p>
+<pre><span class="surf">SENTINEL DATA LAKE</span>
+EntraAgentIdentities
+| extend BlueprintId = tostring(column_ifexists("agentIdentityBlueprintId", ""))
+| summarize Agents = count() by BlueprintId
+| top 10 by Agents</pre>
+</div>
 
 <div class="callout callout-info" style="margin-top:16px;">
   <div class="callout-title">📌 Four KPIs to track weekly</div>

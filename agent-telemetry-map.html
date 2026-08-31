@@ -138,9 +138,39 @@ section.notes{border-top:1px solid var(--rule);padding:30px 0 60px;background:va
 .cols h3{font:600 12px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin:0 0 9px}
 .cols p{margin:0 0 11px;font-size:13.5px;color:var(--ink-2)}
 .cols code{font-family:var(--f-mono);font-size:12px;color:var(--ink)}
+
+/* ── site nav, scoped to this page's design system ── */
+.mnav{position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:18px;
+  padding:10px 24px;background:var(--surface);border-bottom:1px solid var(--rule);
+  font-family:var(--f-body);box-shadow:var(--shadow);}
+.mnav-brand{display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0;}
+.mnav-logo{width:16px;height:16px;display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.mnav-logo i{border-radius:1px;display:block;}
+.mnav-brand b{font-size:13px;font-weight:700;color:var(--ink);white-space:nowrap;}
+.mnav-links{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;}
+.mnav-links::-webkit-scrollbar{display:none;}
+.mnav-links a{font-size:12.5px;font-weight:600;color:var(--ink-2);text-decoration:none;
+  padding:5px 10px;border-radius:7px;white-space:nowrap;}
+.mnav-links a:hover{color:var(--ink);background:var(--surface-2);}
+.mnav-links a.on{color:var(--focus);background:var(--surface-2);}
 </style>
 </head>
 <body>
+<nav class="mnav" aria-label="Site">
+  <a class="mnav-brand" href="index.html">
+    <span class="mnav-logo" aria-hidden="true"><i style="background:#f25022"></i><i style="background:#7fba00"></i><i style="background:#00a4ef"></i><i style="background:#ffb900"></i></span>
+    <b>Securing AI with Microsoft</b>
+  </a>
+  <div class="mnav-links">
+    <a href="index.html">Home</a>
+    <a href="surfaces.html">Five Surfaces</a>
+    <a href="licensing.html">Licensing</a>
+    <a class="on" href="agent-telemetry-map.html">Agent Map</a>
+    <a href="field-notes.html">Field Notes</a>
+    <a href="start.html">Start Here</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
 
 <header>
   <div class="wrap mast">
@@ -172,6 +202,16 @@ section.notes{border-top:1px solid var(--rule);padding:30px 0 60px;background:va
     <h2>Coverage, path by path</h2>
     <p>The same relationships as a table — useful when the question is “can this screen see that agent?” rather than “where does this agent land?”. <span class="yes">Always</span> · <span class="cond">Conditional</span> · <span class="no">Never</span>.</p>
     <div class="tablewrap"><table id="matrix"></table></div>
+  </section>
+</div>
+
+<div class="wrap">
+  <section class="matrix" id="four-screens" style="padding:8px 0 44px">
+    <h2>Four screens, four counts</h2>
+    <p>Ask a tenant how many agents it has and you can collect four defensible answers in one afternoon. The <strong>Agent Registry</strong> counts published titles — things people <em>could</em> run, whether or not anyone does. <strong>Defender's inventory</strong> counts what security tooling can see, and is the only screen that includes agents living on laptops. <strong>Entra</strong> counts what holds a directory principal — an identity that can actually be governed. And the registry's own catalog API has been observed disagreeing with the registry's portal tile for the same tenant, in Microsoft's own documentation.</p>
+    <p>The numbers disagree <em>by design</em>, not by defect. Each screen answers a different question: could it run (registry) · can we see it (Defender) · can we govern it (Entra) · what actually ran (the runtime tables on this map). Treating any one of them as <em>the</em> inventory is how an estate ends up confidently wrong.</p>
+    <p>So the reconciliation itself is the finding, and it's how I open every engagement. Present the spread, not a number — because each gap between two screens names its own work item. Registry-but-not-Entra is the ungoverned population (Classic Copilot Studio lives here). Defender-local-but-nowhere-else is the endpoint estate nobody put on the risk register. Entra-but-telemetry-silent means observability was never instrumented. A single count tells you none of that.</p>
+    <p><strong>The rule that falls out: never quote an agent count without saying which screen it came from.</strong></p>
   </section>
 </div>
 

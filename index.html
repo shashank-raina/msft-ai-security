@@ -28,6 +28,7 @@
 <a href="surfaces.html" class="">Five Surfaces</a>
 <a href="licensing.html" class="">Licensing</a>
 <a href="agent-telemetry-map.html" class="">Agent Map</a>
+<a href="field-notes.html" class="">Field Notes</a>
 <a href="start.html" class="">Start Here</a>
 <a href="contact.html" class="">Contact</a>
 </div>
@@ -39,6 +40,7 @@
 <a href="surfaces.html" class="">Five Surfaces</a>
 <a href="licensing.html" class="">Licensing</a>
 <a href="agent-telemetry-map.html" class="">Agent Map</a>
+<a href="field-notes.html" class="">Field Notes</a>
 <a href="start.html" class="">Start Here</a>
 <a href="contact.html" class="">Contact</a>
 </div>
@@ -51,7 +53,7 @@
 
 <div class="section-label" style="margin-top:24px;">The starting point</div>
 <h1>Securing AI with Microsoft —<br><span style="color:var(--blue);">five surfaces, one map, and the licences between you and each control</span></h1>
-<p style="font-size:15.5px;color:#2e3d5e;max-width:700px;">AI security guidance is scattered across product teams, blogs and licence tiers. This site is deliberately small: the concepts you need to orient, and pointers outward for depth. Read the five surfaces, trace your agents on the map, check what your licences actually gate — then go build.</p>
+<p style="font-size:15.5px;color:#2e3d5e;max-width:700px;">I spend my working week securing Microsoft AI estates, and the guidance for doing it is scattered across product teams, blogs and licence tiers. This site is the primer I kept wishing I could hand people — deliberately small: the concepts you need to orient, and pointers outward for depth. Read the five surfaces, trace your agents on the map, check what your licences actually gate. Then go build.</p>
 
 <div class="fact-strip">
   <div class="fact"><b>500,000+ agents</b>in Microsoft's own tenant — this is scale, not a pilot (Customer Zero, Aug 2026)</div>
@@ -73,12 +75,22 @@
 
 <div class="section-label" style="margin-top:36px;">The organising idea</div>
 <h2>Five AI threat surfaces</h2>
-<p>Everything on this site hangs off one taxonomy. Your AI estate is five asset classes, each with different risks, different owning controls, and different licence gates — and the most common failure is securing one class and assuming the others are covered.</p>
+<p>Everything on this site hangs off one taxonomy. Your AI estate is five asset classes, each with different risks, different owning controls, and different licence gates — and the most common failure I see is securing one class and assuming the others came along for free.</p>
 <div class="surface-card"><div class="num">SURFACE 1</div><h3><a href="surfaces.html#s1" style="color:inherit;text-decoration:none;">AI apps &amp; assistants →</a></h3><p style="font-size:13.5px;margin:0;">M365 Copilot, declarative agents, SaaS AI, shadow AI. The risk is what people paste in and what comes back out.</p></div>
 <div class="surface-card"><div class="num">SURFACE 2</div><h3><a href="surfaces.html#s2" style="color:inherit;text-decoration:none;">AI platform &amp; workloads →</a></h3><p style="font-size:13.5px;margin:0;">Foundry, Azure OpenAI, RAG pipelines, grounding data. Azure-side risk that no M365 licence covers.</p></div>
 <div class="surface-card"><div class="num">SURFACE 3</div><h3><a href="surfaces.html#s3" style="color:inherit;text-decoration:none;">Agents →</a></h3><p style="font-size:13.5px;margin:0;">Copilot Studio, Foundry agents, third-party. Sprawl, maker credentials, and the blueprint blast radius.</p></div>
 <div class="surface-card"><div class="num">SURFACE 4</div><h3><a href="surfaces.html#s4" style="color:inherit;text-decoration:none;">Tools, MCP servers &amp; connectors →</a></h3><p style="font-size:13.5px;margin:0;">Every MCP server is a supply-chain dependency with tenant access — an asset with an owner, not plumbing.</p></div>
-<div class="surface-card"><div class="num">SURFACE 5</div><h3><a href="surfaces.html#s5" style="color:inherit;text-decoration:none;">Endpoints running local AI →</a></h3><p style="font-size:13.5px;margin:0;">Coding CLIs, desktop AI, local model runners — inference outside every prompt-logging and DLP path you have.</p></div>
+<div class="surface-card"><div class="num">SURFACE 5</div><h3><a href="surfaces.html#s5" style="color:inherit;text-decoration:none;">Endpoints running local AI →</a></h3><p style="font-size:13.5px;margin:0;">Coding CLIs, desktop AI, local model runners — inference outside every prompt-logging and DLP path you have. The class most organisations discover last; the one I check first.</p></div>
+
+<div class="section-label" style="margin-top:36px;">Held positions</div>
+<h2>Five rules I don't bend</h2>
+<div style="font-size:15px;line-height:2.1;color:#0d1526;max-width:700px;">
+<strong>Enabled is not covered.</strong><br>
+<strong>A discovery list is never a protection list.</strong><br>
+<strong>Blocking relocates risk; it doesn't remove it.</strong> <span style="color:var(--text3);font-size:13px;">People route around controls — visibility usually beats prohibition.</span><br>
+<strong>An unevaluated asset is a visibility gap, not a pass.</strong><br>
+<strong>Browser AI is a class-1 asset governed by class-5 mechanisms.</strong> <span style="color:var(--text3);font-size:13px;">Look at the endpoint, not only the tenant.</span>
+</div>
 
 <p style="margin-top:28px;font-size:14px;">Then: <a href="licensing.html" style="color:var(--blue);font-weight:600;">what licences actually gate</a> · <a href="start.html" style="color:var(--blue);font-weight:600;">where to start, in six phases</a> · <a href="archive/overview.html" style="color:var(--blue);">the deep-dive archive</a> for everything this primer deliberately leaves out.</p>
 

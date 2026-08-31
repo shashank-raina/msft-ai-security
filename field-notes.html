@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Field Notes — what actually bites</title>
+<meta name="description" content="Short, specific things learned deploying Microsoft AI security for real — schema traps, licence boundaries, identity blind spots and the controls that quietly stopped working.">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+<style>
+.note{margin:26px 0;padding-left:18px;border-left:3px solid var(--border);}
+.note h3{font-size:16.5px;font-weight:700;color:#0d1526;margin:0 0 6px;}
+.note p{font-size:14px;margin:0 0 8px;}
+.note .n{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--blue);display:block;margin-bottom:2px;}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-brand">
+    <div class="msft-logo"><div></div><div></div><div></div><div></div></div>
+    <div><div class="brand-text">Securing AI with Microsoft</div></div>
+  </div>
+  <div class="nav-links">
+<a href="index.html" class="">Home</a>
+<a href="surfaces.html" class="">Five Surfaces</a>
+<a href="licensing.html" class="">Licensing</a>
+<a href="agent-telemetry-map.html" class="">Agent Map</a>
+<a href="field-notes.html" class="active">Field Notes</a>
+<a href="start.html" class="">Start Here</a>
+<a href="contact.html" class="">Contact</a>
+</div>
+  <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+
+<div class="mobile-drawer-overlay" id="drawerOverlay"></div>
+<div class="mobile-drawer" id="mobileDrawer">
+<a href="index.html" class="">Home</a>
+<a href="surfaces.html" class="">Five Surfaces</a>
+<a href="licensing.html" class="">Licensing</a>
+<a href="agent-telemetry-map.html" class="">Agent Map</a>
+<a href="field-notes.html" class="active">Field Notes</a>
+<a href="start.html" class="">Start Here</a>
+<a href="contact.html" class="">Contact</a>
+</div>
+  <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" class="substack-nav" style="flex-shrink:0;margin-left:10px;display:flex;align-items:center;gap:5px;background:var(--blue);color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:6px 13px;border-radius:6px;text-decoration:none;white-space:nowrap;letter-spacing:0.03em;">📬 Subscribe</a>
+</nav>
+<div style="background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;color:#6a5000;text-align:center;position:sticky;top:var(--nav-h);z-index:99;">
+  📌 <strong>Author's note:</strong> Independent, not affiliated with or endorsed by Microsoft. This site is a <strong>starting point</strong> — verify current product status against Microsoft documentation before architecture or purchasing decisions.
+</div>
+<div class="page">
+
+<div class="section-label" style="margin-top:24px;">From doing, not reading</div>
+<h1>Field<br><span style="color:var(--blue);">notes</span></h1>
+<p style="font-size:15px;color:#2e3d5e;max-width:700px;">Everything else on this site you could, eventually, assemble from Microsoft's documentation. This page you couldn't. These are the things that bit me — or nearly did — while actually deploying this stack: schema traps, licence boundaries dressed up as empty tables, and controls that stopped working without saying so. Short, specific, and dated to August 2026.</p>
+
+<div class="note">
+<span class="n">NOTE 01</span>
+<h3>A bare <code>arg_max(Timestamp, *)</code> collapses your fleet to one row</h3>
+<p><code>AgentsInfo</code> stores repeated snapshots of every agent, so the tempting one-liner <code>summarize arg_max(Timestamp, *)</code> returns exactly one agent — the most recently written row in the entire table. I shipped that into a workbook tile and stared at an inventory of one for longer than I'd like to admit. The correct reduction is <code>summarize arg_max(Timestamp, *) by AgentId</code>, and then filter out <code>LifecycleStatus == "Deleted"</code>, or your inventory quietly counts ghosts.</p>
+</div>
+
+<div class="note">
+<span class="n">NOTE 02</span>
+<h3>An empty table means one of three things</h3>
+<p>Before declaring a data gap, work out which one: the licence gate isn't met, you're on the wrong query surface, or there is genuinely no data. The surfaces don't degrade gracefully — a table queried on the wrong one fails outright. <code>CopilotActivity</code> is a Log Analytics table that Advanced Hunting has never heard of; <code>UnifiedAgentObservability</code> exists only in the Sentinel data lake; <code>AgentsInfo</code> populates its local-agent rows on E5 but needs Agent 365 for the cloud ones. Same symptom, three different fixes — and only one of them costs money.</p>
+</div>
+
+<div class="note">
+<span class="n">NOTE 03</span>
+<h3>Legacy Copilot Studio agents have no identity to govern</h3>
+<p>Agents built before agent identities existed authenticate with an ordinary app registration or the maker's own credentials. They appear in none of the agent identity views — not Entra's Agent ID blade, not the data lake identity tables — which is precisely what makes them the population to worry about. The service principal tag <code>AgentCreatedBy:CopilotStudio</code> is how I find them. If your governance story starts at "agents with identities", these agents aren't in it.</p>
+</div>
+
+<div class="note">
+<span class="n">NOTE 04</span>
+<h3>The documentation and the deployed schema disagree on names</h3>
+<p>Learn pages reference <code>AgentInfo</code>; the deployed table is <code>AgentsInfo</code>. The retired <code>AIAgentsInfo</code> still sits in the schema listing next to its replacement. The Graph audit table is spelled <code>GraphAPIAuditEvents</code> on one Learn page and <code>GraphApiAuditEvents</code> on another. Not malice — a product moving faster than its docs. But it means the schema tab in your own portal outranks any web page, this one included.</p>
+</div>
+
+<div class="note">
+<span class="n">NOTE 05</span>
+<h3>Some tables ship before their schemas do</h3>
+<p>The four <code>EntraAgent*</code> identity tables landed in the data lake (preview) with no published column reference — the announcement blog shows a handful of camelCase fields, and that's all anyone has. Every query I write against them wraps columns in <code>column_ifexists()</code> and carries a "validate in-tenant" flag. Preview tables are absolutely usable; just never let a dashboard break because a column got renamed underneath it.</p>
+</div>
+
+<div class="note">
+<span class="n">NOTE 06</span>
+<h3>Nobody agrees how many agents you have</h3>
+<p>The registry counts published titles. Defender's inventory counts what it can see, local agents included. Entra counts only what holds a directory principal. Even within one product, Microsoft's own documentation shows the registry portal tile and the catalog API returning different counts for the same tenant. The spread between these numbers isn't noise — most of the time it <em>is</em> the finding. How I reconcile them is on the <a href="agent-telemetry-map.html#four-screens" style="color:var(--blue);font-weight:600;">Agent Map</a> page.</p>
+</div>
+
+<div class="note">
+<span class="n">NOTE 07</span>
+<h3>Observability and identity are independent — never infer one from the other</h3>
+<p>The Agent 365 SDK's capabilities are separable, and its observability can run on a plain Entra app registration. So an agent can send you rich telemetry while holding no agent identity at all, and an agent with a first-class identity can be telemetry-silent. I audit them as two columns, and the interesting rows are the ones where they disagree.</p>
+</div>
+
+<div class="note">
+<span class="n">NOTE 08</span>
+<h3>The blueprint is the credential boundary, not the agent</h3>
+<p>Agent identities hold no credentials of their own — the blueprint holds the secrets and impersonates its agents. One leaked blueprint credential is therefore every agent under that blueprint; Microsoft's own guidance calls blueprint count "a security boundary decision". The useful corollary: disabling a blueprint stops all of its agents authenticating, in one action. That's your fleet kill switch. Write it into the emergency runbook before you need it.</p>
+</div>
+
+<div class="note">
+<span class="n">NOTE 09</span>
+<h3>Controls don't always survive platform migrations</h3>
+<p>When agent blocking moved under the Security for AI policy umbrella in mid-2026, pre-existing Block rules were reported to simply stop enforcing until recreated in the new location — no error, no alert, just an old rule that no longer did anything. Verify that one in your own tenant; it's exactly the kind of behaviour that gets fixed quietly. The durable lesson stands either way: after every platform migration, ask which of your controls came along — and how you would know.</p>
+</div>
+
+<div class="note">
+<span class="n">NOTE 10</span>
+<h3>"We block paste into AI" rarely means what people think</h3>
+<p>Defender for Cloud Apps session controls apply only to apps onboarded to Conditional Access App Control — which public AI sites are not, so a session policy never sees that paste. Endpoint DLP can govern it, but paste content is classified <em>locally</em>: exact data match and trainable classifiers don't fire on paste; only standard pattern-based sensitive info types do. And blocking carries its own cost — people route around controls, so visibility is usually worth more than prohibition.</p>
+</div>
+
+<p style="margin-top:32px;font-size:13.5px;color:var(--text3);">These notes date fast — that's rather the point. Anything here older than a couple of months deserves re-verification against <a href="https://learn.microsoft.com/" target="_blank" style="color:var(--blue);">Microsoft Learn</a> before you rely on it.</p>
+
+<div class="footer">
+  Sources: Microsoft Learn · Microsoft Security Blog · Sentinel blog connector announcements · own tenant observations, generalised<br>
+  <a href="archive/changelog.html" style="color:var(--text3);">Changelog</a> · <a href="archive/overview.html" style="color:var(--text3);">Deep-dive archive</a> · Last updated: August 31, 2026
+</div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var btn = document.getElementById('hamburgerBtn');
+  var drawer = document.getElementById('mobileDrawer');
+  var overlay = document.getElementById('drawerOverlay');
+  if(btn){btn.addEventListener('click',function(){drawer.classList.toggle('open');overlay.classList.toggle('open');});
+  overlay.addEventListener('click',function(){drawer.classList.remove('open');overlay.classList.remove('open');});}
+});
+</script>
+</body>
+</html>
