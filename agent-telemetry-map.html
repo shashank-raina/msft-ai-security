@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent Telemetry Map</title>
+<meta name="description" content="How every kind of Microsoft AI agent is created, what identity it gets, and which tables it emits to — with the licence gates that decide whether you see it at all.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;450;600&display=swap">
+<style>
+:root{
+  --ground:#f5f8f9; --surface:#ffffff; --surface-2:#eef3f5;
+  --ink:#0f161c; --ink-2:#4d5d6a; --ink-3:#7b8b98;
+  --rule:#dbe4ea; --rule-2:#c3d0d9;
+  --la:#0d7a7c; --ah:#4553b8; --lake:#7a4a9e; --graph:#a86510; --gap:#b03a30;
+  --focus:#0d7a7c;
+  --shadow:0 1px 2px rgba(15,22,28,.06), 0 8px 24px -12px rgba(15,22,28,.18);
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#0d1317; --surface:#151c22; --surface-2:#1c252c;
+  --ink:#e3ebf1; --ink-2:#96a7b4; --ink-3:#6e808d;
+  --rule:#242f37; --rule-2:#33424c;
+  --la:#3bbcbe; --ah:#8390ef; --lake:#b684dc; --graph:#dd9f40; --gap:#e8776d;
+  --focus:#3bbcbe;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+}}
+:root[data-theme="dark"]{
+  --ground:#0d1317; --surface:#151c22; --surface-2:#1c252c;
+  --ink:#e3ebf1; --ink-2:#96a7b4; --ink-3:#6e808d;
+  --rule:#242f37; --rule-2:#33424c;
+  --la:#3bbcbe; --ah:#8390ef; --lake:#b684dc; --graph:#dd9f40; --gap:#e8776d;
+  --focus:#3bbcbe;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-body);
+  font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1320px;margin:0 auto;padding:0 24px}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:3px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ── masthead ─────────────────────────────────────────── */
+header{border-bottom:1px solid var(--rule);background:var(--surface)}
+.mast{display:flex;gap:32px;align-items:flex-start;justify-content:space-between;padding:34px 0 28px;flex-wrap:wrap}
+.eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3);margin:0 0 10px}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(30px,4.2vw,46px);line-height:1.04;
+  letter-spacing:-.022em;margin:0 0 12px;text-wrap:balance;max-width:15ch}
+.lede{margin:0;color:var(--ink-2);max-width:56ch;font-size:16px}
+.lede strong{color:var(--ink);font-weight:600}
+.toggle{font:500 12px/1 var(--f-mono);color:var(--ink-2);background:var(--surface-2);
+  border:1px solid var(--rule-2);border-radius:999px;padding:8px 14px;cursor:pointer;white-space:nowrap}
+.toggle:hover{color:var(--ink);border-color:var(--ink-3)}
+
+/* ── legend ───────────────────────────────────────────── */
+.legend{display:flex;gap:10px;flex-wrap:wrap;padding:16px 0 22px;border-bottom:1px solid var(--rule)}
+.key{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-2);
+  background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:6px 11px}
+.key i{width:9px;height:9px;border-radius:2px;display:block;flex:none}
+.key.edge svg{display:block}
+
+/* ── layout ───────────────────────────────────────────── */
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:28px;padding:26px 0 40px;align-items:start}
+@media (max-width:1040px){.grid{grid-template-columns:1fr}}
+.mapbox{background:var(--surface);border:1px solid var(--rule);border-radius:10px;
+  box-shadow:var(--shadow);overflow-x:auto;padding:6px}
+/* The map holds its designed width (the viewBox) so labels stay at their intended size;
+   below that the figure scrolls rather than the page. */
+figure.stage{margin:0;overflow-x:auto}
+svg.map{display:block;min-width:754px;width:100%;height:auto}
+
+/* svg */
+.node{cursor:pointer}
+.node rect{fill:var(--surface-2);stroke:var(--rule-2);stroke-width:1;rx:6}
+.node:hover rect{stroke:var(--ink-3)}
+.node .n-title{font:600 13px var(--f-body);fill:var(--ink)}
+.node .n-sub{font:400 10.5px var(--f-body);fill:var(--ink-3)}
+.node .n-mono{font:500 12px var(--f-mono);fill:var(--ink)}
+.node .n-lic{font:500 8.5px var(--f-mono);fill:var(--ink-3);letter-spacing:.01em}
+.node .n-chip{font:500 9.5px var(--f-mono);letter-spacing:.02em}
+.node[data-on="0"]{opacity:.22}
+.node[data-sel="1"] rect{stroke-width:2}
+.edge{fill:none;stroke-width:1.4;opacity:.5}
+.edge[data-on="0"]{opacity:.05}
+.edge[data-on="1"]{opacity:.95;stroke-width:2.2}
+.colhead{font:500 10.5px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;fill:var(--ink-3)}
+.srfhead{font:600 11px var(--f-body);letter-spacing:.04em}
+.tick{stroke:var(--rule-2);stroke-width:1}
+
+/* ── detail panel ─────────────────────────────────────── */
+aside{position:sticky;top:18px;background:var(--surface);border:1px solid var(--rule);
+  border-radius:10px;box-shadow:var(--shadow);padding:20px 20px 22px}
+@media (max-width:1040px){aside{position:static}}
+aside h2{font-family:var(--f-display);font-weight:700;font-size:20px;line-height:1.15;
+  letter-spacing:-.01em;margin:0 0 4px;text-wrap:balance}
+.kind{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-3);margin:0 0 14px}
+aside p{margin:0 0 14px;font-size:13.5px;color:var(--ink-2)}
+aside h3{font:600 11px var(--f-body);letter-spacing:.09em;text-transform:uppercase;
+  color:var(--ink-3);margin:18px 0 8px}
+.emits{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.emits li{display:flex;gap:9px;align-items:baseline;font-size:13px}
+.emits .dot{width:8px;height:8px;border-radius:2px;flex:none;transform:translateY(1px)}
+.emits code{font-family:var(--f-mono);font-size:12px;color:var(--ink)}
+.emits .gives{display:block;color:var(--ink-2);font-size:12px}
+.emits .cond{display:block;color:var(--ink-3);font-size:11.5px;font-style:italic}
+.flag{display:inline-block;font:500 10.5px var(--f-mono);letter-spacing:.06em;
+  padding:3px 8px;border-radius:4px;margin:0 0 12px}
+.flag.blind{background:color-mix(in srgb,var(--gap) 14%,transparent);color:var(--gap)}
+.hint{font-size:12.5px;color:var(--ink-3);border-top:1px solid var(--rule);padding-top:14px;margin-top:4px}
+
+/* ── matrix ───────────────────────────────────────────── */
+section.matrix{padding:8px 0 54px}
+section.matrix h2{font-family:var(--f-display);font-weight:700;font-size:26px;letter-spacing:-.015em;margin:0 0 6px}
+section.matrix > p{color:var(--ink-2);max-width:64ch;margin:0 0 20px;font-size:14.5px}
+.tablewrap{overflow-x:auto;border:1px solid var(--rule);border-radius:10px;background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:13px}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--rule);vertical-align:top}
+thead th{font:600 11px var(--f-body);letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);
+  background:var(--surface-2);white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+td.path{font-weight:600;white-space:nowrap}
+td.path span{display:block;font-weight:400;font-size:11.5px;color:var(--ink-3)}
+td.mono{font-family:var(--f-mono);font-size:12px}
+.yes{color:var(--la);font-weight:600}
+.cond{color:var(--graph);font-weight:600}
+.no{color:var(--ink-3)}
+
+/* ── caveats ──────────────────────────────────────────── */
+section.notes{border-top:1px solid var(--rule);padding:30px 0 60px;background:var(--surface)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:26px}
+.cols h3{font:600 12px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin:0 0 9px}
+.cols p{margin:0 0 11px;font-size:13.5px;color:var(--ink-2)}
+.cols code{font-family:var(--f-mono);font-size:12px;color:var(--ink)}
+footer{border-top:1px solid var(--rule);padding:18px 0 34px;font-size:12px;color:var(--ink-3)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap mast">
+    <div>
+      <p class="eyebrow">Microsoft AI agent estate</p>
+      <h1>Where do your agents leave a trace?</h1>
+      <p class="lede">Seven ways an agent gets created, the identity each one receives, and the fourteen places they emit telemetry. <strong>Dashed lines are the ones that matter</strong> — they only carry data if a licence or a per-agent setting is in place, which is where every blind spot in this estate lives.</p>
+    </div>
+    <button class="toggle" id="theme" type="button">theme</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="legend" id="legend"></div>
+
+  <div class="grid">
+    <div class="mapbox">
+      <figure class="stage">
+        <svg class="map" id="map" role="img" aria-label="Flow map linking seven agent creation paths, each labelled with the identity it receives, to the fourteen telemetry tables they emit to. Edges are coloured by query surface; dashed edges mark emissions that depend on a licence or per-agent configuration."></svg>
+        <figcaption class="hint" style="padding:12px 14px 10px;border:0;margin:0">Click any node to trace it. Each edge means <em>emits to</em>; identity is shown as a chip because telemetry does not route through it. Solid edges always carry data, dashed only under the stated condition. The grey tag on a table is its licence gate; select a node to see what each connection actually delivers.</figcaption>
+      </figure>
+    </div>
+    <aside id="panel"></aside>
+  </div>
+</div>
+
+<div class="wrap">
+  <section class="matrix">
+    <h2>Coverage, path by path</h2>
+    <p>The same relationships as a table — useful when the question is “can this screen see that agent?” rather than “where does this agent land?”. <span class="yes">Always</span> · <span class="cond">Conditional</span> · <span class="no">Never</span>.</p>
+    <div class="tablewrap"><table id="matrix"></table></div>
+  </section>
+</div>
+
+<section class="notes">
+  <div class="wrap cols">
+    <div>
+      <h3>Surfaces are not interchangeable</h3>
+      <p>A workbook tile queries exactly one surface. Querying a table on the wrong one <em>fails</em> — it does not degrade. And graceful degradation via <code>union isfuzzy=true</code> is a Log Analytics property only: on Advanced Hunting and the data lake, a table absent from the tenant schema returns a hard <code>400</code>.</p>
+      <p>Advanced Hunting uses <code>Timestamp</code>. Log Analytics uses <code>TimeGenerated</code>. Streamed tables carry both — and if data arrives more than 48h late, ingestion overwrites <code>TimeGenerated</code> with <code>now()</code>.</p>
+    </div>
+    <div>
+      <h3>Seeing is free, governing is not</h3>
+      <p>Microsoft: <em>“Agent ID is available for all Microsoft Entra customers”</em>, but <em>“extending Microsoft Entra security features to agents requires Microsoft Agent 365”</em>. So agent identities are readable at any tier; Conditional Access, ID Protection and governance are not.</p>
+      <p><code>AgentsInfo</code> runs the other way: cloud agents need Agent 365, local agents need only Defender for Endpoint P2. So at E5 you hold <strong>three partial inventories</strong> — the registry (biggest number), Entra (the better <em>identity</em> inventory), <code>AgentsInfo</code> (the local agents) — and none is complete.</p>
+    </div>
+    <div>
+      <h3>Blueprints outrank agents</h3>
+      <p>Agent identities <em>“don’t have credentials of their own — they authenticate using tokens issued by their agent identity blueprint.”</em> Permissions granted to a blueprint are granted to every agent created from it, and inheritable permissions propagate consent automatically <em>without appearing on the agent</em>.</p>
+      <p>One leaked blueprint secret is therefore not one compromised agent. It is all of them, at once, at runtime, with their inherited permissions. <strong>Inventory blueprints before agents.</strong></p>
+    </div>
+    <div>
+      <h3>Read this before quoting a number</h3>
+      <p>Preview surfaces: <code>AgentsInfo</code>, <code>BehaviorInfo</code>, <code>BehaviorEntities</code>, local agent discovery and much of Agent 365. <code>BehaviorInfo</code> is unavailable in GCC.</p>
+      <p><code>catalog/packages</code> is a beta endpoint, and Microsoft’s own portal tile has been observed reporting a materially different count for the same tenant. Classic Copilot Studio agents (pre-May 2026) hold ordinary app registrations and appear in no agent view — find them by the service principal tag <code>AgentCreatedBy:CopilotStudio</code>.</p>
+    </div>
+    <div>
+      <h3>Third-party is not one population</h3>
+      <p>Agent 365 ships with preintegrated partners — 23 at launch, <strong>every one registered and observable</strong>. A partner <em>agent</em> is registered and its activity visible; an <em>AI teammate</em> also has its own user account, mailbox and Teams presence; an <em>agent factory</em> (Kore, n8n, Kasisto, NVIDIA NeMo) mints an Entra Agent ID for every agent it creates. Vertex AI and Bedrock agents can be registered with no development work.</p>
+      <p>So an onboarded partner agent emits the same OpenTelemetry spans as a Foundry agent. The SDK’s four capabilities are independent, and observability <em>“can use either the agent identity blueprint or a standard Microsoft Entra app registration”</em> — <strong>never infer an agent identity from the presence of telemetry</strong>, or the reverse.</p>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap">Part of the AI Agent Posture pack. Verified against Microsoft Learn; unverified items are flagged in the panel. No data leaves this page — it is a static file.</div></footer>
+
+<script>
+// ═══ DATA — edit this block to change what the map says ═══
+// Agent Telemetry Map — data model.
+// Sources: Microsoft Learn (agent blueprint, Agent 365 observability attribute reference,
+// Copilot Studio Entra Agent ID, Defender XDR connector, table schema references) and the
+// AI Agents Monitoring Workbook. Items marked unverified:true are not documented — treat with care.
+
+const SURFACES = {
+  la:    { label: 'Log Analytics',    hint: 'Sentinel workspace · queryType 0' },
+  ah:    { label: 'Advanced Hunting', hint: 'Defender XDR · Timestamp, not TimeGenerated' },
+  lake:  { label: 'Sentinel Data Lake',hint: 'usage-billed per query' },
+  graph: { label: 'Microsoft Graph',  hint: 'catalogue has no connector — Logic App; identity objects also land lake-side' }
+};
+
+const TELEMETRY = [
+  { id:'CopilotActivity', lic:'M365 Copilot',   surface:'la',    note:'Copilot & AI audit: RecordType, AgentId, LLMEventData (JailbreakDetected, XPIADetected)', needs:'Microsoft Copilot connector + Purview Audit' },
+  { id:'AppEvents', lic:'App Insights',         surface:'la',    note:'Copilot Studio agent-level telemetry: BotMessageReceived/Send, topics, ContentFiltered', needs:'Workspace-based App Insights, wired per agent' },
+  { id:'AppDependencies', lic:'App Insights',   surface:'la',    note:'Foundry gen_ai.* spans (model, tokens, latency, tools) and Studio environment-level spans', needs:'Workspace-based App Insights, per project/environment' },
+  { id:'ASimAgentEventLogs', lic:'OpenAI CCF',surface:'la',    note:'ASIM-normalised agent events: agents, model, tokens, tool names', needs:'OpenAI CCF connector' },
+  { id:'AADServicePrincipalSignInLogs', lic:'Entra', surface:'la', note:'Agent authentication. The Agent column carries agentic sign-in detail', needs:'Entra ID connector — SP sign-in logs category' },
+  { id:'SecurityAlert', lic:'free ingest',     surface:'la',    note:'AI detections from Defender and Azure plans', needs:'Defender XDR connector (alerts ingest free)' },
+  { id:'AgentsInfo', lic:'MDE P2 · A365',        surface:'ah',    note:'Inventory & posture. The only surface that sees locally installed agents', needs:'Agent 365 for cloud agents · MDE P2 for local' },
+  { id:'CloudAppEvents', lic:'E5 · A365',    surface:'ah',    note:'Copilot verdicts (E5) and Agent 365 runtime: InvokeAgent, ExecuteToolBy*', needs:'Defender for Cloud Apps + Microsoft 365 activities' },
+  { id:'BehaviorInfo', lic:'E5 · preview',      surface:'ah',    note:'Prompt Shield audit and block events', needs:'Defender for Cloud Apps + UEBA behaviours · Preview · not in GCC' },
+  { id:'UnifiedAgentObservability', lic:'A365 + lake', surface:'lake', note:'Full-fidelity spans: prompt text, tool arguments, token counts', needs:'Agent 365 + data lake tier' },
+  { id:'EntraAgent* assets', lic:'lake · preview', surface:'lake', note:'Four identity asset tables: EntraAgentUsers, EntraAgentIdentities, EntraAgentIdentityBlueprints, EntraAgentIdentityBlueprintPrincipals — the identity graph, queryable next to activity', needs:'Agent Identities connector (Preview) + data lake tier · column schemas unpublished', unverified:true },
+  { id:'agentIdentityBlueprint', lic:'any Entra tier',    surface:'graph', note:'Holds the credentials its agents authenticate with, and permissions they inherit. Credential detail lives only here — the lake copy does not carry it', needs:'Application.Read.All — or lake-side via the Agent Identities connector' },
+  { id:'agentIdentity', lic:'any Entra tier',     surface:'graph', note:'The agent directory principal. ServiceIdentity — holds no credentials of its own', needs:'AgentIdentity.Read.All (no Agent 365) — or lake-side via the Agent Identities connector' },
+  { id:'catalog/packages', lic:'beta API',  surface:'graph', note:'Agent registry catalogue — published titles only', needs:'CopilotPackages.Read.All · beta endpoint', unverified:true }
+];
+
+const IDENTITY = [
+  { id:'entra',  label:'Entra Agent ID',       detail:'Directory principal under a blueprint. Governable with Conditional Access and ID Protection — but only with Agent 365.' },
+  { id:'appreg', label:'App registration',     detail:'Legacy. Entra treats these as ordinary applications, not AI agents. No agent properties, no agent filters.' },
+  { id:'none',   label:'No directory identity',detail:'Nothing in Entra to govern, target with policy, or attribute activity to.' }
+];
+
+// cond:true  → dashed edge: the path emits here only if a licence or per-agent config is in place
+const PATHS = [
+  { id:'cs', name:'Copilot Studio', sub:'low-code makers · shared global blueprint',
+    identity:['entra','appreg'],
+    identityNote:'A date, not a setting. Before May 2026 an app registration per agent; from 18 Mar 2026 agent identities; after May 2026 every new agent, no opt-out. No automated in-place migration — recreate and deprecate.',
+    emits:[ {t:'CopilotActivity', gives:'every interaction: agent + actor, Jailbreak / XPIA verdicts in LLMEventData'},
+            {t:'CloudAppEvents', gives:'Copilot interaction verdict rows — the E5 population'},
+            {t:'AgentsInfo', cond:'Agent 365', gives:'config posture: auth model, declared tools and data sources, MCP servers, owners, lifecycle'},
+            {t:'AADServicePrincipalSignInLogs', gives:'each agent sign-in, with agentic detail in the Agent column'},
+            {t:'AppEvents', cond:'App Insights, per agent', gives:'per-message telemetry: BotMessageReceived / Send, topic triggers, ContentFiltered'},
+            {t:'AppDependencies', cond:'environment-level telemetry', gives:'environment-level spans of invocations and tool execution'},
+            {t:'catalog/packages', gives:'the published title, publisher and status'},
+            {t:'agentIdentity', gives:'the directory principal: sponsor, enabled state, created date'},
+            {t:'agentIdentityBlueprint', gives:'the shared global blueprint every Studio agent authenticates through'},
+            {t:'EntraAgent* assets', cond:'Agent Identities connector + lake', gives:'the same identity graph as rows you can join to activity'} ] },
+
+  { id:'foundry', name:'Microsoft Foundry', sub:'code-first · own models and tools',
+    identity:['entra'],
+    identityNote:'Auto-provisioned. A default blueprint and identity per project; publishing mints a dedicated blueprint and identity.',
+    emits:[ {t:'AppDependencies', cond:'App Insights + tracing enabled', gives:'gen_ai.* spans: model, tokens, latency, tool calls, content-filter results'},
+            {t:'AgentsInfo', cond:'Agent 365', gives:'inventory and config posture per agent'},
+            {t:'CloudAppEvents', cond:'Agent 365 instrumentation', gives:'InvokeAgent / InferenceCall / ExecuteToolBy* rows, with caller and client IP'},
+            {t:'UnifiedAgentObservability', cond:'Agent 365 + lake', gives:'full-fidelity spans: prompt text, tool arguments, guardrail blocks, sessions'},
+            {t:'AADServicePrincipalSignInLogs', gives:'sign-ins of the project and per-agent identities'},
+            {t:'agentIdentity', gives:'an auto-provisioned identity per project; a dedicated one at publish'},
+            {t:'agentIdentityBlueprint', gives:'the blueprint minted at publish — credentials and inheritable permissions'},
+            {t:'catalog/packages', gives:'a registry entry via sync'},
+            {t:'EntraAgent* assets', cond:'Agent Identities connector + lake', gives:'identity graph rows for project and published agents'} ] },
+
+  { id:'builder', name:'Agent Builder', sub:'end users, inside Copilot chat',
+    identity:['none'],
+    identityNote:'Ungated creation, about a minute per agent, and no directory identity — so identity controls never see the growth.',
+    emits:[ {t:'CopilotActivity', gives:'interactions, attributed to the invoking user — the only per-use trail'},
+            {t:'AgentsInfo', cond:'Agent 365', gives:'an inventory row per agent — often the first sighting'},
+            {t:'catalog/packages', gives:'a catalogue entry once shared'} ] },
+
+  { id:'third', name:'Third-party publisher', sub:'store listings · partner agents · agent factories',
+    identity:['entra','appreg','none'],
+    identityNote:'Not one population. Agent 365 ships with preintegrated partners — 23 named at launch, every one of them registered and observable — and agent factories (Kore, n8n, Kasisto, NVIDIA NeMo) mint an Entra Agent ID for every agent they create. Observability alone can run on a plain app registration rather than a blueprint. Vertex AI and Bedrock agents can be registered with no development work. A store listing nobody onboarded still gets nothing.',
+    emits:[ {t:'AgentsInfo', cond:'Agent 365', gives:'an inventory row for every onboarded partner agent'},
+            {t:'CloudAppEvents', gives:'runtime rows for onboarded agents; install-time grants are all you see otherwise'},
+            {t:'catalog/packages', gives:'the store listing'},
+            {t:'UnifiedAgentObservability', cond:'A365 SDK observability + lake', gives:'the same span set a Foundry agent emits, for SDK-instrumented agents'},
+            {t:'AADServicePrincipalSignInLogs', cond:'onboarded with an agent identity', gives:'sign-ins of the onboarded agent identity'},
+            {t:'agentIdentity', cond:'onboarded to Agent 365', gives:'the identity minted at onboarding'},
+            {t:'agentIdentityBlueprint', cond:'onboarded to Agent 365', gives:'the SDK or agent-factory blueprint'},
+            {t:'EntraAgent* assets', cond:'onboarded + Agent Identities connector + lake', gives:'identity graph rows for onboarded agents'} ] },
+
+  { id:'first', name:'Microsoft first-party', sub:'Researcher · Analyst · SharePoint',
+    identity:['none'],
+    identityNote:'Microsoft’s infrastructure and Microsoft’s controls. Lowest of the five and not where effort belongs.',
+    emits:[ {t:'CopilotActivity', gives:'usage audit rows — adoption evidence, little else'},
+            {t:'AgentsInfo', cond:'Agent 365', gives:'an inventory row'},
+            {t:'catalog/packages', gives:'the catalogue title'} ] },
+
+  { id:'lob', name:'Line-of-business', sub:'your own, not published to a store',
+    identity:['entra','none'],
+    identityNote:'Depends how it was built. A pro-code agent on Agent ID gets a blueprint and identity; anything on a plain app registration does not.',
+    emits:[ {t:'AgentsInfo', cond:'Agent 365', gives:'an inventory row once instrumented'},
+            {t:'catalog/packages', gives:'an entry only if published to your org catalogue'},
+            {t:'agentIdentity', cond:'if built on Agent ID', gives:'a governable principal'},
+            {t:'EntraAgent* assets', cond:'if on Agent ID + connector + lake', gives:'identity graph rows'},
+            {t:'AADServicePrincipalSignInLogs', gives:'SP sign-ins — often the only signal a LoB agent leaves'} ] },
+
+  { id:'local', name:'Locally installed', sub:'Claude · ChatGPT · Ollama · local Copilot',
+    identity:['none'], blind:true,
+    identityNote:'No identity, no catalogue entry, no control but the endpoint sensor. A local model runner puts inference outside every prompt-logging and DLP path you have.',
+    emits:[ {t:'AgentsInfo', cond:'MDE P2 — Platform == LocalAgents', gives:'what the agent IS: vendor, version, host process, trust and auto-approve settings, local and remote MCP servers, device and account'} ] }
+];
+</script>
+<script>
+(function(){
+  const SV=(k)=>getComputedStyle(document.documentElement).getPropertyValue('--'+k).trim();
+  const svg=document.getElementById('map'), panel=document.getElementById('panel');
+  const NS='http://www.w3.org/2000/svg';
+  const el=(n,a={})=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);return e;};
+
+  // ── geometry ──────────────────────────────────────────
+  // Two columns, not three. Identity is an ATTRIBUTE of the creation path, not a hop the
+  // telemetry routes through - drawing it as a middle column would imply a flow that does
+  // not exist. So identity rides on the path node as a chip, and every edge means "emits to".
+  const PW=286, TW=252, ROWH=64, TOP=64, GAPY=14, LANE=118;
+  const X1=16, X3=X1+PW+LANE+66, W=X3+TW+16;
+  const pathY=i=>TOP+i*ROWH; const PH=56;
+  const order=['la','ah','lake','graph'];
+  const groups=order.map(s=>({s,items:TELEMETRY.filter(t=>t.surface===s)}));
+  const tPos={}; let y=TOP, heads=[];
+  groups.forEach(g=>{ heads.push({s:g.s,y:y}); y+=26; g.items.forEach(t=>{ tPos[t.id]=y; y+=42; }); y+=GAPY; });
+  const H=Math.max(y+14, pathY(PATHS.length)+24);
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+
+  [['Created how · identity issued',X1,PW],['Telemetry emitted',X3,TW]].forEach(([t,x,w])=>{
+    const n=el('text',{x:x,y:34,class:'colhead'}); n.textContent=t; svg.appendChild(n);
+    svg.appendChild(el('line',{x1:x,y1:42,x2:x+w,y2:42,class:'tick'}));
+  });
+
+  // ── edges: one lane per creation path, so the fan stays readable ──
+  const edges=[];
+  PATHS.forEach((p,i)=>{
+    const y0=pathY(i)+21;
+    p.emits.forEach(e=>{
+      const y1=(tPos[e.t]||TOP)+17, srf=(TELEMETRY.find(t=>t.id===e.t)||{}).surface||'la';
+      const x0=X1+PW, x1=X3, c=(x1-x0)*.52;
+      const path=el('path',{d:`M${x0},${y0} C${x0+c},${y0} ${x1-c},${y1} ${x1},${y1}`,
+        class:'edge',stroke:SV(srf),'data-p':p.id,'data-t':'t:'+e.t});
+      if(e.cond)path.setAttribute('stroke-dasharray','5 4');
+      svg.appendChild(path); edges.push(path);
+    });
+  });
+
+  // ── nodes ─────────────────────────────────────────────
+  function node(x,yy,w,h,attrs,draw){
+    const g=el('g',{class:'node',tabindex:'0',role:'button',...attrs});
+    g.appendChild(el('rect',{x:x,y:yy,width:w,height:h,rx:6}));
+    draw(g); svg.appendChild(g); return g;
+  }
+  const IDSHORT={entra:'Entra Agent ID',appreg:'app registration',none:'no identity'};
+  // A path that can land on all three needs a shorter chip than the full names allow
+  const IDMICRO={entra:'Entra Agent ID',appreg:'app reg',none:'none'};
+  PATHS.forEach((p,i)=>{
+    const yy=pathY(i), h=PH;
+    const g=node(X1,yy,PW,h,{'data-kind':'path','data-id':p.id},(g)=>{
+      const a=el('text',{x:X1+14,y:yy+18,class:'n-title','data-max':PW-28}); a.textContent=p.name;
+      const b=el('text',{x:X1+14,y:yy+31,class:'n-sub','data-max':PW-28});   b.textContent=p.sub;
+      g.append(a,b);
+      // identity chip on its own row - a wide label must never collide with the sub-title
+      const label=p.identity.map(k=>(p.identity.length>2?IDMICRO:IDSHORT)[k]).join(' / ');
+      const w=Math.min(label.length*5.9+18, PW-28);
+      const col=p.identity[0]==='none'?'gap':(p.identity[0]==='entra'?'ah':'graph');
+      g.appendChild(el('rect',{x:X1+14,y:yy+36,width:w,height:15,rx:7.5,
+        fill:'none',stroke:SV(col),'stroke-width':1,opacity:.85}));
+      const c=el('text',{x:X1+14+w/2,y:yy+46.5,class:'n-chip','text-anchor':'middle',fill:SV(col),'data-max':w-10});
+      c.textContent=label; g.appendChild(c);
+      if(p.blind) g.appendChild(el('rect',{x:X1,y:yy,width:3,height:h,rx:1.5,fill:SV('gap'),stroke:'none'}));
+    });
+    g.addEventListener('click',()=>select('path',p.id));
+    g.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();select('path',p.id);}});
+  });
+  heads.forEach(h=>{
+    const t=el('text',{x:X3,y:h.y+14,class:'srfhead',fill:SV(h.s)});
+    t.textContent=SURFACES[h.s].label.toUpperCase(); svg.appendChild(t);
+  });
+  TELEMETRY.forEach(t=>{
+    const yy=tPos[t.id];
+    const g=node(X3,yy,TW,34,{'data-kind':'tel','data-id':t.id},(g)=>{
+      g.appendChild(el('rect',{x:X3,y:yy,width:3,height:34,rx:1.5,fill:SV(t.surface),stroke:'none'}));
+      const licw=t.lic?t.lic.length*5.2+6:0;
+      const a=el('text',{x:X3+13,y:yy+22,class:'n-mono','data-max':TW-26-licw});
+      a.textContent=t.id.length>31?t.id.slice(0,30)+'\u2026':t.id; g.appendChild(a);
+      if(t.lic){ const l=el('text',{x:X3+TW-10,y:yy+22,class:'n-lic','text-anchor':'end','data-max':licw-4});
+        l.textContent=t.lic; g.appendChild(l); }
+    });
+    g.addEventListener('click',()=>select('tel',t.id));
+    g.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();select('tel',t.id);}});
+  });
+
+  // ── fit long labels ───────────────────────────────────
+  // Every label carries the width it is allowed. Measured rather than estimated,
+  // because the display faces load asynchronously and may not load at all.
+  function fitLabels(){
+    svg.querySelectorAll('text[data-max]').forEach(t=>{
+      const max=+t.getAttribute('data-max');
+      t.removeAttribute('textLength'); t.removeAttribute('lengthAdjust');
+      let len; try{ len=t.getComputedTextLength(); }catch(e){ return; }
+      if(len>max){ t.setAttribute('textLength',max); t.setAttribute('lengthAdjust','spacingAndGlyphs'); }
+    });
+  }
+  fitLabels();
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fitLabels).catch(()=>{});
+
+  // ── selection ─────────────────────────────────────────
+  let cur=null;
+  function select(kind,id){
+    cur=(cur&&cur.kind===kind&&cur.id===id)?null:{kind,id};
+    const nodes=svg.querySelectorAll('.node');
+    if(!cur){ nodes.forEach(n=>{n.removeAttribute('data-on');n.removeAttribute('data-sel');});
+      edges.forEach(e=>e.removeAttribute('data-on')); return renderPanel(); }
+    let liveP=new Set(), liveT=new Set();
+    if(kind==='path'){ const p=PATHS.find(x=>x.id===id); liveP.add(id); p.emits.forEach(e=>liveT.add(e.t)); }
+    else { liveT.add(id); PATHS.filter(p=>p.emits.some(e=>e.t===id)).forEach(p=>liveP.add(p.id)); }
+    nodes.forEach(n=>{
+      const k=n.getAttribute('data-kind'), i=n.getAttribute('data-id');
+      const on=(k==='path'&&liveP.has(i))||(k==='tel'&&liveT.has(i));
+      n.setAttribute('data-on',on?'1':'0');
+      n.setAttribute('data-sel',(k===kind&&i===id)?'1':'0');
+    });
+    edges.forEach(e=>{
+      const p=e.getAttribute('data-p'), t=e.getAttribute('data-t');
+      e.setAttribute('data-on',(kind==='path'?p===id:(liveP.has(p)&&t==='t:'+id))?'1':'0');
+    });
+    renderPanel();
+  }
+
+  // ── panel ─────────────────────────────────────────────
+  function chip(s){return `<span class="dot" style="background:var(--${s})"></span>`;}
+  function renderPanel(){
+    if(!cur){
+      panel.innerHTML=`<p class="kind">Start here</p><h2>Pick a node</h2>
+        <p>Select a creation path to see everything it emits, a table to see which agents feed it, or an identity type to see who gets one.</p>
+        <h3>The shape of the problem</h3>
+        <p>Only <code style="font-family:var(--f-mono);font-size:12px">AgentsInfo</code> sees locally installed agents. Only Graph holds the registry catalogue — that endpoint has no connector of any kind — while the identity objects now also land lake-side via the Agent Identities connector (Preview). No single screen sees the whole estate — which is why “how many agents do you have” has four honest answers.</p>
+        <p class="hint">Built from the AI Agents Monitoring Workbook. Every table shown is queried by at least one of its 126 tiles.</p>`;
+      return;
+    }
+    if(cur.kind==='path'){
+      const p=PATHS.find(x=>x.id===cur.id);
+      panel.innerHTML=`<p class="kind">Creation path</p><h2>${p.name}</h2>
+        ${p.blind?'<span class="flag blind">largest visibility gap</span>':''}
+        <p>${p.sub}.</p>
+        <h3>Identity</h3><p>${p.identityNote}</p>
+        <h3>Emits to ${p.emits.length} place${p.emits.length===1?'':'s'}</h3>
+        <ul class="emits">${p.emits.map(e=>{const t=TELEMETRY.find(x=>x.id===e.t)||{surface:'la'};
+          return `<li>${chip(t.surface)}<span><code>${e.t}</code>${e.gives?`<span class="gives">${e.gives}</span>`:''}${e.cond?`<span class="cond">only with ${e.cond}</span>`:''}</span></li>`;}).join('')}</ul>`;
+    } else if(cur.kind==='tel'){
+      const t=TELEMETRY.find(x=>x.id===cur.id);
+      const feeders=PATHS.filter(p=>p.emits.some(e=>e.t===t.id));
+      panel.innerHTML=`<p class="kind">${SURFACES[t.surface].label} · ${SURFACES[t.surface].hint}</p>
+        <h2 style="font-family:var(--f-mono);font-size:17px;font-weight:500">${t.id}</h2>
+        ${t.unverified?'<span class="flag blind">beta / unverified</span>':''}
+        <p>${t.note}</p>
+        <h3>Needs</h3><p>${t.needs}</p>
+        <h3>Fed by ${feeders.length} path${feeders.length===1?'':'s'}</h3>
+        <ul class="emits">${feeders.map(p=>{const e=p.emits.find(x=>x.t===t.id);
+          return `<li>${chip(t.surface)}<span><code style="font-family:var(--f-body);font-weight:600">${p.name}</code>${e.gives?`<span class="gives">${e.gives}</span>`:''}${e.cond?`<span class="cond">only with ${e.cond}</span>`:''}</span></li>`;}).join('')}</ul>`;
+    } else {
+      const d=IDENTITY.find(x=>x.id===cur.id);
+      const who=PATHS.filter(p=>p.identity.includes(d.id));
+      panel.innerHTML=`<p class="kind">Identity type</p><h2>${d.label}</h2><p>${d.detail}</p>
+        <h3>Issued to</h3><ul class="emits">${who.map(p=>`<li>${chip('ah')}<span><code style="font-family:var(--f-body);font-weight:600">${p.name}</code></span></li>`).join('')}</ul>`;
+    }
+  }
+
+  // ── legend ────────────────────────────────────────────
+  document.getElementById('legend').innerHTML =
+    order.map(s=>`<span class="key"><i style="background:var(--${s})"></i>${SURFACES[s].label}</span>`).join('')
+    + `<span class="key edge"><svg width="26" height="9" aria-hidden="true"><line x1="1" y1="4.5" x2="25" y2="4.5" stroke="currentColor" stroke-width="1.6"/></svg>always emits</span>`
+    + `<span class="key edge"><svg width="26" height="9" aria-hidden="true"><line x1="1" y1="4.5" x2="25" y2="4.5" stroke="currentColor" stroke-width="1.6" stroke-dasharray="5 4"/></svg>only with a licence or per-agent config</span>`
+    + `<span class="key"><i style="background:var(--gap)"></i>no identity, no registry entry</span>`;
+
+  // ── matrix ────────────────────────────────────────────
+  const m=document.getElementById('matrix');
+  m.innerHTML=`<thead><tr><th>Created how</th><th>Identity</th>${TELEMETRY.map(t=>
+      `<th class="mono" style="color:var(--${t.surface})">${t.id.replace('catalog/packages','registry')}</th>`).join('')}</tr></thead>
+    <tbody>${PATHS.map(p=>`<tr><td class="path">${p.name}<span>${p.sub}</span></td>
+      <td>${p.identity.map(i=>IDENTITY.find(d=>d.id===i).label).join(' / ')}</td>
+      ${TELEMETRY.map(t=>{const e=p.emits.find(x=>x.t===t.id);
+        return `<td>${!e?'<span class="no">—</span>':(e.cond?`<span class="cond" title="${e.cond}">cond</span>`:'<span class="yes">yes</span>')}</td>`;}).join('')}
+      </tr>`).join('')}</tbody>`;
+
+  // ── theme ─────────────────────────────────────────────
+  const btn=document.getElementById('theme');
+  btn.addEventListener('click',()=>{
+    const now=document.documentElement.getAttribute('data-theme');
+    const dark=now?now==='dark':matchMedia('(prefers-color-scheme:dark)').matches;
+    document.documentElement.setAttribute('data-theme',dark?'light':'dark');
+    try{localStorage.setItem('atm-theme',dark?'light':'dark');}catch(e){}
+    repaint();
+  });
+  try{const t=localStorage.getItem('atm-theme'); if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}
+  function repaint(){
+    svg.querySelectorAll('.srfhead').forEach((n,i)=>n.setAttribute('fill',SV(heads[i].s)));
+    svg.querySelectorAll('.node[data-kind="tel"] rect:not([rx="6"])').forEach(r=>{
+      const id=r.parentNode.getAttribute('data-id');
+      r.setAttribute('fill',SV((TELEMETRY.find(t=>t.id===id)||{}).surface||'la'));});
+    edges.forEach(e=>{const tt=TELEMETRY.find(x=>x.id===e.getAttribute('data-t').slice(2));
+      e.setAttribute('stroke',SV(tt?tt.surface:'la'));});
+    svg.querySelectorAll('.node[data-kind="path"]').forEach(g=>{
+      const p=PATHS.find(x=>x.id===g.getAttribute('data-id'));
+      const col=p.identity[0]==='none'?'gap':(p.identity[0]==='entra'?'ah':'graph');
+      const chip=g.querySelector('rect[rx="9.5"]'), txt=g.querySelector('.n-chip');
+      if(chip)chip.setAttribute('stroke',SV(col)); if(txt)txt.setAttribute('fill',SV(col));});
+    svg.querySelectorAll('.node[data-kind="path"] rect[rx="1.5"]').forEach(r=>r.setAttribute('fill',SV('gap')));
+  }
+  matchMedia('(prefers-color-scheme:dark)').addEventListener('change',repaint);
+  renderPanel(); repaint();
+})();
+</script>
+</body>
+</html>
