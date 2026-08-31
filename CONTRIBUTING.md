@@ -18,17 +18,13 @@ The maintainer will review the gap against the current site content and implemen
 
 | File | Content |
 |---|---|
-| `index.html` | Home — persona guide |
-| `overview.html` | Stack overview, risk properties + tiering, six-phase rollout, and the gap register |
-| `product-map.html` | 32+ products with GA/Preview status |
-| `agent365.html` | Agent 365 deep dive + Foundry control plane |
-| `identity.html` | Auth patterns, Classic/Modern, Blueprint/FIC, KQL |
-| `threats.html` | Threat scenarios + MCP security + the frameworks layer (OWASP, NIST, ISO, ZT4AI) |
-| `playbooks.html` | 5 operational playbooks with KQL |
-| `demo.html` | Portal tour — the five screens that see agents (fictional data) |
-| `agent-telemetry-map.html` | Interactive map: creation paths → telemetry surfaces → licences |
-| `changelog.html` | Dated change log (May 2026 onward; older history in git) |
-| `contact.html` | Feedback form + Privacy policy |
+| `index.html` | Home — the five surfaces, the map, three facts |
+| `surfaces.html` | The five AI threat surfaces: risks, owning controls, licence gates |
+| `licensing.html` | Three licence axes and the E5 / Agent 365 / E7 / lake splits |
+| `agent-telemetry-map.html` | Interactive map: creation paths → telemetry → licences |
+| `start.html` | Four-screens rule, six-phase rollout, first-week checklist |
+| `contact.html` | Feedback form + privacy policy |
+| `archive/*.html` | The former deep-dive pages, kept as reference (agent365, identity, threats, playbooks, overview, product-map, demo, changelog) |
 
 ## What fits this site
 
