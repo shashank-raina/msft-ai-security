@@ -5,267 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Threat Scenarios — Securing AI with Microsoft</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
 <style>
-:root {
-  --bg:#f5f7fc;--surface:#ffffff;--surface2:#eef1f8;--surface3:#e4e9f4;
-  --border:#d0d8ec;--border2:#b8c4de;
-  --blue:#0078d4;--blue2:#0063b1;--purple:#6264a7;--purple2:#5a5c9a;
-  --teal:#008575;--teal2:#007a6e;--green:#107c10;--green2:#0e6e0e;
-  --orange:#d83b01;--orange2:#b83200;--gold:#c09020;--gold2:#8a6800;
-  --red:#c50f1f;--warn:rgba(216,59,1,0.07);--warn-border:rgba(216,59,1,0.3);
-  --warn-text:#c23000;--caution:rgba(140,90,0,0.07);
-  --caution-border:rgba(140,90,0,0.3);--caution-text:#6e4500;
-  --text:#0d1526;--text2:#2e3d5e;--text3:#5a6a8a;--nav-h:52px;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
-body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;
-  font-size:15.5px;line-height:1.8;padding-top:var(--nav-h);color:var(--text);}
-body::before{content:'';position:fixed;inset:0;
-  background-image:linear-gradient(rgba(0,80,180,0.05) 1px,transparent 1px),
-  linear-gradient(90deg,rgba(0,80,180,0.05) 1px,transparent 1px);
-  background-size:48px 48px;pointer-events:none;z-index:0;}
-
-/* TOP NAV */
-.topnav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);
-  background:rgba(245,247,252,0.97);border-bottom:1px solid var(--border2);box-shadow:0 1px 10px rgba(0,0,0,0.07);
-  backdrop-filter:blur(12px);z-index:200;
-  display:flex;align-items:center;padding:0 32px;gap:0;}
-.nav-brand{display:flex;align-items:center;gap:8px;margin-right:20px;flex-shrink:0;}
-.msft-logo{width:18px;height:18px;display:grid;grid-template-columns:1fr 1fr;gap:2px;}
-.msft-logo div:nth-child(1){background:#f25022;border-radius:1px;}
-.msft-logo div:nth-child(2){background:#7fba00;border-radius:1px;}
-.msft-logo div:nth-child(3){background:#00a4ef;border-radius:1px;}
-.msft-logo div:nth-child(4){background:#ffb900;border-radius:1px;}
-.brand-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;
-  color:#0d1526;letter-spacing:0.01em;white-space:nowrap;line-height:1.2;}
-
-.nav-links{display:flex;align-items:stretch;height:100%;flex:1;overflow-x:auto;gap:2px;}
-.nav-links::-webkit-scrollbar{display:none;}
-.nav-links a{display:flex;align-items:center;gap:5px;padding:0 9px;
-  text-decoration:none;color:#1a2a4a;font-size:11.5px;font-weight:600;
-  border-bottom:2px solid transparent;white-space:nowrap;
-  transition:color 0.15s,border-color 0.15s;}
-.nav-links a:hover{color:#0d1526;}
-.nav-links a.active{color:var(--blue);border-bottom-color:var(--blue);}
-.nav-links a .n{font-family:'JetBrains Mono',monospace;font-size:11px;
-  color:#4a6a9a;letter-spacing:0.02em;font-weight:700;}
-.nav-links a.active .n{color:var(--blue);}
-
-
-/* LAYOUT */
-.page{max-width:940px;margin:0 auto;padding:52px 40px 100px;position:relative;z-index:1;}
-
-/* TYPOGRAPHY */
-.section-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;
-  color:#004a9e;text-transform:uppercase;
-  margin:48px 0 16px;
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(0,120,212,0.07);
-  border:1px solid rgba(0,120,212,0.2);
-  border-radius:6px;
-  padding:5px 12px;
-  font-weight:500;}
-.section-label::before{content:'';display:inline-block;
-  width:6px;height:6px;border-radius:50%;
-  background:var(--blue);flex-shrink:0;}
-h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:44px;font-weight:800;
-  line-height:1.06;letter-spacing:-0.03em;color:#0d1526;margin-bottom:18px;}
-h1 span{background:linear-gradient(135deg,var(--blue),#004fa8);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:26px;font-weight:700;
-  color:#0d1526;letter-spacing:-0.02em;margin:8px 0 14px;line-height:1.2;
-  padding-left:14px;border-left:3px solid var(--blue);}
-h2:first-child{margin-top:0;}
-h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:700;
-  color:#0d1526;margin:32px 0 12px;
-  padding-bottom:8px;border-bottom:1px solid var(--border2);}
-h4{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;
-  color:var(--text);margin:20px 0 6px;}
-p{color:#2e3d5e;margin-bottom:14px;font-weight:400;font-size:15px;}
-p strong{color:#0d1526;font-weight:600;}
-p:last-child{margin-bottom:0;}
-a{color:var(--blue);text-decoration:none;}
-a:hover{text-decoration:underline;}
-
-/* PAGE HERO */
-.hero{padding:40px 0 36px;border-bottom:1px solid var(--border);margin-bottom:40px;}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;
-  background:#ffffff;border:1px solid var(--border2);
-  border-radius:100px;padding:4px 12px 4px 8px;
-  font-family:'JetBrains Mono',monospace;font-size:10px;
-  color:#3a4a6a;letter-spacing:0.08em;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
-.live-dot{width:6px;height:6px;border-radius:50%;background:var(--blue);
-  animation:blink 1.5s infinite;}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
-.hero-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;}
-.chip{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.07em;
-  padding:4px 10px;border-radius:4px;border:1px solid;}
-.chip-blue{background:#0a1e38;border-color:#2060aa;color:#90c8ff;}
-.chip-warn{background:#2a0e06;border-color:#882000;color:#ffb090;}
-.chip-caution{background:#221400;border-color:#7a5000;color:#ffcc60;}
-.chip-green{background:#061a06;border-color:#1e6a1e;color:#80e880;}
-
-/* CALLOUTS */
-.callout{border-radius:10px;padding:18px 20px;margin:20px 0;border:1px solid;}
-.callout-warn{background:#fff4f0;border-color:rgba(216,59,1,0.3);}
-.callout-caution{background:#fffbf0;border-color:rgba(140,90,0,0.3);}
-.callout-info{background:#f0f6ff;border-color:rgba(0,120,212,0.25);}
-.callout-green{background:#f0fbf0;border-color:rgba(16,124,16,0.25);}
-.callout-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;
-  margin-bottom:8px;display:flex;align-items:center;gap:8px;}
-.callout-warn .callout-title{color:#b83000;}
-.callout-caution .callout-title{color:#6e4500;}
-.callout-info .callout-title{color:var(--blue);}
-.callout-green .callout-title{color:#0a5a0a;}
-.callout p{font-size:14px;margin-bottom:0;}
-.callout-warn p{color:#6a2000;}
-.callout-caution p{color:#5a3800;}
-.callout-info p{color:#003a80;}
-.callout-green p{color:#0a4a0a;}
-
-/* CARDS */
-.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-  gap:14px;margin:20px 0;}
-.card{background:#ffffff;border:1px solid var(--border);
-  border-radius:10px;padding:18px;position:relative;overflow:hidden;
-  transition:border-color 0.2s,transform 0.15s,box-shadow 0.15s;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
-.card:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,120,212,0.12);border-color:var(--blue2);}
-.card-link{text-decoration:none;color:inherit;display:block;position:relative;}
-.card-link .card{position:relative;}
-.card-link:hover{text-decoration:none;}
-
-.card-link .card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
-.card-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;
-  color:#0d1526;margin-bottom:8px;}
-.card-sub{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--text3);
-  letter-spacing:0.08em;margin-bottom:6px;}
-.card-desc{font-size:13px;color:#2e3d5e;margin:0 0 12px;font-weight:400;line-height:1.6;}
-.tag-row{display:flex;flex-wrap:wrap;gap:5px;}
-.tag{font-family:'JetBrains Mono',monospace;font-size:9px;padding:3px 8px;border-radius:4px;
-  background:#1a2035;border:1px solid #2d3a55;
-  color:#c8d8f0;letter-spacing:0.04em;}
-.tag.warn{background:#2a0e06;border-color:#882000;color:#ffb090;}
-.tag.caution{background:#221400;border-color:#7a5000;color:#ffcc60;}
-.tag.green{background:#061a06;border-color:#1e6a1e;color:#80e880;}
-.tag.blue{background:#0a1e38;border-color:#2060aa;color:#90c8ff;}
-.tag.purple{background:#10102a;border-color:#4040a0;color:#b0b0ff;}
-
-/* TABLES */
-table{width:100%;border-collapse:collapse;margin:20px 0;font-size:13px;}
-th{background:#e8edf8;border:1px solid var(--border2);padding:10px 14px;
-  text-align:left;font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:700;
-  color:#0d1526;letter-spacing:0.02em;}
-td{border:1px solid var(--border);padding:9px 14px;color:#2e3d5e;
-  font-weight:400;vertical-align:top;line-height:1.55;background:#ffffff;}
-tr:hover td{background:#f5f8ff;}
-td strong{color:#0d1526;font-weight:600;}
-td code{font-family:'JetBrains Mono',monospace;font-size:10px;
-  background:#eef1f8;border:1px solid var(--border2);
-  border-radius:3px;padding:1px 5px;color:#004a9e;}
-.warn-inline{color:#d05030;font-family:'JetBrains Mono',monospace;font-size:10px;}
-.caution-inline{color:#c0820a;font-family:'JetBrains Mono',monospace;font-size:10px;}
-.green-inline{color:#2a9a2a;font-family:'JetBrains Mono',monospace;font-size:10px;}
-.severity-critical{color:#e84040;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;}
-.severity-high{color:#e87050;font-family:'JetBrains Mono',monospace;font-size:10px;}
-.severity-medium{color:#c8902a;font-family:'JetBrains Mono',monospace;font-size:10px;}
-
-/* FLOW */
-.flow{display:flex;align-items:stretch;border:1px solid var(--border2);
-  border-radius:10px;overflow:hidden;margin:20px 0;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
-.flow-step{flex:1;padding:14px 16px;border-right:1px solid var(--border2);
-  position:relative;background:#ffffff;transition:background 0.2s;}
-.flow-step:last-child{border-right:none;}
-.flow-step:hover{background:#eef1f8;}
-.flow-num{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--text3);
-  letter-spacing:0.1em;margin-bottom:6px;}
-.flow-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;
-  color:#0d1526;margin-bottom:4px;}
-.flow-desc{font-size:12px;color:#3a4a6a;font-weight:400;line-height:1.4;}
-.flow-arrow{position:absolute;right:-10px;top:50%;transform:translateY(-50%);
-  color:var(--text3);font-size:14px;z-index:2;}
-
-/* DIVIDER */
-.divider{height:1px;background:var(--border);margin:32px 0;}
-
-/* PAGE NAV (prev/next) */
-.page-nav{display:flex;justify-content:space-between;align-items:center;
-  margin-top:60px;padding-top:24px;border-top:1px solid var(--border);}
-.page-nav a{display:flex;align-items:center;gap:8px;padding:10px 16px;
-  background:#ffffff;border:1px solid var(--border2);border-radius:8px;
-  color:#3a4a6a;text-decoration:none;font-size:12px;transition:all 0.15s;box-shadow:0 1px 4px rgba(0,0,0,0.05);}
-.page-nav a:hover{border-color:var(--blue);color:var(--blue);}
-.page-nav-label{font-family:'JetBrains Mono',monospace;font-size:9px;
-  color:var(--text2);letter-spacing:0.08em;display:block;margin-bottom:2px;}
-.page-nav-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;color:#0d1526;}
-.page-nav-spacer{flex:1;}
-
-/* MISC */
-code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#eef1f8;
-  border:1px solid var(--border2);border-radius:4px;padding:2px 6px;color:#004a9e;}
-.pill-list{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;}
-.pill{display:flex;align-items:center;gap:6px;background:#ffffff;
-  border:1px solid var(--border2);border-radius:100px;padding:5px 12px 5px 8px;
-  font-size:12px;color:#2e3d5e;font-weight:400;box-shadow:0 1px 3px rgba(0,0,0,0.05);}
-.pill-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
-.obo-flow{display:flex;flex-direction:column;border:1px solid var(--border2);
-  border-radius:10px;overflow:hidden;margin:20px 0;}
-.obo-row{display:flex;align-items:stretch;border-bottom:1px solid var(--border2);}
-.obo-row:last-child{border-bottom:none;}
-.obo-label{width:130px;flex-shrink:0;background:#eef1f8;padding:12px 14px;
-  border-right:1px solid var(--border2);font-family:'JetBrains Mono',monospace;
-  font-size:9px;letter-spacing:0.08em;color:#3a4a6a;
-  display:flex;align-items:center;text-transform:uppercase;}
-.obo-content{flex:1;padding:12px 16px;font-size:13px;color:#2e3d5e;font-weight:400;}
-.obo-content strong{color:#0d1526;font-weight:600;}
-.mcp-layer{border:1px solid var(--border2);border-radius:8px;margin:8px 0;overflow:hidden;}
-.mcp-layer-header{padding:10px 16px;background:#eef1f8;
-  border-bottom:1px solid var(--border2);display:flex;align-items:center;gap:10px;}
-.mcp-layer-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;color:#0d1526;}
-.mcp-layer-body{padding:12px 16px;display:flex;flex-wrap:wrap;gap:8px;}
-.mcp-item{background:#ffffff;border:1px solid var(--border2);
-  border-radius:6px;padding:6px 12px;font-size:12px;color:#2e3d5e;font-weight:400;}
-.mcp-item.risk{background:rgba(216,59,1,0.08);border-color:rgba(216,59,1,0.25);color:var(--warn-text);}
-.mcp-item.control{background:rgba(0,120,212,0.07);border-color:rgba(0,120,212,0.25);color:#004a9e;}
-.threat-block{background:#ffffff;border:1px solid var(--border2);
-  border-radius:10px;margin:24px 0;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
-.threat-header{padding:14px 20px;border-bottom:1px solid var(--border2);
-  background:#f5f7fc;display:flex;align-items:center;gap:12px;}
-.threat-icon{font-size:22px;}
-.threat-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;color:#0d1526;}
-.threat-category{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 8px;
-  border-radius:3px;letter-spacing:0.06em;margin-left:auto;}
-.threat-body{padding:20px;}
-.threat-cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
-.threat-col-title{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;
-  color:var(--text2);margin-bottom:10px;text-transform:uppercase;}
-.threat-step{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start;}
-.threat-step-num{width:20px;height:20px;border-radius:50%;display:flex;
-  align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;
-  font-size:9px;font-weight:500;flex-shrink:0;margin-top:1px;}
-.threat-step-text{font-size:13px;color:#2e3d5e;font-weight:400;}
-.nist-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0;}
-.nist-card{background:#ffffff;border:1px solid var(--border);
-  border-radius:10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.06);
-  transition:transform 0.15s,box-shadow 0.15s,border-color 0.15s;}
-a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,120,212,0.12);border-color:var(--blue2);}
-.nist-header{padding:12px 16px;display:flex;align-items:center;gap:10px;}
-.nist-badge{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;
-  padding:4px 10px;border-radius:6px;letter-spacing:0.05em;}
-.nist-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;color:#0d1526;}
-.nist-body{padding:0 16px 16px;}
-.nist-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border2);font-size:13px;}
-.nist-item:last-child{border-bottom:none;}
-.nist-control{color:#2e3d5e;font-weight:400;flex:1;}
-.nist-tool{font-family:'JetBrains Mono',monospace;font-size:10px;color:#004a9e;white-space:nowrap;}
-.nist-gap{font-family:'JetBrains Mono',monospace;font-size:10px;color:#b83000;white-space:nowrap;}
-::-webkit-scrollbar{width:5px;height:5px;}
-::-webkit-scrollbar-track{background:#e8edf8;}
-::-webkit-scrollbar-thumb{background:#b0bcce;border-radius:3px;}
-.footer{text-align:center;margin-top:60px;padding-top:24px;border-top:1px solid var(--border2);
-  font-family:'JetBrains Mono',monospace;font-size:10px;color:#5a6a8a;
-  letter-spacing:0.05em;line-height:1.9;}
 @media(max-width:700px){
   .topnav{padding:0 16px;}
   .page{padding:32px 20px 80px;}
@@ -274,31 +15,6 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   .flow{flex-direction:column;}
   .flow-arrow{display:none;}
   h1{font-size:26px;}
-}
-
-/* HAMBURGER */
-.hamburger{display:none;background:none;border:none;cursor:pointer;
-  padding:6px;flex-direction:column;gap:5px;margin-left:auto;flex-shrink:0;}
-.hamburger span{display:block;width:22px;height:2px;background:#0d1526;
-  border-radius:2px;transition:all 0.2s;}
-.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
-.hamburger.open span:nth-child(2){opacity:0;}
-.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
-.mobile-drawer{display:none;position:fixed;top:var(--nav-h);left:0;right:0;
-  background:rgba(245,247,252,0.98);border-bottom:1px solid var(--border2);
-  backdrop-filter:blur(16px);z-index:199;padding:12px 20px 20px;
-  flex-direction:column;gap:2px;box-shadow:0 8px 32px rgba(0,0,0,0.1);}
-.mobile-drawer.open{display:flex;}
-.mobile-drawer a{display:block;padding:10px 12px;border-radius:8px;
-  font-size:14px;font-weight:600;color:#1a2a4a;text-decoration:none;
-  transition:background 0.12s;}
-.mobile-drawer a:hover,.mobile-drawer a.active{background:#f0f6ff;color:var(--blue);}
-.mobile-drawer-overlay{display:none;position:fixed;inset:0;z-index:198;
-  background:rgba(0,0,0,0.2);}
-.mobile-drawer-overlay.open{display:block;}
-@media(max-width:900px){
-  .nav-links{display:none !important;}
-  .hamburger{display:flex;}
 }
 </style>
 </head>
@@ -312,17 +28,11 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <div class="nav-links">
 <a href="index.html" class="">Home</a>
 <a href="overview.html" class="">Overview</a>
-<a href="risk.html" class="">AI Risk</a>
 <a href="product-map.html" class="">Products</a>
 <a href="agent365.html" class="">Agent 365</a>
 <a href="identity.html" class="">Identity</a>
-<a href="mcp.html" class="">MCP</a>
 <a href="threats.html" class="active">Threats</a>
-<a href="frameworks.html" class="">Frameworks</a>
-<a href="gaps.html" class="">Gaps</a>
 <a href="playbooks.html" class="">Playbooks</a>
-<a href="foundry.html" class="">Foundry</a>
-<a href="strategy.html" class="">Strategy</a>
 <a href="contact.html" class="">Contact</a>
 </div>
   <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
@@ -331,17 +41,11 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <div class="mobile-drawer" id="mobileDrawer">
 <a href="index.html" class="">Home</a>
 <a href="overview.html" class="">Overview</a>
-<a href="risk.html" class="">AI Risk</a>
 <a href="product-map.html" class="">Products</a>
 <a href="agent365.html" class="">Agent 365</a>
 <a href="identity.html" class="">Identity</a>
-<a href="mcp.html" class="">MCP</a>
 <a href="threats.html" class="active">Threats</a>
-<a href="frameworks.html" class="">Frameworks</a>
-<a href="gaps.html" class="">Gaps</a>
 <a href="playbooks.html" class="">Playbooks</a>
-<a href="foundry.html" class="">Foundry</a>
-<a href="strategy.html" class="">Strategy</a>
 <a href="contact.html" class="">Contact</a>
 </div>
   <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" class="substack-nav" style="flex-shrink:0;margin-left:10px;display:flex;align-items:center;gap:5px;background:var(--blue);color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:6px 13px;border-radius:6px;text-decoration:none;white-space:nowrap;letter-spacing:0.03em;">📬 Subscribe</a>
@@ -669,6 +373,19 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <!-- ════════════════════════════════════════════════════════════════════════ -->
 <!-- EXTERNAL THREAT DETECTION FOR COPILOT STUDIO -->
 <!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:48px;">Prompt abuse in the wild</div>
+<h2>How attackers actually abuse prompts — the DART taxonomy</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">Microsoft's Defender Experts (DART) published a field taxonomy of prompt abuse observed in real tenants (<a href="https://www.microsoft.com/en-us/security/blog/" target="_blank" style="color:var(--blue);">Microsoft Security Blog, March 2026</a>). Three classes, each with a different detection surface:</p>
+<table>
+<thead><tr><th>Class</th><th>What it looks like</th><th>Where it shows up</th></tr></thead>
+<tbody>
+<tr><td><strong>Direct override</strong></td><td>The user or attacker instructs the model to ignore its system prompt or safety rules</td><td>Jailbreak verdicts in Copilot interaction audit; Prompt Shields</td></tr>
+<tr><td><strong>Extractive abuse</strong></td><td>Systematic prompting to pull training data, system prompts, or grounding content out of the model</td><td>Volume and pattern anomalies in interaction logs</td></tr>
+<tr><td><strong>Indirect injection</strong></td><td>Instructions planted in content the agent will read — documents, email, web pages. Includes <strong>HashJack</strong> (payload hidden in a URL fragment)</td><td>XPIA verdicts; cross-referencing accessed resources against interaction outcomes</td></tr>
+</tbody>
+</table>
+<p style="font-size:13px;color:#5a6a8a;margin:8px 0 0;">DART's playbook for it is a five-step visibility-to-oversight loop — worth mapping onto the monitoring phase of any agent security programme.</p>
+
 <div class="section-label" style="margin-top:48px;">External threat detection</div>
 <h2>External threat detection for Copilot Studio — pluggable runtime control</h2>
 <p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">Beyond the built-in UPIA / XPIA protections, Copilot Studio now lets organisations plug in <strong>external threat detection systems</strong> at runtime. The agent calls a customer-configured REST API endpoint every time the orchestrator considers invoking a tool. The endpoint evaluates the proposed tool use and returns an allow/block decision. This gives security teams a hook point to apply organisation-specific policy that Microsoft's built-in classifiers can't cover — third-party threat intel, custom prompt injection detectors, sector-specific guardrails.</p>
@@ -828,7 +545,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <p style="margin-top:8px;"><strong>What defenders should do now:</strong> stay current on patches (the discover-to-patch window is what protects you); reduce attack surface; secure your source code; for organisations that develop software at scale, evaluate the MDASH private preview when it opens more broadly — or equivalent multi-agent vulnerability discovery from other vendors.</p>
 </div>
 
-<div class="page-nav"><a href="mcp.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">MCP</span></a><a href="frameworks.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Frameworks</span></a></div>
+<div class="page-nav"><a href="threats.html#mcp"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">MCP</span></a><a href="threats.html#frameworks"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Frameworks</span></a></div>
 <div style="text-align:center;margin:32px 0 0;padding:24px 0;border-top:1px solid var(--border2);">
   <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text3);margin-bottom:10px;">STAY UPDATED</div>
   <div style="font-size:15px;font-weight:700;color:#0d1526;margin-bottom:6px;">Get notified when Microsoft AI security changes</div>
@@ -838,9 +555,887 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   </a>
   <div style="font-size:11px;color:var(--text3);margin-top:10px;font-family:'JetBrains Mono',monospace;">aiagentsecurity.substack.com · Free · No spam</div>
 </div>
+
+<hr style="border:none;border-top:1px solid var(--border2);margin:56px 0 8px;">
+<div class="section-label" id="frameworks" style="margin-top:24px;">Frameworks, standards &amp; compliance</div>
+<h2>The frameworks layer — OWASP, NIST, ISO and Zero Trust for AI</h2>
+<p style="font-size:14px;color:#2e3d5e;">Threat scenarios tell you what goes wrong; the frameworks below are how the industry names, scores and governs it. (Merged from the former Frameworks page.)</p>
+<div class="section-label" style="margin-top:48px;">OWASP LLM Top 10 (2025)</div>
+<h2>Top 10 security risks for LLM applications and AI agents</h2>
+<p>Source: <a href="https://genai.owasp.org/llm-top-10/" target="_blank" style="color:var(--blue);">OWASP — LLM Top 10 for AI Applications (2025)</a></p>
+<p>Distinct from the OWASP Agentic AI Top 10 below — the LLM Top 10 covers the full range of LLM application risks, while the Agentic Top 10 focuses specifically on multi-agent systems. Every AI agent you deploy is exposed to all ten. Use <a href="product-map.html" style="color:var(--blue);">PyRIT</a> to test for them before deployment.</p>
+
+<table>
+<thead><tr><th>#</th><th>Risk</th><th>What it means for AI agents</th><th>Primary control</th></tr></thead>
+<tbody>
+<tr><td><strong>LLM01</strong></td><td><strong>Prompt Injection</strong></td><td>Malicious instructions override agent instructions. Includes XPIA (cross-prompt injection) via documents, emails, or web content the agent retrieves.</td><td>Prompt Shields, ATG, input validation</td></tr>
+<tr><td><strong>LLM02</strong></td><td><strong>Sensitive Information Disclosure</strong></td><td>Agent leaks PII, credentials, system prompts, or proprietary data in responses or via tool outputs.</td><td>Purview DLP, DSPM for AI, output filtering</td></tr>
+<tr><td><strong>LLM03</strong></td><td><strong>Supply Chain</strong></td><td>Compromised model weights, poisoned training data, malicious plugins, or unsafe third-party MCP servers.</td><td>Foundry model governance, MCP server vetting, Agent Governance Toolkit</td></tr>
+<tr><td><strong>LLM04</strong></td><td><strong>Data and Model Poisoning</strong></td><td>Adversarially modified training or fine-tuning data causes model to behave incorrectly or unsafely.</td><td>Foundry evaluation pipelines, model provenance tracking</td></tr>
+<tr><td><strong>LLM05</strong></td><td><strong>Improper Output Handling</strong></td><td>Agent outputs passed unsanitised to downstream systems — SQL injection via agent-generated queries, XSS via agent-generated HTML, command injection via agent-generated scripts.</td><td>Output validation, sandboxed execution, Foundry code execution controls</td></tr>
+<tr><td><strong>LLM06</strong></td><td><strong>Excessive Agency</strong></td><td>Agent has more permissions, tools, or autonomy than needed. Least agency principle violated.</td><td>Minimal connector/tool assignment, ATG tool allowlisting, least-privilege permissions</td></tr>
+<tr><td><strong>LLM07</strong></td><td><strong>System Prompt Leakage</strong></td><td>Agent reveals its system prompt or instructions — exposing business logic and enabling targeted attacks.</td><td>System prompt hardening, Prompt Shields, jailbreak detection</td></tr>
+<tr><td><strong>LLM08</strong></td><td><strong>Vector and Embedding Weaknesses</strong></td><td>Adversarial inputs manipulate RAG retrieval — poisoned documents inserted into knowledge base alter agent behaviour.</td><td>Document ingestion controls, retrieval validation, SAM RCD for SharePoint</td></tr>
+<tr><td><strong>LLM09</strong></td><td><strong>Misinformation</strong></td><td>Agent generates confident but incorrect information — dangerous in compliance, legal, medical, or financial workflows.</td><td>Human-in-the-loop for high-stakes decisions, Foundry evaluation, grounding with verified sources</td></tr>
+<tr><td><strong>LLM10</strong></td><td><strong>Unbounded Consumption</strong></td><td>Agent consumes excessive compute, tokens, or API calls — enabling denial of service or cost-based attacks.</td><td>Rate limiting, token budgets, ATG blocking, Azure AI throttling</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:12px;">
+  <div class="callout-title">📌 Two risk surfaces — test both before deployment</div>
+  <p>AI red teaming requires testing two surfaces simultaneously: <strong>security vulnerabilities</strong> (LLM01–LLM10) and <strong>responsible AI harms</strong> (bias, toxicity, manipulation). Traditional security testing focuses on only one. Microsoft's PyRIT automates testing across both surfaces — see the Products page for details and Playbooks for the pre-deployment workflow.</p>
+</div>
+
+<div class="section-label" style="margin-top:48px;">OWASP Agentic AI</div>
+<h2>OWASP Top 10 for Agentic Applications 2026</h2>
+<p>In December 2025, OWASP published the first formal taxonomy of risks specific to autonomous AI agents. Unlike the existing OWASP Top 10 for LLM applications (which focuses on model-level risks), the Agentic AI Top 10 covers risks that emerge when AI agents act autonomously — making decisions, invoking tools, and interacting with other agents. Microsoft's <a href="https://github.com/microsoft/agent-governance-toolkit" target="_blank" style="color:var(--blue);">Agent Governance Toolkit</a> (open source, April 2026) maps to all 10 risks.</p>
+
+<table>
+<thead><tr><th>OWASP Risk</th><th>Description</th><th>Microsoft Control</th><th>AGT Coverage</th></tr></thead>
+<tbody>
+<tr><td><strong>Goal Hijacking</strong></td><td>Adversary manipulates agent's objective through prompt injection or environmental data</td><td>Prompt Shield, Entra Internet Access Prompt Injection Protection</td><td>Semantic intent classifier in Agent OS policy engine</td></tr>
+<tr><td><strong>Tool Misuse</strong></td><td>Agent invokes tools beyond intended scope — accessing unauthorised APIs, data, or systems</td><td>Foundry Guardrails, Defender for Cloud Apps CASB</td><td>Capability sandboxing + MCP security gateway</td></tr>
+<tr><td><strong>Identity Abuse</strong></td><td>Agent impersonates users or other agents, acquires excessive permissions</td><td>Entra Agent ID, CA for Agents, ID Protection for Agents</td><td>DID-based identity + behavioural trust scoring</td></tr>
+<tr><td><strong>Supply Chain Risks</strong></td><td>Compromised model, plugin, or dependency introduced into agent pipeline</td><td>Defender for Cloud AI model scanning, GitHub Advanced Security</td><td>Plugin signing with Ed25519 + manifest verification</td></tr>
+<tr><td><strong>Unsafe Code Execution</strong></td><td>Agent executes unvalidated code or scripts with excessive privileges</td><td>Foundry execution sandboxing</td><td>Execution rings with resource limits</td></tr>
+<tr><td><strong>Memory Poisoning</strong></td><td>Adversarial data injected into agent memory or RAG grounding data</td><td>DSPM for AI (grounding data blocking)</td><td>Cross-Model Verification Kernel (CMVK) with majority voting</td></tr>
+<tr><td><strong>Insecure Communications</strong></td><td>Unencrypted or unauthenticated agent-to-agent communication</td><td>Entra Agent ID A2A protocol</td><td>Inter-Agent Trust Protocol (IATP) encryption</td></tr>
+<tr><td><strong>Cascading Failures</strong></td><td>Failure or compromise in one agent propagates through multi-agent chain</td><td>Sentinel AI analytics rules, automated response rules</td><td>Circuit breakers + SLO enforcement</td></tr>
+<tr><td><strong>Human-Agent Trust Exploitation</strong></td><td>Agent manipulates human oversight — bypassing approval workflows or creating false urgency</td><td>Human-in-the-loop controls in Copilot Studio</td><td>Approval workflows with quorum logic</td></tr>
+<tr><td><strong>Rogue Agents</strong></td><td>Agent operates outside intended boundaries — ignoring instructions, self-replicating</td><td>Power Platform admin kill switch, Entra CA for Modern Agents</td><td>Ring isolation, trust decay, automated kill switch</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;">
+  <div class="callout-title">📌 Sources</div>
+  <p><a href="https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/" target="_blank" style="color:var(--blue);">OWASP Top 10 for Agentic Applications 2026</a> · <a href="https://github.com/microsoft/agent-governance-toolkit" target="_blank" style="color:var(--blue);">Microsoft Agent Governance Toolkit (GitHub, April 2026)</a></p>
+</div>
+
+<div class="section-label" style="margin-top:48px;">Regulatory Deadlines</div>
+<h2>Upcoming Compliance Dates — AI Agents</h2>
+<p>Two regulatory frameworks become enforceable in 2026 that directly apply to organisations deploying autonomous AI agents. These are not hypothetical — they have hard enforcement dates.</p>
+
+<table>
+<thead><tr><th>Regulation</th><th>Enforcement Date</th><th>Who It Affects</th><th>Key Obligations for AI Agents</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>EU AI Act — High-Risk AI Obligations</strong></td>
+  <td><span style="font-family:'JetBrains Mono',monospace;font-size:11px;background:rgba(216,59,1,0.1);color:#8a2000;padding:2px 8px;border-radius:4px;border:1px solid rgba(216,59,1,0.2);">August 2026</span></td>
+  <td>Any organisation deploying AI systems classified as high-risk in the EU market</td>
+  <td>Risk management system, data governance, technical documentation, human oversight, accuracy and robustness requirements, logging and auditability obligations</td>
+</tr>
+<tr>
+  <td><strong>Colorado AI Act</strong></td>
+  <td><span style="font-family:'JetBrains Mono',monospace;font-size:11px;background:rgba(216,59,1,0.1);color:#8a2000;padding:2px 8px;border-radius:4px;border:1px solid rgba(216,59,1,0.2);">June 2026</span></td>
+  <td>Developers and deployers of high-risk AI systems affecting Colorado consumers</td>
+  <td>Impact assessments, transparency disclosures, human oversight mechanisms, discrimination risk mitigation, consumer complaint process</td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout callout-warn" style="margin-top:16px;">
+  <div class="callout-title">⚠️ The Classic Agent gap compounds regulatory risk</div>
+  <p>Most existing Copilot Studio agents are Classic agents — outside the Entra security perimeter with no lifecycle governance, no audit trail in Entra, and no automated kill switch. If your high-risk AI deployments include Classic agents, meeting EU AI Act auditability and human oversight obligations will require either migration to Modern agents or compensating controls. Microsoft's planned migration tool does not yet exist.</p>
+</div>
+
+
+<div class="callout callout-info" style="margin-top:16px;">
+  <div class="callout-title">✓ Start here — AI Baseline in Purview Compliance Manager</div>
+  <p>If you're standing up AI governance from zero, the first thing to run is the <strong>AI Baseline assessment</strong> in Purview Compliance Manager (Purview portal → Compliance Manager → Assessments → AI Baseline). It's a pre-built evaluation that automatically scores your tenant against the EU AI Act, NIST AI RMF 1.0, and ISO 42001 — surfacing remediation actions mapped to Purview, Entra, and Defender controls. Run it once to establish your baseline; re-run quarterly to track trend.</p>
+</div>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">🛠️ Closing the gaps operationally — Purview Compliance Manager</div>
+  <p>Beyond the AI Baseline, Compliance Manager includes additional AI-specific regulatory assessment templates that evaluate your tenant against specific obligations and surface prioritised improvement actions for data protection, auditability, and AI usage controls. It's the operational tool that turns each deadline into a task list. Access via the <a href="https://learn.microsoft.com/en-us/purview/compliance-manager" target="_blank" style="color:var(--blue);">Microsoft Purview portal → Compliance Manager</a>.</p>
+</div>
+
+<div class="callout callout-warn" style="margin-top:14px;">
+  <div class="callout-title">⚠ Compliance Manager score ≠ audit-ready compliance assessment</div>
+  <p>The Compliance Manager AI Baseline produces a posture score — useful for tracking trend and prioritising remediation. It is <strong>not</strong> the same as a structured compliance assessment with evidence collection, control testing, gap analysis, and a written findings report suitable for the ICO, EU AI Office, internal audit, or board sign-off. Regulated sectors (financial services, healthcare, public sector) typically need both: the score for operational tracking, and an independently validated assessment for regulator submission. Treating the score as the assessment is a common and significant misconception.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- AI GOVERNANCE OPERATING MODEL -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:48px;">Governance operating model</div>
+<h2>The human layer — forums, cadences, and decision rights</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 18px;">Most failed AI security programmes fail at governance, not technology. Compliance Manager produces evidence; Sentinel produces alerts; PyRIT produces findings. What turns those into sustained risk reduction is the human layer that meets to review them. The forums below are the minimum viable AI governance operating model — they sit alongside (not instead of) existing security governance.</p>
+
+<table>
+<thead><tr><th>Forum</th><th>What it owns</th><th>Attendees</th><th>Frequency</th></tr></thead>
+<tbody>
+<tr><td><strong>AI Security Working Group</strong></td><td>Cross-functional review of new agent deployments, the risk register, compliance posture, weekly KPI trends. Owns the agenda for everything below.</td><td>IT, Security, Data Protection, Legal, key business unit reps</td><td>Monthly</td></tr>
+<tr><td><strong>Agent Lifecycle Board</strong></td><td>Approves new agents, reviews ownerless agents, owns the Classic-to-Modern migration roadmap, signs off on risk-tier overrides. Reviews every HIGH-tier agent.</td><td>Owner (per agent), Sponsor (per agent), IT Approver, security lead</td><td>Monthly</td></tr>
+<tr><td><strong>Quarterly Governance Sweep</strong></td><td>Full Phase 1 KQL re-run, auth-type review, Access Package renewal, DLP exception review, ownerless-agent check cross-referenced with HR data, shadow-AI scan.</td><td>Security ops, IAM ops, Purview admin</td><td>Quarterly</td></tr>
+<tr><td><strong>Annual AI Risk Assessment</strong></td><td>Full estate review against the risk tier rubric, red team prioritisation for the year ahead, compliance framework re-assessment, board pack preparation.</td><td>Working Group + executive sponsor</td><td>Annual</td></tr>
+<tr><td><strong>Agent Red Team Cycle</strong></td><td>Structured adversarial testing of HIGH-tier agents, new agents tested pre-production, regression red teaming on significant change. Findings feed back into Agent Lifecycle Board.</td><td>Internal red team or external partner</td><td>Per new HIGH-tier agent + annual for in-production HIGH agents</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;">
+  <div class="callout-title">📌 What each forum decides</div>
+  <p><strong>Working Group:</strong> direction and prioritisation. <strong>Lifecycle Board:</strong> approval and accountability for individual agents. <strong>Quarterly Sweep:</strong> operational hygiene. <strong>Annual Assessment:</strong> strategy and budget. <strong>Red Team:</strong> evidence. The forums escalate up the table — a Lifecycle Board cannot override the Working Group; an Annual Assessment cannot override the executive sponsor. Document the escalation path explicitly before the first meeting.</p>
+</div>
+
+<div class="section-label">NIST AI RMF</div>
+<h2>NIST AI Risk Management Framework — Four Functions</h2>
+<div class="nist-grid">
+  <a href="https://airc.nist.gov/Docs/1" target="_blank" class="card-link" style="text-decoration:none;"><div class="nist-card">
+    <div class="nist-header" style="background:rgba(0,120,212,0.1);">
+      <div class="nist-badge" style="background:rgba(0,120,212,0.2);color:var(--blue2);">GOVERN</div>
+      <div class="nist-title">Policies, roles, accountability</div>
+    </div>
+    <div class="nist-body">
+      <div class="nist-item"><div class="nist-control">Establish AI risk governance structure</div><div class="nist-tool">Agent 365 · Purview</div></div>
+      <div class="nist-item"><div class="nist-control">Define roles and accountabilities for AI</div><div class="nist-tool">Entra Agent ID</div><div class="nist-gap">⚠ preview · Modern Agents only</div></div>
+      <div class="nist-item"><div class="nist-control">Establish AI lifecycle policies</div><div class="nist-tool">SDL for AI · ZT4AI</div></div>
+      <div class="nist-item"><div class="nist-control">Govern Classic vs Modern agent estate</div><div class="nist-tool">Power Platform Admin + AgentsInfo KQL</div></div>
+      <div class="nist-item"><div class="nist-control">Govern multi-tenant AI environments</div><div class="nist-tool">Entra Tenant Governance</div><div class="nist-gap">Preview · RSAC 2026</div></div>
+      <div class="nist-item"><div class="nist-control">Manage third-party AI and MCP risk</div><div class="nist-tool">Defender for Cloud Apps</div></div>
+      <div class="nist-item"><div class="nist-control">Workforce AI literacy and training</div><div class="nist-gap">⚠ Not a product control</div></div>
+    </div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://airc.nist.gov/Docs/1" target="_blank" class="card-link" style="text-decoration:none;"><div class="nist-card">
+    <div class="nist-header" style="background:rgba(0,133,117,0.1);">
+      <div class="nist-badge" style="background:rgba(0,133,117,0.2);color:var(--teal2);">MAP</div>
+      <div class="nist-title">Context, risks, and impacts</div>
+    </div>
+    <div class="nist-body">
+      <div class="nist-item"><div class="nist-control">Inventory all AI systems in use</div><div class="nist-tool">Security Dashboard for AI</div><div class="nist-gap" style="color:var(--green2);">✓ Now GA</div></div>
+      <div class="nist-item"><div class="nist-control">Inventory agent authentication posture</div><div class="nist-tool">AgentsInfo Advanced Hunting (Defender)</div></div>
+      <div class="nist-item"><div class="nist-control">Identify Classic vs Modern agents</div><div class="nist-tool">Entra Agent ID portal · AgentsInfo KQL</div><div class="nist-gap">⚠ Name sync bug complicates this</div></div>
+      <div class="nist-item"><div class="nist-control">Identify sensitive data exposure</div><div class="nist-tool">Purview DSPM for AI</div></div>
+      <div class="nist-item"><div class="nist-control">Identify shadow AI deployment</div><div class="nist-tool">Entra Internet Access Shadow AI</div><div class="nist-gap" style="color:var(--green2);">GA Mar 31 2026</div></div>
+      <div class="nist-item"><div class="nist-control">Identify threat actors and attack vectors</div><div class="nist-tool">Defender · Sentinel · ZT4AI</div></div>
+      <div class="nist-item"><div class="nist-control">AI bias and fairness assessment</div><div class="nist-gap">⚠ Responsible AI tools (separate)</div></div>
+    </div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://airc.nist.gov/Docs/1" target="_blank" class="card-link" style="text-decoration:none;"><div class="nist-card">
+    <div class="nist-header" style="background:rgba(192,144,32,0.1);">
+      <div class="nist-badge" style="background:rgba(192,144,32,0.2);color:var(--gold2);">MEASURE</div>
+      <div class="nist-title">Analyse, assess, benchmark</div>
+    </div>
+    <div class="nist-body">
+      <div class="nist-item"><div class="nist-control">Continuous AI risk monitoring</div><div class="nist-tool">Security Dashboard · Defender</div><div class="nist-gap" style="color:var(--green2);">Dashboard Now GA</div></div>
+      <div class="nist-item"><div class="nist-control">Measure no-auth and ownerless agents</div><div class="nist-tool">AgentsInfo KQL queries</div></div>
+      <div class="nist-item"><div class="nist-control">Evaluate model safety pre-deployment</div><div class="nist-tool">Foundry Red Teaming + Evals</div></div>
+      <div class="nist-item"><div class="nist-control">Detect credential exposure in data</div><div class="nist-tool">Data Security Posture Agent</div><div class="nist-gap">Preview · RSAC 2026</div></div>
+      <div class="nist-item"><div class="nist-control">Benchmark AI security posture</div><div class="nist-tool">ZT Workshop + ZT Assessment Tool</div><div class="nist-gap"><span class="green-inline">✓ AI pillar now available</span></div></div>
+      <div class="nist-item"><div class="nist-control">Runtime anomaly detection</div><div class="nist-tool">Sentinel · Defender for AI</div></div>
+    </div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://airc.nist.gov/Docs/1" target="_blank" class="card-link" style="text-decoration:none;"><div class="nist-card">
+    <div class="nist-header" style="background:rgba(16,124,16,0.1);">
+      <div class="nist-badge" style="background:rgba(16,124,16,0.2);color:var(--green2);">MANAGE</div>
+      <div class="nist-title">Treat, respond, recover</div>
+    </div>
+    <div class="nist-body">
+      <div class="nist-item"><div class="nist-control">Respond to AI security incidents</div><div class="nist-tool">Sentinel SOAR · Security Copilot</div></div>
+      <div class="nist-item"><div class="nist-control">Enforce access controls on AI systems</div><div class="nist-tool">Entra CA · Foundry Guardrails</div><div class="nist-gap">⚠ Modern Agents only for CA</div></div>
+      <div class="nist-item"><div class="nist-control">Block unauthenticated agent access</div><div class="nist-tool">Power Platform Managed Environments</div><div class="nist-gap" style="color:var(--green2);">Available now</div></div>
+      <div class="nist-item"><div class="nist-control">Manage agent lifecycle (onboard/retire)</div><div class="nist-tool">Entra Agent ID</div><div class="nist-gap">⚠ preview · Modern only</div></div>
+      <div class="nist-item"><div class="nist-control">Enforce data governance in AI workflows</div><div class="nist-tool">Purview · DLP for Copilot</div><div class="nist-gap" style="color:var(--green2);">DLP: GA Mar 31 2026</div></div>
+      <div class="nist-item"><div class="nist-control">Limit blast radius during active attack</div><div class="nist-tool">Defender Predictive Shielding</div><div class="nist-gap">Preview · RSAC 2026</div></div>
+      <div class="nist-item"><div class="nist-control">Recover identity infrastructure</div><div class="nist-tool">Entra Backup and Recovery</div><div class="nist-gap">Preview · RSAC 2026</div></div>
+    </div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+</div>
+
+<div class="section-label">ISO 42001</div>
+<h2>ISO/IEC 42001:2023 — AI Management System</h2>
+<table>
+<thead><tr><th>Clause</th><th>Requirement</th><th>Microsoft Controls</th><th>Gap / Caveat</th></tr></thead>
+<tbody>
+<tr><td><strong>4.2 — Interested Parties</strong></td><td>Identify stakeholders and AI-related requirements</td><td>Agent 365 governance; Purview compliance; Entra Tenant Governance (preview)</td><td>Organisational process — not a product control</td></tr>
+<tr><td><strong>5.2 — AI Policy</strong></td><td>Establish and maintain an AI policy</td><td>SDL for AI; ZT for AI framework; Zero Trust Workshop (microsoft.github.io/zerotrustassessment)</td><td>Policy content is customer-defined; Microsoft provides scaffolding and guided workshop</td></tr>
+<tr><td><strong>6.1 — Risk Assessment</strong></td><td>AI-specific risk identification and assessment process</td><td>Security Dashboard for AI (now GA); Purview DSPM; AgentsInfo Advanced Hunting; Foundry Red Teaming</td><td>Quantitative risk scoring still limited; qualitative posture now available via GA dashboard. Classic Agent estate requires separate inventory.</td></tr>
+<tr><td><strong>6.1.3 — AI Impact Assessment</strong></td><td>Assess impacts on individuals and society</td><td>Microsoft Responsible AI Impact Assessment tools (separate from Security)</td><td>Outside security product scope; separate RAI tooling required</td></tr>
+<tr><td><strong>8.4 — AI System Development</strong></td><td>Security in AI development lifecycle</td><td>SDL for AI; GitHub Advanced Security; Foundry Red Teaming; Classic→Modern Agent migration</td><td>Classic Agent legacy complicates this — agents built before Agent ID may have no secure development baseline</td></tr>
+<tr><td><strong>8.6 — Data for AI Systems</strong></td><td>Data quality, provenance, and governance</td><td>Purview Information Protection; DSPM for AI; DLP for Copilot (GA March 31 2026)</td><td>Training data provenance still limited; inference-time data controls now stronger. Maker credentials can bypass data governance if not configured correctly.</td></tr>
+<tr><td><strong>9.1 — Monitoring & Measurement</strong></td><td>Continuous monitoring of AI system performance and risks</td><td>Security Dashboard (GA); Sentinel + MCP Entity Analyzer; Defender for AI; AgentsInfo KQL; Purview AI Observability</td><td>Good coverage when fully deployed. AI Agent Inventory requires Defender + Power Platform admin collaboration — complex setup.</td></tr>
+<tr><td><strong>10.2 — Continual Improvement</strong></td><td>Improve AIMS based on incidents and audit findings</td><td>Sentinel incident management; SDL feedback loops; ZT Workshop; ZT Assessment AI pillar (now available)</td><td>Classic Agent name sync bug makes agent-level policy improvement tracking difficult.</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info">
+  <div class="callout-title">📌 Framework Coverage — Updated Post-RSAC 2026 + Field Research</div>
+  <p>The GA of Security Dashboard for AI strengthens MAP and MEASURE function coverage. The discovery of the Classic vs Modern agent distinction reveals a gap across <strong>all four functions</strong> — most organisations cannot claim complete GOVERN, MAP, MEASURE, or MANAGE coverage until their Classic Agent estate is migrated to Modern Agents. This is the most significant framework compliance gap identified from field research and is not visible from Microsoft's product documentation alone.</p>
+</div>
+
+
+
+<div class="divider" style="margin-top:56px;"></div>
+
+<div class="section-label" style="margin-top:48px;">Zero Trust for AI</div>
+<h2 id="zero-trust">Applying Zero Trust to AI Workloads</h2>
+<p>Zero Trust isn't just for users and devices. The three core principles apply directly to AI agents, but the implementation looks very different from user-centric Zero Trust. Here's what each principle means in practice — and where the hardest gaps are today.</p>
+
+<div class="zt-principle">
+  <div class="zt-principle-header">
+    <div class="zt-principle-icon">🔍</div>
+    <div><div class="zt-principle-title">Verify Explicitly</div><div class="zt-principle-sub">PRINCIPLE 01 · IDENTITY & AUTHENTICATION</div></div>
+  </div>
+  <div class="zt-principle-body">For users, this means MFA and Conditional Access. For AI agents, it means ensuring every agent has a verified identity — not just a name — before it can access resources or communicate with other agents. In practice: require Entra ID authentication for all agent interactions, register agents in the Agent 365 Registry, and use modern Agent ID authentication (OAuth 2.0) where available. For Copilot Studio agents, this means enforcing one of the four authentication patterns rather than allowing No Authentication. <strong>The hardest part:</strong> Classic Copilot Studio agents authenticate as service principals or OBO — they don't use modern Agent ID and therefore can't be verified by CA for Agents or ID Protection. This is the single biggest gap in Microsoft's current Zero Trust for AI story.</div>
+</div>
+
+<div class="zt-principle">
+  <div class="zt-principle-header">
+    <div class="zt-principle-icon">🔒</div>
+    <div><div class="zt-principle-title">Use Least Privilege</div><div class="zt-principle-sub">PRINCIPLE 02 · ACCESS & PERMISSIONS</div></div>
+  </div>
+  <div class="zt-principle-body">For users, this means JIT/JEA and PIM. For AI agents, it means scoping each agent's permissions to exactly what it needs for its specific task — no broader. In practice: avoid Application permissions (tenant-wide) in favour of Delegated permissions (user-scoped), avoid maker credentials (which grant the maker's full permission set to every user), use access packages for time-bound agent resource assignments, and configure Custom Security Attributes to classify agent access levels for attribute-based CA policies. <strong>The hardest part:</strong> agents are often provisioned broadly "to make sure they work" and permissions are rarely reviewed. Agent lifecycle workflows and access reviews are the operational controls that enforce this principle over time.<br><br><strong>Least agency — an extension of least privilege for AI:</strong> The ZT4AI framework introduces a more specific concept. It is not enough to give an agent a limited set of data sources — you must also limit the APIs, UI actions, and side effects it can invoke. Each connector added to an agent (CRM, ticketing system, database, line-of-business app) expands its blast radius if compromised or manipulated via prompt injection. Least agency means giving agents the minimum set of tools and actions required for the specific task — not everything that might be convenient. In Copilot Studio terms: restrict which connectors and MCP tools are available per agent, not just which data sources it can read.</div>
+</div>
+
+<div class="zt-principle">
+  <div class="zt-principle-header">
+    <div class="zt-principle-icon">🛡️</div>
+    <div><div class="zt-principle-title">Assume Breach</div><div class="zt-principle-sub">PRINCIPLE 03 · DETECTION & RESPONSE</div></div>
+  </div>
+  <div class="zt-principle-body">For users, this means SIEM, SOAR, and EDR. For AI agents, it means assuming any agent could be compromised via prompt injection, malicious tool output, or credential theft — and building detection and containment accordingly. In practice: deploy Sentinel AI analytics rules, configure Defender real-time agent protection, build AI incident response playbooks, and set up automated response rules for high-risk AI activity. <strong>The hardest part:</strong> agent compromise often looks like normal agent behaviour — the agent is doing what it was told, just by an attacker rather than a legitimate user. Detection requires behavioural baselines, not just signature matching.</div>
+</div>
+
+
+
+
+<div class="callout callout-info" style="margin-top:16px;">
+  <div class="callout-title">📌 Three concepts from the ZT4AI announcement worth knowing</div>
+  <p><strong>"Double agents" framing:</strong> Overprivileged, manipulated, or misaligned agents can act like double agents — working against the very outcomes they were built to support. This is Microsoft's framing for why standard least-privilege and assume-breach thinking must extend to AI agents, not just users.</p>
+  <p><strong>Ephemerality Controls (JIT for agents):</strong> Agents should be granted short-lived credentials that expire the moment their specific task is completed. This Just-in-Time model limits blast radius if an agent is compromised mid-task — the attacker's access window is minutes, not days. Entra Agent ID supports this via time-bound access packages and lifecycle workflows.</p>
+  <p><strong>Full AI lifecycle scope:</strong> ZT4AI covers not just agent runtime but the entire AI lifecycle — data ingestion, model training, deployment, and agent behavior. Supply chain and model security are in scope, not just the agent identity and access layer.</p>
+</div>
+<div style="background:linear-gradient(135deg,rgba(0,120,212,0.07),rgba(0,99,177,0.04));border:1.5px solid rgba(0,120,212,0.25);border-radius:12px;padding:20px 24px;margin:24px 0;display:flex;gap:18px;align-items:flex-start;">
+  <div style="font-size:32px;flex-shrink:0;line-height:1;">🗺️</div>
+  <div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;color:var(--blue);margin-bottom:5px;">ZT4AI · OFFICIAL RESOURCE · RSAC 2026</div>
+    <div style="font-size:15px;font-weight:700;color:#0d1526;margin-bottom:6px;">Zero Trust for AI — Reference Architecture</div>
+    <div style="font-size:13px;color:#2e3d5e;line-height:1.6;margin-bottom:10px;">Microsoft published a dedicated Zero Trust for AI reference architecture at RSAC 2026 — an extension of the existing Zero Trust reference architecture. It shows how policy-driven access controls, continuous verification, monitoring, and governance work together to secure AI systems and increase resilience when incidents occur. Covers the full AI lifecycle: data ingestion, model training, deployment, and agent behaviour. Free to use and a practical starting point for any organisation building an AI security roadmap, regardless of how much of the Microsoft stack is in use.</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <a href="https://www.microsoft.com/en-us/security/blog/2026/03/19/new-tools-and-guidance-announcing-zero-trust-for-ai/" target="_blank" style="display:inline-flex;align-items:center;gap:5px;background:var(--blue);color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:7px 14px;border-radius:6px;text-decoration:none;">→ ZT4AI Announcement</a>
+      <a href="https://microsoft.github.io/zerotrustassessment/docs/category/ai" target="_blank" style="display:inline-flex;align-items:center;gap:5px;background:rgba(0,120,212,0.08);color:#004a9e;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:7px 14px;border-radius:6px;text-decoration:none;border:1px solid rgba(0,120,212,0.2);">→ ZT Workshop AI Controls</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="section-label" style="margin-top:48px;">Access Fabric</div>
+<h2>The Access Fabric — Microsoft's Architectural Framing for AI-Scale Access</h2>
+<p>Alongside ZT4AI, Microsoft has introduced the <strong>Access Fabric</strong> concept — an architectural approach that treats access as a continuous, end-to-end system rather than a set of point controls. It uses identity as the consistent decision point and enforces those decisions across environments in near real time.</p>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0;">
+  <div class="card" style="border-color:rgba(0,120,212,0.2);">
+    <div class="card-name" style="color:var(--blue);">🏗️ What an Access Fabric provides</div>
+    <div class="card-desc">A common identity foundation for employees, workloads, and AI agents. Near-real-time enforcement of access decisions across the network. Continuous signal sharing across identity, network, and security tools. Faster propagation of policy and risk changes without manual stitching between tools.</div>
+  </div>
+  <div class="card" style="border-color:rgba(216,59,1,0.2);">
+    <div class="card-name" style="color:#c23000;">⚠️ Why fragmentation is the enemy</div>
+    <div class="card-desc">Microsoft research found organisations use an average of <strong>5 identity solutions and 4 network access tools</strong> — often from different vendors. Nearly half of security leaders report being overwhelmed by vendor sprawl. With AI agents operating at machine speed, static decisions and delayed enforcement create exploitable gaps.</div>
+  </div>
+</div>
+
+<div class="callout callout-info" style="margin-top:8px;">
+  <div class="callout-title">📌 Why this matters for AI agent security specifically</div>
+  <p>AI agents operate continuously, interact with multiple systems, and often require broad access. In a fragmented access environment, policy changes take longer to propagate, visibility is partial, and gaps between tools create openings. The Access Fabric model is directly relevant to Microsoft's agent security story — the same integrated Entra + Defender + Purview platform that Microsoft markets for agent governance is its implementation of this concept. The Classic vs Modern agent gap is a concrete example of what fragmentation looks like in practice: agents outside the Entra perimeter get zero coverage from the access fabric regardless of what other controls are deployed.</p>
+</div>
+
+<div class="section-label" style="margin-top:48px;">Zero Trust Maturity Model</div>
+<h2>Where to start — a staged approach</h2>
+<p>Don't try to implement all 700+ ZT Workshop AI controls (116 logical groups, 33 swim lanes) at once. This three-stage model gives organisations a practical sequence from zero visibility to full automation.</p>
+
+<div class="zt-maturity">
+  <div class="zt-stage" style="border-color:rgba(0,120,212,0.3);background:rgba(0,120,212,0.04);">
+    <div class="zt-stage-num" style="color:var(--blue);">STAGE 01</div>
+    <div class="zt-stage-name" style="color:#0d1526;">Visibility</div>
+    <div class="zt-stage-desc" style="color:#2e3d5e;">Know what you have before you try to control it. Most organisations skip this and jump to controls — then discover the controls don't apply to most of their agents.</div>
+    <div class="zt-stage-items">
+      <div class="zt-stage-item" style="color:#0d1526;">Discover agents in Agent 365 Registry</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Enable AI Agent Inventory (Defender)</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Run Playbook 01 KQL audit queries</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Identify Classic vs Modern agents</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Triage no-auth and maker-cred agents</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Assign owners to all published agents</div>
+    </div>
+  </div>
+  <div class="zt-stage" style="border-color:rgba(255,140,0,0.3);background:rgba(255,140,0,0.04);">
+    <div class="zt-stage-num" style="color:#8a5000;">STAGE 02</div>
+    <div class="zt-stage-name" style="color:#0d1526;">Control</div>
+    <div class="zt-stage-desc" style="color:#2e3d5e;">Apply identity and access controls to the agents you've inventoried. Focus on the highest-risk patterns first — no-auth, maker credentials, org-wide sharing.</div>
+    <div class="zt-stage-items">
+      <div class="zt-stage-item" style="color:#0d1526;">Enforce Entra ID auth on all agents</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Deploy CA posture for Modern Agents</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Enable ID Protection for Agents</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Configure Global Secure Access for agents</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Deploy DSPM for AI + DLP policies</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Enable Defender real-time protection</div>
+    </div>
+  </div>
+  <div class="zt-stage" style="border-color:rgba(16,124,16,0.3);background:rgba(16,124,16,0.04);">
+    <div class="zt-stage-num" style="color:#0a5a20;">STAGE 03</div>
+    <div class="zt-stage-name" style="color:#0d1526;">Automation</div>
+    <div class="zt-stage-desc" style="color:#2e3d5e;">Operationalise your controls so they scale without manual effort. Governance that requires manual review of every agent will break down as agent count grows.</div>
+    <div class="zt-stage-items">
+      <div class="zt-stage-item" style="color:#0d1526;">Lifecycle workflows for mover/leaver</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Access reviews for agent permissions</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Automated response rules in Sentinel</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Graph API agent registry management</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Recurring AI threat review cadence</div>
+      <div class="zt-stage-item" style="color:#0d1526;">Red teaming cadence for all agents</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label" style="margin-top:48px;">Priority Controls</div>
+<h2>The highest-impact ZT Workshop AI controls</h2>
+<p>From the 700+ controls in the <a href="https://microsoft.github.io/zerotrustassessment/docs/category/ai" target="_blank" style="color:var(--blue);">Microsoft Zero Trust Assessment Workshop AI section</a>, these are the ones security architects should prioritise first.</p>
+
+<div class="zt-controls-grid">
+  <div class="zt-control">
+    <div class="zt-control-id">AI_000 · IDENTITY</div>
+    <div class="zt-control-name">Require Entra ID Auth for All Agent Interactions</div>
+    <div class="zt-control-desc">Ensure every agent that interacts with users or data authenticates via Entra ID. No anonymous or no-auth agents in production. Foundation for everything else.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_001–002 · VISIBILITY</div>
+    <div class="zt-control-name">Discover, Inventory and Assign Ownership</div>
+    <div class="zt-control-desc">Use Agent 365 Registry to discover all agents. Triage each one and assign an accountable owner. Unowned agents are your highest sprawl risk.</div>
+    <span class="zt-effort effort-low">LOW EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_005 · IDENTITY</div>
+    <div class="zt-control-name">Custom Security Attributes for Agent Classification</div>
+    <div class="zt-control-desc">Tag agents with custom attributes (risk level, data sensitivity, environment). Enables attribute-based CA policies that scale to hundreds of agents without per-agent rules — directly addresses the agent name sync gap.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_006 · IDENTITY</div>
+    <div class="zt-control-name">ID Protection + Risk-Based CA for Agents</div>
+    <div class="zt-control-desc">Enable Identity Protection risk signals for Modern Agents and deploy risk-based CA policies. Automatically blocks high-risk agents without manual intervention.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_014 · GOVERNANCE</div>
+    <div class="zt-control-name">Lifecycle Workflows for Sponsor Mover/Leaver</div>
+    <div class="zt-control-desc">When the person who sponsors an agent leaves the organisation, a workflow must reassign sponsorship or decommission the agent. Without this, agents become orphaned and unmanaged over time.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_072 · RUNTIME</div>
+    <div class="zt-control-name">Content Safety SDK for All Agent Inputs</div>
+    <div class="zt-control-desc">Require all agents to pass inputs through Azure AI Content Safety before processing. Detects prompt injection, harmful content, and jailbreak attempts at the input layer before the model sees them.</div>
+    <span class="zt-effort effort-high">HIGH EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_077 · MCP</div>
+    <div class="zt-control-name">APIM Gateway for All MCP Server Deployments</div>
+    <div class="zt-control-desc">Require Azure API Management as a governance layer in front of all custom MCP servers. Provides authentication, rate limiting, logging, and policy enforcement at the tool layer.</div>
+    <span class="zt-effort effort-high">HIGH EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_080 · DATA</div>
+    <div class="zt-control-name">Sensitivity Label Inheritance for AI Outputs</div>
+    <div class="zt-control-desc">AI-generated content should inherit the highest sensitivity label of its source data. Without this, a Confidential document summarised by an agent produces an Unclassified output — bypassing your data protection controls.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_090–091 · DETECT</div>
+    <div class="zt-control-name">Sentinel AI Analytics Rules</div>
+    <div class="zt-control-desc">Enable AI-specific analytics rules for prompt injection detection and create custom rules for agent anomaly detection. Also configure AI threat detection workbooks for ongoing visibility.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_094 · RESPOND</div>
+    <div class="zt-control-name">Automated Response Rules for High-Risk AI Activity</div>
+    <div class="zt-control-desc">Configure SOAR-style automated containment for high-risk AI activity — automatic agent suspension, access revocation, or alert escalation without waiting for manual triage.</div>
+    <span class="zt-effort effort-high">HIGH EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_081–083 · RUNTIME</div>
+    <div class="zt-control-name">AI Red Teaming Cadence</div>
+    <div class="zt-control-desc">Configure AI Red Teaming Agent in Microsoft Foundry. Establish red teaming as a requirement for all new agent deployments and a recurring validation cadence (quarterly recommended) for existing agents.</div>
+    <span class="zt-effort effort-high">HIGH EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_128 · MCP</div>
+    <div class="zt-control-name">MCP Management Server</div>
+    <div class="zt-control-desc">Deploy a dedicated MCP Management Server as the control plane for all custom MCP server deployments. Provides centralised approval, discovery, and governance of the tool layer — the MCP equivalent of an app catalogue.</div>
+    <span class="zt-effort effort-high">HIGH EFFORT</span>
+  </div>
+</div>
+
+<div class="callout callout-info" style="margin-top:32px;">
+  <div class="callout-title">📌 Full control list</div>
+
+<div class="section-label" style="margin-top:48px;">Priority Controls</div>
+<h2>The highest-impact ZT Workshop AI controls</h2>
+<p>From the 700+ controls in the <a href="https://microsoft.github.io/zerotrustassessment/docs/category/ai" target="_blank" style="color:var(--blue);">Microsoft Zero Trust Assessment Workshop AI section</a>, these are the ones security architects should prioritise first.</p>
+
+<div class="zt-controls-grid">
+  <div class="zt-control">
+    <div class="zt-control-id">AI_000 · IDENTITY</div>
+    <div class="zt-control-name">Require Entra ID Auth for All Agent Interactions</div>
+    <div class="zt-control-desc">Ensure every agent that interacts with users or data authenticates via Entra ID. No anonymous or no-auth agents in production. Foundation for everything else.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_001–002 · VISIBILITY</div>
+    <div class="zt-control-name">Discover, Inventory and Assign Ownership</div>
+    <div class="zt-control-desc">Use Agent 365 Registry to discover all agents. Triage each one and assign an accountable owner. Unowned agents are your highest sprawl risk.</div>
+    <span class="zt-effort effort-low">LOW EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_005 · IDENTITY</div>
+    <div class="zt-control-name">Custom Security Attributes for Agent Classification</div>
+    <div class="zt-control-desc">Tag agents with custom attributes (risk level, data sensitivity, environment). Enables attribute-based CA policies that scale to hundreds of agents without per-agent rules — directly addresses the agent name sync gap.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_006 · IDENTITY</div>
+    <div class="zt-control-name">ID Protection + Risk-Based CA for Agents</div>
+    <div class="zt-control-desc">Enable Identity Protection risk signals for Modern Agents and deploy risk-based CA policies. Automatically blocks high-risk agents without manual intervention.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_014 · GOVERNANCE</div>
+    <div class="zt-control-name">Lifecycle Workflows for Sponsor Mover/Leaver</div>
+    <div class="zt-control-desc">When the person who sponsors an agent leaves the organisation, a workflow must reassign sponsorship or decommission the agent. Without this, agents become orphaned and unmanaged over time.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_072 · RUNTIME</div>
+    <div class="zt-control-name">Content Safety SDK for All Agent Inputs</div>
+    <div class="zt-control-desc">Require all agents to pass inputs through Azure AI Content Safety before processing. Detects prompt injection, harmful content, and jailbreak attempts at the input layer before the model sees them.</div>
+    <span class="zt-effort effort-high">HIGH EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_077 · MCP</div>
+    <div class="zt-control-name">APIM Gateway for All MCP Server Deployments</div>
+    <div class="zt-control-desc">Require Azure API Management as a governance layer in front of all custom MCP servers. Provides authentication, rate limiting, logging, and policy enforcement at the tool layer.</div>
+    <span class="zt-effort effort-high">HIGH EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_080 · DATA</div>
+    <div class="zt-control-name">Sensitivity Label Inheritance for AI Outputs</div>
+    <div class="zt-control-desc">AI-generated content should inherit the highest sensitivity label of its source data. Without this, a Confidential document summarised by an agent produces an Unclassified output — bypassing your data protection controls.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_090–091 · DETECT</div>
+    <div class="zt-control-name">Sentinel AI Analytics Rules</div>
+    <div class="zt-control-desc">Enable AI-specific analytics rules for prompt injection detection and create custom rules for agent anomaly detection. Also configure AI threat detection workbooks for ongoing visibility.</div>
+    <span class="zt-effort effort-med">MEDIUM EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_094 · RESPOND</div>
+    <div class="zt-control-name">Automated Response Rules for High-Risk AI Activity</div>
+    <div class="zt-control-desc">Configure SOAR-style automated containment for high-risk AI activity — automatic agent suspension, access revocation, or alert escalation without waiting for manual triage.</div>
+    <span class="zt-effort effort-high">HIGH EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_081–083 · RUNTIME</div>
+    <div class="zt-control-name">AI Red Teaming Cadence</div>
+    <div class="zt-control-desc">Configure AI Red Teaming Agent in Microsoft Foundry. Establish red teaming as a requirement for all new agent deployments and a recurring validation cadence (quarterly recommended) for existing agents.</div>
+    <span class="zt-effort effort-high">HIGH EFFORT</span>
+  </div>
+  <div class="zt-control">
+    <div class="zt-control-id">AI_128 · MCP</div>
+    <div class="zt-control-name">MCP Management Server</div>
+    <div class="zt-control-desc">Deploy a dedicated MCP Management Server as the control plane for all custom MCP server deployments. Provides centralised approval, discovery, and governance of the tool layer — the MCP equivalent of an app catalogue.</div>
+    <span class="zt-effort effort-high">HIGH EFFORT</span>
+  </div>
+</div>
+
+<div class="callout callout-info" style="margin-top:32px;">
+  <div class="callout-title">📌 Full control list</div>
+  <p>The 12 controls shown above are the highest-impact subset of the full Zero Trust Workshop AI catalogue. For the complete list of controls including effort, dependencies, and implementation notes, see the <a href="threats.html#zero-trust" style="color:var(--blue);">dedicated Zero Trust for AI page</a>.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- OPEN-SOURCE AI TRUST STACK (Build 2026) -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:48px;">Open trust stack for AI agents</div>
+<h2>ASSERT + Agent Control Specification — Microsoft's open trust standards (Build 2026)</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">Alongside the Build 2026 product announcements, Microsoft published an open-source trust stack — two projects designed to standardise agent evaluation and control across <strong>any framework</strong>, not just Microsoft-built agents. Worth tracking even if you aren't yet using them: they signal where Microsoft expects industry-wide agent governance standards to converge.</p>
+
+<table>
+<thead><tr><th>Project</th><th>What it does</th><th>Why a security architect should care</th></tr></thead>
+<tbody>
+<tr><td><strong>ASSERT</strong><br><span style="font-size:11px;color:var(--text3);">Adaptive Spec-driven Scoring for Evaluation and Regression Testing</span></td><td>Open-source framework for <strong>policy-driven safety evaluation</strong> of AI agents. Define a policy spec, run automated evaluations, get a score, gate releases on the score. Adaptive — adjusts test depth based on detected risk in the agent's behaviour.</td><td>Provides the missing "test coverage gate" for agent CI/CD. Treats safety evaluation like unit test coverage. Combined with PyRIT (Microsoft's red-team tool), gives a complete pre-deployment evaluation pipeline. Use as the release-gate criterion in Phase 4 (Runtime Protection) of the six-phase strategy.</td></tr>
+<tr><td><strong>Agent Control Specification (ACS)</strong></td><td>Standardises <strong>where and how to apply controls in the agent loop</strong>. Defines hook points (prompt receive, tool call, response generation, action commit) and a policy schema describing what controls run at each point.</td><td>The agentic equivalent of OWASP Top 10 + CWE for traditional apps. Once vendor tools converge on ACS-compatible policy schemas, controls become portable across runtimes (Copilot Studio, Foundry, OpenClaw, third-party). Reduces lock-in. Worth referencing now in vendor evaluation criteria — "is your control framework ACS-aligned?"</td></tr>
+</tbody>
+</table>
+
+<p style="font-size:12px;color:var(--text2);margin-top:10px;">↗ <strong>Note:</strong> Earlier coverage on this site listed "Codename MDASH" alongside ASSERT and ACS as part of an "open trust stack". That was based on partial information — MDASH is actually a Microsoft-internal <em>vulnerability discovery</em> system (autonomous code security), not an open standard. See the <a href="threats.html" style="color:var(--blue);">threats page</a> for proper coverage of MDASH and what it means for the threat landscape.</p>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 The strategic positioning</div>
+  <p>Microsoft is doing for agentic AI what they did for identity (OpenID Connect, FIDO) and zero trust (the Zero Trust principles): publish open standards that lower the cost of interoperability and shape the industry around their preferred shape. For your architecture decisions, the practical implication is to <strong>prefer agent runtimes and control frameworks that align with ACS hook points</strong> — even if you don't adopt the spec wholesale today. It positions you for the next wave of cross-platform agent security tools without committing to a single vendor's proprietary control model.</p>
+</div>
+
+<div class="page-nav"><a href="threats.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Threats</span></a><a href="overview.html#gaps"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Gaps</span></a></div>
+<div style="text-align:center;margin:32px 0 0;padding:24px 0;border-top:1px solid var(--border2);">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text3);margin-bottom:10px;">STAY UPDATED</div>
+  <div style="font-size:15px;font-weight:700;color:#0d1526;margin-bottom:6px;">Get notified when Microsoft AI security changes</div>
+  <div style="font-size:13px;color:#2e3d5e;margin-bottom:14px;">Monthly updates on new controls, GA announcements, and critical gaps — direct to your inbox.</div>
+  <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#ffffff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;padding:12px 24px;border-radius:8px;text-decoration:none;transition:opacity 0.15s;" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">
+    Subscribe to updates →
+  </a>
+  <div style="font-size:11px;color:var(--text3);margin-top:10px;font-family:'JetBrains Mono',monospace;">aiagentsecurity.substack.com · Free · No spam</div>
+</div>
+
+
+<hr style="border:none;border-top:1px solid var(--border2);margin:56px 0 8px;">
+<div class="section-label" id="mcp" style="margin-top:24px;">MCP &amp; the tool supply chain</div>
+<h2>MCP security — architecture, attack vectors and controls</h2>
+<p style="font-size:14px;color:#2e3d5e;">Tools are how agent threats become real-world actions: every MCP server is a supply-chain dependency with tenant access. (Merged from the former MCP page.)</p>
+<div class="section-label">MCP Architecture</div>
+<h2>The Three-Layer MCP Model</h2>
+<p>MCP defines how AI agents discover, connect to, and invoke tools, data sources, and services across a standard protocol. With Microsoft's official server catalog, MCP is now enterprise infrastructure — not a prototype technology.</p>
+<div class="mcp-layer">
+  <div class="mcp-layer-header" style="background:rgba(0,120,212,0.1);">
+    <div class="mcp-layer-title" style="color:var(--blue2);">Layer 1 — MCP Host (the AI agent / client)</div>
+  </div>
+  <div class="mcp-layer-body">
+    <div class="mcp-item control">Copilot Studio agent (MCP tools natively supported)</div>
+    <div class="mcp-item control">Microsoft Foundry agent</div>
+    <div class="mcp-item control">GitHub Copilot (VS Code / Visual Studio)</div>
+    <div class="mcp-item control">Custom LLM application</div>
+    <div class="mcp-item risk">Shadow / unsanctioned agents with unreviewed MCP tools</div>
+  </div>
+</div>
+<div class="mcp-layer">
+  <div class="mcp-layer-header" style="background:rgba(98,100,167,0.1);">
+    <div class="mcp-layer-title" style="color:#a4a8d8;">Layer 2 — MCP Server (the tool/connector layer)</div>
+  </div>
+  <div class="mcp-layer-body">
+    <div class="mcp-item control">Microsoft Azure MCP Server</div>
+    <div class="mcp-item control">GitHub MCP Server</div>
+    <div class="mcp-item control">SharePoint / M365 MCP Server</div>
+    <div class="mcp-item control">Azure DevOps MCP Server</div>
+    <div class="mcp-item control">SQL Server MCP Server</div>
+    <div class="mcp-item risk">Third-party / community MCP servers (unvetted)</div>
+    <div class="mcp-item risk">Often lacks authentication in OSS implementations</div>
+    <div class="mcp-item risk">Tool descriptions (used by agent for routing) can be poisoned</div>
+  </div>
+</div>
+<div class="mcp-layer">
+  <div class="mcp-layer-header" style="background:rgba(0,133,117,0.1);">
+    <div class="mcp-layer-title" style="color:var(--teal2);">Layer 3 — Backend Resources</div>
+  </div>
+  <div class="mcp-layer-body">
+    <div class="mcp-item">Azure subscriptions / resource groups</div>
+    <div class="mcp-item">GitHub repositories / issues / PRs</div>
+    <div class="mcp-item">SharePoint / OneDrive / Exchange</div>
+    <div class="mcp-item">SQL databases</div>
+    <div class="mcp-item">Salesforce, ServiceNow, Jira (via third-party servers)</div>
+    <div class="mcp-item risk">All accessed using the agent's credentials — in Copilot Studio, this is maker credentials by default</div>
+  </div>
+</div>
+
+<div class="section-label">Copilot Studio + MCP</div>
+<h2>Copilot Studio MCP Tools — A Specific Risk Pattern</h2>
+<p>When a Copilot Studio agent is configured with MCP tools, the agent authenticates to those MCP servers using maker credentials by default. This means:</p>
+<div class="card-grid">
+  <a href="https://www.microsoft.com/en-us/security/blog/2026/02/12/copilot-studio-agent-security-top-10-risks-detect-prevent/" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.3);">
+    <div class="card-name">⚠ Maker Credentials × MCP Tools</div>
+    <div class="card-desc">The maker (developer/admin) connects an Azure MCP server to a Copilot Studio agent. The agent authenticates to Azure as the maker. If the agent is shared org-wide with no authentication, every employee can trigger Azure resource queries or management actions — using the maker's Azure permissions.</div>
+    <div class="tag-row"><span class="tag warn">CRITICAL COMBINATION</span><span class="tag">Copilot Studio</span></div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://github.com/microsoft/mcp" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.3);">
+    <div class="card-name">⚠ Unreviewed MCP Tool Lifecycle</div>
+    <div class="card-desc">MCP tools added to a Copilot Studio agent are not subject to the same App Registration review as traditional app permissions. Microsoft recommends using the "MCP Tool Configured" Advanced Hunting query and enforcing lifecycle reviews for every MCP tool configuration in the environment.</div>
+    <div class="tag-row"><span class="tag warn">Governance Gap</span><span class="tag">KQL Detectable</span></div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+</div>
+
+<div class="section-label">Attack Vectors</div>
+<h2>MCP-Specific Attack Vectors</h2>
+<table>
+<thead><tr><th>Attack</th><th>How It Works</th><th>Impact</th><th>Primary Control</th></tr></thead>
+<tbody>
+<tr><td><strong>Tool Poisoning</strong></td><td>Malicious MCP server returns poisoned tool descriptions. Agent reads descriptions to decide which tool to invoke — poisoned descriptions redirect agent to attacker-controlled tools.</td><td><span class="severity-critical">CRITICAL</span> Full agent hijack</td><td>Foundry Guardrails (whitelist); Defender for Cloud Apps (MCP server governance)</td></tr>
+<tr><td><strong>MCP Server Impersonation</strong></td><td>Attacker substitutes a malicious MCP server (DNS hijack, supply chain, local server swap). Agent connects to attacker's server and receives malicious tool outputs.</td><td><span class="severity-critical">CRITICAL</span> Data exfiltration, action hijack</td><td>Defender for Cloud Apps (MCP server registry); no cryptographic binding standard in MCP spec</td></tr>
+<tr><td><strong>Indirect Prompt Injection via MCP</strong></td><td>Malicious instructions embedded in data returned by an MCP tool. Agent treats the embedded text as legitimate instruction and acts on it using maker credentials.</td><td><span class="severity-critical">CRITICAL</span> Data exfiltration, lateral movement</td><td>Prompt Shields (XPIA detection); Entra Internet Access Prompt Injection Protection (GA Mar 31 2026)</td></tr>
+<tr><td><strong>OAuth Scope Abuse</strong></td><td>Agent inherits overly broad OAuth scopes from maker credentials when connecting to MCP-backed SaaS. Broad token enables lateral movement across multiple services.</td><td><span class="severity-high">HIGH</span> Lateral movement across SaaS</td><td>Defender for Cloud Apps OAuth governance; enforce end-user auth per agent</td></tr>
+<tr><td><strong>Unauthenticated MCP Server</strong></td><td>Many community MCP servers have no authentication. Any agent or attacker on the network can call them without credentials.</td><td><span class="severity-high">HIGH</span> Unauthorised tool execution</td><td>Network segmentation; Entra Internet Access; security review of MCP server implementations</td></tr>
+<tr><td><strong>MCP Supply Chain Attack</strong></td><td>Malicious package in MCP server registry. Enterprise deploys a compromised MCP server — attacker gains persistent access to the agent's tool layer.</td><td><span class="severity-high">HIGH</span> Persistent backdoor in agent tooling</td><td>Defender for Cloud (supply chain scanning); Security Dashboard AI Inventory; GitHub Advanced Security</td></tr>
+<tr><td><strong>Unreviewed MCP Tool in Copilot Studio</strong></td><td>Developer adds a community MCP server to a Copilot Studio agent without security review. Agent runs with maker credentials against unvetted tool surface.</td><td><span class="severity-high">HIGH</span> Uncontrolled action surface</td><td>"MCP Tool Configured" Advanced Hunting query; enforce MCP tool lifecycle reviews</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-warn">
+  <div class="callout-title">⚠ Critical Gap: No Strong MCP Server Authentication Standard</div>
+  <p>The MCP specification (as of early 2026) does not mandate strong cryptographic authentication for MCP server-to-client binding. Microsoft's official MCP catalog servers use standard OAuth where supported, but third-party and community servers vary widely. There is no platform-enforced way to guarantee the MCP server an agent connects to is the legitimate, unmodified server it expects. This requires defence-in-depth at the network, CASB, and orchestration layers — no single product closes it.</p>
+</div>
+
+<div class="section-label">Microsoft Controls</div>
+<h2>How Microsoft Secures the MCP Boundary</h2>
+<div class="card-grid">
+  <a href="https://learn.microsoft.com/en-us/defender-cloud-apps/ai-agent-protection" target="_blank" class="card-link"><div class="card" style="border-color:rgba(0,120,212,0.2);">
+    <div class="card-name">Defender for Cloud Apps (CASB)</div>
+    <div class="card-desc">Primary control for MCP-to-SaaS boundary. Discovers MCP-connected SaaS apps. Governs OAuth permissions. Detects anomalous access from agent-driven API calls. Can block or alert on risky MCP-to-SaaS connections. For Copilot Studio specifically: provides real-time protection — blocks tool invocations if prompt is suspicious (1-second timeout, then allow if no decision).</div>
+    <div class="tag-row"><span class="tag green">GA</span><span class="tag">OAuth Governance</span><span class="tag">RT Protection</span></div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://learn.microsoft.com/en-us/security/security-for-ai/security-dashboard-for-ai" target="_blank" class="card-link"><div class="card" style="border-color:rgba(84,176,84,0.15);">
+    <div class="card-name">Security Dashboard — AI Inventory</div>
+    <div class="card-desc">Includes MCP servers in AI inventory — now GA. Discovery and risk assessment of MCP servers across the environment including those deployed without IT knowledge. Coverage extends to third-party AI including ChatGPT, Gemini, and MCP servers.</div>
+    <div class="tag-row"><span class="tag green">✓ Now GA · RSAC 2026</span><span class="tag">MCP Server Discovery</span></div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://azure.microsoft.com/en-us/products/ai-foundry" target="_blank" class="card-link"><div class="card" style="border-color:rgba(252,225,0,0.15);">
+    <div class="card-name">Foundry Guardrails</div>
+    <div class="card-desc">For Foundry-deployed agents — define which MCP tools the agent is allowed to invoke. Whitelist at the orchestration layer. Does not apply to Copilot Studio agents — each platform has its own governance model.</div>
+    <div class="tag-row"><span class="tag caution">Preview</span><span class="tag">Tool Whitelist</span><span class="tag warn">⚠ Foundry only — not Copilot Studio</span></div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://learn.microsoft.com/en-us/azure/ai-services/content-safety/concepts/jailbreak-detection" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.15);">
+    <div class="card-name">Prompt Shields</div>
+    <div class="card-desc">Primary defence against indirect prompt injection via MCP tool outputs. Inspects content flowing from MCP responses into agent context before reaching the model.</div>
+    <div class="tag-row"><span class="tag green">GA</span><span class="tag">XPIA Defence</span><span class="tag">Tool Output Inspection</span></div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://learn.microsoft.com/en-us/entra/global-secure-access/how-to-manage-microsoft-profile" target="_blank" class="card-link"><div class="card" style="border-color:rgba(216,59,1,0.15);">
+    <div class="card-name">Entra Internet Access — Prompt Injection Protection</div>
+    <div class="card-desc">Network-layer enforcement blocking malicious AI prompts across apps and agents. Complements Prompt Shields at the network boundary. GA March 31 2026, 2026.</div>
+    <div class="tag-row"><span class="tag green">GA March 31 2026</span><span class="tag">Network Layer</span></div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+  <a href="https://learn.microsoft.com/en-us/azure/sentinel/overview" target="_blank" class="card-link"><div class="card" style="border-color:rgba(84,176,84,0.15);">
+    <div class="card-name">Sentinel MCP Entity Analyzer</div>
+    <div class="card-desc">Natural language querying of MCP entity data within Sentinel investigations. GA April 2026. Enables analysts to explore MCP-connected entity relationships without writing KQL from scratch.</div>
+    <div class="tag-row"><span class="tag blue">GA April 2026</span><span class="tag">Natural Language</span><span class="tag">Sentinel</span></div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
+</div>
+
+<div class="section-label">Defence Architecture</div>
+<h2>Layered MCP Defence-in-Depth</h2>
+<table>
+<thead><tr><th>Layer</th><th>What It Covers</th><th>Microsoft Control</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td><strong>Catalog governance</strong></td><td>Vetting which MCP servers are approved for use; lifecycle reviews</td><td>Internal policy + "MCP Tool Configured" Advanced Hunting query</td><td><span class="caution-inline">Process control — no product enforcement</span></td></tr>
+<tr><td><strong>Network</strong></td><td>Control which MCP servers agents can reach; block malicious prompts</td><td>Entra Internet Access</td><td><span class="green-inline">GA Mar 31 2026</span></td></tr>
+<tr><td><strong>Identity</strong></td><td>Authenticate which agents can invoke which MCP tools; prevent maker credential blast radius</td><td>Enforce end-user auth (Power Platform admin)</td><td><span class="green-inline">Available now</span></td></tr>
+<tr><td><strong>Orchestration</strong></td><td>Whitelist allowed tools per agent (Foundry only)</td><td>Foundry Guardrails</td><td><span class="caution-inline">Preview · Foundry only</span></td></tr>
+<tr><td><strong>Content Inspection</strong></td><td>Detect adversarial instructions in MCP tool outputs</td><td>Prompt Shields</td><td><span class="green-inline">GA</span></td></tr>
+<tr><td><strong>Runtime Protection</strong></td><td>Block tool invocations during suspicious Copilot Studio agent activity</td><td>Defender for Cloud Apps real-time protection</td><td><span class="caution-inline">Preview · Copilot Studio only</span></td></tr>
+<tr><td><strong>SaaS Governance</strong></td><td>OAuth scope governance; anomalous API usage detection</td><td>Defender for Cloud Apps</td><td><span class="green-inline">GA</span></td></tr>
+<tr><td><strong>Inventory &amp; Posture</strong></td><td>Discover all MCP servers; assess risk</td><td>Security Dashboard for AI</td><td><span class="green-inline">Now GA</span></td></tr>
+<tr><td><strong>Investigation</strong></td><td>NL querying of MCP entity relationships in Sentinel</td><td>Sentinel MCP Entity Analyzer</td><td><span class="green-inline">GA April</span></td></tr>
+</tbody>
+</table>
+
+
+
+<div class="section-label" style="margin-top:32px;">Agent-to-Agent (A2A) Protocol</div>
+<h2>Beyond MCP — A2A for Inter-Agent Communication</h2>
+<p>While MCP governs how agents connect to external tools and data sources, <strong>A2A (Agent-to-Agent)</strong> is an emerging protocol for authenticated communication between agents themselves. Microsoft's Entra Agent ID platform now supports A2A for agent-to-agent discovery and authorisation — enabling orchestration agents to delegate tasks to sub-agents with verified identities. This is separate from MCP and addresses a different attack surface: the communication channels between agents in multi-agent architectures.</p>
+<div class="card-grid" style="grid-template-columns:1fr 1fr;margin-top:16px;">
+  <div class="card">
+    <div class="card-name">MCP (Model Context Protocol)</div>
+    <div class="card-desc">Governs agent-to-tool and agent-to-data-source connections. An agent calls an external tool (file system, API, database) via MCP. Standardised by Anthropic, adopted by Microsoft.</div>
+    <div class="tag-row"><span class="tag green">Widely adopted</span><span class="tag">Agent → Tool</span></div>
+  </div>
+  <div class="card">
+    <div class="card-name">A2A (Agent-to-Agent Protocol)</div>
+    <div class="card-desc">Governs agent-to-agent communication and delegation. An orchestration agent delegates tasks to sub-agents via A2A with identity verification. Emerging standard supported by Entra Agent ID.</div>
+    <div class="tag-row"><span class="tag caution">Emerging</span><span class="tag">Agent → Agent</span><span class="tag">Entra Agent ID</span></div>
+  </div>
+</div>
+<div class="callout callout-warn" style="margin-top:16px;">
+  <div class="callout-title">⚠️ Most multi-agent architectures today have no A2A verification</div>
+  <p>Copilot Studio agent chains, Power Automate flows that call agents, and custom orchestration built on Microsoft Foundry typically have no formal A2A authentication. This means a compromised orchestrator can issue malicious delegations to sub-agents without any identity check. Until A2A becomes standard, treat every inter-agent boundary as an untrusted boundary and apply least-privilege scoping per agent.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- MICROSOFT-PROVIDED MCP SERVERS — THE LANDSCAPE NOW -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:48px;">Microsoft's MCP servers</div>
+<h2>What Microsoft now ships as first-party MCP servers</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 18px;">As of late 2025, Microsoft has shipped or previewed several first-party MCP servers, each with different security boundaries and trust models. Understanding what each one is — and where the authoritative auth/audit lives — is critical for designing safe MCP integrations.</p>
+
+<table>
+<thead><tr><th>MCP server</th><th>What it provides</th><th>Auth / boundary</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td><strong>Microsoft Sentinel MCP server</strong></td><td>Scenario-focused collections of security tools — query Sentinel data lake and Defender in natural language, build security agents, automate triage and threat hunting. Includes Security Copilot agent creation tools.</td><td>Fully hosted by Microsoft. Microsoft Entra for identity. No infrastructure deployment needed.</td><td><span class="green-inline">Available</span></td></tr>
+<tr><td><strong>Microsoft Learn MCP server</strong></td><td>Three tools: <code>microsoft_docs_search</code>, <code>microsoft_docs_fetch</code>, <code>microsoft_code_sample_search</code>. Searches official Microsoft docs.</td><td>Hosted by Microsoft. Authless.</td><td><span class="green-inline">Available</span> at <code>learn.microsoft.com/api/mcp</code></td></tr>
+<tr><td><strong>Foundry MCP integration</strong> (client side)</td><td>Foundry agents consume remote MCP servers. Each tool added with unique <code>server_label</code> + <code>server_url</code>. Some pre-validated MCP servers (e.g. Azure DevOps) are in the Foundry Add Tools catalog.</td><td>Custom headers (including auth tokens) pass per-run only — not persisted. Foundry approval and audit mechanisms apply.</td><td><span class="green-inline">Available</span></td></tr>
+<tr><td><strong>Windows On-device Agent Registry (ODR)</strong></td><td>Local registry of MCP servers on Windows endpoints. Apps and agents discover MCP servers via the ODR. Includes built-in connectors (e.g. File Explorer MCP).</td><td>MCP servers run in <strong>contained environment by default</strong>. User and IT admin control via Windows Settings and Intune. Logging and auditing for client↔server interactions.</td><td><span class="caution-inline">Preview</span></td></tr>
+<tr><td><strong>Copilot Studio MCP onboarding wizard</strong></td><td>Add existing MCP servers to Copilot Studio agents via guided OAuth wizard. Generates callback URLs for identity provider registration. Handles authorization code → access token → refresh token flow.</td><td>Per-agent OAuth 2.0 configuration. Identity provider remains the trust anchor.</td><td><span class="green-inline">Available</span></td></tr>
+<tr><td><strong>Microsoft Agent Framework MCP tools</strong></td><td>.NET/Java/Python SDKs for connecting custom agents to MCP servers, including local MCP servers. Used to build framework-based agents.</td><td>Developer chooses transport and auth; Microsoft provides SDK primitives.</td><td><span class="green-inline">Available</span></td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:16px;">
+  <div class="callout-title">📌 Authoritative Microsoft security guidance for MCP</div>
+  <p>Microsoft repeatedly cites two sources across all MCP-related docs: (1) <a href="https://modelcontextprotocol.io/specification/draft/basic/security_best_practices" target="_blank" style="color:var(--blue);">MCP Security Best Practices</a> on the Model Context Protocol website, and (2) the Microsoft Security Community Blog post <a href="https://techcommunity.microsoft.com/blog/microsoft-security-blog/understanding-and-mitigating-security-risks-in-mcp-implementations/4404667" target="_blank" style="color:var(--blue);">Understanding and mitigating security risks in MCP implementations</a>. Both are required reading for anyone integrating MCP into an enterprise estate.</p>
+</div>
+
+<div class="callout callout-warn" style="margin-top:14px;">
+  <div class="callout-title">⚠ Microsoft's stated stance on third-party MCP servers</div>
+  <p>From Microsoft's own Agent Framework documentation: "The remote MCP servers that you decide to use with the MCP tool described in this article were created by third parties, not Microsoft. Microsoft hasn't tested or verified these servers. Microsoft has no responsibility to you or others in relation to your use of any remote MCP servers." This is the framing to use when third-party MCP servers come up in governance discussions — Microsoft treats them as supply-chain risk you own. Recommended: track every MCP server added to any agent in your estate, rely on servers hosted by trusted providers (not proxies), and log all data shared with remote MCP servers for auditing.</p>
+</div>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 Windows ODR — the local MCP control plane Microsoft is now shipping</div>
+  <p>The Windows On-device Agent Registry is the local equivalent of what Entra Agent Registry does for cloud agents — it tracks MCP servers on Windows endpoints. Key security properties: MCP servers run <strong>contained</strong> by default (separate environment, can only access approved resources), users and IT admins control access per agent via Windows Settings or Intune, and interactions between MCP clients and servers are logged and auditable. The <code>odr.exe</code> command-line tool lets users and admins view and manage MCP servers. For endpoints where users may install MCP-enabled apps, this is the control point to manage centrally.</p>
+</div>
+
+<div class="callout callout-info" style="margin-top:14px;background:#fff8e6;border-color:#e8b840;">
+  <div class="callout-title">🆕 June 2026 — Purview now governs MCP clients on developer endpoints</div>
+  <p>Until June 2026, MCP clients running on developer endpoints — <strong>GitHub Copilot CLI, Claude Code, OpenAI Codex, OpenClaw</strong> — were largely outside the reach of Microsoft's central security tooling. Activity happened on a developer's laptop and stayed there. Purview's <strong>local & endpoint agents</strong> preview (June 2026) changes this. The same DSPM, DLP, and Insider Risk capabilities that govern cloud-side agents now extend to these local agents, with full interaction context flowing back to Purview.</p>
+  <p style="margin-top:8px;">Four protections come together: <strong>(1) DSPM visibility</strong> into prompts, responses, and actions taken by the local agent; <strong>(2) real-time DLP enforcement</strong> during execution — sensitive content can be blocked mid-flow; <strong>(3) Insider Risk signal generation</strong> from risky local-agent behaviour (data being moved out of policy boundaries); <strong>(4) full interaction logs</strong> in the unified audit log for forensics. This is the same governance plane that already covers cloud Copilot and Foundry agents — extended to the build environment.</p>
+  <p style="margin-top:8px;font-size:12px;color:var(--text2);">Why it matters: developers using Claude Code or GitHub Copilot CLI to ground an agent against sensitive source code, internal docs, or production data were a real gap. The data left the corporate perimeter via the agent and Purview had no view. This closes that gap for any MCP client Microsoft supports as a local-agent endpoint. See <a href="product-map.html#data-security" style="color:var(--blue);">Purview for Local & Endpoint Agents</a> on the product map for full details.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- CLAWS + CLAWHUB -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:48px;">Claws · the new agent skill primitive</div>
+<h2>What are "claws" — and what's the security model</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">Build 2026 introduced a new agent-runtime vocabulary worth knowing for any security architect designing for local AI agents.</p>
+
+<table>
+<thead><tr><th>Concept</th><th>Definition</th><th>Security implication</th></tr></thead>
+<tbody>
+<tr><td><strong>OpenClaw</strong></td><td>A self-hosted agent runtime that runs on a workstation, VM, or container. Loads skills and interacts with local and cloud resources. <strong>Open-source.</strong></td><td>Inherits the trust (and risk) of the machine and the identities it can use. Same operational model as installing a desktop application with elevated privileges.</td></tr>
+<tr><td><strong>Claws</strong></td><td>Skills loaded into OpenClaw. Each claw is a discrete capability — read files, query a database, call an API, write code. Composed by the user to build a working agent.</td><td><strong>Installing a skill is basically installing privileged code.</strong> The skill operates inside the OpenClaw runtime with the user's permissions to local apps, files, and accounts.</td></tr>
+<tr><td><strong>ClawHub</strong></td><td>Public skills registry for OpenClaw. Skills are discovered and installed through ClawHub — by search, by recommendation, by community channels.</td><td><strong>Supply chain attack surface.</strong> Microsoft Threat Intelligence has already observed attackers publishing malicious skills disguised as utilities, and promoting them through community channels. Skills can also be discovered organically via search and installed by users who don't recognise the risk.</td></tr>
+<tr><td><strong>OpenClaw on Windows via MXC</strong></td><td>Windows node and gateway for OpenClaw run inside Microsoft Execution Containers (MXC). Windows companion app available to set up and connect claws. Available open-source.</td><td>Containment is now native to the platform on Windows — the OpenClaw runtime can't reach beyond what MXC policy permits. Compare to running OpenClaw bare on a developer's machine where the runtime has whatever permissions the user has.</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-warn" style="margin-top:14px;">
+  <div class="callout-title">⚠ Treat ClawHub like a package registry, not an app store</div>
+  <p>The same threat model applies as for npm, PyPI, VS Code Marketplace, or any other third-party code source. Microsoft's <a href="https://www.microsoft.com/en-us/security/blog/2026/02/19/running-openclaw-safely-identity-isolation-runtime-risk/" target="_blank" style="color:var(--blue);">February 2026 OpenClaw security research</a> documented the pattern: malicious skills disguised as utilities, organic discovery via search, social engineering via community channels. Recommended controls before any developer team adopts OpenClaw: maintain an approved-claws list, prefer skills from verified publishers, run OpenClaw inside MXC on Windows (not bare), and ensure Purview's local-agent observability is enabled so risky behaviour at skill execution time generates Insider Risk signals.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- MICROSOFT EXECUTION CONTAINERS (MXC) -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:48px;">Runtime containment</div>
+<h2>Microsoft Execution Containers (MXC) — the policy-driven runtime layer</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">MXC SDK is a new layer introduced at Build 2026 that sits between the agent runtime and the OS. Developers <strong>declare what an agent can access</strong> (files, network, processes) and MXC enforces those declarations at runtime. The model is similar to seccomp on Linux or App Container on Windows, but designed specifically for agentic workloads where behaviour is non-deterministic.</p>
+
+<div class="callout callout-info" style="margin-top:8px;">
+  <div class="callout-title">📌 Composable isolation by intent and risk</div>
+  <p>MXC offers a <strong>spectrum of isolation semantics</strong> — light containment when an agent's task is low-risk, full sandboxing when it touches sensitive data or invokes high-impact tools. Composition is dynamic: a single agent can run light when summarising a doc and switch to strict containment when invoking a connector that could exfiltrate data. The point: containment policy follows the operation, not the agent identity.</p>
+  <p style="margin-top:10px;"><strong>Agent 365 + MXC integration</strong> (Preview, July 2026) brings Defender, Entra, Intune, and Purview protections through MXC so agents start secure and stay secure. This is the moment when the four governance pillars (identity, threat, device, data) converge at the runtime boundary for local agents — not just cloud agents.</p>
+</div>
+
+<div class="callout callout-warn" style="margin-top:14px;">
+  <div class="callout-title">⚠ Real-world finding — Claude Code GitHub Action prompt injection</div>
+  <p>Microsoft Threat Intelligence identified a <strong>prompt injection pathway in the Claude Code GitHub Action</strong> that allowed access to workflow secrets under specific conditions (research published February 2026). The attack pattern: untrusted content (e.g., an issue body) becomes input to the agent's prompt; the injected prompt redirects the agent to dump <code>secrets.*</code> values or call out to attacker-controlled endpoints. The fix in CI/CD: treat any LLM agent invocation as a trust boundary — never pass untrusted content directly into prompts that have access to secrets, and scope <code>GITHUB_TOKEN</code> permissions to the minimum the agent actually needs. This is the same threat class as <a href="threats.html" style="color:var(--blue);">Threat Scenario 6 (XPIA via untrusted data sources)</a>, manifesting in a code-automation context.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- DEFENDER'S VIEW OF LOCAL AI AGENTS (Build 2026) -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:48px;">Endpoint inventory & runtime protection</div>
+<h2>Defender's view of local AI agents — 20+ tools surfaced as security assets</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">Microsoft Defender for Endpoint now discovers and protects local AI agents on Defender-onboarded Windows endpoints — <strong>treating each agent as a first-class security asset rather than just an OS process</strong>. Per the authoritative <a href="https://learn.microsoft.com/en-us/defender-endpoint/local-agent-discovery-overview" target="_blank" style="color:var(--blue);">Microsoft Learn local agent discovery page</a>, Defender currently identifies five categories of local AI agents. Many of these are MCP clients — the inventory is the central place to see what agents users have installed and what MCP server configurations they've added.</p>
+
+<table>
+<thead><tr><th>Category</th><th>Agents discovered today</th></tr></thead>
+<tbody>
+<tr><td><strong>CLI agents</strong></td><td>Claude Code · Codex CLI · Gemini CLI · GitHub Copilot CLI · OpenCode · Antigravity CLI</td></tr>
+<tr><td><strong>Desktop apps</strong></td><td>ChatGPT Desktop · Claude Desktop · Codex Desktop · Ollama Desktop · Poe Desktop</td></tr>
+<tr><td><strong>Agentic IDEs</strong></td><td>Cursor · Antigravity IDE · Windsurf</td></tr>
+<tr><td><strong>VS Code extensions</strong></td><td>Claude Code · Cline · Codex · Gemini Code Assist · GitHub Copilot · Roo Code</td></tr>
+<tr><td><strong>Claw-based agents</strong></td><td>OpenClaw · Clawpilot · Claw/Nanobot</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 How Defender defines an "agent"</div>
+  <p>An agent is the combination of <strong>user + device + agent type</strong>. So if Claude Code runs in 15 different project folders on the same user/device, it's <em>one</em> agent in the inventory — not 15. This keeps the inventory tractable while still giving SOC analysts the dimensions they need to pivot during investigation (which user is running what on which machine).</p>
+  <p style="margin-top:8px;">Three views available in the Microsoft Defender portal:</p>
+  <ul style="margin:8px 0 0 18px;font-size:13px;line-height:1.8;">
+    <li><strong>Local AI agent inventory</strong> — centralised list across the tenant, with device and user associations, MCP server configurations (local AND remote), and discovery metadata.</li>
+    <li><strong>Exposure map</strong> — visual relationships between local agents, devices, identities, and the resources those identities can reach. The exposure map is the answer to "if this agent is compromised, what can it touch?"</li>
+    <li><strong>Advanced Hunting</strong> — KQL queries against discovery data. Hunt for risky configurations (e.g., agents in auto-approve mode under a privileged identity with access to production, source code, or CI/CD), then convert hunting queries into custom detection rules.</li>
+  </ul>
+</div>
+
+<h2 style="margin-top:32px;">Runtime protection — inline prompt-injection detection in the agent loop</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">Discovery surfaces what's running; <strong>runtime protection</strong> stops malicious instructions before the agent acts on them. Per the <a href="https://learn.microsoft.com/en-us/defender-endpoint/ai-agent-runtime-protection-overview" target="_blank" style="color:var(--blue);">AI agent runtime protection overview</a>, Defender inspects three points in the agent loop where content enters or leaves reasoning:</p>
+
+<table>
+<thead><tr><th>Hook point</th><th>What Defender inspects</th><th>What's caught</th></tr></thead>
+<tbody>
+<tr><td><strong>① User prompt</strong></td><td>The prompt submitted to the agent</td><td>Direct prompt injection via user input</td></tr>
+<tr><td><strong>② Pre-tool call</strong></td><td>The tool invocation request before execution</td><td>Hidden instructions in fetched content (file, web page, repo) attempting to redirect a tool call</td></tr>
+<tr><td><strong>③ Post-tool response</strong></td><td>The tool response after execution completes</td><td>Tool output containing injection payload aimed at the next reasoning step</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 How the inspection works in practice</div>
+  <p>Defender uses each agent's published <strong>hooks framework</strong> (<a href="https://code.claude.com/docs/en/hooks" target="_blank" style="color:var(--blue);">Claude Code hooks</a>, <a href="https://docs.github.com/copilot/how-tos/copilot-cli/customize-copilot/use-hooks" target="_blank" style="color:var(--blue);">GitHub Copilot CLI hooks</a>) — Defender registers as a hook consumer at the three inspection points. This means added latency is minimal because each scan is a fast inline check, not continuous monitoring of the agent process.</p>
+  <p style="margin-top:8px;"><strong>Modes:</strong> <em>Block</em> (Defender stops the action, notifies the user via agent UI + Windows toast, raises an alert correlated into Defender incidents; the detection is also recorded in Defender protection history on the device); <em>Audit</em> (action continues, alert still raised — recommended starting mode); <em>Disabled</em>. The setting is protected by Tamper Protection so it can't be silently disabled. Alert name: <strong>Suspicious AI prompt injection</strong>. Once enabled, Defender inspects supported agents at their hook points <strong>without changing how users run the agent</strong> — no wrapping, no interception of the agent process, no behavioural change to the developer workflow.</p>
+  <p style="margin-top:8px;"><strong>Currently supported agents</strong> for runtime protection: Claude Code, GitHub Copilot CLI. Coverage expanding — any agent that exposes a hooks framework can in principle be added. Worth noting: until coverage broadens, runtime protection is a meaningful capability only for organisations whose developers actually use these two specific tools. Discovery (above) covers the much broader 20+ list.</p>
+</div>
+
+<div class="callout callout-warn" style="margin-top:14px;">
+  <div class="callout-title">⚠ Example scenario from Microsoft's documentation</div>
+  <p style="font-size:13px;color:#2e3d5e;"><em>"A coding agent fetches a project's documentation to answer a question, and the page contains hidden text that instructs the agent to read the local <code>.env</code> file and post its contents to an external URL. The agent treats the instruction as part of the page and is about to comply, but Defender detects the prompt injection in the tool response and blocks the action before any data leaves the device."</em></p>
+  <p style="margin-top:8px;font-size:13px;color:var(--text2);">This is the canonical local agent threat — and the canonical case for why runtime protection earns its place in any tenant where developers use Claude Code or GitHub Copilot CLI against real production data.</p>
+</div>
+
+<h2 style="margin-top:32px;">Configuration in practice — prerequisites, phased rollout, deployment</h2>
+<p style="font-size:14px;color:#2e3d5e;line-height:1.7;margin:10px 0 14px;">Per the <a href="https://learn.microsoft.com/en-us/defender-endpoint/configure-ai-agent-runtime-protection" target="_blank" style="color:var(--blue);">configuration guide</a>, enabling runtime protection isn't a single switch — it has prerequisites, a recommended phased rollout, and PowerShell-only enablement today.</p>
+
+<div class="callout callout-warn" style="margin-top:8px;">
+  <div class="callout-title">⚠ Prerequisites — the Beta channel gotcha</div>
+  <p>The most important constraint: runtime protection is currently available <strong>only on devices configured to receive Beta platform and engine updates</strong>. Production fleets on the standard ring won't see the capability. Other prerequisites are routine — devices onboarded to Defender for Endpoint, Defender Antivirus in active mode, supported local AI agent installed, agent natively supports a hooks framework (Claude Code or GitHub Copilot CLI today). Minimum <code>AntivirusSignatureVersion</code> is <code>1.451.224.0</code>.</p>
+</div>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 Microsoft's recommended 4-phase rollout</div>
+  <ol style="margin:8px 0 0 22px;font-size:13px;line-height:1.9;">
+    <li><strong>Test</strong> — enable in <em>Audit</em> mode on a small set of devices where supported agents are actively used.</li>
+    <li><strong>Review</strong> — monitor alerts in the Defender portal for <strong>1-2 weeks</strong>. Submit false positives to Microsoft for analysis.</li>
+    <li><strong>Deploy</strong> — roll out in <em>Audit</em> mode to additional device groups across the organisation.</li>
+    <li><strong>Enforce</strong> — after validating alert accuracy, switch to <em>Block</em> mode on the device groups where you want active enforcement.</li>
+  </ol>
+  <p style="margin-top:10px;font-size:12px;color:var(--text2);">In Audit mode, alerts are <strong>Informational severity</strong> — your team can review what would have been blocked without triaging it as an active threat. In Block mode, alerts carry a <strong>Critical / High / Medium / Low severity</strong> based on assessed risk. Plan SOC capacity accordingly.</p>
+</div>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 Enablement is PowerShell — no Intune policy yet</div>
+  <p>There is no native Intune configuration profile for runtime protection at present. Single-device enablement is via PowerShell:</p>
+  <p style="margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:12px;background:#0d1526;color:#e0e6f0;padding:10px 14px;border-radius:4px;line-height:1.7;"># Switch to Beta channel<br>
+  Set-MpPreference -PlatformUpdatesChannel Beta<br>
+  Set-MpPreference -EngineUpdatesChannel Beta<br><br>
+  # Force signature refresh (run 3 times per Microsoft's guidance)<br>
+  Update-MpSignature; Update-MpSignature; Update-MpSignature<br><br>
+  # Verify signature version &gt;= 1.451.224.0<br>
+  Get-MpComputerStatus | Select-Object AntivirusSignatureVersion<br><br>
+  # Enable runtime protection (Disabled / Audit / Block)<br>
+  Set-MpPreference -AiAgentProtection Audit<br><br>
+  # Verify current setting<br>
+  Get-MpPreference | Select-Object AiAgentProtection</p>
+  <p style="margin-top:10px;">For fleet deployment, wrap this in a PowerShell script and deploy via Intune's <strong>PowerShell scripts</strong> feature (not a configuration profile). Same command, scaled to device groups.</p>
+</div>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 What end users see when Block mode triggers</div>
+  <p>Two notifications appear in parallel:</p>
+  <ul style="margin:8px 0 0 18px;font-size:13px;line-height:1.8;">
+    <li><strong>In the agent terminal</strong> — block message showing what was blocked, why, and confirmation that the action didn't execute. Developer-friendly framing.</li>
+    <li><strong>Windows toast notification</strong> — appears regardless of whether the agent terminal is in focus.</li>
+  </ul>
+  <p style="margin-top:8px;">Users can also review detections under <strong>Windows Security &gt; Virus &amp; threat protection &gt; Current threats / Protection history</strong> — same surface as other Defender detections. This means runtime protection events look familiar to users who've seen any other Defender intervention.</p>
+</div>
+
+<div class="page-nav"><a href="identity.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Identity</span></a><a href="threats.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Threats</span></a></div>
+<div style="text-align:center;margin:32px 0 0;padding:24px 0;border-top:1px solid var(--border2);">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text3);margin-bottom:10px;">STAY UPDATED</div>
+  <div style="font-size:15px;font-weight:700;color:#0d1526;margin-bottom:6px;">Get notified when Microsoft AI security changes</div>
+  <div style="font-size:13px;color:#2e3d5e;margin-bottom:14px;">Monthly updates on new controls, GA announcements, and critical gaps — direct to your inbox.</div>
+  <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#ffffff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;padding:12px 24px;border-radius:8px;text-decoration:none;transition:opacity 0.15s;" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">
+    Subscribe to updates →
+  </a>
+  <div style="font-size:11px;color:var(--text3);margin-top:10px;font-family:'JetBrains Mono',monospace;">aiagentsecurity.substack.com · Free · No spam</div>
+</div>
+
 <div class="footer">
   SOURCES: Microsoft Security Blog · RSAC 2026 (March 20, 2026) · Microsoft Ignite 2025 · NIST AI RMF 1.0 · ISO/IEC 42001:2023<br>
-  <a href="changelog.html" style="color:var(--text3);">Changelog</a> · Last updated: June 5, 2026
+  <a href="changelog.html" style="color:var(--text3);">Changelog</a> · Last updated: August 31, 2026
 <script>
 document.addEventListener('DOMContentLoaded', function(){
   var btn = document.getElementById('hamburgerBtn');

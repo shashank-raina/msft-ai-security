@@ -5,267 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Overview — Securing AI with Microsoft</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
 <style>
-:root {
-  --bg:#f5f7fc;--surface:#ffffff;--surface2:#eef1f8;--surface3:#e4e9f4;
-  --border:#d0d8ec;--border2:#b8c4de;
-  --blue:#0078d4;--blue2:#0063b1;--purple:#6264a7;--purple2:#5a5c9a;
-  --teal:#008575;--teal2:#007a6e;--green:#107c10;--green2:#0e6e0e;
-  --orange:#d83b01;--orange2:#b83200;--gold:#c09020;--gold2:#8a6800;
-  --red:#c50f1f;--warn:rgba(216,59,1,0.07);--warn-border:rgba(216,59,1,0.3);
-  --warn-text:#c23000;--caution:rgba(140,90,0,0.07);
-  --caution-border:rgba(140,90,0,0.3);--caution-text:#6e4500;
-  --text:#0d1526;--text2:#2e3d5e;--text3:#5a6a8a;--nav-h:52px;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
-body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;
-  font-size:15.5px;line-height:1.8;padding-top:var(--nav-h);color:var(--text);}
-body::before{content:'';position:fixed;inset:0;
-  background-image:linear-gradient(rgba(0,80,180,0.05) 1px,transparent 1px),
-  linear-gradient(90deg,rgba(0,80,180,0.05) 1px,transparent 1px);
-  background-size:48px 48px;pointer-events:none;z-index:0;}
-
-/* TOP NAV */
-.topnav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);
-  background:rgba(245,247,252,0.97);border-bottom:1px solid var(--border2);box-shadow:0 1px 10px rgba(0,0,0,0.07);
-  backdrop-filter:blur(12px);z-index:200;
-  display:flex;align-items:center;padding:0 32px;gap:0;}
-.nav-brand{display:flex;align-items:center;gap:8px;margin-right:20px;flex-shrink:0;}
-.msft-logo{width:18px;height:18px;display:grid;grid-template-columns:1fr 1fr;gap:2px;}
-.msft-logo div:nth-child(1){background:#f25022;border-radius:1px;}
-.msft-logo div:nth-child(2){background:#7fba00;border-radius:1px;}
-.msft-logo div:nth-child(3){background:#00a4ef;border-radius:1px;}
-.msft-logo div:nth-child(4){background:#ffb900;border-radius:1px;}
-.brand-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;
-  color:#0d1526;letter-spacing:0.01em;white-space:nowrap;line-height:1.2;}
-
-.nav-links{display:flex;align-items:stretch;height:100%;flex:1;overflow-x:auto;gap:2px;}
-.nav-links::-webkit-scrollbar{display:none;}
-.nav-links a{display:flex;align-items:center;gap:5px;padding:0 9px;
-  text-decoration:none;color:#1a2a4a;font-size:11.5px;font-weight:600;
-  border-bottom:2px solid transparent;white-space:nowrap;
-  transition:color 0.15s,border-color 0.15s;}
-.nav-links a:hover{color:#0d1526;}
-.nav-links a.active{color:var(--blue);border-bottom-color:var(--blue);}
-.nav-links a .n{font-family:'JetBrains Mono',monospace;font-size:11px;
-  color:#4a6a9a;letter-spacing:0.02em;font-weight:700;}
-.nav-links a.active .n{color:var(--blue);}
-
-
-/* LAYOUT */
-.page{max-width:940px;margin:0 auto;padding:52px 40px 100px;position:relative;z-index:1;}
-
-/* TYPOGRAPHY */
-.section-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;
-  color:#004a9e;text-transform:uppercase;
-  margin:48px 0 16px;
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(0,120,212,0.07);
-  border:1px solid rgba(0,120,212,0.2);
-  border-radius:6px;
-  padding:5px 12px;
-  font-weight:500;}
-.section-label::before{content:'';display:inline-block;
-  width:6px;height:6px;border-radius:50%;
-  background:var(--blue);flex-shrink:0;}
-h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:44px;font-weight:800;
-  line-height:1.06;letter-spacing:-0.03em;color:#0d1526;margin-bottom:18px;}
-h1 span{background:linear-gradient(135deg,var(--blue),#004fa8);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:26px;font-weight:700;
-  color:#0d1526;letter-spacing:-0.02em;margin:8px 0 14px;line-height:1.2;
-  padding-left:14px;border-left:3px solid var(--blue);}
-h2:first-child{margin-top:0;}
-h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:700;
-  color:#0d1526;margin:32px 0 12px;
-  padding-bottom:8px;border-bottom:1px solid var(--border2);}
-h4{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;
-  color:var(--text);margin:20px 0 6px;}
-p{color:#2e3d5e;margin-bottom:14px;font-weight:400;font-size:15px;}
-p strong{color:#0d1526;font-weight:600;}
-p:last-child{margin-bottom:0;}
-a{color:var(--blue);text-decoration:none;}
-a:hover{text-decoration:underline;}
-
-/* PAGE HERO */
-.hero{padding:40px 0 36px;border-bottom:1px solid var(--border);margin-bottom:40px;}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;
-  background:#ffffff;border:1px solid var(--border2);
-  border-radius:100px;padding:4px 12px 4px 8px;
-  font-family:'JetBrains Mono',monospace;font-size:10px;
-  color:#3a4a6a;letter-spacing:0.08em;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
-.live-dot{width:6px;height:6px;border-radius:50%;background:var(--blue);
-  animation:blink 1.5s infinite;}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
-.hero-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;}
-.chip{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.07em;
-  padding:4px 10px;border-radius:4px;border:1px solid;}
-.chip-blue{background:#0a1e38;border-color:#2060aa;color:#90c8ff;}
-.chip-warn{background:#2a0e06;border-color:#882000;color:#ffb090;}
-.chip-caution{background:#221400;border-color:#7a5000;color:#ffcc60;}
-.chip-green{background:#061a06;border-color:#1e6a1e;color:#80e880;}
-
-/* CALLOUTS */
-.callout{border-radius:10px;padding:18px 20px;margin:20px 0;border:1px solid;}
-.callout-warn{background:#fff4f0;border-color:rgba(216,59,1,0.3);}
-.callout-caution{background:#fffbf0;border-color:rgba(140,90,0,0.3);}
-.callout-info{background:#f0f6ff;border-color:rgba(0,120,212,0.25);}
-.callout-green{background:#f0fbf0;border-color:rgba(16,124,16,0.25);}
-.callout-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;
-  margin-bottom:8px;display:flex;align-items:center;gap:8px;}
-.callout-warn .callout-title{color:#b83000;}
-.callout-caution .callout-title{color:#6e4500;}
-.callout-info .callout-title{color:var(--blue);}
-.callout-green .callout-title{color:#0a5a0a;}
-.callout p{font-size:14px;margin-bottom:0;}
-.callout-warn p{color:#6a2000;}
-.callout-caution p{color:#5a3800;}
-.callout-info p{color:#003a80;}
-.callout-green p{color:#0a4a0a;}
-
-/* CARDS */
-.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-  gap:14px;margin:20px 0;}
-.card{background:#ffffff;border:1px solid var(--border);
-  border-radius:10px;padding:18px;position:relative;overflow:hidden;
-  transition:border-color 0.2s,transform 0.15s,box-shadow 0.15s;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
-.card:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,120,212,0.12);border-color:var(--blue2);}
-.card-link{text-decoration:none;color:inherit;display:block;position:relative;}
-.card-link .card{position:relative;}
-.card-link:hover{text-decoration:none;}
-
-.card-link .card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
-.card-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;
-  color:#0d1526;margin-bottom:8px;}
-.card-sub{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--text3);
-  letter-spacing:0.08em;margin-bottom:6px;}
-.card-desc{font-size:13px;color:#2e3d5e;margin:0 0 12px;font-weight:400;line-height:1.6;}
-.tag-row{display:flex;flex-wrap:wrap;gap:5px;}
-.tag{font-family:'JetBrains Mono',monospace;font-size:9px;padding:3px 8px;border-radius:4px;
-  background:#1a2035;border:1px solid #2d3a55;
-  color:#c8d8f0;letter-spacing:0.04em;}
-.tag.warn{background:#2a0e06;border-color:#882000;color:#ffb090;}
-.tag.caution{background:#221400;border-color:#7a5000;color:#ffcc60;}
-.tag.green{background:#061a06;border-color:#1e6a1e;color:#80e880;}
-.tag.blue{background:#0a1e38;border-color:#2060aa;color:#90c8ff;}
-.tag.purple{background:#10102a;border-color:#4040a0;color:#b0b0ff;}
-
-/* TABLES */
-table{width:100%;border-collapse:collapse;margin:20px 0;font-size:13px;}
-th{background:#e8edf8;border:1px solid var(--border2);padding:10px 14px;
-  text-align:left;font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:700;
-  color:#0d1526;letter-spacing:0.02em;}
-td{border:1px solid var(--border);padding:9px 14px;color:#2e3d5e;
-  font-weight:400;vertical-align:top;line-height:1.55;background:#ffffff;}
-tr:hover td{background:#f5f8ff;}
-td strong{color:#0d1526;font-weight:600;}
-td code{font-family:'JetBrains Mono',monospace;font-size:10px;
-  background:#eef1f8;border:1px solid var(--border2);
-  border-radius:3px;padding:1px 5px;color:#004a9e;}
-.warn-inline{color:#d05030;font-family:'JetBrains Mono',monospace;font-size:10px;}
-.caution-inline{color:#c0820a;font-family:'JetBrains Mono',monospace;font-size:10px;}
-.green-inline{color:#2a9a2a;font-family:'JetBrains Mono',monospace;font-size:10px;}
-.severity-critical{color:#e84040;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;}
-.severity-high{color:#e87050;font-family:'JetBrains Mono',monospace;font-size:10px;}
-.severity-medium{color:#c8902a;font-family:'JetBrains Mono',monospace;font-size:10px;}
-
-/* FLOW */
-.flow{display:flex;align-items:stretch;border:1px solid var(--border2);
-  border-radius:10px;overflow:hidden;margin:20px 0;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
-.flow-step{flex:1;padding:14px 16px;border-right:1px solid var(--border2);
-  position:relative;background:#ffffff;transition:background 0.2s;}
-.flow-step:last-child{border-right:none;}
-.flow-step:hover{background:#eef1f8;}
-.flow-num{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--text3);
-  letter-spacing:0.1em;margin-bottom:6px;}
-.flow-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;
-  color:#0d1526;margin-bottom:4px;}
-.flow-desc{font-size:12px;color:#3a4a6a;font-weight:400;line-height:1.4;}
-.flow-arrow{position:absolute;right:-10px;top:50%;transform:translateY(-50%);
-  color:var(--text3);font-size:14px;z-index:2;}
-
-/* DIVIDER */
-.divider{height:1px;background:var(--border);margin:32px 0;}
-
-/* PAGE NAV (prev/next) */
-.page-nav{display:flex;justify-content:space-between;align-items:center;
-  margin-top:60px;padding-top:24px;border-top:1px solid var(--border);}
-.page-nav a{display:flex;align-items:center;gap:8px;padding:10px 16px;
-  background:#ffffff;border:1px solid var(--border2);border-radius:8px;
-  color:#3a4a6a;text-decoration:none;font-size:12px;transition:all 0.15s;box-shadow:0 1px 4px rgba(0,0,0,0.05);}
-.page-nav a:hover{border-color:var(--blue);color:var(--blue);}
-.page-nav-label{font-family:'JetBrains Mono',monospace;font-size:9px;
-  color:var(--text2);letter-spacing:0.08em;display:block;margin-bottom:2px;}
-.page-nav-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;color:#0d1526;}
-.page-nav-spacer{flex:1;}
-
-/* MISC */
-code{font-family:'JetBrains Mono',monospace;font-size:11px;background:#eef1f8;
-  border:1px solid var(--border2);border-radius:4px;padding:2px 6px;color:#004a9e;}
-.pill-list{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;}
-.pill{display:flex;align-items:center;gap:6px;background:#ffffff;
-  border:1px solid var(--border2);border-radius:100px;padding:5px 12px 5px 8px;
-  font-size:12px;color:#2e3d5e;font-weight:400;box-shadow:0 1px 3px rgba(0,0,0,0.05);}
-.pill-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
-.obo-flow{display:flex;flex-direction:column;border:1px solid var(--border2);
-  border-radius:10px;overflow:hidden;margin:20px 0;}
-.obo-row{display:flex;align-items:stretch;border-bottom:1px solid var(--border2);}
-.obo-row:last-child{border-bottom:none;}
-.obo-label{width:130px;flex-shrink:0;background:#eef1f8;padding:12px 14px;
-  border-right:1px solid var(--border2);font-family:'JetBrains Mono',monospace;
-  font-size:9px;letter-spacing:0.08em;color:#3a4a6a;
-  display:flex;align-items:center;text-transform:uppercase;}
-.obo-content{flex:1;padding:12px 16px;font-size:13px;color:#2e3d5e;font-weight:400;}
-.obo-content strong{color:#0d1526;font-weight:600;}
-.mcp-layer{border:1px solid var(--border2);border-radius:8px;margin:8px 0;overflow:hidden;}
-.mcp-layer-header{padding:10px 16px;background:#eef1f8;
-  border-bottom:1px solid var(--border2);display:flex;align-items:center;gap:10px;}
-.mcp-layer-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;color:#0d1526;}
-.mcp-layer-body{padding:12px 16px;display:flex;flex-wrap:wrap;gap:8px;}
-.mcp-item{background:#ffffff;border:1px solid var(--border2);
-  border-radius:6px;padding:6px 12px;font-size:12px;color:#2e3d5e;font-weight:400;}
-.mcp-item.risk{background:rgba(216,59,1,0.08);border-color:rgba(216,59,1,0.25);color:var(--warn-text);}
-.mcp-item.control{background:rgba(0,120,212,0.07);border-color:rgba(0,120,212,0.25);color:#004a9e;}
-.threat-block{background:#ffffff;border:1px solid var(--border2);
-  border-radius:10px;margin:24px 0;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
-.threat-header{padding:14px 20px;border-bottom:1px solid var(--border2);
-  background:#f5f7fc;display:flex;align-items:center;gap:12px;}
-.threat-icon{font-size:22px;}
-.threat-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;color:#0d1526;}
-.threat-category{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 8px;
-  border-radius:3px;letter-spacing:0.06em;margin-left:auto;}
-.threat-body{padding:20px;}
-.threat-cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
-.threat-col-title{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;
-  color:var(--text2);margin-bottom:10px;text-transform:uppercase;}
-.threat-step{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start;}
-.threat-step-num{width:20px;height:20px;border-radius:50%;display:flex;
-  align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;
-  font-size:9px;font-weight:500;flex-shrink:0;margin-top:1px;}
-.threat-step-text{font-size:13px;color:#2e3d5e;font-weight:400;}
-.nist-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0;}
-.nist-card{background:#ffffff;border:1px solid var(--border);
-  border-radius:10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.06);
-  transition:transform 0.15s,box-shadow 0.15s,border-color 0.15s;}
-a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,120,212,0.12);border-color:var(--blue2);}
-.nist-header{padding:12px 16px;display:flex;align-items:center;gap:10px;}
-.nist-badge{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;
-  padding:4px 10px;border-radius:6px;letter-spacing:0.05em;}
-.nist-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;color:#0d1526;}
-.nist-body{padding:0 16px 16px;}
-.nist-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border2);font-size:13px;}
-.nist-item:last-child{border-bottom:none;}
-.nist-control{color:#2e3d5e;font-weight:400;flex:1;}
-.nist-tool{font-family:'JetBrains Mono',monospace;font-size:10px;color:#004a9e;white-space:nowrap;}
-.nist-gap{font-family:'JetBrains Mono',monospace;font-size:10px;color:#b83000;white-space:nowrap;}
-::-webkit-scrollbar{width:5px;height:5px;}
-::-webkit-scrollbar-track{background:#e8edf8;}
-::-webkit-scrollbar-thumb{background:#b0bcce;border-radius:3px;}
-.footer{text-align:center;margin-top:60px;padding-top:24px;border-top:1px solid var(--border2);
-  font-family:'JetBrains Mono',monospace;font-size:10px;color:#5a6a8a;
-  letter-spacing:0.05em;line-height:1.9;}
 @media(max-width:700px){
   .topnav{padding:0 16px;}
   .page{padding:32px 20px 80px;}
@@ -289,31 +30,6 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   .viz-agent{font-size:11px !important;padding:6px 10px !important;}
   .viz-footer{flex-wrap:wrap;gap:10px !important;}
 }
-
-/* HAMBURGER */
-.hamburger{display:none;background:none;border:none;cursor:pointer;
-  padding:6px;flex-direction:column;gap:5px;margin-left:auto;flex-shrink:0;}
-.hamburger span{display:block;width:22px;height:2px;background:#0d1526;
-  border-radius:2px;transition:all 0.2s;}
-.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
-.hamburger.open span:nth-child(2){opacity:0;}
-.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
-.mobile-drawer{display:none;position:fixed;top:var(--nav-h);left:0;right:0;
-  background:rgba(245,247,252,0.98);border-bottom:1px solid var(--border2);
-  backdrop-filter:blur(16px);z-index:199;padding:12px 20px 20px;
-  flex-direction:column;gap:2px;box-shadow:0 8px 32px rgba(0,0,0,0.1);}
-.mobile-drawer.open{display:flex;}
-.mobile-drawer a{display:block;padding:10px 12px;border-radius:8px;
-  font-size:14px;font-weight:600;color:#1a2a4a;text-decoration:none;
-  transition:background 0.12s;}
-.mobile-drawer a:hover,.mobile-drawer a.active{background:#f0f6ff;color:var(--blue);}
-.mobile-drawer-overlay{display:none;position:fixed;inset:0;z-index:198;
-  background:rgba(0,0,0,0.2);}
-.mobile-drawer-overlay.open{display:block;}
-@media(max-width:900px){
-  .nav-links{display:none !important;}
-  .hamburger{display:flex;}
-}
 </style>
 </head>
 <body>
@@ -326,17 +42,11 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <div class="nav-links">
 <a href="index.html" class="">Home</a>
 <a href="overview.html" class="active">Overview</a>
-<a href="risk.html" class="">AI Risk</a>
 <a href="product-map.html" class="">Products</a>
 <a href="agent365.html" class="">Agent 365</a>
 <a href="identity.html" class="">Identity</a>
-<a href="mcp.html" class="">MCP</a>
 <a href="threats.html" class="">Threats</a>
-<a href="frameworks.html" class="">Frameworks</a>
-<a href="gaps.html" class="">Gaps</a>
 <a href="playbooks.html" class="">Playbooks</a>
-<a href="foundry.html" class="">Foundry</a>
-<a href="strategy.html" class="">Strategy</a>
 <a href="contact.html" class="">Contact</a>
 </div>
   <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
@@ -345,17 +55,11 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 <div class="mobile-drawer" id="mobileDrawer">
 <a href="index.html" class="">Home</a>
 <a href="overview.html" class="active">Overview</a>
-<a href="risk.html" class="">AI Risk</a>
 <a href="product-map.html" class="">Products</a>
 <a href="agent365.html" class="">Agent 365</a>
 <a href="identity.html" class="">Identity</a>
-<a href="mcp.html" class="">MCP</a>
 <a href="threats.html" class="">Threats</a>
-<a href="frameworks.html" class="">Frameworks</a>
-<a href="gaps.html" class="">Gaps</a>
 <a href="playbooks.html" class="">Playbooks</a>
-<a href="foundry.html" class="">Foundry</a>
-<a href="strategy.html" class="">Strategy</a>
 <a href="contact.html" class="">Contact</a>
 </div>
   <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" class="substack-nav" style="flex-shrink:0;margin-left:10px;display:flex;align-items:center;gap:5px;background:var(--blue);color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:6px 13px;border-radius:6px;text-decoration:none;white-space:nowrap;letter-spacing:0.03em;">📬 Subscribe</a>
@@ -375,7 +79,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 
 <div class="callout callout-green">
   <div class="callout-title">✅ RSAC 2026 Updates — March 20, 2026</div>
-  <p>Security Dashboard for AI is now <strong>generally available</strong>. Entra Internet Access Shadow AI Detection and Prompt Injection Protection both GA on March 31. New Security Analyst Agent and Security Alert Triage Agent announced. Sentinel MCP Entity Analyzer GA in April. Several new Purview and Entra capabilities added across preview and GA. See the <a href="gaps.html">Gaps</a> page for the updated availability matrix.</p>
+  <p>Security Dashboard for AI is now <strong>generally available</strong>. Entra Internet Access Shadow AI Detection and Prompt Injection Protection both GA on March 31. New Security Analyst Agent and Security Alert Triage Agent announced. Sentinel MCP Entity Analyzer GA in April. Several new Purview and Entra capabilities added across preview and GA. See the page for the updated availability matrix.</p>
 </div>
 
 
@@ -572,7 +276,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <div class="viz-arrow">↓</div>
 
   <!-- LAYER 04: MCP & Tool Governance -->
-  <a href="mcp.html" style="text-decoration:none;color:inherit;display:block;">
+  <a href="threats.html#mcp" style="text-decoration:none;color:inherit;display:block;">
   <div class="viz-layer">
     <div class="viz-layer-inner" style="background:#f0f8ff;border-color:#80b8e0;">
       <div class="viz-label" style="background:#d8eeff;border-color:#80b8e0;">
@@ -663,9 +367,289 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
 </div>
 
 
+<div class="section-label" id="risk" style="margin-top:48px;">Why agents break the old model</div>
+<h2>The properties that create new attack surface</h2>
+<p>Eight properties make agents a different security object from users, devices or apps. The capability and the risk are the same property seen from two sides:</p>
+<table>
+<thead><tr><th>Property</th><th>Security downside</th><th>Severity</th></tr></thead>
+<tbody>
+<tr><td><strong>Self-initiating</strong></td><td>May take unintended actions outside guardrails</td><td>HIGH</td></tr>
+<tr><td><strong>Persistent</strong></td><td>Over-permissioning drift; undetected misuse; orphaned agents</td><td>HIGH</td></tr>
+<tr><td><strong>Opaque</strong></td><td>LLM black-box; non-determinism makes output hard to audit</td><td>HIGH</td></tr>
+<tr><td><strong>Prolific</strong></td><td>Shadow agents and sprawl; most existing Copilot Studio agents are Classic — outside the Entra security perimeter entirely</td><td>CRITICAL</td></tr>
+<tr><td><strong>Tool-invoking</strong></td><td>Prompt injection converts to real-world harm; MCP extends it to any connected system</td><td>CRITICAL</td></tr>
+<tr><td><strong>Context-consuming</strong></td><td>Sensitive data enters AI context — a new exfiltration surface</td><td>CRITICAL</td></tr>
+<tr><td><strong>Maker-authenticated</strong></td><td>Copilot Studio agents can authenticate as their <em>maker</em>, not the user — the maker's permissions extend to every user of the agent</td><td>CRITICAL</td></tr>
+<tr><td><strong>Autonomous</strong></td><td>Overprivileged or manipulated agents act as "double agents" against the outcomes they were built for</td><td>CRITICAL</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-warn" style="margin-top:14px;">
+  <div class="callout-title">⚠ The maker-credentials problem — the most underappreciated escalation path</div>
+  <p>If a developer with admin rights builds an agent and shares it org-wide with one toggle, every employee interacts with it using the <strong>maker's</strong> permissions. Field research confirms this pattern is common in production. Details and the authentication patterns are on the <a href="identity.html" style="color:var(--blue);">Identity</a> page; per-platform specifics on <a href="agent365.html" style="color:var(--blue);">Agent 365</a>.</p>
+</div>
+
+<h2 style="margin-top:32px;">Risk tiering — which agents to fix first</h2>
+<p>Categories say what can go wrong; the tier says which agents to remediate first. Apply to every agent in the inventory:</p>
+<table>
+<thead><tr><th>Tier</th><th>Criteria (any of)</th><th>Action</th></tr></thead>
+<tbody>
+<tr><td><strong>HIGH</strong></td><td>No authentication · maker credentials · org-wide sharing · no owner · regulated data</td><td>Remediate or block within 14 days; red team before production; alert on any change</td></tr>
+<tr><td><strong>MEDIUM</strong></td><td>Authenticated but broad connector access · sensitive data · owner but no sponsor · shared 50+</td><td>Scope review within 30 days; DLP validated; annual focused red team</td></tr>
+<tr><td><strong>LOW</strong></td><td>Delegated end-user auth · small-group sharing · scoped data · owner and sponsor assigned</td><td>Document; quarterly inventory check</td></tr>
+</tbody>
+</table>
+
+<div class="section-label" id="strategy" style="margin-top:48px;">Programme shape</div>
+<h2>The six-phase rollout</h2>
+<p>Each phase produces evidence the next consumes — run them in order, or controls land without the visibility they depend on. Everything maps to an existing M365 E5 + Sentinel footprint, with Agent 365 add-ons marked where required.</p>
+<table>
+<thead><tr><th>Phase</th><th>What you do</th><th>Output (input to the next phase)</th></tr></thead>
+<tbody>
+<tr><td><strong>01 · Discover &amp; Inventory</strong></td><td>Security Dashboard for AI; AI Agent Inventory; full <code>AgentsInfo</code> KQL sweep; no-auth and maker-credential flags; H/M/L tiers; shadow AI via the cloud app catalogue</td><td>Tiered agent register · no-auth list · shadow AI baseline</td></tr>
+<tr><td><strong>02 · Identity &amp; Governance</strong></td><td>Classic: Managed Environments, enforced end-user auth, sharing limits, owner/sponsor model, Power Platform DLP. Modern: Conditional Access, ID Protection, access packages (Agent 365)</td><td>Governed maker estate · CA-protected Modern agents · auth baseline</td></tr>
+<tr><td><strong>03 · Data Security</strong></td><td>DSPM oversharing assessment; regulated SITs; label inheritance; Purview DLP for Copilot; retention on agent output; browser DLP for public LLMs</td><td>Oversharing remediated · DLP active · label coverage measured</td></tr>
+<tr><td><strong>04 · Runtime Protection</strong></td><td>Defender real-time protection; Entra Internet Access prompt-injection controls; Prompt Shields; pre-deployment red teaming (PyRIT / Foundry Red Teaming Agent)</td><td>Runtime guardrails live · red-team evidence</td></tr>
+<tr><td><strong>05 · Monitoring &amp; Detection</strong></td><td>Sentinel connectors (Copilot, Defender XDR, Agent 365 + Agent Identities lake connectors); analytics rules; hunting via <code>AgentsInfo</code> / <code>CloudAppEvents</code>; the <a href="agent-telemetry-map.html" style="color:var(--blue);">Agent Telemetry Map</a> shows which sources need which licence</td><td>Detections firing · investigation paths proven</td></tr>
+<tr><td><strong>06 · Compliance &amp; Governance</strong></td><td>Agent lifecycle board; access reviews; Compliance Manager AI assessments; quarterly reporting</td><td>Standing governance cadence</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 Four KPIs to track weekly</div>
+  <p><strong>Inventory coverage</strong> (agents tiered vs discovered) · <strong>No-auth agent count</strong> (target zero) · <strong>Ownerless agent count</strong> (target zero) · <strong>Detection coverage</strong> (analytics rules live vs planned). If a metric can't be produced from the current phase's evidence, the phase isn't done.</p>
+</div>
+
+<hr style="border:none;border-top:1px solid var(--border2);margin:56px 0 8px;">
+<div class="section-label" id="gaps" style="margin-top:24px;">Gap register</div>
+<h2>Gaps, limitations &amp; roadmap</h2>
+<p style="font-size:14px;color:#2e3d5e;">What the stack cannot do yet, with interim mitigations — the honest counterpart to the capability story above. (Merged from the former Gaps page.)</p>
+<div class="section-label">Critical Gaps</div>
+<h2>🔴 Critical — Active Now</h2>
+<table>
+<thead><tr><th>Gap</th><th>Why It Matters</th><th>Interim Mitigation</th><th>Expected Resolution</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>Classic Agents — no Entra security product coverage</strong></td>
+  <td>Most existing Copilot Studio agents in production are Classic Agents (Service Principals). They receive zero Entra Agent ID security product coverage: no ID Protection, no Conditional Access, no lifecycle governance. This gap is invisible from Microsoft's marketing materials. Field research confirms this is the default state of most enterprise Copilot Studio deployments.</td>
+  <td>Inventory Classic vs Modern agents via AgentsInfo KQL; enforce end-user auth per agent via Power Platform admin; restrict org-wide sharing; manually recreate critical agents as Modern Agents</td>
+  <td>Microsoft migration tool planned — no date confirmed. Manual recreation is the only current path.</td>
+</tr>
+<tr>
+  <td><strong>Maker credentials — agent authenticates as builder, not user</strong></td>
+  <td>Copilot Studio agents authenticate to connected services as the maker (builder), not the invoking user. Combined with org-wide sharing and no authentication, a single admin-built agent extends admin permissions to every employee. This is structurally more dangerous than OBO in Copilot Studio deployments.</td>
+  <td>Enforce end-user authentication per agent (Power Platform admin); restrict sharing scope via Managed Environments; PAM hygiene on developers who build agents</td>
+  <td>Architectural — requires Power Platform admin enforcement. Product default is unlikely to change.</td>
+</tr>
+<tr>
+  <td><strong>OBO — no true per-agent least privilege (non-Copilot Studio agents)</strong></td>
+  <td>Standard agents inherit invoking user's full token scope. Overprivileged users = overprivileged agents. No changes at RSAC 2026.</td>
+  <td>PAM hygiene on users; Foundry Guardrails for tool whitelisting; Entra Workload Identity for app-level scoping; Defender Predictive Shielding during active attacks (preview)</td>
+  <td>Dependent on Entra Agent ID GA — timeline unconfirmed</td>
+</tr>
+<tr>
+  <td><strong>Entra Agent ID — preview only, Modern Agents only</strong></td>
+  <td>The primary Entra security primitive for agents isn't GA. Even when it is, it will only protect Modern Agents — Classic Agent migration must happen first. Not announced as GA at RSAC 2026.</td>
+  <td>Entra Workload Identity as stopgap; manual agent inventory; Agent 365 for discovery (GA May 1 2026)</td>
+  <td>GA timeline not publicly committed; expected H2 2026. Migration tool needed before most orgs can benefit.</td>
+</tr>
+<tr>
+  <td><strong>Per-user licensing mismatch</strong></td>
+  <td>Agent 365 licenses per user, not per agent. Governance scope doesn't scale with agent proliferation. Not addressed at RSAC 2026.</td>
+  <td>Architect agent deployments to be user-anchored; track agent count separately</td>
+  <td>No per-agent tier announced</td>
+</tr>
+<tr>
+  <td><strong>OBO audit trail — user not agent identity</strong></td>
+  <td>Logs show user UPN (or service), not agent identity. In Copilot Studio with maker credentials, logs may show the service account — making the attacker invisible. Forensic attribution is fundamentally broken until Agent ID GA + Classic migration.</td>
+  <td>Purview AI Observability (data-access layer); Sentinel correlation; application-layer logging; AgentsInfo Advanced Hunting for agent-side context</td>
+  <td>Improves with Agent ID GA and Classic→Modern migration</td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout callout-info" style="margin:0 0 24px;">
+  <div class="callout-title">🛠️ Automate gap discovery — M365 Copilot Automated Readiness Assessment (ARA)</div>
+  <p>Before manually working through this gap register, consider running the open-source <a href="https://github.com/microsoft/m365-copilot-automated-readiness-assessment" target="_blank" style="color:var(--blue);">Microsoft ARA tool</a>. It queries your tenant APIs directly and generates a prioritised report covering M365 licensing, Entra identity, Defender security posture, Purview compliance, Power Platform governance, and Copilot Studio readiness — in minutes. Read-only, no data egress, free. Use the output to prioritise which gaps below apply to your specific tenant configuration.</p>
+</div>
+
+<div class="section-label">Significant Gaps</div>
+<table>
+<thead><tr><th>Gap</th><th>Interim Mitigation</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>Identity tool fragmentation — 5 identity + 4 network tools on average</strong><br>
+  <span style="font-size:11px;color:var(--text3);">Microsoft research (March 2026) found organisations manage an average of 5 identity solutions and 4 network access solutions, often from different vendors. Nearly half of security leaders report being overwhelmed by vendor sprawl — a figure increasing year over year. In this environment, deploying Microsoft's agent security stack (Entra Agent ID, CA for Agents, Defender, Purview) alongside existing non-Microsoft identity infrastructure creates integration complexity that slows policy propagation and creates coverage gaps between tools. Classic agents are invisible to Entra products regardless of other tools deployed.</span></td>
+  <td>Adopt the Microsoft Access Fabric model: consolidate identity and network access tooling where possible so policy changes propagate in near real time. At minimum, ensure Defender + Entra + Purview signals flow into a single Sentinel workspace. Audit which agents fall outside the Entra perimeter regardless of what other identity tools are in use.</td>
+</tr>
+</tbody>
+</table>
+
+<h2>🟡 Significant — Manageable with Controls</h2>
+<table>
+<thead><tr><th>Gap</th><th>Interim Mitigation</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>Agent identity lake tables ship without published schemas</strong><br>
+  <span style="font-size:11px;color:var(--text3);">The Microsoft Agent Identities connector (Preview) lands <code>EntraAgentUsers</code>, <code>EntraAgentIdentities</code>, <code>EntraAgentIdentityBlueprints</code> and <code>EntraAgentIdentityBlueprintPrincipals</code> in the Sentinel data lake — but no column-level schema exists on Microsoft Learn, and the lake copy does not carry blueprint credential detail (secret/certificate counts stay on the Graph application object).</span></td>
+  <td>Guard every column with <code>column_ifexists()</code> and validate against live tenant data before any detection rests on these tables. Keep blueprint credential audit as a Graph/Entra exercise. Re-check Learn for the schema pages before each reuse.</td>
+</tr>
+<tr>
+  <td><strong>Orphaned agents — two distinct scenarios, both undetected by default</strong><br>
+  <span style="font-size:11px;color:var(--text3);"><strong>Scenario A — Blueprint deleted (Entra):</strong> When a Blueprint is deleted, the Modern Agent Identities it created are not automatically removed. They retain all permissions (Graph API, Azure RBAC, Entra roles) but can no longer authenticate. Orphaned Agent Users remain as normal user accounts with no flag or indicator.<br><br><strong>Scenario B — Builder left the company (most common in practice):</strong> Agents built in Copilot Studio by employees who have since left the organisation continue running with the builder's original permissions, full tool access, and no accountable owner. The agent remains active and accessible to anyone it was shared with. Microsoft does not detect or flag either scenario automatically — detection requires active KQL queries against AgentsInfo and cross-referencing against current employee lists.</span></td>
+  <td>Run quarterly Graph API sweep to detect orphaned Agent Identities (Agent Identities whose Blueprint Principal no longer exists). Use PowerShell with AgentIdentity.Read.All scope — note Global Reader gets 403, requires Agent ID Administrator. Remove orphaned identities and revoke their permissions. See Identity page for detection scripts.</td>
+</tr>
+<tr>
+  <td><strong>Agent sprawl — no lifecycle enforcement by default</strong><br>
+  <span style="font-size:11px;color:var(--text3);">Microsoft formally defines agent sprawl as the uncontrolled expansion of agents without adequate visibility, management, or lifecycle controls. It manifests as shadow AI (agents created without IT oversight), abandoned agents (created for temporary purposes and never decommissioned), and over-privileged agents (permissions granted and never reviewed). Agent sprawl leads to increased security risk, compliance challenges, and incident response difficulty.</span></td>
+  <td>Implement Entra ID Governance lifecycle management for Modern Agents — assign sponsors, configure Access Reviews, use access packages for time-bound permissions. For Classic Agents, use AgentsInfo KQL to audit and track all published agents quarterly. Run Playbook 01 to detect ownerless and abandoned agents.</td>
+</tr>
+<tr>
+  <td><strong>Microsoft Managed Policies not widely known or deployed</strong><br>
+  <span style="font-size:11px;color:var(--text3);">Microsoft Managed Policies for agents provide automatic baseline CA policies that block high-risk agents — available through Conditional Access. Many organisations are unaware these exist or have not deployed them. Without them, high-risk agent identities have no automatic blocking controls.</span></td>
+  <td>Review Microsoft Managed Policies in Entra → Conditional Access → Microsoft-managed policies. Enable the agent risk baseline policy to automatically block agents flagged as high-risk by Identity Protection. Applies to Modern Agents only.</td>
+</tr>
+<tr>
+  <td><strong>Security Copilot custom agents — maker credentials risk with elevated blast radius</strong><br>
+  <span style="font-size:11px;color:var(--text3);">Custom and partner Security Copilot agents use "Connect with existing user account" — the configuring user's credentials are stored and used for every execution regardless of who triggers the agent. Security Copilot users are typically high-privilege accounts (Security Admin, SOC engineer, Global Admin). A custom agent built by a Global Admin silently extends admin-level access to Sentinel, Defender, Entra, and threat intelligence to every user who runs it. No CA for Agents, no Identity Protection coverage. Structurally identical to Copilot Studio maker credentials but with a larger attack surface.</span></td>
+  <td>Use a dedicated low-privilege service account specifically for configuring custom Security Copilot agents — not a personal admin account. Treat this account like a shared service identity: minimal permissions scoped to what the agent actually needs, monitored, no interactive use. Establish an approval gate before any custom Security Copilot agent reaches production. Audit existing custom agents and review the permissions of the accounts used to configure them.</td>
+</tr>
+<tr>
+  <td><strong>Local AI agents (OpenClaw, GitHub Copilot CLI, Claude Code) operating outside governance</strong><br>
+  <span style="font-size:11px;color:var(--text3);">Users are installing AI agents on their devices outside MDM and security controls. These local agents can autonomously execute tasks, modify code, or access confidential information with no IT visibility. Agent 365 Shadow AI page (Frontier programme) can discover OpenClaw today; GitHub Copilot CLI and Claude Code support coming. Without Frontier programme, no native discovery mechanism exists. June 2026: Defender context mapping will show local agent blast radius including MCP servers and cloud resources reachable.</span></td>
+  <td>Enrol devices in Intune and ensure Defender for Endpoint coverage. Use Agent 365 Shadow AI page (Frontier programme) to discover OpenClaw instances. Apply Intune policies to block unauthorised local agents. June 2026: Defender context mapping and runtime blocking.<br><br><strong>⚠️ Policy caveat:</strong> Once the Block AI Agents from OpenClaw policy is enabled via Agent 365, it cannot be disabled through the Agent 365 portal. Rollback requires deleting the Intune security policy (<code>A365 - Block OpenClaw</code>) directly in Intune. Source: Derk van der Woude, May 2026.</td>
+  <td><span class="severity-high">High</span></td>
+</tr>
+<tr>
+  <td><strong>No pre-deployment security testing for AI agents</strong><br>
+  <span style="font-size:11px;color:var(--text3);">Most AI agents go to production without a single adversarial security test. Unlike web applications (OWASP ZAP, Snyk, DAST pipelines), AI agents have no equivalent mandatory pre-deployment security gate in the Microsoft platform. Prompt injection, system prompt leakage, excessive agency, and data exfiltration vulnerabilities (OWASP LLM01, LLM02, LLM06, LLM07) are typically only discovered after deployment. The OWASP LLM Top 10 (2025) defines 10 risk categories — most agents are untested against all ten before shipping.</span></td>
+  <td>Use Microsoft PyRIT (github.com/microsoft/PyRIT) for automated pre-deployment adversarial testing. Wrap PyRIT in a config-driven scanner with OWASP mapping and CI/CD release gate (exit 0 = deploy, exit 1 = block). Run quick scans on every merge (phases 1–2), full scans pre-release (all 4 phases). See Playbook 06. Source: <a href="https://techcommunity.microsoft.com/blog/appsonazureblog/securing-your-ai-agents-before-they-ship-red-teaming-with-microsoft-pyrit/4515514" target="_blank" style="color:var(--blue);">Microsoft Tech Community — PyRIT</a></td>
+  <td><span class="severity-high">High</span></td>
+</tr>
+<tr>
+  <td><strong>No visibility into which AI model each agent uses — EUDB compliance blind spot</strong><br>
+  <span style="font-size:11px;color:var(--text3);">Copilot Studio allows agents to use third-party models (Anthropic Sonnet/Haiku/Opus, OpenAI GPT-4o etc.). The model selection is stored in <code>RawAgentInfo.modelNameHint</code> — not surfaced in any admin UI or registry view. Agents using Anthropic models process data outside the EU Data Boundary regardless of tenant geo settings. No native policy to prevent makers selecting out-of-EUDB models. Source: <a href="https://github.com/Blue161616/Agent-Identity/blob/main/CopilotStudioAgentModelInfo.KQL" target="_blank">Blue161616/Agent-Identity</a>.</span></td>
+  <td>Query AgentsInfo with extract(modelNameHint) to identify affected agents and their EUDB status. Consider restricting available models in Copilot Studio environment settings via Power Platform Admin Center. Run before any data residency audit.</td>
+  <td><span class="severity-high">High</span></td>
+  </tr>
+  <tr>
+  <td><strong>Any user can change another agent's authentication type</strong><br>
+  <span style="font-size:11px;color:var(--text3);">By design in Copilot Studio, any tenant user can change the authentication settings of an agent they did not create and do not own — including downgrading a published agent from authenticated to No Authentication. A single non-admin user can silently expose any published agent to anonymous access without the owner's knowledge. There is currently no platform-enforced owner-only restriction on auth type changes.</span></td>
+  <td>Deploy the change-detection Sentinel Analytics Rule (see Playbooks) to alert immediately when any agent is switched to No Authentication. Audit auth type changes regularly via the AgentsInfo table. Restrict who can access Copilot Studio environments via Managed Environments in Power Platform Admin Center.</td>
+</tr><br><span style="font-size:11px;color:var(--text3);">Agent 365, Security Dashboard for AI, and Entra Agent ID portal show different agent counts. Microsoft has confirmed this is a known issue. Security teams cannot rely on any single portal for a definitive agent inventory.</span></td>
+  <td>Cross-reference all three portals; use AgentsInfo Advanced Hunting table as the most granular source; treat any portal count as approximate until Microsoft resolves the consistency issue</td>
+</tr>
+<tr>
+  <td><strong>Purview triage agent 90-day re-auth requirement</strong><br><span style="font-size:11px;color:var(--text3);">Purview Security Copilot triage agents (DLP, IRM) run in the security context of the last user who saved the config. After 90 days, the agent stops running until config is manually re-saved. No automatic renewal.</span></td>
+  <td>Create a calendar reminder at 80 days post-config to re-save. Consider assigning a shared service account as the config owner to avoid disruption if the original user departs.</td>
+</tr>
+<tr>
+  <td><strong>SharePoint oversharing — silent Copilot data exposure vector</strong><br>
+  <span style="font-size:11px;color:var(--text3);">M365 Copilot grounds responses in data the user has permission to access. Sites shared with Everyone Except External Users (EEEU), broken permission inheritance, anonymous sharing links, and ownerless sites all become Copilot exposure vectors — Copilot will surface content from these sites in responses to any user with access. Most organisations have significant oversharing debt that predates Copilot deployment. This is a data risk distinct from agent identity risks — it exists even in well-governed Classic/Modern agent environments.</span></td>
+  <td>Run SharePoint Advanced Management (SAM) Content Management Assessment to identify high-risk sites. Apply Restricted Content Discovery (RCD) immediately to exclude sensitive sites from Copilot grounding while remediation is underway. Then remediate: remove EEEU access, fix broken inheritance, assign site owners, restrict sharing links. Use DSPM for AI Data Risk Assessments to continuously monitor. See <a href="https://learn.microsoft.com/en-us/microsoft-365/copilot/configure-secure-governed-data-foundation-microsoft-365-copilot" target="_blank" style="color:var(--blue);">Microsoft's three-step blueprint</a>.</td>
+</tr>
+<tr>
+  <td><strong>Real-time agent tool protection — Agent Tooling Gateway (ATG)</strong><br>
+  <span style="font-size:11px;color:var(--text3);">Agents onboarded via Agent 365's Agent Tooling Gateway (ATG) now get real-time protection equivalent to the existing Copilot Studio Defender RT integration — tool actions evaluated and blocked before execution. However, this only applies to agents explicitly onboarded via ATG. Custom agents, Classic Copilot Studio agents, and any agent not registered with Agent 365 receive no ATG protection. Coverage depends on adoption of Agent 365 SDK or ATG integration by the agent builder.</span></td>
+  <td>Ensure new custom agent builds onboard via Agent 365 SDK to receive ATG real-time protection. Classic Copilot Studio agents remain outside this coverage. Treat ATG as the enforcement path for Agent 365-registered agents going forward.</td>
+</tr>
+<tr>
+  <td><strong>DLP label-blocking previously limited to SharePoint/OneDrive — now being fixed</strong><br>
+  <span style="font-size:11px;color:var(--text3);">Until April 2026, Purview DLP label-blocking for Copilot only applied to files stored in SharePoint or OneDrive. Files on local devices, network shares, and non-Microsoft cloud locations were not covered — Copilot could process sensitivity-labelled confidential files from these locations despite active DLP policies. This was confirmed in practice by incident CW1226324 (January 2026), in which Copilot accessed confidential emails in Outlook Drafts and Sent Items for approximately one month. Resolution: rolling out mid-April to May 2026, DLP label-blocking now applies to Word, Excel, and PowerPoint files regardless of storage location. No policy changes required — existing rules apply automatically.</span></td>
+  <td><span style="color:var(--green2);font-weight:600;">✓ Resolving April–May 2026 rollout</span> — verify rollout has reached your tenant before treating as closed. Ensure sensitivity labels are applied to files requiring protection — unlabelled files remain unblocked regardless of DLP policies. Deploy auto-labelling policies via Purview Information Protection to cover unlabelled content at scale.</td>
+</tr>
+<tr>
+  <td><strong>DLP coverage gap — unmanaged devices without Edge for Business</strong><br>
+  <span style="font-size:11px;color:var(--text3);">Browser-layer DLP (Edge for Business inline protection) only activates where users are signed into their Edge for Business profile. Users on unmanaged devices using Chrome, Firefox, or Safari to access external GenAI tools have no browser-layer DLP coverage. Network Data Security (Global Secure Access) fills this gap but is still in preview. Organisations have a residual exposure window for BYOD users on non-Edge browsers.</span></td>
+  <td>Prioritise Edge for Business rollout as an immediate mitigation. Enable Network Data Security (Global Secure Access preview) for broader device coverage. Communicate acceptable use policy for GenAI apps on personal devices pending GA.</td>
+</tr>
+<tr><td><strong>AI Agent Inventory — complex setup requiring two admins</strong><br><span style="font-size:11px;color:var(--text3);">Setup requires collaboration between Defender admin (enable 3 preview features) AND Power Platform admin (enable separate threat detection toggle). Takes up to 30 min for connection, longer for data population. Not self-service.</span></td><td>Assign a joint Defender + Power Platform admin workstream for onboarding. Verify via AgentsInfo KQL after setup. Plan for 30-minute minimum delay on initial data.</td></tr>
+<tr><td><strong>Agent name sync bug — Copilot Studio rename not reflected in Entra Agent ID</strong><br><span style="font-size:11px;color:var(--text3);">Agents renamed in Copilot Studio keep their original "Agent #" name in Entra. Makes per-agent CA policy management nearly impossible at scale.</span></td><td>Use Agent ID object-ID (not name) as primary key for agent identification. Cross-reference via PowerShell script against Power Platform Admin Environment URL. Monitor for Microsoft fix — no timeline confirmed.</td></tr>
+<tr><td><strong>No MCP server authentication standard</strong> — MCP spec doesn't mandate cryptographic server binding</td><td>Defender for Cloud Apps MCP server registry + anomaly detection; network segmentation; Foundry Guardrails tool whitelist (Foundry agents only); Sentinel MCP Entity Analyzer (GA April) for investigation</td></tr>
+<tr><td><strong>Foundry Guardrails in preview, Foundry agents only</strong> — no equivalent control for Copilot Studio agents</td><td>Power Platform admin controls for Copilot Studio agents (authentication enforcement, sharing limits); Defender for Cloud Apps for API-layer controls</td></tr>
+<tr><td><strong>CopilotActivity table prompt sensitivity + ingestion cost</strong><br><span style="font-size:11px;color:var(--text3);">The Copilot Data Connector for Sentinel ingests prompt content into the CopilotActivity table — making user prompts a sensitive artifact inside the SIEM. Standard ingestion costs apply (pay-per-GB). Organisations must apply field-level masking, retention policies, and access controls on the table before enabling in production.</span></td><td>Enable in a controlled test workspace first. Apply field-level masking on prompt content fields. Set short retention for sensitive fields. Restrict CopilotActivity table access to SOC personnel only. Plan and budget for ingestion volume before enabling at scale.</td></tr>
+<tr><td><strong>Defender for Cloud Apps RT protection — 1-second timeout</strong><br><span style="font-size:11px;color:var(--text3);">If the Defender system doesn't return a block decision within 1 second, the agent proceeds to execute the tool anyway. Fast tool calls may bypass protection.</span></td><td>Ensure network latency between Copilot Studio environment and Defender is minimised. Treat as a detection tool, not a guaranteed prevention control.</td></tr>
+<tr><td><strong>ZT Assessment AI pillar now available</strong> <span style="color:var(--green2);font-weight:700;">(RESOLVED)</span></td><td>Use the AI pillar of the Microsoft Zero Trust Assessment — see <a href="https://learn.microsoft.com/entra/fundamentals/zero-trust-ai" target="_blank" style="color:var(--blue);">Configure agent identity security with the Zero Trust Assessment</a>. Microsoft identifies three common agent issues the assessment helps surface: auth/policy mismatch, overpermissioned access, lifecycle gaps.</td></tr>
+<tr><td><strong>No built-in platform kill switch — open-source option now available</strong><br><span style="font-size:11px;color:var(--text3);">Microsoft has no single-click kill switch for all agent types. The Agent Governance Toolkit (open-source, MIT, April 2026) provides an automated kill switch with ring isolation and trust decay via Agent Runtime package. For platform controls: Entra CA for Modern Agents, Power Platform admin can disable Classic agents, Defender Predictive Shielding (preview).</span></td><td>Adopt Agent Governance Toolkit for programmatic kill switch capability. Pre-plan incident response runbook for agent compromise scenarios. Entra CA for Modern Agents provides policy-based blocking. Power Platform admin can disable Classic agents manually. See <a href="playbooks.html#playbook4" style="color:var(--blue);">Playbook 04</a> for incident response.</td></tr>
+<tr><td><strong>Cross-user context contamination in shared agents</strong></td><td>Architecture control: enforce session isolation in agent design; no native Microsoft platform control</td></tr>
+<tr><td><strong>Org-wide sharing default enables blast radius</strong></td><td>Power Platform Managed Environments: set sharing limits; require end-user auth; AgentsInfo KQL to detect widely-shared no-auth agents</td></tr>
+</tbody>
+</table>
+<p style="font-size:13px;color:#5a6a8a;">Detection and remediation KQL for these gaps lives on <a href="playbooks.html" style="color:var(--blue);">Playbooks</a> and <a href="identity.html" style="color:var(--blue);">Identity</a>.</p>
+<div class="section-label">Roadmap</div>
+<h2>📅 What to Watch</h2>
+<div class="pill-list">
+  <div class="pill"><div class="pill-dot" style="background:var(--green2);"></div>Security Dashboard for AI — <strong>Now GA</strong></div>
+  <div class="pill"><div class="pill-dot" style="background:var(--green2);"></div>Entra Internet Access Shadow AI + Prompt Injection — GA March 31 2026</div>
+  <div class="pill"><div class="pill-dot" style="background:var(--green2);"></div>Purview DLP for M365 Copilot — GA March 31 2026</div>
+  <div class="pill"><div class="pill-dot" style="background:var(--green2);"></div>Entra External MFA — Now GA</div>
+  <div class="pill"><div class="pill-dot" style="background:var(--blue2);"></div>Sentinel MCP Entity Analyzer — GA April 2026</div>
+  <div class="pill"><div class="pill-dot" style="background:var(--blue2);"></div>Security Analyst Agent — Preview March 26 2026</div>
+  <div class="pill"><div class="pill-dot" style="background:var(--blue2);"></div>Purview in Copilot Control System — GA April</div>
+  <div class="pill"><div class="pill-dot" style="background:var(--caution-text);"></div>Agent 365 + M365 E7 — GA May 1 2026, 2026</div>
+  <div class="pill"><div class="pill-dot" style="background:var(--green2);"></div>ZT Assessment AI Pillar — Now Available</div>
+  <div class="pill"><div class="pill-dot" style="background:var(--warn-text);"></div>Entra Agent ID GA — unconfirmed; H2 2026 expected</div>
+  <div class="pill"><div class="pill-dot" style="background:var(--warn-text);"></div>Classic → Modern Agent migration tool — no date confirmed</div>
+  <div class="pill"><div class="pill-dot" style="background:var(--warn-text);"></div">Agent name sync fix (Copilot Studio ↔ Entra) — no date confirmed</div>
+  <div class="pill"><div class="pill-dot" style="background:var(--purple2);"></div>MCP spec authentication standard — open-source community</div>
+</div>
+
+<div class="callout callout-green" style="margin-top:28px;">
+  <div class="callout-title">✅ Where the Stack Is Genuinely Strong Today</div>
+  <p>Production-ready GA controls: Prompt Shields, Azure AI Content Safety, Defender for Cloud Apps (OAuth + SaaS governance + Copilot Studio RT protection), Purview Information Protection, Sentinel, Entra Conditional Access, Security Dashboard for AI (now GA), Entra Internet Access Shadow AI and Prompt Injection Protection (GA March 31 2026), Purview DLP for Copilot (GA March 31 2026), Power Platform Managed Environments (sharing limits + auth enforcement). A well-architected deployment combining these controls with Modern Agent migration provides meaningful defence in depth — but the Classic Agent estate must be addressed first.</p>
+</div>
+
+<div class="section-label">Full Availability Matrix</div>
+<h2>Control Availability — Updated March 2026</h2>
+<table>
+<thead><tr><th>Control</th><th>Product</th><th>Status</th><th>Applies To</th><th>Key Caveat</th></tr></thead>
+<tbody>
+<tr><td><strong>Agent 365 Control Plane</strong></td><td>Agent 365</td><td><span class="caution-inline">GA May 1 2026</span></td><td>All agents</td><td>Per-user, not per-agent licensing</td></tr>
+<tr><td><strong>Security Dashboard for AI</strong></td><td>Defender/Entra/Purview</td><td><span class="green-inline">✓ Now GA</span></td><td>All agents + third-party AI</td><td>Previously preview</td></tr>
+<tr><td><strong>AI Agent Inventory (Defender)</strong></td><td>Defender for Cloud Apps</td><td><span class="caution-inline">Preview</span></td><td>Copilot Studio agents only</td><td>Requires Defender admin + Power Platform admin collaboration; complex setup; 30min+ data delay</td></tr>
+<tr><td><strong>Entra Agent ID</strong></td><td>Entra</td><td><span class="warn-inline">Preview · Frontier only</span></td><td>Modern Agents only</td><td>Classic Agents require migration first; OBO still underlying</td></tr>
+<tr><td><strong>ID Protection for Agents</strong></td><td>Entra</td><td><span class="warn-inline">Preview</span></td><td>Modern Agents only</td><td>Classic Agents not covered</td></tr>
+<tr><td><strong>Conditional Access for Agents</strong></td><td>Entra</td><td><span class="green-inline">GA</span></td><td>Modern Agents only</td><td>Classic Agents cannot be targeted; name sync bug complicates policy management</td></tr>
+<tr><td><strong>Entra Workload Identity</strong></td><td>Entra</td><td><span class="green-inline">GA</span></td><td>App-level (not per-agent)</td><td>Stopgap — not purpose-scoped for agent-instances</td></tr>
+<tr><td><strong>Entra External MFA</strong></td><td>Entra</td><td><span class="green-inline">✓ Now GA</span></td><td>All users + agents</td><td>New at RSAC 2026</td></tr>
+<tr><td><strong>Entra Backup and Recovery</strong></td><td>Entra</td><td><span class="caution-inline">Preview · RSAC 2026</span></td><td>Entra directory objects</td><td>New capability</td></tr>
+<tr><td><strong>Entra Tenant Governance</strong></td><td>Entra</td><td><span class="caution-inline">Preview · RSAC 2026</span></td><td>Multi-tenant</td><td>Shadow tenant discovery</td></tr>
+<tr><td><strong>Entra Internet Access — Shadow AI</strong></td><td>Entra Suite</td><td><span class="green-inline">GA March 31 2026</span></td><td>Network-wide</td><td>—</td></tr>
+<tr><td><strong>Entra Internet Access — Prompt Injection</strong></td><td>Entra Suite</td><td><span class="green-inline">GA March 31 2026</span></td><td>Network-wide</td><td>Complements Prompt Shields; not a replacement</td></tr>
+<tr><td><strong>Power Platform Managed Environments</strong></td><td>Power Platform</td><td><span class="green-inline">GA</span></td><td>Copilot Studio agents</td><td>Primary control for maker creds + org-wide sharing risk</td></tr>
+<tr><td><strong>Prompt Shields</strong></td><td>Azure AI / Foundry</td><td><span class="green-inline">GA</span></td><td>Foundry agents, SDK</td><td>Must be explicitly enabled per agent; not auto-applied</td></tr>
+<tr><td><strong>Azure AI Content Safety</strong></td><td>Azure AI</td><td><span class="green-inline">GA</span></td><td>Model boundary</td><td>Separate from Prompt Shields</td></tr>
+<tr><td><strong>Defender for Cloud Apps RT Protection</strong></td><td>Defender for Cloud Apps</td><td><span class="caution-inline">Preview</span></td><td>Copilot Studio agents only</td><td>1-second timeout — fast tool calls may bypass; complex setup</td></tr>
+<tr><td><strong>Defender Predictive Shielding</strong></td><td>Defender</td><td><span class="caution-inline">Preview · RSAC 2026</span></td><td>All identities</td><td>Reactive during active attacks</td></tr>
+<tr><td><strong>Foundry Guardrails</strong></td><td>Microsoft Foundry</td><td><span class="caution-inline">Preview</span></td><td>Foundry agents only</td><td>No equivalent for Copilot Studio agents</td></tr>
+<tr><td><strong>Defender for Cloud Apps (CASB)</strong></td><td>Defender</td><td><span class="green-inline">GA</span></td><td>All MCP-SaaS connections</td><td>Primary MCP boundary control</td></tr>
+<tr><td><strong>Microsoft Sentinel</strong></td><td>Sentinel</td><td><span class="green-inline">GA</span></td><td>All</td><td>MCP Entity Analyzer GA April; Data Federation preview; GDAP + unified RBAC (cross-tenant) preview</td></tr>
+<tr><td><strong>Sentinel GDAP + Unified RBAC</strong></td><td>Sentinel</td><td><span class="caution-inline">Preview · RSAC 2026</span></td><td>MSSP / multi-tenant</td><td>Granular delegated admin privileges + unified RBAC for secure cross-tenant Sentinel management. Addresses long-standing gap for partners and MSSPs managing multiple customer tenants from a single pane.</td></tr>
+<tr><td><strong>Purview DSPM for AI</strong></td><td>Purview</td><td><span class="caution-inline">Preview</span></td><td>AI workloads</td><td>—</td></tr>
+<tr><td><strong>Purview DLP for M365 Copilot</strong></td><td>Purview</td><td><span class="green-inline">GA March 31 2026</span></td><td>M365 Copilot prompts</td><td>New at RSAC 2026</td></tr>
+<tr><td><strong>Purview DLP — SIT Prompt Blocking</strong></td><td>Purview</td><td><span class="caution-inline">Preview · GA June/July 2026</span></td><td>M365 Copilot, Copilot Chat, Word/Excel/PPT</td><td>No response when triggered (does not fall back to Graph). Files uploaded to prompts not scanned. Two conditions can't be in same rule.</td></tr>
+<tr><td><strong>Purview Information Protection</strong></td><td>Purview</td><td><span class="green-inline">GA</span></td><td>All AI workflows</td><td>—</td></tr>
+<tr><td><strong>Security Copilot</strong></td><td>Security Copilot</td><td><span class="green-inline">GA · Included E5 + E7</span></td><td>SOC workflows</td><td>400 SCU/1K users/mo (E5); 15+ partner agents</td></tr>
+<tr><td><strong>Security Analyst Agent</strong></td><td>Defender / Security Copilot</td><td><span class="caution-inline">Preview March 26 2026</span></td><td>Defender investigations</td><td>New at RSAC 2026</td></tr>
+<tr><td><strong>Security Alert Triage Agent</strong></td><td>Defender / Security Copilot</td><td><span class="caution-inline">Preview Apr 2026il</span></td><td>Cloud + identity alerts</td><td>New at RSAC 2026</td></tr>
+</tbody>
+</table>
+
+
+<div class="page-nav"><a href="threats.html#frameworks"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Frameworks</span></a><a href="playbooks.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">Playbooks</span></a></div>
+<div style="text-align:center;margin:32px 0 0;padding:24px 0;border-top:1px solid var(--border2);">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text3);margin-bottom:10px;">STAY UPDATED</div>
+  <div style="font-size:15px;font-weight:700;color:#0d1526;margin-bottom:6px;">Get notified when Microsoft AI security changes</div>
+  <div style="font-size:13px;color:#2e3d5e;margin-bottom:14px;">Monthly updates on new controls, GA announcements, and critical gaps — direct to your inbox.</div>
+  <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#ffffff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;padding:12px 24px;border-radius:8px;text-decoration:none;transition:opacity 0.15s;" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">
+    Subscribe to updates →
+  </a>
+  <div style="font-size:11px;color:var(--text3);margin-top:10px;font-family:'JetBrains Mono',monospace;">aiagentsecurity.substack.com · Free · No spam</div>
+</div>
+
 <h2>How to Use This Guide</h2>
 <div class="card-grid">
-  <a href="risk.html" class="card-link" style="text-decoration:none;color:inherit;display:block;"><div class="card" style="border-color:rgba(216,59,1,0.2);">
+  <a href="overview.html#risk" class="card-link" style="text-decoration:none;color:inherit;display:block;"><div class="card" style="border-color:rgba(216,59,1,0.2);">
     <div class="card-sub">AI RISK</div>
     <div class="card-name">AI Risk Reality</div>
     <div class="card-desc">How AI agents break traditional security assumptions. Severity-rated risk taxonomy and the full attack surface model.</div>
@@ -683,7 +667,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
     <div class="card-desc">The OBO token flow in detail. What Agent ID is vs. what's actually available. What architects should do today.</div>
     <div class="tag-row"><span class="tag warn">⚠ Critical Gap</span><span class="tag">OBO · Agent ID</span></div>
   <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
-  <a href="mcp.html" class="card-link" style="text-decoration:none;color:inherit;display:block;"><div class="card" style="border-color:rgba(98,100,167,0.2);">
+  <a href="threats.html#mcp" class="card-link" style="text-decoration:none;color:inherit;display:block;"><div class="card" style="border-color:rgba(98,100,167,0.2);">
     <div class="card-sub">MCP ECOSYSTEM</div>
     <div class="card-name">MCP</div>
     <div class="card-desc">MCP architecture, six specific attack vectors, and how Microsoft controls the MCP-to-SaaS boundary — including the new Sentinel MCP Entity Analyzer.</div>
@@ -695,13 +679,13 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
     <div class="card-desc">Four detailed attack chains — DPI, XPIA, data leakage, privilege escalation — with full control mappings and gap assessments.</div>
     <div class="tag-row"><span class="tag">DPI</span><span class="tag">XPIA</span><span class="tag">Data Leakage</span></div>
   <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
-  <a href="frameworks.html" class="card-link" style="text-decoration:none;color:inherit;display:block;"><div class="card" style="border-color:rgba(0,133,117,0.2);">
+  <a href="threats.html#frameworks" class="card-link" style="text-decoration:none;color:inherit;display:block;"><div class="card" style="border-color:rgba(0,133,117,0.2);">
     <div class="card-sub">FRAMEWORKS</div>
     <div class="card-name">Frameworks</div>
     <div class="card-desc">NIST AI RMF and ISO 42001 control mappings — with gap analysis per clause and function.</div>
     <div class="tag-row"><span class="tag">NIST AI RMF</span><span class="tag">ISO 42001</span></div>
   <div style="margin-top:12px;display:flex;justify-content:flex-end;"><span style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ffffff;background:#0078d4;border-radius:3px;padding:3px 8px;letter-spacing:0.04em;font-weight:500;">↗ Learn More</span></div></div></a>
-  <a href="gaps.html" class="card-link" style="text-decoration:none;color:inherit;display:block;"><div class="card" style="border-color:rgba(252,225,0,0.15);">
+  <a href="overview.html#gaps" class="card-link" style="text-decoration:none;color:inherit;display:block;"><div class="card" style="border-color:rgba(252,225,0,0.15);">
     <div class="card-sub">GAPS & ROADMAP</div>
     <div class="card-name">Gaps</div>
     <div class="card-desc">Consolidated gap register with interim mitigations and updated availability matrix reflecting RSAC 2026 GA announcements.</div>
@@ -719,7 +703,7 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   <p>Microsoft's <a href="https://learn.microsoft.com/security/security-for-ai/whats-new" target="_blank" style="color:var(--blue);">official "What's new in Microsoft AI security"</a> page is the authoritative source for capability landings. Key recent additions: <strong>Microsoft Entra Agent Platform</strong> (developer-first identity platform), <strong>Microsoft Entra Agent Registry</strong> (complete inventory including third-party agents), <strong>AI Prompt Shield</strong> (network-layer prompt injection blocking, Preview), <strong>specialized roles for Agent ID management</strong>, and <strong>Microsoft Copilot Studio AI agent protection in Defender</strong> (Preview, GA expected June 2026). The platform is also now called <strong>Microsoft Foundry</strong> (formerly Azure AI Foundry) — Microsoft is using the new name consistently in Learn from Q4 2025 onward.</p>
 </div>
 
-<div class="page-nav"><a href="index.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Home</span></a><a href="risk.html"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">AI Risk</span></a></div>
+<div class="page-nav"><a href="index.html"><span class="page-nav-label">← PREVIOUS</span><span class="page-nav-name">Home</span></a><a href="overview.html#risk"><span class="page-nav-label">NEXT →</span><span class="page-nav-name">AI Risk</span></a></div>
 <div style="text-align:center;margin:32px 0 0;padding:24px 0;border-top:1px solid var(--border2);">
   <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text3);margin-bottom:10px;">STAY UPDATED</div>
   <div style="font-size:15px;font-weight:700;color:#0d1526;margin-bottom:6px;">Get notified when Microsoft AI security changes</div>
