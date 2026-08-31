@@ -138,9 +138,38 @@ section.notes{border-top:1px solid var(--rule);padding:30px 0 60px;background:va
 .cols h3{font:600 12px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin:0 0 9px}
 .cols p{margin:0 0 11px;font-size:13.5px;color:var(--ink-2)}
 .cols code{font-family:var(--f-mono);font-size:12px;color:var(--ink)}
+
+/* ── site nav, scoped to this page's design system ── */
+.mnav{position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:18px;
+  padding:10px 24px;background:var(--surface);border-bottom:1px solid var(--rule);
+  font-family:var(--f-body);box-shadow:var(--shadow);}
+.mnav-brand{display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0;}
+.mnav-logo{width:16px;height:16px;display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.mnav-logo i{border-radius:1px;display:block;}
+.mnav-brand b{font-size:13px;font-weight:700;color:var(--ink);white-space:nowrap;}
+.mnav-links{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;}
+.mnav-links::-webkit-scrollbar{display:none;}
+.mnav-links a{font-size:12.5px;font-weight:600;color:var(--ink-2);text-decoration:none;
+  padding:5px 10px;border-radius:7px;white-space:nowrap;}
+.mnav-links a:hover{color:var(--ink);background:var(--surface-2);}
+.mnav-links a.on{color:var(--focus);background:var(--surface-2);}
 </style>
 </head>
 <body>
+<nav class="mnav" aria-label="Site">
+  <a class="mnav-brand" href="index.html">
+    <span class="mnav-logo" aria-hidden="true"><i style="background:#f25022"></i><i style="background:#7fba00"></i><i style="background:#00a4ef"></i><i style="background:#ffb900"></i></span>
+    <b>Securing AI with Microsoft</b>
+  </a>
+  <div class="mnav-links">
+    <a href="index.html">Home</a>
+    <a href="surfaces.html">Five Surfaces</a>
+    <a href="licensing.html">Licensing</a>
+    <a class="on" href="agent-telemetry-map.html">Agent Map</a>
+    <a href="start.html">Start Here</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
 
 <header>
   <div class="wrap mast">
