@@ -429,7 +429,8 @@ const PATHS = [
   { id:'local', name:'Locally installed', sub:'Claude · ChatGPT · Ollama · local Copilot',
     identity:['none'], blind:true,
     identityNote:'No identity, no catalogue entry, no control but the endpoint sensor. A local model runner puts inference outside every prompt-logging and DLP path you have.',
-    emits:[ {t:'AgentsInfo', cond:'MDE P2 — Platform == LocalAgents', gives:'what the agent IS: vendor, version, host process, trust and auto-approve settings, local and remote MCP servers, device and account'} ] }
+    emits:[ {t:'AgentsInfo', cond:'MDE P2 — Platform == LocalAgents', gives:'what the agent IS: vendor, version, host process, trust and auto-approve settings, local and remote MCP servers, device and account'},
+            {t:'ApiManagementGatewayLlmLog', cond:'CLI deliberately pointed at an APIM gateway', gives:'prompts, completions and token counts for routed traffic — APIM speaks the Anthropic Messages API, and Claude Code documents LLM-gateway configuration. Unrouted traffic stays endpoint-only visibility'} ] }
 ];
 </script>
 <script>
