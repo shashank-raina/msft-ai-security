@@ -370,7 +370,7 @@ const PATHS = [
 
   { id:'cs', name:'Copilot Studio', sub:'low-code makers · shared global blueprint',
     identity:['entra','appreg'],
-    identityNote:'A date, not a setting. Before May 2026 an app registration per agent; from 18 Mar 2026 agent identities; after May 2026 every new agent, no opt-out. No automated in-place migration — recreate and deprecate.',
+    identityNote:'A date, not a setting. Before May 2026 an app registration per agent; from 18 Mar 2026 agent identities; after May 2026 every new agent, no opt-out. No automated in-place migration — recreate and deprecate. And the population under the shared global blueprint is broader than the Studio: Power Automate agent flows — and, reportedly, product-provisioned agents — mint identities there too, so blueprint-level actions are population-level actions.',
     emits:[ {t:'CopilotActivity', gives:'every interaction: agent + actor, Jailbreak / XPIA verdicts in LLMEventData'},
             {t:'CloudAppEvents', gives:'Copilot interaction verdict rows — the E5 population'},
             {t:'AgentsInfo', cond:'Agent 365', gives:'config posture: auth model, declared tools and data sources, MCP servers, owners, lifecycle'},

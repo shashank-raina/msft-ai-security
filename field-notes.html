@@ -51,7 +51,7 @@
 
 <div class="section-label" style="margin-top:24px;">From doing, not reading</div>
 <h1>Field<br><span style="color:var(--blue);">notes</span></h1>
-<p style="font-size:15px;color:#2e3d5e;max-width:700px;">Everything else on this site you could, eventually, assemble from Microsoft's documentation. This page you couldn't. These are the things that bit me — or nearly did — while actually deploying this stack: schema traps, licence boundaries dressed up as empty tables, and controls that stopped working without saying so. Short, specific, and dated to August 2026.</p>
+<p style="font-size:15px;color:#2e3d5e;max-width:700px;">Everything else on this site you could, eventually, assemble from Microsoft's documentation. This page you couldn't. These are the things that bit me — or nearly did — while actually deploying this stack: schema traps, licence boundaries dressed up as empty tables, and controls that stopped working without saying so. Short, specific, and dated August–September 2026.</p>
 
 <div class="note">
 <span class="n">NOTE 01</span>
@@ -111,6 +111,12 @@
 <span class="n">NOTE 10</span>
 <h3>"We block paste into AI" rarely means what people think</h3>
 <p>Defender for Cloud Apps session controls apply only to apps onboarded to Conditional Access App Control — which public AI sites are not, so a session policy never sees that paste. Endpoint DLP can govern it, but paste content is classified <em>locally</em>: exact data match and trainable classifiers don't fire on paste; only standard pattern-based sensitive info types do. And blocking carries its own cost — people route around controls, so visibility is usually worth more than prohibition.</p>
+</div>
+
+<div class="note">
+<span class="n">NOTE 11</span>
+<h3>"Copilot Studio" in Entra names the machinery, not the maker</h3>
+<p>Every Copilot Studio app-based agent identity in Entra is a child of one shared global blueprint — and that population is bigger than the agents anyone built in the Studio. Agent flows (Power Automate) receive Entra Agent IDs through the same integration, and first-party product agents provisioned through the Power Platform machinery are reported to land there too — that last part I haven't found written down, so verify it in your tenant. Two consequences. Counting the blueprint's children as "Copilot Studio agents someone built" overcounts. And the sharper one: a Conditional Access policy or a disable aimed at that blueprint hits <em>everything</em> under it — flows and product-provisioned agents included. Blueprint-level actions are population-level actions.</p>
 </div>
 
 <p style="margin-top:32px;font-size:13.5px;color:var(--text3);">These notes date fast — that's rather the point. Anything here older than a couple of months deserves re-verification against <a href="https://learn.microsoft.com/" target="_blank" style="color:var(--blue);">Microsoft Learn</a> before you rely on it.</p>
