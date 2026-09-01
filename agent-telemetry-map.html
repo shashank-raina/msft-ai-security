@@ -249,7 +249,7 @@ section.notes{border-top:1px solid var(--rule);padding:30px 0 60px;background:va
     <div>
       <p class="eyebrow">Microsoft AI agent estate</p>
       <h1>Where do your agents leave a trace?</h1>
-      <p class="lede">Eight sources of AI activity — the assistant itself included — the identity each one runs as, and the sixteen places they emit telemetry. <strong>Dashed lines are the ones that matter</strong> — they only carry data if a licence or a per-agent setting is in place, which is where every blind spot in this estate lives.</p>
+      <p class="lede">Nine sources of AI activity — the assistant itself included — the identity each one runs as, and the sixteen places they emit telemetry. <strong>Dashed lines are the ones that matter</strong> — they only carry data if a licence or a per-agent setting is in place, which is where every blind spot in this estate lives.</p>
     </div>
     <button class="toggle" id="theme" type="button">theme</button>
   </div>
@@ -261,7 +261,7 @@ section.notes{border-top:1px solid var(--rule);padding:30px 0 60px;background:va
   <div class="grid">
     <div class="mapbox">
       <figure class="stage">
-        <svg class="map" id="map" role="img" aria-label="Flow map linking eight AI activity sources, each labelled with the identity it receives, to the sixteen telemetry tables they emit to. Edges are coloured by query surface; dashed edges mark emissions that depend on a licence or per-agent configuration."></svg>
+        <svg class="map" id="map" role="img" aria-label="Flow map linking nine AI activity sources, each labelled with the identity it receives, to the sixteen telemetry tables they emit to. Edges are coloured by query surface; dashed edges mark emissions that depend on a licence or per-agent configuration."></svg>
         <figcaption class="hint" style="padding:12px 14px 10px;border:0;margin:0">Click any node to trace it. Each edge means <em>emits to</em>; identity is shown as a chip because telemetry does not route through it. Solid edges always carry data, dashed only under the stated condition. The grey tag on a table is its licence gate; select a node to see what each connection actually delivers.</figcaption>
       </figure>
     </div>
@@ -416,6 +416,11 @@ const PATHS = [
             {t:'agentIdentity', cond:'onboarded to Agent 365', gives:'the identity minted at onboarding'},
             {t:'agentIdentityBlueprint', cond:'onboarded to Agent 365', gives:'the SDK or agent-factory blueprint'},
             {t:'EntraAgent* assets', cond:'onboarded + Agent Identities connector + lake', gives:'identity graph rows for onboarded agents'} ] },
+
+  { id:'seccopilot', name:'Security Copilot', sub:'Microsoft-built · partner · custom agents',
+    identity:['entra','none'],
+    identityNote:'Split, and moving. Entra lists Security Copilot among the products integrated with the agent identity platform \u2014 but custom SCP agents cannot yet take an Entra Agent ID, and custom agents do not yet appear in the Agent 365 registry either (both field-reported as in progress at Microsoft, Sep 2026 \u2014 verify in tenant). Until then, custom agents are governed inside Security Copilot itself.',
+    emits:[ {t:'Purview AI activities', cond:'the \u201cLogging audit data in Microsoft Purview\u201d opt-in', gives:'agent management operations (CreateCopilotAgent and trigger ops), CopilotInteraction metadata for prompts to Copilot or an agent \u2014 prompt and response content only via DSPM for AI. No native Sentinel table: stream the audit log. And where an agent acts on a product, that product\u2019s own audit log carries the change \u2014 Entra audit logs tag the CA Optimization Agent by name'} ] },
 
   { id:'first', name:'Microsoft first-party', sub:'Researcher · Analyst · SharePoint',
     identity:['none'],
