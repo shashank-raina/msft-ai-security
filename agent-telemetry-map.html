@@ -249,7 +249,7 @@ section.notes{border-top:1px solid var(--rule);padding:30px 0 60px;background:va
     <div>
       <p class="eyebrow">Microsoft AI agent estate</p>
       <h1>Where do your agents leave a trace?</h1>
-      <p class="lede">Seven ways an agent gets created, the identity each one receives, and the sixteen places they emit telemetry. <strong>Dashed lines are the ones that matter</strong> — they only carry data if a licence or a per-agent setting is in place, which is where every blind spot in this estate lives.</p>
+      <p class="lede">Nine sources of AI activity — the assistant itself included — the identity each one runs as, and the sixteen places they emit telemetry. <strong>Dashed lines are the ones that matter</strong> — they only carry data if a licence or a per-agent setting is in place, which is where every blind spot in this estate lives.</p>
     </div>
     <button class="toggle" id="theme" type="button">theme</button>
   </div>
@@ -261,7 +261,7 @@ section.notes{border-top:1px solid var(--rule);padding:30px 0 60px;background:va
   <div class="grid">
     <div class="mapbox">
       <figure class="stage">
-        <svg class="map" id="map" role="img" aria-label="Flow map linking seven agent creation paths, each labelled with the identity it receives, to the sixteen telemetry tables they emit to. Edges are coloured by query surface; dashed edges mark emissions that depend on a licence or per-agent configuration."></svg>
+        <svg class="map" id="map" role="img" aria-label="Flow map linking nine AI activity sources, each labelled with the identity it receives, to the sixteen telemetry tables they emit to. Edges are coloured by query surface; dashed edges mark emissions that depend on a licence or per-agent configuration."></svg>
         <figcaption class="hint" style="padding:12px 14px 10px;border:0;margin:0">Click any node to trace it. Each edge means <em>emits to</em>; identity is shown as a chip because telemetry does not route through it. Solid edges always carry data, dashed only under the stated condition. The grey tag on a table is its licence gate; select a node to see what each connection actually delivers.</figcaption>
       </figure>
     </div>
@@ -352,6 +352,7 @@ const TELEMETRY = [
 ];
 
 const IDENTITY = [
+  { id:'user',   label:'Acts as the signed-in user', detail:'On-behalf-of: carries the user\u2019s token, so existing user Conditional Access (E3) and ID Protection (E5) already apply. No agent identity involved.' },
   { id:'entra',  label:'Entra Agent ID',       detail:'Directory principal under a blueprint. Governable with Conditional Access and ID Protection — but only with Agent 365.' },
   { id:'appreg', label:'App registration',     detail:'Legacy. Entra treats these as ordinary applications, not AI agents. No agent properties, no agent filters.' },
   { id:'none',   label:'No directory identity',detail:'Nothing in Entra to govern, target with policy, or attribute activity to.' }
@@ -359,9 +360,17 @@ const IDENTITY = [
 
 // cond:true  → dashed edge: the path emits here only if a licence or per-agent config is in place
 const PATHS = [
+  { id:'m365copilot', name:'M365 Copilot', sub:'the assistant itself · every licensed user',
+    identity:['user'],
+    identityNote:'No agent identity at all — Copilot acts on-behalf-of the signed-in user, carrying that user\u2019s token. Existing user Conditional Access (E3) and ID Protection (E5) therefore already apply; nothing new to govern in Entra.',
+    emits:[ {t:'CopilotActivity', gives:'every interaction: agent and actor, per-message Jailbreak and XPIA verdicts in LLMEventData, resources touched'},
+            {t:'CloudAppEvents', gives:'interaction verdict rows on E5 — huntable beside the rest of Defender XDR'},
+            {t:'BehaviorInfo', cond:'preview · not in GCC', gives:'Prompt Shield audit and block behaviours'},
+            {t:'Purview AI activities', gives:'prompts and responses in the unified audit log, DSPM for AI reports, retention and eDiscovery — native, no SDK or toggle needed'} ] },
+
   { id:'cs', name:'Copilot Studio', sub:'low-code makers · shared global blueprint',
     identity:['entra','appreg'],
-    identityNote:'A date, not a setting. Before May 2026 an app registration per agent; from 18 Mar 2026 agent identities; after May 2026 every new agent, no opt-out. No automated in-place migration — recreate and deprecate.',
+    identityNote:'A date, not a setting. Before May 2026 an app registration per agent; from 18 Mar 2026 agent identities; after May 2026 every new agent, no opt-out. No automated in-place migration — recreate and deprecate. And the population under the shared global blueprint is broader than the Studio: Power Automate agent flows — and, reportedly, product-provisioned agents — mint identities there too, so blueprint-level actions are population-level actions.',
     emits:[ {t:'CopilotActivity', gives:'every interaction: agent + actor, Jailbreak / XPIA verdicts in LLMEventData'},
             {t:'CloudAppEvents', gives:'Copilot interaction verdict rows — the E5 population'},
             {t:'AgentsInfo', cond:'Agent 365', gives:'config posture: auth model, declared tools and data sources, MCP servers, owners, lifecycle'},
@@ -398,7 +407,7 @@ const PATHS = [
 
   { id:'third', name:'Third-party publisher', sub:'store listings · partner agents · agent factories',
     identity:['entra','appreg','none'],
-    identityNote:'Not one population. Agent 365 ships with preintegrated partners — 23 named at launch, every one of them registered and observable — and agent factories (Kore, n8n, Kasisto, NVIDIA NeMo) mint an Entra Agent ID for every agent they create. Observability alone can run on a plain app registration rather than a blueprint. Vertex AI and Bedrock agents can be registered with no development work. A store listing nobody onboarded still gets nothing.',
+    identityNote:'Not one population — and read the footnotes. Agent 365 ships 23 preintegrated partners, every one registered and observable, though five (Adobe, Celonis, Egnyte, Manus, NVIDIA) are still marked coming soon. Agent factories (Kore, n8n, Kasisto, NVIDIA NeMo) mint an Entra Agent ID for every agent they create — but factory-built agents currently deploy as AI teammates, and AI teammates are Frontier-programme-only. Observability alone can run on a plain app registration. Vertex AI and Bedrock agents can be registered with no development work. A store listing nobody onboarded still gets nothing.',
     emits:[ {t:'AgentsInfo', cond:'Agent 365', gives:'an inventory row for every onboarded partner agent'},
             {t:'CloudAppEvents', gives:'runtime rows for onboarded agents; install-time grants are all you see otherwise'},
             {t:'catalog/packages', gives:'the store listing'},
@@ -407,6 +416,12 @@ const PATHS = [
             {t:'agentIdentity', cond:'onboarded to Agent 365', gives:'the identity minted at onboarding'},
             {t:'agentIdentityBlueprint', cond:'onboarded to Agent 365', gives:'the SDK or agent-factory blueprint'},
             {t:'EntraAgent* assets', cond:'onboarded + Agent Identities connector + lake', gives:'identity graph rows for onboarded agents'} ] },
+
+  { id:'seccopilot', name:'Security Copilot', sub:'Microsoft-built · partner · custom agents',
+    identity:['entra','none'],
+    identityNote:'Split, and moving. Entra lists Security Copilot among the products integrated with the agent identity platform \u2014 but custom SCP agents cannot yet take an Entra Agent ID, and custom agents do not yet appear in the Agent 365 registry either (both field-reported as in progress at Microsoft, Sep 2026 \u2014 verify in tenant). Until then, custom agents are governed inside Security Copilot itself.',
+    emits:[ {t:'Purview AI activities', cond:'the \u201cLogging audit data in Microsoft Purview\u201d opt-in', gives:'agent management operations (CreateCopilotAgent and trigger ops), CopilotInteraction metadata for prompts to Copilot or an agent \u2014 prompt and response content only via DSPM for AI. No native Sentinel table: stream the audit log. And where an agent acts on a product, that product\u2019s own audit log carries the change \u2014 Entra audit logs tag the CA Optimization Agent by name'},
+            {t:'CloudAppEvents', cond:'audit opt-in + the M365 connector', gives:'huntable rows via the audit pipeline \u2014 Learn names Security Copilot among CopilotInteraction record types and the M365 connector feeds those into this table. Mechanism-verified, not stated verbatim: confirm in tenant'} ] },
 
   { id:'first', name:'Microsoft first-party', sub:'Researcher · Analyst · SharePoint',
     identity:['none'],
@@ -426,10 +441,12 @@ const PATHS = [
             {t:'Purview AI activities', cond:'Purview SDK or Agent Framework middleware', gives:'prompts evaluated inline against DLP — restrictAccess blocks before the model or the next agent is called — plus audit and classification'},
             {t:'ApiManagementGatewayLlmLog', cond:'calls routed via an APIM AI gateway', gives:'per-consumer token accounting and prompt/completion logs for any agent you choose to front with the gateway'} ] },
 
-  { id:'local', name:'Locally installed', sub:'Claude · ChatGPT · Ollama · local Copilot',
+  { id:'local', name:'Locally installed', sub:'Claude Cowork & Code · ChatGPT · Ollama',
     identity:['none'], blind:true,
     identityNote:'No identity, no catalogue entry, no control but the endpoint sensor. A local model runner puts inference outside every prompt-logging and DLP path you have.',
-    emits:[ {t:'AgentsInfo', cond:'MDE P2 — Platform == LocalAgents', gives:'what the agent IS: vendor, version, host process, trust and auto-approve settings, local and remote MCP servers, device and account'} ] }
+    emits:[ {t:'AgentsInfo', cond:'MDE P2 — Platform == LocalAgents', gives:'what the agent IS: vendor, version, host process, trust and auto-approve settings, local and remote MCP servers, device and account'},
+            {t:'SecurityAlert', cond:'MDE runtime protection — hooked apps only', gives:'endpoint detections: jailbreak, indirect injection, credential leakage. Hook-based coverage is a short, moving list (Claude Code and GitHub Copilot among them — verify yours); audit mode raises only Informational alerts, block mode real severities'},
+            {t:'ApiManagementGatewayLlmLog', cond:'CLI deliberately pointed at an APIM gateway', gives:'prompts, completions and token counts for routed traffic — APIM speaks the Anthropic Messages API, and Claude Code documents LLM-gateway configuration. Unrouted traffic stays endpoint-only visibility'} ] }
 ];
 </script>
 <script>
@@ -478,9 +495,9 @@ const PATHS = [
     g.appendChild(el('rect',{x:x,y:yy,width:w,height:h,rx:6}));
     draw(g); svg.appendChild(g); return g;
   }
-  const IDSHORT={entra:'Entra Agent ID',appreg:'app registration',none:'no identity'};
+  const IDSHORT={user:'acts as the user',entra:'Entra Agent ID',appreg:'app registration',none:'no identity'};
   // A path that can land on all three needs a shorter chip than the full names allow
-  const IDMICRO={entra:'Entra Agent ID',appreg:'app reg',none:'none'};
+  const IDMICRO={user:'as the user',entra:'Entra Agent ID',appreg:'app reg',none:'none'};
   PATHS.forEach((p,i)=>{
     const yy=pathY(i), h=PH;
     const g=node(X1,yy,PW,h,{'data-kind':'path','data-id':p.id},(g)=>{
