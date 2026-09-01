@@ -407,7 +407,7 @@ const PATHS = [
 
   { id:'third', name:'Third-party publisher', sub:'store listings · partner agents · agent factories',
     identity:['entra','appreg','none'],
-    identityNote:'Not one population. Agent 365 ships with preintegrated partners — 23 named at launch, every one of them registered and observable — and agent factories (Kore, n8n, Kasisto, NVIDIA NeMo) mint an Entra Agent ID for every agent they create. Observability alone can run on a plain app registration rather than a blueprint. Vertex AI and Bedrock agents can be registered with no development work. A store listing nobody onboarded still gets nothing.',
+    identityNote:'Not one population — and read the footnotes. Agent 365 ships 23 preintegrated partners, every one registered and observable, though five (Adobe, Celonis, Egnyte, Manus, NVIDIA) are still marked coming soon. Agent factories (Kore, n8n, Kasisto, NVIDIA NeMo) mint an Entra Agent ID for every agent they create — but factory-built agents currently deploy as AI teammates, and AI teammates are Frontier-programme-only. Observability alone can run on a plain app registration. Vertex AI and Bedrock agents can be registered with no development work. A store listing nobody onboarded still gets nothing.',
     emits:[ {t:'AgentsInfo', cond:'Agent 365', gives:'an inventory row for every onboarded partner agent'},
             {t:'CloudAppEvents', gives:'runtime rows for onboarded agents; install-time grants are all you see otherwise'},
             {t:'catalog/packages', gives:'the store listing'},
