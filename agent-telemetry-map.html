@@ -249,7 +249,7 @@ section.notes{border-top:1px solid var(--rule);padding:30px 0 60px;background:va
     <div>
       <p class="eyebrow">Microsoft AI agent estate</p>
       <h1>Where do your agents leave a trace?</h1>
-      <p class="lede">Seven ways an agent gets created, the identity each one receives, and the sixteen places they emit telemetry. <strong>Dashed lines are the ones that matter</strong> — they only carry data if a licence or a per-agent setting is in place, which is where every blind spot in this estate lives.</p>
+      <p class="lede">Eight sources of AI activity — the assistant itself included — the identity each one runs as, and the sixteen places they emit telemetry. <strong>Dashed lines are the ones that matter</strong> — they only carry data if a licence or a per-agent setting is in place, which is where every blind spot in this estate lives.</p>
     </div>
     <button class="toggle" id="theme" type="button">theme</button>
   </div>
@@ -261,7 +261,7 @@ section.notes{border-top:1px solid var(--rule);padding:30px 0 60px;background:va
   <div class="grid">
     <div class="mapbox">
       <figure class="stage">
-        <svg class="map" id="map" role="img" aria-label="Flow map linking seven agent creation paths, each labelled with the identity it receives, to the sixteen telemetry tables they emit to. Edges are coloured by query surface; dashed edges mark emissions that depend on a licence or per-agent configuration."></svg>
+        <svg class="map" id="map" role="img" aria-label="Flow map linking eight AI activity sources, each labelled with the identity it receives, to the sixteen telemetry tables they emit to. Edges are coloured by query surface; dashed edges mark emissions that depend on a licence or per-agent configuration."></svg>
         <figcaption class="hint" style="padding:12px 14px 10px;border:0;margin:0">Click any node to trace it. Each edge means <em>emits to</em>; identity is shown as a chip because telemetry does not route through it. Solid edges always carry data, dashed only under the stated condition. The grey tag on a table is its licence gate; select a node to see what each connection actually delivers.</figcaption>
       </figure>
     </div>
@@ -352,6 +352,7 @@ const TELEMETRY = [
 ];
 
 const IDENTITY = [
+  { id:'user',   label:'Acts as the signed-in user', detail:'On-behalf-of: carries the user\u2019s token, so existing user Conditional Access (E3) and ID Protection (E5) already apply. No agent identity involved.' },
   { id:'entra',  label:'Entra Agent ID',       detail:'Directory principal under a blueprint. Governable with Conditional Access and ID Protection — but only with Agent 365.' },
   { id:'appreg', label:'App registration',     detail:'Legacy. Entra treats these as ordinary applications, not AI agents. No agent properties, no agent filters.' },
   { id:'none',   label:'No directory identity',detail:'Nothing in Entra to govern, target with policy, or attribute activity to.' }
@@ -359,6 +360,14 @@ const IDENTITY = [
 
 // cond:true  → dashed edge: the path emits here only if a licence or per-agent config is in place
 const PATHS = [
+  { id:'m365copilot', name:'M365 Copilot', sub:'the assistant itself · every licensed user',
+    identity:['user'],
+    identityNote:'No agent identity at all — Copilot acts on-behalf-of the signed-in user, carrying that user\u2019s token. Existing user Conditional Access (E3) and ID Protection (E5) therefore already apply; nothing new to govern in Entra.',
+    emits:[ {t:'CopilotActivity', gives:'every interaction: agent and actor, per-message Jailbreak and XPIA verdicts in LLMEventData, resources touched'},
+            {t:'CloudAppEvents', gives:'interaction verdict rows on E5 — huntable beside the rest of Defender XDR'},
+            {t:'BehaviorInfo', cond:'preview · not in GCC', gives:'Prompt Shield audit and block behaviours'},
+            {t:'Purview AI activities', gives:'prompts and responses in the unified audit log, DSPM for AI reports, retention and eDiscovery — native, no SDK or toggle needed'} ] },
+
   { id:'cs', name:'Copilot Studio', sub:'low-code makers · shared global blueprint',
     identity:['entra','appreg'],
     identityNote:'A date, not a setting. Before May 2026 an app registration per agent; from 18 Mar 2026 agent identities; after May 2026 every new agent, no opt-out. No automated in-place migration — recreate and deprecate.',
@@ -426,10 +435,11 @@ const PATHS = [
             {t:'Purview AI activities', cond:'Purview SDK or Agent Framework middleware', gives:'prompts evaluated inline against DLP — restrictAccess blocks before the model or the next agent is called — plus audit and classification'},
             {t:'ApiManagementGatewayLlmLog', cond:'calls routed via an APIM AI gateway', gives:'per-consumer token accounting and prompt/completion logs for any agent you choose to front with the gateway'} ] },
 
-  { id:'local', name:'Locally installed', sub:'Claude · ChatGPT · Ollama · local Copilot',
+  { id:'local', name:'Locally installed', sub:'Claude Cowork & Code · ChatGPT · Ollama',
     identity:['none'], blind:true,
     identityNote:'No identity, no catalogue entry, no control but the endpoint sensor. A local model runner puts inference outside every prompt-logging and DLP path you have.',
     emits:[ {t:'AgentsInfo', cond:'MDE P2 — Platform == LocalAgents', gives:'what the agent IS: vendor, version, host process, trust and auto-approve settings, local and remote MCP servers, device and account'},
+            {t:'SecurityAlert', cond:'MDE runtime protection — hooked apps only', gives:'endpoint detections: jailbreak, indirect injection, credential leakage. Hook-based coverage is a short, moving list (Claude Code and GitHub Copilot among them — verify yours); audit mode raises only Informational alerts, block mode real severities'},
             {t:'ApiManagementGatewayLlmLog', cond:'CLI deliberately pointed at an APIM gateway', gives:'prompts, completions and token counts for routed traffic — APIM speaks the Anthropic Messages API, and Claude Code documents LLM-gateway configuration. Unrouted traffic stays endpoint-only visibility'} ] }
 ];
 </script>
@@ -479,9 +489,9 @@ const PATHS = [
     g.appendChild(el('rect',{x:x,y:yy,width:w,height:h,rx:6}));
     draw(g); svg.appendChild(g); return g;
   }
-  const IDSHORT={entra:'Entra Agent ID',appreg:'app registration',none:'no identity'};
+  const IDSHORT={user:'acts as the user',entra:'Entra Agent ID',appreg:'app registration',none:'no identity'};
   // A path that can land on all three needs a shorter chip than the full names allow
-  const IDMICRO={entra:'Entra Agent ID',appreg:'app reg',none:'none'};
+  const IDMICRO={user:'as the user',entra:'Entra Agent ID',appreg:'app reg',none:'none'};
   PATHS.forEach((p,i)=>{
     const yy=pathY(i), h=PH;
     const g=node(X1,yy,PW,h,{'data-kind':'path','data-id':p.id},(g)=>{
