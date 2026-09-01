@@ -249,7 +249,7 @@ section.notes{border-top:1px solid var(--rule);padding:30px 0 60px;background:va
     <div>
       <p class="eyebrow">Microsoft AI agent estate</p>
       <h1>Where do your agents leave a trace?</h1>
-      <p class="lede">Seven ways an agent gets created, the identity each one receives, and the fourteen places they emit telemetry. <strong>Dashed lines are the ones that matter</strong> — they only carry data if a licence or a per-agent setting is in place, which is where every blind spot in this estate lives.</p>
+      <p class="lede">Seven ways an agent gets created, the identity each one receives, and the sixteen places they emit telemetry. <strong>Dashed lines are the ones that matter</strong> — they only carry data if a licence or a per-agent setting is in place, which is where every blind spot in this estate lives.</p>
     </div>
     <button class="toggle" id="theme" type="button">theme</button>
   </div>
@@ -261,7 +261,7 @@ section.notes{border-top:1px solid var(--rule);padding:30px 0 60px;background:va
   <div class="grid">
     <div class="mapbox">
       <figure class="stage">
-        <svg class="map" id="map" role="img" aria-label="Flow map linking seven agent creation paths, each labelled with the identity it receives, to the fourteen telemetry tables they emit to. Edges are coloured by query surface; dashed edges mark emissions that depend on a licence or per-agent configuration."></svg>
+        <svg class="map" id="map" role="img" aria-label="Flow map linking seven agent creation paths, each labelled with the identity it receives, to the sixteen telemetry tables they emit to. Edges are coloured by query surface; dashed edges mark emissions that depend on a licence or per-agent configuration."></svg>
         <figcaption class="hint" style="padding:12px 14px 10px;border:0;margin:0">Click any node to trace it. Each edge means <em>emits to</em>; identity is shown as a chip because telemetry does not route through it. Solid edges always carry data, dashed only under the stated condition. The grey tag on a table is its licence gate; select a node to see what each connection actually delivers.</figcaption>
       </figure>
     </div>
@@ -329,7 +329,7 @@ const SURFACES = {
   la:    { label: 'Log Analytics',    hint: 'Sentinel workspace · queryType 0' },
   ah:    { label: 'Advanced Hunting', hint: 'Defender XDR · Timestamp, not TimeGenerated' },
   lake:  { label: 'Sentinel Data Lake',hint: 'usage-billed per query' },
-  graph: { label: 'Microsoft Graph',  hint: 'catalogue has no connector — Logic App; identity objects also land lake-side' }
+  graph: { label: 'API / portal',  hint: 'no KQL surface — Graph API, Logic App or the Purview portal; identity objects also land lake-side' }
 };
 
 const TELEMETRY = [
@@ -339,6 +339,7 @@ const TELEMETRY = [
   { id:'ASimAgentEventLogs', lic:'OpenAI CCF',surface:'la',    note:'ASIM-normalised agent events: agents, model, tokens, tool names', needs:'OpenAI CCF connector' },
   { id:'AADServicePrincipalSignInLogs', lic:'Entra', surface:'la', note:'Agent authentication. The Agent column carries agentic sign-in detail', needs:'Entra ID connector — SP sign-in logs category' },
   { id:'SecurityAlert', lic:'free ingest',     surface:'la',    note:'AI detections from Defender and Azure plans', needs:'Defender XDR connector (alerts ingest free)' },
+  { id:'ApiManagementGatewayLlmLog', lic:'APIM + diagnostics', surface:'la', note:'The AI-gateway log: prompts, completions and token counts per request, chunked entries joined on CorrelationId; per-consumer token metrics land in App Insights beside it', needs:'APIM AI gateway in front of the model + diagnostic settings to Log Analytics' },
   { id:'AgentsInfo', lic:'MDE P2 · A365',        surface:'ah',    note:'Inventory & posture. The only surface that sees locally installed agents', needs:'Agent 365 for cloud agents · MDE P2 for local' },
   { id:'CloudAppEvents', lic:'E5 · A365',    surface:'ah',    note:'Copilot verdicts (E5) and Agent 365 runtime: InvokeAgent, ExecuteToolBy*', needs:'Defender for Cloud Apps + Microsoft 365 activities' },
   { id:'BehaviorInfo', lic:'E5 · preview',      surface:'ah',    note:'Prompt Shield audit and block events', needs:'Defender for Cloud Apps + UEBA behaviours · Preview · not in GCC' },
@@ -346,7 +347,8 @@ const TELEMETRY = [
   { id:'EntraAgent* assets', lic:'lake · preview', surface:'lake', note:'Four identity asset tables: EntraAgentUsers, EntraAgentIdentities, EntraAgentIdentityBlueprints, EntraAgentIdentityBlueprintPrincipals — the identity graph, queryable next to activity', needs:'Agent Identities connector (Preview) + data lake tier · column schemas unpublished', unverified:true },
   { id:'agentIdentityBlueprint', lic:'any Entra tier',    surface:'graph', note:'Holds the credentials its agents authenticate with, and permissions they inherit. Credential detail lives only here — the lake copy does not carry it', needs:'Application.Read.All — or lake-side via the Agent Identities connector' },
   { id:'agentIdentity', lic:'any Entra tier',     surface:'graph', note:'The agent directory principal. ServiceIdentity — holds no credentials of its own', needs:'AgentIdentity.Read.All (no Agent 365) — or lake-side via the Agent Identities connector' },
-  { id:'catalog/packages', lic:'beta API',  surface:'graph', note:'Agent registry catalogue — published titles only', needs:'CopilotPackages.Read.All · beta endpoint', unverified:true }
+  { id:'catalog/packages', lic:'beta API',  surface:'graph', note:'Agent registry catalogue — published titles only', needs:'CopilotPackages.Read.All · beta endpoint', unverified:true },
+  { id:'Purview AI activities', lic:'Purview PAYG · A365', surface:'graph', note:'Prompts & responses in the unified audit log with SIT classification; DSPM for AI analytics, IRM, Communication Compliance and eDiscovery reach. Policy enforcement only on Entra user-context calls — everything else is visibility', needs:'"Powered by Microsoft Purview" toggle per subscription (Foundry new portal) — Audit-only without Purview pay-as-you-go or Agent 365 billing' }
 ];
 
 const IDENTITY = [
@@ -378,6 +380,9 @@ const PATHS = [
             {t:'AgentsInfo', cond:'Agent 365', gives:'inventory and config posture per agent'},
             {t:'CloudAppEvents', cond:'Agent 365 instrumentation', gives:'InvokeAgent / InferenceCall / ExecuteToolBy* rows, with caller and client IP'},
             {t:'UnifiedAgentObservability', cond:'Agent 365 + lake', gives:'full-fidelity spans: prompt text, tool arguments, guardrail blocks, sessions'},
+            {t:'Purview AI activities', cond:'Purview toggle on the subscription', gives:'prompts and responses audited and SIT-classified, for apps and agents alike; DLP enforced only on Entra user-context /chat/completions calls'},
+            {t:'SecurityAlert', cond:'Defender for AI Services plan', gives:'jailbreak, leakage and credential-theft detections, with redacted prompt snippets as alert evidence'},
+            {t:'ApiManagementGatewayLlmLog', cond:'model behind the APIM AI gateway', gives:'gateway-side prompts, completions and token counts — but only for admin-connected models: Agent Service inference bypasses the gateway otherwise (community-confirmed, verify in tenant)'},
             {t:'AADServicePrincipalSignInLogs', gives:'sign-ins of the project and per-agent identities'},
             {t:'agentIdentity', gives:'an auto-provisioned identity per project; a dedicated one at publish'},
             {t:'agentIdentityBlueprint', gives:'the blueprint minted at publish — credentials and inheritable permissions'},
@@ -417,7 +422,9 @@ const PATHS = [
             {t:'catalog/packages', gives:'an entry only if published to your org catalogue'},
             {t:'agentIdentity', cond:'if built on Agent ID', gives:'a governable principal'},
             {t:'EntraAgent* assets', cond:'if on Agent ID + connector + lake', gives:'identity graph rows'},
-            {t:'AADServicePrincipalSignInLogs', gives:'SP sign-ins — often the only signal a LoB agent leaves'} ] },
+            {t:'AADServicePrincipalSignInLogs', gives:'SP sign-ins — often the only signal a LoB agent leaves'},
+            {t:'Purview AI activities', cond:'Purview SDK or Agent Framework middleware', gives:'prompts evaluated inline against DLP — restrictAccess blocks before the model or the next agent is called — plus audit and classification'},
+            {t:'ApiManagementGatewayLlmLog', cond:'calls routed via an APIM AI gateway', gives:'per-consumer token accounting and prompt/completion logs for any agent you choose to front with the gateway'} ] },
 
   { id:'local', name:'Locally installed', sub:'Claude · ChatGPT · Ollama · local Copilot',
     identity:['none'], blind:true,
