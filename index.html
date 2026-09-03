@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Securing AI with Microsoft — the starting point</title>
-<meta name="description" content="A concise primer on securing Microsoft AI and agents: the five threat surfaces, the licences that gate each control, and an interactive map of where agents leave a trace.">
+<meta name="description" content="A concise primer on securing Microsoft AI and agents: the five threat surfaces, the licences that gate each control, and where every kind of agent leaves a trace.">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="site.css?v=20260903">
 <style>
@@ -27,7 +27,6 @@
 <a href="index.html" class="active">Home</a>
 <a href="surfaces.html" class="">Five Surfaces</a>
 <a href="licensing.html" class="">Licensing</a>
-<a href="agent-telemetry-map.html" class="">Agent Map</a>
 <a href="field-notes.html" class="">Field Notes</a>
 <a href="start.html" class="">Start Here</a>
 <a href="contact.html" class="">Contact</a>
@@ -39,7 +38,6 @@
 <a href="index.html" class="active">Home</a>
 <a href="surfaces.html" class="">Five Surfaces</a>
 <a href="licensing.html" class="">Licensing</a>
-<a href="agent-telemetry-map.html" class="">Agent Map</a>
 <a href="field-notes.html" class="">Field Notes</a>
 <a href="start.html" class="">Start Here</a>
 <a href="contact.html" class="">Contact</a>
@@ -52,26 +50,16 @@
 <div class="page">
 
 <div class="section-label" style="margin-top:24px;">The starting point</div>
-<h1>Securing AI with Microsoft —<br><span style="color:var(--blue);">five surfaces, one map, and the licences between you and each control</span></h1>
-<p style="font-size:15.5px;color:#2e3d5e;max-width:700px;">I spend my working week securing Microsoft AI estates, and the guidance for doing it is scattered across product teams, blogs and licence tiers. This site is the primer I kept wishing I could hand people — deliberately small: the concepts you need to orient, and pointers outward for depth. Read the five surfaces, trace your agents on the map, check what your licences actually gate. Then go build.</p>
+<h1>Securing AI with Microsoft —<br><span style="color:var(--blue);">five surfaces and the licences between you and each control</span></h1>
+<p style="font-size:15.5px;color:#2e3d5e;max-width:700px;">I spend my working week securing Microsoft AI estates, and the guidance for doing it is scattered across product teams, blogs and licence tiers. This site is the primer I kept wishing I could hand people — deliberately small: the concepts you need to orient, and pointers outward for depth. Read the five surfaces, check what your licences actually gate, then go build.</p>
 
 <div class="fact-strip">
   <div class="fact"><b>500,000+ agents</b>in Microsoft's own tenant — already at production scale (Customer Zero, Aug 2026)</div>
   <div class="fact"><b>Four screens count agents</b>and they disagree by design — always say which screen a number came from</div>
-  <div class="fact"><b>Most telemetry is licence-gated</b>— the dashed lines on the map are where every blind spot lives</div>
+  <div class="fact"><b>Most telemetry is licence-gated</b>— those boundaries are where every blind spot lives</div>
 </div>
 
-<a href="agent-telemetry-map.html" style="text-decoration:none;color:inherit;display:block;margin:22px 0;">
-  <div style="background:#ffffff;border:2px solid var(--blue);border-radius:14px;padding:20px 26px;display:flex;align-items:center;gap:18px;">
-    <div style="font-size:36px;line-height:1;">🗺️</div>
-    <div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;color:var(--teal);margin-bottom:3px;">INTERACTIVE</div>
-      <div style="font-size:17px;font-weight:800;color:#0d1526;">Agent Telemetry Map — where do your agents leave a trace?</div>
-      <div style="font-size:13px;color:#2e3d5e;margin-top:3px;">Nine activity sources · sixteen telemetry destinations · the licence gate on every table · what each connection delivers</div>
-    </div>
-    <div style="margin-left:auto;font-size:22px;color:var(--blue);">→</div>
-  </div>
-</a>
+
 
 <div class="section-label" style="margin-top:36px;">The organising idea</div>
 <h2>Five AI threat surfaces</h2>

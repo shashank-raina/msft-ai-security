@@ -21,7 +21,7 @@ The maintainer will review the gap against the current site content and implemen
 | `index.html` | Home — the five surfaces, the map, three facts |
 | `surfaces.html` | The five AI threat surfaces: risks, owning controls, licence gates |
 | `licensing.html` | Three licence axes and the E5 / Agent 365 / E7 / lake splits |
-| `agent-telemetry-map.html` | Interactive map: creation paths → telemetry → licences |
+| `agent-telemetry-map.html` | Interactive map: creation paths → telemetry → licences. **Unlisted for now** — live at its URL but linked from nowhere, pending the LinkedIn launch series; restore by reverting the unlisting commit |
 | `field-notes.html` | Field notes — hands-on gotchas: schema traps, licence boundaries, migration surprises |
 | `start.html` | Four-screens rule, six-phase rollout, first-week checklist |
 | `contact.html` | Feedback form + privacy policy |
