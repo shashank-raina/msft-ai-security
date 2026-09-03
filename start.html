@@ -113,7 +113,7 @@ AgentsInfo
 </div>
 
 <div class="kq">
-<p class="why"><b>3 · What did agents actually do?</b> The Agent 365 runtime rows. An empty result here is usually the licence/instrumentation gate, not quiet agents — these ActionTypes only exist for instrumented agents. Note the key juggling: <code>RawEventData</code> names the agent differently per operation.</p>
+<p class="why"><b>3 · What did agents actually do?</b> The Agent 365 runtime rows. An empty result here usually means the licence/instrumentation gate — these ActionTypes only exist for instrumented agents, however busy the fleet is. Note the key juggling: <code>RawEventData</code> names the agent differently per operation.</p>
 <pre><span class="surf">ADVANCED HUNTING</span>
 CloudAppEvents
 | where ActionType in ("InvokeAgent", "InferenceCall",
