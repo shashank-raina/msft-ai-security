@@ -27,6 +27,8 @@ The maintainer will review the gap against the current site content and implemen
 | `contact.html` | Feedback form + privacy policy |
 | `archive/*.html` | The former deep-dive pages, kept as reference (agent365, identity, threats, playbooks, overview, product-map, demo, changelog) |
 
+When `site.css` changes, bump the `?v=` query on every root page's stylesheet link in the same commit — browsers and CDN edges cache the CSS independently of the HTML, and a stale stylesheet renders new components unstyled.
+
 ## What fits this site
 
 The site focuses on **security architecture for Microsoft AI products** — specifically Copilot Studio, Microsoft Foundry, Agent 365, Entra Agent ID, Defender for AI, Purview DLP, and the surrounding identity and data security stack.
