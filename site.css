@@ -272,3 +272,12 @@ a:has(.nist-card):hover .nist-card{transform:translateY(-3px);box-shadow:0 6px 2
   .nav-links{display:none !important;}
   .hamburger{display:flex;}
 }
+
+/* PREV/NEXT PAGE TILES */
+.pagenav{display:flex;gap:14px;margin:44px 0 0;}
+.pagenav a{flex:1;background:#ffffff;border:1px solid var(--border);border-radius:10px;
+  padding:14px 18px;text-decoration:none;color:#0d1526;font-weight:600;font-size:14px;}
+.pagenav a:hover{border-color:var(--blue);text-decoration:none;color:var(--blue);}
+.pagenav .dir{display:block;font-family:'JetBrains Mono',monospace;font-size:9.5px;
+  letter-spacing:0.1em;color:var(--text3);font-weight:500;margin-bottom:3px;}
+.pagenav a.next{text-align:right;}

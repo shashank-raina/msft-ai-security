@@ -49,7 +49,7 @@
 </div>
 <div class="page">
 
-<div class="section-label" style="margin-top:24px;">From doing, not reading</div>
+<div class="section-label" style="margin-top:24px;">Learned the hard way</div>
 <h1>Field<br><span style="color:var(--blue);">notes</span></h1>
 <p style="font-size:15px;color:#2e3d5e;max-width:700px;">Everything else on this site you could, eventually, assemble from Microsoft's documentation. This page you couldn't. These are the things that bit me — or nearly did — while actually deploying this stack: schema traps, licence boundaries dressed up as empty tables, and controls that stopped working without saying so. Short, specific, and dated August–September 2026.</p>
 
@@ -68,13 +68,13 @@
 <div class="note">
 <span class="n">NOTE 03</span>
 <h3>Legacy Copilot Studio agents have no identity to govern</h3>
-<p>Agents built before agent identities existed authenticate with an ordinary app registration or the maker's own credentials. They appear in none of the agent identity views — not Entra's Agent ID blade, not the data lake identity tables — which is precisely what makes them the population to worry about. The service principal tag <code>AgentCreatedBy:CopilotStudio</code> is how I find them. If your governance story starts at "agents with identities", these agents aren't in it.</p>
+<p>Agents built before agent identities existed authenticate with an ordinary app registration or the maker's own credentials. Entra's Agent ID blade and the lake identity tables both draw a blank on them — and that invisibility is precisely what makes them the population to worry about. The service principal tag <code>AgentCreatedBy:CopilotStudio</code> is how I find them. The Agent Registry tells the opposite story: it happily lists these classic agents — alongside entries synced in from Power Platform and Dynamics 365 that are barely agents at all. So the registry overcounts while the identity views undercount, and neither number is the estate. If your governance story starts at "agents with identities", these agents aren't in it.</p>
 </div>
 
 <div class="note">
 <span class="n">NOTE 04</span>
 <h3>The documentation and the deployed schema disagree on names</h3>
-<p>Learn pages reference <code>AgentInfo</code>; the deployed table is <code>AgentsInfo</code>. The retired <code>AIAgentsInfo</code> still sits in the schema listing next to its replacement. The Graph audit table is spelled <code>GraphAPIAuditEvents</code> on one Learn page and <code>GraphApiAuditEvents</code> on another. Not malice — a product moving faster than its docs. But it means the schema tab in your own portal outranks any web page, this one included.</p>
+<p>The retired <code>AIAgentsInfo</code> still sits in the schema listing next to its replacement, months past its own cut-off date. Earlier this year Learn pages called the new table <code>AgentInfo</code> while the portal deployed <code>AgentsInfo</code>, and rendered the Graph audit table with two different spellings — both since fixed, quietly, which is rather the point. The docs and the schema drift apart and back together without announcements, so the schema tab in your own portal outranks any web page, this one included.</p>
 </div>
 
 <div class="note">
@@ -86,7 +86,7 @@
 <div class="note">
 <span class="n">NOTE 06</span>
 <h3>Nobody agrees how many agents you have</h3>
-<p>The registry counts published titles. Defender's inventory counts what it can see, local agents included. Entra counts only what holds a directory principal. Even within one product, Microsoft's own documentation shows the registry portal tile and the catalog API returning different counts for the same tenant. The spread between these numbers isn't noise — most of the time it <em>is</em> the finding. How I reconcile them is on the <a href="agent-telemetry-map.html#four-screens" style="color:var(--blue);font-weight:600;">Agent Map</a> page.</p>
+<p>The registry counts published titles. Defender's inventory counts what it can see, local agents included. Entra counts only what holds a directory principal. Even within one product, Microsoft's own documentation shows the registry portal tile and the catalog API returning different counts for the same tenant. The spread between these numbers is usually the finding itself. How I reconcile them is on the <a href="agent-telemetry-map.html#four-screens" style="color:var(--blue);font-weight:600;">Agent Map</a> page.</p>
 </div>
 
 <div class="note">
@@ -97,7 +97,7 @@
 
 <div class="note">
 <span class="n">NOTE 08</span>
-<h3>The blueprint is the credential boundary, not the agent</h3>
+<h3>The blueprint holds the credentials — and the blast radius</h3>
 <p>Agent identities hold no credentials of their own — the blueprint holds the secrets and impersonates its agents. One leaked blueprint credential is therefore every agent under that blueprint; Microsoft's own guidance calls blueprint count "a security boundary decision". The useful corollary: disabling a blueprint stops all of its agents authenticating, in one action. That's your fleet kill switch. Write it into the emergency runbook before you need it.</p>
 </div>
 
@@ -115,11 +115,16 @@
 
 <div class="note">
 <span class="n">NOTE 11</span>
-<h3>"Copilot Studio" in Entra names the machinery, not the maker</h3>
+<h3>Entra's "Copilot Studio" label tells you which machinery minted the identity</h3>
 <p>Every Copilot Studio app-based agent identity in Entra is a child of one shared global blueprint — and that population is bigger than the agents anyone built in the Studio. Agent flows (Power Automate) receive Entra Agent IDs through the same integration, and first-party product agents provisioned through the Power Platform machinery are reported to land there too — that last part I haven't found written down, so verify it in your tenant. Two consequences. Counting the blueprint's children as "Copilot Studio agents someone built" overcounts. And the sharper one: a Conditional Access policy or a disable aimed at that blueprint hits <em>everything</em> under it — flows and product-provisioned agents included. Blueprint-level actions are population-level actions.</p>
 </div>
 
 <p style="margin-top:32px;font-size:13.5px;color:var(--text3);">These notes date fast — that's rather the point. Anything here older than a couple of months deserves re-verification against <a href="https://learn.microsoft.com/" target="_blank" style="color:var(--blue);">Microsoft Learn</a> before you rely on it.</p>
+
+<div class="pagenav">
+  <a href="agent-telemetry-map.html"><span class="dir">← PREVIOUS</span>Agent Map</a>
+  <a class="next" href="start.html"><span class="dir">NEXT →</span>Start Here</a>
+</div>
 
 <div class="footer">
   Sources: Microsoft Learn · Microsoft Security Blog · Sentinel blog connector announcements · own tenant observations, generalised<br>

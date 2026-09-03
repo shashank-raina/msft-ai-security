@@ -67,7 +67,7 @@
 <div class="section-label" style="margin-top:36px;">The split that causes the most confusion</div>
 <h2>One table, two populations, two licences</h2>
 <div class="callout callout-warn">
-  <div class="callout-title">⚠ An empty result can be a licence boundary, not a data gap</div>
+  <div class="callout-title">⚠ Empty tables are often licence boundaries in disguise</div>
   <p><strong><code>AgentsInfo</code></strong> — <em>local</em> agents populate on E5 / MDE P2 with no Agent 365 licence (tenant-verified); <em>cloud</em> agents need Agent 365.<br>
   <strong><code>CloudAppEvents</code></strong> — Copilot interaction <em>verdict</em> rows (Jailbreak, XPIA) arrive on E5; the Agent 365 <em>runtime</em> rows (<code>InvokeAgent</code>, <code>InferenceCall</code>, <code>ExecuteToolBy*</code>) do not exist until Agent 365 instruments an agent.</p>
 </div>
@@ -85,6 +85,11 @@
 <div class="callout callout-info" style="margin-top:16px;">
   <div class="callout-title">📌 Two rules for quoting any of this</div>
   <p><strong>Never quote a price from a web page</strong> — including this one; verify against the current Microsoft price list. And when a screen shows nothing, check the licence gate before declaring a data gap — the <a href="agent-telemetry-map.html" style="color:var(--blue);font-weight:600;">Agent Telemetry Map</a> carries the gate on every table for exactly this reason.</p>
+</div>
+
+<div class="pagenav">
+  <a href="surfaces.html"><span class="dir">← PREVIOUS</span>Five Surfaces</a>
+  <a class="next" href="agent-telemetry-map.html"><span class="dir">NEXT →</span>Agent Map</a>
 </div>
 
 <div class="footer">

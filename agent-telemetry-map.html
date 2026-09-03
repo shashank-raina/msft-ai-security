@@ -281,8 +281,8 @@ section.notes{border-top:1px solid var(--rule);padding:30px 0 60px;background:va
   <section class="matrix" id="four-screens" style="padding:8px 0 44px">
     <h2>Four screens, four counts</h2>
     <p>Ask a tenant how many agents it has and you can collect four defensible answers in one afternoon. The <strong>Agent Registry</strong> counts published titles — things people <em>could</em> run, whether or not anyone does. <strong>Defender's inventory</strong> counts what security tooling can see, and is the only screen that includes agents living on laptops. <strong>Entra</strong> counts what holds a directory principal — an identity that can actually be governed. And the registry's own catalog API has been observed disagreeing with the registry's portal tile for the same tenant, in Microsoft's own documentation.</p>
-    <p>The numbers disagree <em>by design</em>, not by defect. Each screen answers a different question: could it run (registry) · can we see it (Defender) · can we govern it (Entra) · what actually ran (the runtime tables on this map). Treating any one of them as <em>the</em> inventory is how an estate ends up confidently wrong.</p>
-    <p>So the reconciliation itself is the finding, and it's how I open every engagement. Present the spread, not a number — because each gap between two screens names its own work item. Registry-but-not-Entra is the ungoverned population (Classic Copilot Studio lives here). Defender-local-but-nowhere-else is the endpoint estate nobody put on the risk register. Entra-but-telemetry-silent means observability was never instrumented. A single count tells you none of that.</p>
+    <p>The numbers disagree <em>by design</em>. Each screen answers a different question: could it run (registry) · can we see it (Defender) · can we govern it (Entra) · what actually ran (the runtime tables on this map). Treating any one of them as <em>the</em> inventory is how an estate ends up confidently wrong.</p>
+    <p>So the reconciliation itself is the finding, and it's how I open every engagement. Present the spread — each gap between two screens names its own work item. Registry-but-not-Entra is the ungoverned population — Classic Copilot Studio lives here, and the registry pads further with Power Platform and Dynamics 365 entries that are barely agents at all. Defender-local-but-nowhere-else is the endpoint estate nobody put on the risk register. Entra-but-telemetry-silent means observability was never instrumented. A single count tells you none of that.</p>
     <p><strong>The rule that falls out: never quote an agent count without saying which screen it came from.</strong></p>
   </section>
 </div>
@@ -295,14 +295,14 @@ section.notes{border-top:1px solid var(--rule);padding:30px 0 60px;background:va
       <p>Advanced Hunting uses <code>Timestamp</code>. Log Analytics uses <code>TimeGenerated</code>. Streamed tables carry both — and if data arrives more than 48h late, ingestion overwrites <code>TimeGenerated</code> with <code>now()</code>.</p>
     </div>
     <div>
-      <h3>Seeing is free, governing is not</h3>
+      <h3>Seeing is free; governing is licensed</h3>
       <p>Microsoft: <em>“Agent ID is available for all Microsoft Entra customers”</em>, but <em>“extending Microsoft Entra security features to agents requires Microsoft Agent 365”</em>. So agent identities are readable at any tier; Conditional Access, ID Protection and governance are not.</p>
       <p><code>AgentsInfo</code> runs the other way: cloud agents need Agent 365, local agents need only Defender for Endpoint P2. So at E5 you hold <strong>three partial inventories</strong> — the registry (biggest number), Entra (the better <em>identity</em> inventory), <code>AgentsInfo</code> (the local agents) — and none is complete.</p>
     </div>
     <div>
       <h3>Blueprints outrank agents</h3>
       <p>Agent identities <em>“don’t have credentials of their own — they authenticate using tokens issued by their agent identity blueprint.”</em> Permissions granted to a blueprint are granted to every agent created from it, and inheritable permissions propagate consent automatically <em>without appearing on the agent</em>.</p>
-      <p>One leaked blueprint secret is therefore not one compromised agent. It is all of them, at once, at runtime, with their inherited permissions. <strong>Inventory blueprints before agents.</strong></p>
+      <p>One leaked blueprint secret therefore compromises every agent under it — at once, at runtime, with their inherited permissions. <strong>Inventory blueprints before agents.</strong></p>
     </div>
     <div>
       <h3>Read this before quoting a number</h3>
@@ -310,12 +310,18 @@ section.notes{border-top:1px solid var(--rule);padding:30px 0 60px;background:va
       <p><code>catalog/packages</code> is a beta endpoint, and Microsoft’s own portal tile has been observed reporting a materially different count for the same tenant. Classic Copilot Studio agents (pre-May 2026) hold ordinary app registrations and appear in no agent view — find them by the service principal tag <code>AgentCreatedBy:CopilotStudio</code>.</p>
     </div>
     <div>
-      <h3>Third-party is not one population</h3>
-      <p>Agent 365 ships with preintegrated partners — 23 at launch, <strong>every one registered and observable</strong>. A partner <em>agent</em> is registered and its activity visible; an <em>AI teammate</em> also has its own user account, mailbox and Teams presence; an <em>agent factory</em> (Kore, n8n, Kasisto, NVIDIA NeMo) mints an Entra Agent ID for every agent it creates. Vertex AI and Bedrock agents can be registered with no development work.</p>
+      <h3>Third-party is several populations</h3>
+      <p>Agent 365 ships with 23 preintegrated partners, <strong>every one registered and observable</strong> — though five (Adobe, Celonis, Egnyte, Manus, NVIDIA) are still marked coming soon. A partner <em>agent</em> is registered and its activity visible; an <em>AI teammate</em> also has its own user account, mailbox and Teams presence — Frontier-programme territory, and factory-built agents currently deploy this way; an <em>agent factory</em> (Kore, n8n, Kasisto, NVIDIA NeMo) mints an Entra Agent ID for every agent it creates. Vertex AI and Bedrock agents can be registered with no development work.</p>
       <p>So an onboarded partner agent emits the same OpenTelemetry spans as a Foundry agent. The SDK’s four capabilities are independent, and observability <em>“can use either the agent identity blueprint or a standard Microsoft Entra app registration”</em> — <strong>never infer an agent identity from the presence of telemetry</strong>, or the reverse.</p>
     </div>
   </div>
 </section>
+
+<div class="wrap" style="margin:34px auto 54px;display:flex;gap:14px;font-family:var(--f-body)">
+  <a href="licensing.html" style="flex:1;background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:14px 18px;text-decoration:none;color:var(--ink);font-weight:600;font-size:14px"><span style="display:block;font:500 9.5px var(--f-mono);letter-spacing:.1em;color:var(--ink-3);margin-bottom:3px">← PREVIOUS</span>Licensing</a>
+  <a href="field-notes.html" style="flex:1;text-align:right;background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:14px 18px;text-decoration:none;color:var(--ink);font-weight:600;font-size:14px"><span style="display:block;font:500 9.5px var(--f-mono);letter-spacing:.1em;color:var(--ink-3);margin-bottom:3px">NEXT →</span>Field Notes</a>
+</div>
+
 
 
 <script>
@@ -327,7 +333,7 @@ section.notes{border-top:1px solid var(--rule);padding:30px 0 60px;background:va
 
 const SURFACES = {
   la:    { label: 'Log Analytics',    hint: 'Sentinel workspace · queryType 0' },
-  ah:    { label: 'Advanced Hunting', hint: 'Defender XDR · Timestamp, not TimeGenerated' },
+  ah:    { label: 'Advanced Hunting', hint: 'Defender XDR · uses Timestamp' },
   lake:  { label: 'Sentinel Data Lake',hint: 'usage-billed per query' },
   graph: { label: 'API / portal',  hint: 'no KQL surface — Graph API, Logic App or the Purview portal; identity objects also land lake-side' }
 };
@@ -354,7 +360,7 @@ const TELEMETRY = [
 const IDENTITY = [
   { id:'user',   label:'Acts as the signed-in user', detail:'On-behalf-of: carries the user\u2019s token, so existing user Conditional Access (E3) and ID Protection (E5) already apply. No agent identity involved.' },
   { id:'entra',  label:'Entra Agent ID',       detail:'Directory principal under a blueprint. Governable with Conditional Access and ID Protection — but only with Agent 365.' },
-  { id:'appreg', label:'App registration',     detail:'Legacy. Entra treats these as ordinary applications, not AI agents. No agent properties, no agent filters.' },
+  { id:'appreg', label:'App registration',     detail:'Legacy. Entra treats these as ordinary applications — no agent properties, no agent filters.' },
   { id:'none',   label:'No directory identity',detail:'Nothing in Entra to govern, target with policy, or attribute activity to.' }
 ];
 
@@ -370,7 +376,7 @@ const PATHS = [
 
   { id:'cs', name:'Copilot Studio', sub:'low-code makers · shared global blueprint',
     identity:['entra','appreg'],
-    identityNote:'A date, not a setting. Before May 2026 an app registration per agent; from 18 Mar 2026 agent identities; after May 2026 every new agent, no opt-out. No automated in-place migration — recreate and deprecate. And the population under the shared global blueprint is broader than the Studio: Power Automate agent flows — and, reportedly, product-provisioned agents — mint identities there too, so blueprint-level actions are population-level actions.',
+    identityNote:'The dividing line is a date. Before May 2026 an app registration per agent; from 18 Mar 2026 agent identities; after May 2026 every new agent, no opt-out. No automated in-place migration — recreate and deprecate. And the population under the shared global blueprint is broader than the Studio: Power Automate agent flows — and, reportedly, product-provisioned agents — mint identities there too, so blueprint-level actions are population-level actions.',
     emits:[ {t:'CopilotActivity', gives:'every interaction: agent + actor, Jailbreak / XPIA verdicts in LLMEventData'},
             {t:'CloudAppEvents', gives:'Copilot interaction verdict rows — the E5 population'},
             {t:'AgentsInfo', cond:'Agent 365', gives:'config posture: auth model, declared tools and data sources, MCP servers, owners, lifecycle'},
@@ -407,7 +413,7 @@ const PATHS = [
 
   { id:'third', name:'Third-party publisher', sub:'store listings · partner agents · agent factories',
     identity:['entra','appreg','none'],
-    identityNote:'Not one population — and read the footnotes. Agent 365 ships 23 preintegrated partners, every one registered and observable, though five (Adobe, Celonis, Egnyte, Manus, NVIDIA) are still marked coming soon. Agent factories (Kore, n8n, Kasisto, NVIDIA NeMo) mint an Entra Agent ID for every agent they create — but factory-built agents currently deploy as AI teammates, and AI teammates are Frontier-programme-only. Observability alone can run on a plain app registration. Vertex AI and Bedrock agents can be registered with no development work. A store listing nobody onboarded still gets nothing.',
+    identityNote:'Several populations share this one label — and read the footnotes. Agent 365 ships 23 preintegrated partners, every one registered and observable, though five (Adobe, Celonis, Egnyte, Manus, NVIDIA) are still marked coming soon. Agent factories (Kore, n8n, Kasisto, NVIDIA NeMo) mint an Entra Agent ID for every agent they create — but factory-built agents currently deploy as AI teammates, and AI teammates are Frontier-programme-only. Observability alone can run on a plain app registration. Vertex AI and Bedrock agents can be registered with no development work. A store listing nobody onboarded still gets nothing.',
     emits:[ {t:'AgentsInfo', cond:'Agent 365', gives:'an inventory row for every onboarded partner agent'},
             {t:'CloudAppEvents', gives:'runtime rows for onboarded agents; install-time grants are all you see otherwise'},
             {t:'catalog/packages', gives:'the store listing'},
@@ -421,7 +427,7 @@ const PATHS = [
     identity:['entra','none'],
     identityNote:'Split, and moving. Entra lists Security Copilot among the products integrated with the agent identity platform \u2014 but custom SCP agents cannot yet take an Entra Agent ID, and custom agents do not yet appear in the Agent 365 registry either (both field-reported as in progress at Microsoft, Sep 2026 \u2014 verify in tenant). Until then, custom agents are governed inside Security Copilot itself.',
     emits:[ {t:'Purview AI activities', cond:'the \u201cLogging audit data in Microsoft Purview\u201d opt-in', gives:'agent management operations (CreateCopilotAgent and trigger ops), CopilotInteraction metadata for prompts to Copilot or an agent \u2014 prompt and response content only via DSPM for AI. No native Sentinel table: stream the audit log. And where an agent acts on a product, that product\u2019s own audit log carries the change \u2014 Entra audit logs tag the CA Optimization Agent by name'},
-            {t:'CloudAppEvents', cond:'audit opt-in + the M365 connector', gives:'huntable rows via the audit pipeline \u2014 Learn names Security Copilot among CopilotInteraction record types and the M365 connector feeds those into this table. Mechanism-verified, not stated verbatim: confirm in tenant'} ] },
+            {t:'CloudAppEvents', cond:'audit opt-in + the M365 connector', gives:'huntable rows via the audit pipeline \u2014 Learn names Security Copilot among CopilotInteraction record types and the M365 connector feeds those into this table. Each step of that pipeline is documented; the end-to-end claim is field-reported, so confirm in tenant'} ] },
 
   { id:'first', name:'Microsoft first-party', sub:'Researcher · Analyst · SharePoint',
     identity:['none'],
