@@ -310,12 +310,18 @@ section.notes{border-top:1px solid var(--rule);padding:30px 0 60px;background:va
       <p><code>catalog/packages</code> is a beta endpoint, and Microsoft’s own portal tile has been observed reporting a materially different count for the same tenant. Classic Copilot Studio agents (pre-May 2026) hold ordinary app registrations and appear in no agent view — find them by the service principal tag <code>AgentCreatedBy:CopilotStudio</code>.</p>
     </div>
     <div>
-      <h3>Third-party is not one population</h3>
-      <p>Agent 365 ships with preintegrated partners — 23 at launch, <strong>every one registered and observable</strong>. A partner <em>agent</em> is registered and its activity visible; an <em>AI teammate</em> also has its own user account, mailbox and Teams presence; an <em>agent factory</em> (Kore, n8n, Kasisto, NVIDIA NeMo) mints an Entra Agent ID for every agent it creates. Vertex AI and Bedrock agents can be registered with no development work.</p>
+      <h3>Third-party is several populations</h3>
+      <p>Agent 365 ships with 23 preintegrated partners, <strong>every one registered and observable</strong> — though five (Adobe, Celonis, Egnyte, Manus, NVIDIA) are still marked coming soon. A partner <em>agent</em> is registered and its activity visible; an <em>AI teammate</em> also has its own user account, mailbox and Teams presence — Frontier-programme territory, and factory-built agents currently deploy this way; an <em>agent factory</em> (Kore, n8n, Kasisto, NVIDIA NeMo) mints an Entra Agent ID for every agent it creates. Vertex AI and Bedrock agents can be registered with no development work.</p>
       <p>So an onboarded partner agent emits the same OpenTelemetry spans as a Foundry agent. The SDK’s four capabilities are independent, and observability <em>“can use either the agent identity blueprint or a standard Microsoft Entra app registration”</em> — <strong>never infer an agent identity from the presence of telemetry</strong>, or the reverse.</p>
     </div>
   </div>
 </section>
+
+<div class="wrap" style="margin:34px auto 54px;display:flex;gap:14px;font-family:var(--f-body)">
+  <a href="licensing.html" style="flex:1;background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:14px 18px;text-decoration:none;color:var(--ink);font-weight:600;font-size:14px"><span style="display:block;font:500 9.5px var(--f-mono);letter-spacing:.1em;color:var(--ink-3);margin-bottom:3px">← PREVIOUS</span>Licensing</a>
+  <a href="field-notes.html" style="flex:1;text-align:right;background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:14px 18px;text-decoration:none;color:var(--ink);font-weight:600;font-size:14px"><span style="display:block;font:500 9.5px var(--f-mono);letter-spacing:.1em;color:var(--ink-3);margin-bottom:3px">NEXT →</span>Field Notes</a>
+</div>
+
 
 
 <script>

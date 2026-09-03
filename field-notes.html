@@ -68,13 +68,13 @@
 <div class="note">
 <span class="n">NOTE 03</span>
 <h3>Legacy Copilot Studio agents have no identity to govern</h3>
-<p>Agents built before agent identities existed authenticate with an ordinary app registration or the maker's own credentials. They appear in none of the agent identity views — Entra's Agent ID blade and the lake identity tables both draw a blank — which is precisely what makes them the population to worry about. The service principal tag <code>AgentCreatedBy:CopilotStudio</code> is how I find them. If your governance story starts at "agents with identities", these agents aren't in it.</p>
+<p>Agents built before agent identities existed authenticate with an ordinary app registration or the maker's own credentials. Entra's Agent ID blade and the lake identity tables both draw a blank on them — and that invisibility is precisely what makes them the population to worry about. The service principal tag <code>AgentCreatedBy:CopilotStudio</code> is how I find them. If your governance story starts at "agents with identities", these agents aren't in it.</p>
 </div>
 
 <div class="note">
 <span class="n">NOTE 04</span>
 <h3>The documentation and the deployed schema disagree on names</h3>
-<p>Learn pages reference <code>AgentInfo</code>; the deployed table is <code>AgentsInfo</code>. The retired <code>AIAgentsInfo</code> still sits in the schema listing next to its replacement. The Graph audit table is spelled <code>GraphAPIAuditEvents</code> on one Learn page and <code>GraphApiAuditEvents</code> on another. That's a product moving faster than its docs. But it means the schema tab in your own portal outranks any web page, this one included.</p>
+<p>Learn pages reference <code>AgentInfo</code>; the deployed table is <code>AgentsInfo</code>. The retired <code>AIAgentsInfo</code> still sits in the schema listing next to its replacement. The Graph audit table is spelled <code>GraphAPIAuditEvents</code> on one Learn page and <code>GraphApiAuditEvents</code> on another. The product simply moves faster than its docs — which is why the schema tab in your own portal outranks any web page, this one included.</p>
 </div>
 
 <div class="note">
@@ -120,6 +120,11 @@
 </div>
 
 <p style="margin-top:32px;font-size:13.5px;color:var(--text3);">These notes date fast — that's rather the point. Anything here older than a couple of months deserves re-verification against <a href="https://learn.microsoft.com/" target="_blank" style="color:var(--blue);">Microsoft Learn</a> before you rely on it.</p>
+
+<div class="pagenav">
+  <a href="agent-telemetry-map.html"><span class="dir">← PREVIOUS</span>Agent Map</a>
+  <a class="next" href="start.html"><span class="dir">NEXT →</span>Start Here</a>
+</div>
 
 <div class="footer">
   Sources: Microsoft Learn · Microsoft Security Blog · Sentinel blog connector announcements · own tenant observations, generalised<br>
