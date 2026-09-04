@@ -25,7 +25,7 @@ The maintainer will review the gap against the current site content and implemen
 | `field-notes.html` | Field notes — hands-on gotchas: schema traps, licence boundaries, migration surprises |
 | `start.html` | Four-screens rule, six-phase rollout, first-week checklist |
 | `contact.html` | Feedback form + privacy policy |
-| `archive/*.html` | The former deep-dive pages, kept as reference (agent365, identity, threats, playbooks, overview, product-map, demo, changelog) |
+| `archive/*.html` | The former deep-dive pages. **Unlinked from the live site** (Sep 2026) — still served at their URLs and via the `_redirects` 301s, kept as reference (agent365, identity, threats, playbooks, overview, product-map, demo, changelog) |
 
 When `site.css` changes, bump the `?v=` query on every root page's stylesheet link in the same commit — browsers and CDN edges cache the CSS independently of the HTML, and a stale stylesheet renders new components unstyled.
 
