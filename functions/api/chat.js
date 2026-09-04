@@ -267,8 +267,7 @@ WHEN to mention multiple dates:
   05 Runtime Protection
   06 Detect & Respond
 
-Sources: RSAC 2026 announcements, field research by Derk van der Woude
-(Microsoft Security MVP) and Thalpius, official Microsoft documentation.
+Sources: RSAC 2026 announcements, independent community field research, official Microsoft documentation.
 
 // ── RESEARCH STATISTICS (Microsoft, March 2026) ───────────────────────────────
 
@@ -1569,7 +1568,7 @@ THREE AGENT OPERATING MODES (GA blog, May 1 2026):
 LOCAL AGENT DISCOVERY (Shadow AI page in Agent 365 M365 admin center):
   OpenClaw: discoverable TODAY (Frontier programme). See which devices, block via Intune.
   TWO POLICIES in Shadow AI page:
-  DETECT POLICY DETAILS (Derk van der Woude, May 5 2026):
+  DETECT POLICY DETAILS (community field research, May 5 2026):
     Intune policy created: "A365 - Monitor OpenClaw" (Device configuration)
     Type: Properties catalog profile — READ ONLY, safe to deploy
     Settings Catalog node: "Local AI Agent" (new, purpose-built for agent inventory)
@@ -1582,7 +1581,7 @@ LOCAL AGENT DISCOVERY (Shadow AI page in Agent 365 M365 admin center):
     KEY RISK: SYSTEM-level execution context = agent has high-privilege access — triage immediately
     1. "Continuously detect managed devices" — multi-signal detection (identity, devices, network)
     2. "Block AI Agents from OpenClaw" (Intune baseline: A365 - Block OpenClaw)
-  ⚠️ CRITICAL CAVEAT (Derk van der Woude May 2026): Once Block policy is enabled,
+  ⚠️ CRITICAL CAVEAT (community field research, May 2026): Once Block policy is enabled,
     it CANNOT be disabled via Agent 365 portal.
     Rollback = delete the Intune security policy directly (A365 - Block OpenClaw).
   Coming soon detections: Claude Code CLI, Ollama Desktop, OpenAI, Cursor, Poe Desktop
@@ -1753,7 +1752,7 @@ THREE AGENT OPERATING MODES (GA blog, May 1 2026):
 LOCAL AGENT DISCOVERY (Shadow AI page in Agent 365 M365 admin center):
   OpenClaw: discoverable TODAY (Frontier programme). See which devices, block via Intune.
   TWO POLICIES in Shadow AI page:
-  DETECT POLICY DETAILS (Derk van der Woude, May 5 2026):
+  DETECT POLICY DETAILS (community field research, May 5 2026):
     Intune policy created: "A365 - Monitor OpenClaw" (Device configuration)
     Type: Properties catalog profile — READ ONLY, safe to deploy
     Settings Catalog node: "Local AI Agent" (new, purpose-built for agent inventory)
@@ -1766,7 +1765,7 @@ LOCAL AGENT DISCOVERY (Shadow AI page in Agent 365 M365 admin center):
     KEY RISK: SYSTEM-level execution context = agent has high-privilege access — triage immediately
     1. "Continuously detect managed devices" — multi-signal detection (identity, devices, network)
     2. "Block AI Agents from OpenClaw" (Intune baseline: A365 - Block OpenClaw)
-  ⚠️ CRITICAL CAVEAT (Derk van der Woude May 2026): Once Block policy is enabled,
+  ⚠️ CRITICAL CAVEAT (community field research, May 2026): Once Block policy is enabled,
     it CANNOT be disabled via Agent 365 portal.
     Rollback = delete the Intune security policy directly (A365 - Block OpenClaw).
   Coming soon detections: Claude Code CLI, Ollama Desktop, OpenAI, Cursor, Poe Desktop

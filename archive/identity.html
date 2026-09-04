@@ -94,10 +94,7 @@
     <div style="background:#f0f4fb;border-radius:6px;padding:10px 12px;">
       <div style="font-size:10px;font-family:'JetBrains Mono',monospace;color:#6080a0;margin-bottom:6px;">ENTRA AGENT ID · FIELD RESEARCH (MODERN AGENTS ONLY)</div>
       <div style="font-size:12px;color:#2e3d5e;margin-bottom:4px;"><em>Works for Modern Agents only</em></div>
-      <a href="https://derkvanderwoude.medium.com/agent-identity-security-demystified-2ecb164239bf" target="_blank" style="display:block;font-size:12px;color:#0078d4;margin:3px 0;">↗ Entra Agent Identity demystified (basics)</a>
-      <a href="https://derkvanderwoude.medium.com/agent-identity-security-controls-cec061264333" target="_blank" style="display:block;font-size:12px;color:#0078d4;margin:3px 0;">↗ Entra Agent ID security controls</a>
-      <a href="https://derkvanderwoude.medium.com/copilot-studio-agent-security-lessons-learned-from-the-field-989c8523c191" target="_blank" style="display:block;font-size:12px;color:#0078d4;margin:3px 0;">↗ Copilot Studio agent security — lessons from the field</a>
-      <a href="https://derkvanderwoude.medium.com/entra-agent-id-portal-explained-4b0118f8e91a" target="_blank" style="display:block;font-size:12px;color:#0078d4;margin:3px 0;">↗ Entra Agent ID portal explained</a>
+      <div style="font-size:12px;color:#2e3d5e;margin:3px 0;">Grounded in independent community field research (Medium write-ups, 2026) — search for current versions and verify against your tenant.</div>
     </div>
   </div>
 </div>
@@ -128,7 +125,7 @@
 
 <div class="callout callout-caution">
   <div class="callout-title">⚠ The Owner vs Sponsor Distinction Matters</div>
-  <p>For Classic Agents, the user who created the agent is added as an <strong>Owner</strong> of the Enterprise Application. An Owner can add client secrets, bypassing Conditional Access and MFA, abuse federated credentials for cross-tenant access, and is a high-privilege technical role. For Modern Agents, the creator should be listed as a <strong>Sponsor</strong> in the Notes field — a business accountability role without these technical powers. Using the Owner option on Classic Agents introduces real credential abuse risk. Field research by Derk van der Woude confirms this is the default behaviour in production environments.</p>
+  <p>For Classic Agents, the user who created the agent is added as an <strong>Owner</strong> of the Enterprise Application. An Owner can add client secrets, bypassing Conditional Access and MFA, abuse federated credentials for cross-tenant access, and is a high-privilege technical role. For Modern Agents, the creator should be listed as a <strong>Sponsor</strong> in the Notes field — a business accountability role without these technical powers. Using the Owner option on Classic Agents introduces real credential abuse risk. Community field research confirms this is the default behaviour in production environments.</p>
 </div>
 
 <div class="section-label">Maker Credentials</div>
@@ -273,7 +270,7 @@
 
 <div class="section-label">The Five Authentication Patterns</div>
 <h2>How Copilot Studio Agents Actually Authenticate</h2>
-<p>Field research by Derk van der Woude (March 2026) identifies four distinct authentication configurations for Copilot Studio agents — each with a very different risk profile. Knowing <em>which pattern your agents use</em> is the first step to securing them.</p>
+<p>Field research by Community field research (March 2026) identifies four distinct authentication configurations for Copilot Studio agents — each with a very different risk profile. Knowing <em>which pattern your agents use</em> is the first step to securing them.</p>
 
 <table>
 <thead><tr><th>Pattern</th><th>How it authenticates</th><th>Risk</th><th>Detectable via KQL</th></tr></thead>
@@ -337,7 +334,7 @@
 
 <div class="section-label" style="margin-top:32px;">Advanced Detection KQL</div>
 <h2>Detecting Maker Credentials with Precision</h2>
-<p>The following KQL (field-validated by Derk van der Woude) detects maker credentials at the connector level — checking both <code>DeclaredTools</code> and <code>Capabilities</code> for where maker mode is actually configured. This is more precise than checking only the agent-level auth type.</p>
+<p>The following KQL (field-validated by community field research) detects maker credentials at the connector level — checking both <code>DeclaredTools</code> and <code>Capabilities</code> for where maker mode is actually configured. This is more precise than checking only the agent-level auth type.</p>
 <div style="background:#f0f4fb;border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-top:8px;overflow-x:auto;">
 <pre style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#0d1526;line-height:1.8;margin:0;white-space:pre;">let base = AgentsInfo
 | summarize arg_max(Timestamp, *) by AgentId
@@ -380,7 +377,7 @@ directActions
     ParsedUrl, Url, Host, PublishedStatus,
     Owners</pre>
 </div>
-<p style="font-size:12px;color:#5a6a8a;margin-top:8px;">Source: <a href="https://derkvanderwoude.medium.com/your-copilot-studio-agent-is-acting-as-someone-do-you-know-who-f9e5be1116b9" target="_blank" style="color:var(--blue);">Derk van der Woude — Your Copilot Studio agent is acting as someone, do you know who? (March 2026)</a></p>
+<p style="font-size:12px;color:#5a6a8a;margin-top:8px;">Source: community field research (lab-tested), 2026</p>
 
 
 <div class="section-label" style="margin-top:32px;">Agent Sprawl & Lifecycle Risk</div>
@@ -474,7 +471,7 @@ foreach ($agent in $agents.value) {
 Disconnect-MgGraph</pre>
 </div>
 
-<p style="font-size:12px;color:#5a6a8a;margin-top:8px;">Source: <a href="https://thalpius.com/2026/03/14/microsoft-ownerless-agents-the-silent-risk-in-your-entra-tenant/" target="_blank" style="color:var(--blue);">Thalpius — Microsoft Ownerless Agents: The silent risk in your Entra tenant (March 2026)</a></p>
+<p style="font-size:12px;color:#5a6a8a;margin-top:8px;">Source: community field research on ownerless agents, March 2026</p>
 
 <div class="section-label" style="margin-top:24px;">The Blueprint Model</div>
 <h2>Three Agent Categories + The Blueprint Architecture</h2>
@@ -577,7 +574,7 @@ Disconnect-MgGraph</pre>
 
 <div class="section-label" style="margin-top:32px;">Blueprint Authentication — T1/T2 Flow</div>
 <h2>How Blueprint credentials work — and why FIC is the right choice</h2>
-<p>Source: <a href="https://derkvanderwoude.medium.com/entra-agent-id-federated-identity-credentials-fic-deep-dive-472d1b5a66e2" target="_blank" style="color:var(--blue);">Derk van der Woude — Entra Agent ID FIC Deep-Dive (April 2026)</a></p>
+<p>Source: community field research — FIC deep-dive, April 2026</p>
 
 <p>When an agent authenticates, it goes through a two-phase flow:</p>
 
