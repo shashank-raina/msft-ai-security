@@ -81,6 +81,20 @@ agents.** Questions on the table:
 - Outcome feeds the **Agent Map**: the Foundry creation path's edges, the "gives" on
   each, and the licence gates need to reflect the verified answer.
 
+## Launch decisions (recorded 3–4 Sep 2026)
+
+- **One LinkedIn post, not a series.** The original plan was a per-agent-type post
+  series with the Agent Map hidden until the series ran. Reversed: a single short post
+  linking the map directly. The map is the artefact; the post just points at it.
+- **The map stays in the nav.** It was briefly slated for unlisting during the series
+  plan (PR #49, closed unmerged). It is a first-class page — anything that hides it
+  works against the reason it exists.
+- **Share only the canonical domain.** `aiagentsecurity.guide` everywhere;
+  `msftaisecurity.com` now 301-redirects to it and exists purely as a safety net.
+- Pre-publish gate that ran before the post: the mechanical map audit (every node fed,
+  every edge sourced, zero orphans) plus a full-page link/anchor check. Re-run both
+  before any future announcement that drives traffic to the map.
+
 ## What stays in the archive permanently
 
 `product-map` (a catalogue) · `demo` · the full A365 feature inventory · the long
