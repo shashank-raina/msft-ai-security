@@ -18,16 +18,15 @@ Content reflects the personal views and research of the maintainer, not those of
 
 Microsoft's AI security story spans Entra, Defender, Purview, Sentinel, Copilot Studio, AI Foundry, Security Copilot, and more — with documentation scattered across product teams, learn paths, and blog posts. Security architects need to reason about all of it together.
 
-This site exists to fill that gap: a single place to see how the pieces fit, where the gaps are, and how to apply Zero Trust principles to AI and agentic workloads.
+This site exists to fill that gap: a single place to see how the pieces fit, where the gaps are, and which licence actually gates each control. It is deliberately small — a primer to orient from, with pointers outward for depth:
 
-The site is structured as a layered model across **seven security domains**, with practical guidance on:
+- **Five Surfaces** — the five asset classes of an AI estate (apps & assistants, platform & workloads, agents, tools & MCP servers, endpoints running local AI), each with its top risks, owning control, and licence gate
+- **Licensing** — the three independent licence axes, and what E5, Agent 365 / E7, and the Sentinel data lake tier each actually buy
+- **Agent Telemetry Map** — an interactive map of nine agent activity sources, the sixteen tables and destinations their telemetry lands in, the identity each source runs as, and the licence gate on every edge
+- **Field Notes** — short, dated notes on what actually bit during real deployments: schema traps, licence boundaries dressed up as empty tables, controls that stopped working without saying so
+- **Start Here** — a phased rollout order and the five KQL queries worth running first
 
-- **Frameworks** — Microsoft's security frameworks applied to AI workloads
-- **Zero Trust for AI** — three principles, three-stage maturity model, twelve priority controls
-- **Gaps** — known limitations, governance gaps, and architectural caveats worth flagging
-- **Authentication patterns** — including Copilot Studio agent auth patterns and Conditional Access scope clarifications
-- **Detection content** — KQL queries for Microsoft Sentinel covering agent inventory, auth-type changes, and related scenarios
-- **Threat scenarios** — including agent-to-agent (A2A) propagation risks
+Earlier, deeper material (Zero Trust for AI, frameworks, gaps, agent auth patterns, detection content, threat scenarios) lives under `archive/` — still served at its original URLs, no longer linked from the live pages.
 
 ---
 
@@ -42,7 +41,7 @@ The site assumes working familiarity with the Microsoft security stack — it is
 ## Tech stack
 
 - Static HTML / CSS / JavaScript
-- Hosted on **Cloudflare Pages**
+- Hosted on **Cloudflare Pages** — canonical domain `aiagentsecurity.guide`; the secondary domain `msftaisecurity.com` 301-redirects to it via a Cloudflare Redirect Rule
 - Chat assistant via a Cloudflare Pages Function (`functions/api/chat.js`) calling the Anthropic API
 - Contact form via **Formspree**
 - No tracking, no ads, no analytics beyond Cloudflare's edge metrics
@@ -75,6 +74,7 @@ Issues, corrections, and suggestions are very welcome — particularly:
 1. **Open an issue** for discussion before significant changes — this keeps direction aligned and avoids wasted work
 2. **Pull requests** are reviewed by the maintainer; the `main` branch is protected and only the maintainer merges
 3. For substantive new content (new pages, new sections), please discuss in an issue first
+4. See [CONTRIBUTING.md](CONTRIBUTING.md) for page conventions — the page inventory, CSS cache-busting (`site.css?v=`), page-nav tiles, and the status of the archive
 
 This is a personally maintained reference site, so editorial direction stays with the maintainer. That said, community input is what keeps it useful — please don't hesitate to flag things.
 
