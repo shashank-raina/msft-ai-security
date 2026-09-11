@@ -144,7 +144,7 @@
 const CHIPS = [
   { id:'e3',      label:'M365 E3',                     ax:'M365 · per user', grants:['e3'],      includes:[] },
   { id:'e5',      label:'M365 E5',                     ax:'M365 · per user', grants:['e5'],      includes:['e3'] },
-  { id:'copilot', label:'M365 Copilot',                ax:'M365 · add-on',   grants:['copilot'], includes:['e3'] },
+  { id:'copilot', label:'M365 Copilot',                ax:'M365 · add-on',   grants:['copilot'], includes:[] },
   { id:'a365',    label:'Agent 365',                   ax:'M365 · add-on',   grants:['a365'],    includes:['e5'] },
   { id:'e7',      label:'M365 E7',                     ax:'M365 · per user', grants:['e7'],      includes:['e5','a365'] },
   { id:'lake',    label:'Sentinel + data lake',        ax:'Sentinel axis',   grants:['lake'],    includes:[] },
@@ -206,7 +206,7 @@ const CLASSES = [
   { v:'see', t:'Local agent discovery — automatic (Platform == "LocalAgents")', req:[['e5']], gate:'MDE P2 (in E5)' },
   { v:'see', t:'Exposure graph reach for local agents (nodes & edges)', req:[['e5']], gate:'MDE P2 (in E5)' },
   { v:'gov', t:'Block unsanctioned local endpoint agents (Intune)', req:[['a365']], gate:'Agent 365 + Intune' },
-  { v:'pro', t:'Local runtime protection', req:[['e5']], gate:'MDE P2 / E5' },
+  { v:'pro', t:'Local runtime protection (preview) — audit or block at the prompt, pre-tool and post-tool points', req:[['e5']], gate:'MDE P2 / E5' },
   { v:'det', t:'Local-agent risk levels, indicators & recommendations', req:[['a365','e5']], gate:'E7, or Agent 365 + MDE P2' },
   { v:'det', t:'Defender XDR alerts covering local agents', req:[['e5']], gate:'E5' }
 ]}
