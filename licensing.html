@@ -10,7 +10,11 @@
 <style>
 /* ── licence picker ── */
 .picker{background:#ffffff;border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin:22px 0 10px;}
-.picker .plabel{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--blue);margin-bottom:10px;}
+.picker .plabel{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--blue);}
+.picker .phead{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.clearbtn{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.05em;padding:4px 10px;border-radius:6px;
+  border:1px solid var(--border);background:#ffffff;color:#5a6a8a;cursor:pointer;}
+.clearbtn:hover{border-color:var(--blue);color:var(--blue);}
 .chips{display:flex;flex-wrap:wrap;gap:8px;}
 .chip{font-family:'JetBrains Mono',monospace;font-size:11.5px;padding:7px 13px;border-radius:18px;border:1.5px solid var(--border);
   background:#f4f7fb;color:#5a6a8a;cursor:pointer;user-select:none;transition:all .12s;}
@@ -99,13 +103,18 @@
 <p style="font-size:14px;color:#2e3d5e;max-width:700px;">Every capability below sits on one of the five asset classes and is tagged <strong>see</strong>, <strong>govern</strong>, <strong>protect</strong> or <strong>detect</strong>, with the licence that gates it. Toggle what you actually hold — a selection lights everything it includes (E7 lights Agent&nbsp;365 and E5; E5 lights E3, Defender for Endpoint&nbsp;P2 and the Purview suite). Greyed capabilities name the gate you're missing.</p>
 
 <div class="picker">
-  <div class="plabel">WHAT DO YOU HOLD?</div>
+  <div class="phead">
+    <div class="plabel">WHAT DO YOU HOLD?</div>
+    <button class="clearbtn" id="clearBtn" type="button">✕ CLEAR ALL</button>
+  </div>
   <div class="chips" id="chips"></div>
   <div class="litcount" id="litcount"></div>
   <p class="picknote">Chips in lighter blue are included by something you selected. Prices are deliberately absent — never quote one from a web page, including this one.</p>
 </div>
 
 <div id="grid"></div>
+
+<p style="font-size:12.5px;color:#5a6a8a;max-width:720px;margin:14px 0 0;line-height:1.6;">* <strong>Purview PAYG</strong> is Purview's pay-as-you-go billing model: consumption-metered against an Azure subscription instead of per-user seats. It exists because agents and custom AI apps hold no seat licence — their data protection is billed by use. It's how the Foundry "Powered by Microsoft Purview" toggle is paid for without Agent 365, which is why the two Foundry-Purview capabilities above light from either chip.</p>
 
 <div class="callout callout-warn" style="margin-top:20px;">
   <div class="callout-title">⚠ One table, two populations, two licences</div>
@@ -140,7 +149,7 @@ const CHIPS = [
   { id:'e7',      label:'M365 E7',                     ax:'M365 · per user', grants:['e7'],      includes:['e5','a365'] },
   { id:'lake',    label:'Sentinel + data lake',        ax:'Sentinel axis',   grants:['lake'],    includes:[] },
   { id:'d4c',     label:'Defender for Cloud AI plans', ax:'Azure axis',      grants:['d4c'],     includes:[] },
-  { id:'ppayg',   label:'Purview PAYG',                ax:'Azure-billed',    grants:['ppayg'],   includes:[] },
+  { id:'ppayg',   label:'Purview PAYG*',               ax:'Azure-billed',    grants:['ppayg'],   includes:[] },
   { id:'apim',    label:'APIM + diagnostics',          ax:'Azure axis',      grants:['apim'],    includes:[] }
 ];
 
@@ -269,6 +278,7 @@ function render(){
 
 document.addEventListener('DOMContentLoaded', function(){
   render();
+  document.getElementById('clearBtn').addEventListener('click', function(){ selected.clear(); render(); });
   var btn = document.getElementById('hamburgerBtn');
   var drawer = document.getElementById('mobileDrawer');
   var overlay = document.getElementById('drawerOverlay');
