@@ -114,6 +114,8 @@
 
 <div id="grid"></div>
 
+<p style="font-size:12.5px;color:#5a6a8a;max-width:720px;margin:14px 0 0;line-height:1.6;">* <strong>Purview PAYG</strong> is Purview's pay-as-you-go billing model: consumption-metered against an Azure subscription instead of per-user seats. It exists because agents and custom AI apps hold no seat licence — their data protection is billed by use. It's how the Foundry "Powered by Microsoft Purview" toggle is paid for without Agent 365, which is why the two Foundry-Purview capabilities above light from either chip.</p>
+
 <div class="callout callout-warn" style="margin-top:20px;">
   <div class="callout-title">⚠ One table, two populations, two licences</div>
   <p><strong><code>AgentsInfo</code></strong> — <em>local</em> agents populate on Defender for Endpoint P2 (included in E5) with no Agent 365 licence; <em>cloud</em> agents need Agent 365. <strong><code>CloudAppEvents</code></strong> — Copilot interaction <em>verdict</em> rows (Jailbreak, XPIA) arrive on E5; the Agent 365 <em>runtime</em> rows (<code>InvokeAgent</code>, <code>InferenceCall</code>, <code>ExecuteToolBy*</code>) do not exist until Agent 365 instruments an agent. When a screen shows nothing, check the licence gate before declaring a data gap — the <a href="agent-telemetry-map.html" style="color:var(--blue);font-weight:600;">Agent Telemetry Map</a> carries the gate on every table for exactly this reason.</p>
@@ -147,7 +149,7 @@ const CHIPS = [
   { id:'e7',      label:'M365 E7',                     ax:'M365 · per user', grants:['e7'],      includes:['e5','a365'] },
   { id:'lake',    label:'Sentinel + data lake',        ax:'Sentinel axis',   grants:['lake'],    includes:[] },
   { id:'d4c',     label:'Defender for Cloud AI plans', ax:'Azure axis',      grants:['d4c'],     includes:[] },
-  { id:'ppayg',   label:'Purview PAYG',                ax:'Azure-billed',    grants:['ppayg'],   includes:[] },
+  { id:'ppayg',   label:'Purview PAYG*',               ax:'Azure-billed',    grants:['ppayg'],   includes:[] },
   { id:'apim',    label:'APIM + diagnostics',          ax:'Azure axis',      grants:['apim'],    includes:[] }
 ];
 
