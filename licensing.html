@@ -4,16 +4,46 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>AI Security Licensing — what actually gates what</title>
-<meta name="description" content="The three independent licence axes for Microsoft AI security, and the E5 / Agent 365 / E7 splits that decide which tables and controls you actually have.">
+<meta name="description" content="An interactive grid of what each Microsoft licence actually lights up across the five AI asset classes — see, govern, protect and detect, with the gate on every capability.">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="site.css?v=20260903">
 <style>
-.surface-card{background:#ffffff;border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin:14px 0;}
-.surface-card .num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--blue);}
-.surface-card h3{font-size:17px;font-weight:700;color:#0d1526;margin:4px 0 8px;}
-.fact-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:20px 0;}
-.fact{background:#ffffff;border:1px solid var(--border);border-radius:10px;padding:14px 18px;font-size:13px;color:#2e3d5e;line-height:1.6;}
-.fact b{display:block;font-size:15px;color:#0d1526;}
+/* ── licence picker ── */
+.picker{background:#ffffff;border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin:22px 0 10px;}
+.picker .plabel{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--blue);margin-bottom:10px;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{font-family:'JetBrains Mono',monospace;font-size:11.5px;padding:7px 13px;border-radius:18px;border:1.5px solid var(--border);
+  background:#f4f7fb;color:#5a6a8a;cursor:pointer;user-select:none;transition:all .12s;}
+.chip:hover{border-color:var(--blue);}
+.chip.on{background:var(--blue);border-color:var(--blue);color:#ffffff;font-weight:600;}
+.chip.implied{background:#dceafc;border-color:#9cc3ec;color:#1a4e8a;font-weight:600;}
+.chip .ax{font-size:8.5px;opacity:0.75;display:block;letter-spacing:0.06em;}
+.picknote{font-size:12.5px;color:#5a6a8a;margin-top:10px;line-height:1.55;}
+.litcount{font-family:'JetBrains Mono',monospace;font-size:12px;color:#0d1526;margin-top:8px;}
+.litcount b{color:var(--blue);}
+
+/* ── grid ── */
+.classcard{background:#ffffff;border:1px solid var(--border);border-radius:12px;padding:18px 22px;margin:14px 0;}
+.classcard .num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--blue);}
+.classcard h3{font-size:16.5px;font-weight:700;color:#0d1526;margin:3px 0 12px;}
+.verbgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+@media(max-width:860px){.verbgrid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:480px){.verbgrid{grid-template-columns:1fr;}}
+.verbcol .vh{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.14em;padding-bottom:5px;margin-bottom:8px;border-bottom:2px solid;}
+.verbcol.v-see .vh{color:#0f6cbd;border-color:#0f6cbd;}
+.verbcol.v-gov .vh{color:#7a5af8;border-color:#7a5af8;}
+.verbcol.v-pro .vh{color:#0e7d5a;border-color:#0e7d5a;}
+.verbcol.v-det .vh{color:#c2571a;border-color:#c2571a;}
+.cap{border-radius:8px;padding:8px 10px;margin:0 0 8px;font-size:12.5px;line-height:1.45;border:1px solid var(--border);border-left-width:3px;transition:all .15s;}
+.v-see .cap{border-left-color:#0f6cbd;}
+.v-gov .cap{border-left-color:#7a5af8;}
+.v-pro .cap{border-left-color:#0e7d5a;}
+.v-det .cap{border-left-color:#c2571a;}
+.cap .gate{display:block;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.05em;margin-top:4px;}
+.cap.off{background:#f6f8fb;color:#a8b4c8;border-left-color:#c9d3e2 !important;}
+.cap.off .gate{color:#9aa8bf;font-weight:600;}
+.cap.on{background:#ffffff;color:#1c2a40;}
+.cap.on .gate{color:#3f77b8;}
 </style>
 </head>
 <body>
@@ -64,27 +94,27 @@
 </tbody>
 </table>
 
-<div class="section-label" style="margin-top:36px;">The split that causes the most confusion</div>
-<h2>One table, two populations, two licences</h2>
-<div class="callout callout-warn">
-  <div class="callout-title">⚠ Empty tables are often licence boundaries in disguise</div>
-  <p><strong><code>AgentsInfo</code></strong> — <em>local</em> agents populate on E5 / MDE P2 with no Agent 365 licence (tenant-verified); <em>cloud</em> agents need Agent 365.<br>
-  <strong><code>CloudAppEvents</code></strong> — Copilot interaction <em>verdict</em> rows (Jailbreak, XPIA) arrive on E5; the Agent 365 <em>runtime</em> rows (<code>InvokeAgent</code>, <code>InferenceCall</code>, <code>ExecuteToolBy*</code>) do not exist until Agent 365 instruments an agent.</p>
+<div class="section-label" style="margin-top:36px;">The grid</div>
+<h2>Pick what you hold; watch what lights up</h2>
+<p style="font-size:14px;color:#2e3d5e;max-width:700px;">Every capability below sits on one of the five asset classes and is tagged <strong>see</strong>, <strong>govern</strong>, <strong>protect</strong> or <strong>detect</strong>, with the licence that gates it. Toggle what you actually hold — a selection lights everything it includes (E7 lights Agent&nbsp;365 and E5; E5 lights E3, Defender for Endpoint&nbsp;P2 and the Purview suite). Greyed capabilities name the gate you're missing.</p>
+
+<div class="picker">
+  <div class="plabel">WHAT DO YOU HOLD?</div>
+  <div class="chips" id="chips"></div>
+  <div class="litcount" id="litcount"></div>
+  <p class="picknote">Chips in lighter blue are included by something you selected. Prices are deliberately absent — never quote one from a web page, including this one.</p>
 </div>
 
-<h2 style="margin-top:28px;">What each tier actually buys</h2>
-<table>
-<thead><tr><th>You hold</th><th>You can already do</th><th>What the next tier adds</th></tr></thead>
-<tbody>
-<tr><td><strong>M365 E5</strong></td><td>Copilot interaction audit with safety verdicts · free security alerts · local-agent discovery and inventory (MDE P2) · read every agent identity in Entra · shadow-AI discovery</td><td rowspan="2"><strong>Agent 365 / E7:</strong> cloud-agent inventory and posture · Conditional Access, ID Protection and lifecycle <em>for agents</em> · runtime telemetry (invocations, tool calls) · the registry's Risks column and Security tab · local-agent risk scoring</td></tr>
-<tr><td><strong>+ M365 Copilot</strong></td><td><code>CopilotActivity</code> populated per interaction</td></tr>
-<tr><td><strong>Sentinel + lake tier</strong></td><td colspan="2">Two preview connectors land the deepest data lake-side: <code>UnifiedAgentObservability</code> (full spans — prompts, tool arguments, session reconstruction) and the four-table <code>EntraAgent*</code> identity graph. Without the lake, the richest agent telemetry has nowhere to land</td></tr>
-</tbody>
-</table>
+<div id="grid"></div>
 
-<div class="callout callout-info" style="margin-top:16px;">
-  <div class="callout-title">📌 Two rules for quoting any of this</div>
-  <p><strong>Never quote a price from a web page</strong> — including this one; verify against the current Microsoft price list. And when a screen shows nothing, check the licence gate before declaring a data gap — the <a href="agent-telemetry-map.html" style="color:var(--blue);font-weight:600;">Agent Telemetry Map</a> carries the gate on every table for exactly this reason.</p>
+<div class="callout callout-warn" style="margin-top:20px;">
+  <div class="callout-title">⚠ One table, two populations, two licences</div>
+  <p><strong><code>AgentsInfo</code></strong> — <em>local</em> agents populate on Defender for Endpoint P2 (included in E5) with no Agent 365 licence; <em>cloud</em> agents need Agent 365. <strong><code>CloudAppEvents</code></strong> — Copilot interaction <em>verdict</em> rows (Jailbreak, XPIA) arrive on E5; the Agent 365 <em>runtime</em> rows (<code>InvokeAgent</code>, <code>InferenceCall</code>, <code>ExecuteToolBy*</code>) do not exist until Agent 365 instruments an agent. When a screen shows nothing, check the licence gate before declaring a data gap — the <a href="agent-telemetry-map.html" style="color:var(--blue);font-weight:600;">Agent Telemetry Map</a> carries the gate on every table for exactly this reason.</p>
+</div>
+
+<div class="callout callout-info" style="margin-top:14px;">
+  <div class="callout-title">📌 Reading the grid honestly</div>
+  <p>A lit capability means the licence entitles you to it — it says nothing about whether it's deployed, configured, or covering the agents you think it covers. "Enabled" and "covered" are different claims. Entitlement boundaries follow the Agent 365 service description and Microsoft Learn as of early September 2026; the split moves, so re-verify before purchasing decisions. And never quote a price from a web page — verify against the current Microsoft price list.</p>
 </div>
 
 <div class="pagenav">
@@ -93,13 +123,152 @@
 </div>
 
 <div class="footer">
-  Sources: Microsoft Learn · Microsoft Security Blog · Sentinel blog connector announcements<br>
-  Last updated: August 31, 2026
+  Sources: Microsoft Learn (Agent 365 service description · Entra CA for agents · MDE local-agent discovery · Purview for gen-AI apps) · Microsoft Security Blog<br>
+  Last updated: September 11, 2026
 </div>
 </div>
 
 <script>
+// ═══ DATA — licences and capabilities ═══
+// Tokens are entitlement atoms. A chip grants tokens; selecting a chip also
+// auto-lights the chips it includes (cumulative model).
+const CHIPS = [
+  { id:'e3',      label:'M365 E3',                     ax:'M365 · per user', grants:['e3'],      includes:[] },
+  { id:'e5',      label:'M365 E5',                     ax:'M365 · per user', grants:['e5'],      includes:['e3'] },
+  { id:'copilot', label:'M365 Copilot',                ax:'M365 · add-on',   grants:['copilot'], includes:['e3'] },
+  { id:'a365',    label:'Agent 365',                   ax:'M365 · add-on',   grants:['a365'],    includes:['e5'] },
+  { id:'e7',      label:'M365 E7',                     ax:'M365 · per user', grants:['e7'],      includes:['e5','a365'] },
+  { id:'lake',    label:'Sentinel + data lake',        ax:'Sentinel axis',   grants:['lake'],    includes:[] },
+  { id:'d4c',     label:'Defender for Cloud AI plans', ax:'Azure axis',      grants:['d4c'],     includes:[] },
+  { id:'ppayg',   label:'Purview PAYG',                ax:'Azure-billed',    grants:['ppayg'],   includes:[] },
+  { id:'apim',    label:'APIM + diagnostics',          ax:'Azure axis',      grants:['apim'],    includes:[] }
+];
+
+// req: alternatives; each alternative is a token list that must all be held.
+// req [[]] means included with the resource itself — always lit.
+const CLASSES = [
+{ num:'CLASS 1', name:'AI apps & assistants', caps:[
+  { v:'see', t:'Copilot interaction audit with safety verdicts', req:[['e5']], gate:'E5' },
+  { v:'see', t:'CopilotActivity — per-interaction log', req:[['e5','copilot']], gate:'E5 + M365 Copilot' },
+  { v:'see', t:'Shadow-AI discovery (cloud app catalogue)', req:[['e5']], gate:'E5 · Defender for Cloud Apps' },
+  { v:'see', t:'DSPM for AI dashboards', req:[['e5']], gate:'E5 Purview' },
+  { v:'gov', t:'Sensitivity labels + inheritance in Copilot', req:[['e5']], gate:'E5 Purview' },
+  { v:'gov', t:'Unsanctioned AI app blocking (via MDE)', req:[['e5']], gate:'E5 · MDE' },
+  { v:'pro', t:'Purview DLP for Copilot', req:[['e5']], gate:'E5 Purview' },
+  { v:'pro', t:'Endpoint DLP — paste to AI sites (standard SITs only)', req:[['e5']], gate:'E5' },
+  { v:'det', t:'Jailbreak / XPIA verdicts per interaction', req:[['e5']], gate:'E5' },
+  { v:'det', t:'Defender XDR alerts for Copilot', req:[['e5']], gate:'E5' }
+]},
+{ num:'CLASS 2', name:'AI platform & workloads', caps:[
+  { v:'see', t:'Foundry observability — content-filter spans in App Insights', req:[[]], gate:'included with the Foundry resource' },
+  { v:'see', t:'Purview AI activities for Foundry prompts (per-subscription toggle)', req:[['ppayg'],['a365']], gate:'Purview PAYG or Agent 365' },
+  { v:'see', t:'APIM AI-gateway LLM logs (ApiManagementGatewayLlmLog)', req:[['apim']], gate:'APIM + diagnostic settings' },
+  { v:'gov', t:'Foundry guardrail policies (Azure Policy)', req:[[]], gate:'Azure Policy — no extra licence' },
+  { v:'gov', t:'Defender CSPM posture for AI workloads', req:[['d4c']], gate:'Defender CSPM plan' },
+  { v:'pro', t:'Prompt Shields / content filters', req:[[]], gate:'built into Foundry' },
+  { v:'pro', t:'DLP on user-context chat completions', req:[['ppayg'],['a365']], gate:'Purview toggle · Entra user context only' },
+  { v:'det', t:'Defender for AI Services alerts (redacted prompt evidence)', req:[['d4c']], gate:'Defender for AI Services plan · text tokens only' }
+]},
+{ num:'CLASS 3', name:'Agents', caps:[
+  { v:'see', t:'Agent Registry inventory + external registry sync', req:[['e3']], gate:'base M365 plans' },
+  { v:'see', t:'Entra Agent ID objects — readable', req:[['e3']], gate:'any Entra tier' },
+  { v:'see', t:'AgentsInfo — cloud agent rows', req:[['a365']], gate:'Agent 365' },
+  { v:'see', t:'UnifiedAgentObservability — full spans', req:[['a365','lake']], gate:'Agent 365 + Sentinel lake' },
+  { v:'see', t:'EntraAgent* identity tables (preview)', req:[['lake']], gate:'Sentinel lake' },
+  { v:'gov', t:'Registry actions: publish, block, delete, approve, assign', req:[['e3']], gate:'base M365 plans' },
+  { v:'gov', t:'Conditions-based lifecycle rules', req:[['e3']], gate:'base M365 plans' },
+  { v:'gov', t:'Conditional Access for agents', req:[['a365']], gate:'Agent 365 + Entra P1/P2' },
+  { v:'gov', t:'ID Protection for agents', req:[['a365','e5']], gate:'Agent 365 + Entra P2' },
+  { v:'gov', t:'Purview extensions for agents (audit, eDiscovery, DLP, labels)', req:[['a365']], gate:'Agent 365 / E7' },
+  { v:'pro', t:'Tenant-wide control of tools & MCP servers agents may use', req:[['a365']], gate:'Agent 365 / E7' },
+  { v:'pro', t:'Suspicious tool-invocation blocking', req:[['a365']], gate:'Agent 365 / E7 · Defender' },
+  { v:'det', t:'Runtime telemetry: InvokeAgent · InferenceCall · ExecuteToolBy*', req:[['a365']], gate:'Agent 365 instrumentation' },
+  { v:'det', t:'Registry Risks column + Security tab', req:[['a365']], gate:'Agent 365 / E7' }
+]},
+{ num:'CLASS 4', name:'Tools, MCP servers & connectors', caps:[
+  { v:'see', t:'MCP servers on local agents (AgentsInfo.McpServers)', req:[['e5']], gate:'MDE P2 (in E5)' },
+  { v:'see', t:'Declared tools & MCP servers on cloud agents', req:[['a365']], gate:'Agent 365' },
+  { v:'gov', t:'Tenant-wide tool & MCP allow/block', req:[['a365']], gate:'Agent 365 / E7' },
+  { v:'gov', t:'Policy-controlled agent runtime environment (Intune)', req:[['a365']], gate:'Agent 365 + Intune' },
+  { v:'pro', t:'Real-time evaluation of onboarded MCP tools', req:[['a365']], gate:'Agent 365 / E7' },
+  { v:'det', t:'Tool-call telemetry (ExecuteToolBySDK / Gateway / MCPServer)', req:[['a365']], gate:'Agent 365 instrumentation' }
+]},
+{ num:'CLASS 5', name:'Endpoints running local AI', caps:[
+  { v:'see', t:'Local agent discovery — automatic (Platform == "LocalAgents")', req:[['e5']], gate:'MDE P2 (in E5)' },
+  { v:'see', t:'Exposure graph reach for local agents (nodes & edges)', req:[['e5']], gate:'MDE P2 (in E5)' },
+  { v:'gov', t:'Block unsanctioned local endpoint agents (Intune)', req:[['a365']], gate:'Agent 365 + Intune' },
+  { v:'pro', t:'Local runtime protection', req:[['e5']], gate:'MDE P2 / E5' },
+  { v:'det', t:'Local-agent risk levels, indicators & recommendations', req:[['a365','e5']], gate:'E7, or Agent 365 + MDE P2' },
+  { v:'det', t:'Defender XDR alerts covering local agents', req:[['e5']], gate:'E5' }
+]}
+];
+
+const VERBS = [ ['see','SEE'], ['gov','GOVERN'], ['pro','PROTECT'], ['det','DETECT'] ];
+let selected = new Set(['e5']);   // default: the most common holding
+
+function effectiveChips(){
+  const on = new Set(selected);
+  let grew = true;
+  while(grew){
+    grew = false;
+    CHIPS.forEach(c => {
+      if(on.has(c.id)) c.includes.forEach(i => { if(!on.has(i)){ on.add(i); grew = true; } });
+    });
+  }
+  return on;
+}
+function heldTokens(on){
+  const held = new Set();
+  CHIPS.forEach(c => { if(on.has(c.id)) c.grants.forEach(g => held.add(g)); });
+  return held;
+}
+function capLit(cap, held){
+  return cap.req.some(alt => alt.every(tok => held.has(tok)));
+}
+
+function render(){
+  const on = effectiveChips();
+  const held = heldTokens(on);
+
+  const chipsEl = document.getElementById('chips');
+  chipsEl.innerHTML = '';
+  CHIPS.forEach(c => {
+    const el = document.createElement('div');
+    el.className = 'chip' + (selected.has(c.id) ? ' on' : (on.has(c.id) ? ' implied' : ''));
+    el.innerHTML = c.label + '<span class="ax">' + c.ax + '</span>';
+    el.onclick = () => { selected.has(c.id) ? selected.delete(c.id) : selected.add(c.id); render(); };
+    chipsEl.appendChild(el);
+  });
+
+  let lit = 0, total = 0;
+  const gridEl = document.getElementById('grid');
+  gridEl.innerHTML = '';
+  CLASSES.forEach(cl => {
+    const card = document.createElement('div');
+    card.className = 'classcard';
+    let inner = '<div class="num">' + cl.num + '</div><h3>' + cl.name + '</h3><div class="verbgrid">';
+    VERBS.forEach(([vk, vlabel]) => {
+      inner += '<div class="verbcol v-' + vk + '"><div class="vh">' + vlabel + '</div>';
+      cl.caps.filter(c => c.v === vk).forEach(c => {
+        total++;
+        const isLit = capLit(c, held);
+        if(isLit) lit++;
+        inner += '<div class="cap ' + (isLit ? 'on' : 'off') + '">' + c.t +
+                 '<span class="gate">' + (isLit ? '✓ ' : '🔒 ') + c.gate + '</span></div>';
+      });
+      inner += '</div>';
+    });
+    inner += '</div>';
+    card.innerHTML = inner;
+    gridEl.appendChild(card);
+  });
+
+  document.getElementById('litcount').innerHTML =
+    'Your selection lights <b>' + lit + '</b> of <b>' + total + '</b> capabilities.';
+}
+
 document.addEventListener('DOMContentLoaded', function(){
+  render();
   var btn = document.getElementById('hamburgerBtn');
   var drawer = document.getElementById('mobileDrawer');
   var overlay = document.getElementById('drawerOverlay');
