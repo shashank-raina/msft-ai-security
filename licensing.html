@@ -100,7 +100,7 @@
 
 <div class="section-label" style="margin-top:36px;">The grid</div>
 <h2>Pick what you hold; watch what lights up</h2>
-<p style="font-size:14px;color:#2e3d5e;max-width:700px;">Every capability below sits on one of the five asset classes and is tagged <strong>see</strong>, <strong>govern</strong>, <strong>protect</strong> or <strong>detect</strong>, with the licence that gates it. Toggle what you actually hold — a selection lights everything it includes (E7 lights Agent&nbsp;365 and E5; E5 lights E3, Defender for Endpoint&nbsp;P2 and the Purview suite). Greyed capabilities name the gate you're missing.</p>
+<p style="font-size:14px;color:#2e3d5e;max-width:700px;">Every capability below sits on one of the five asset classes and is tagged <strong>see</strong>, <strong>govern</strong>, <strong>protect</strong> or <strong>detect</strong>, with the licence that gates it. Toggle what you actually hold — a selection lights everything it includes (E7 lights Agent&nbsp;365, Copilot and E5; E5 lights E3, Defender for Endpoint&nbsp;P2 and the Purview suite). Greyed capabilities name the gate you're missing.</p>
 
 <div class="picker">
   <div class="phead">
@@ -110,6 +110,11 @@
   <div class="chips" id="chips"></div>
   <div class="litcount" id="litcount"></div>
   <p class="picknote">Chips in lighter blue are included by something you selected. Prices are deliberately absent — never quote one from a web page, including this one.</p>
+</div>
+
+<div class="callout callout-warn" style="margin-top:16px;">
+  <div class="callout-title">⚠ Agent 365 has a purchase prerequisite</div>
+  <p>Since <strong>1 June 2026</strong>, buying Agent 365 standalone requires a qualifying base plan: <strong>Microsoft 365 E5</strong> (enterprise), <strong>F5-level Defender and Purview suites</strong> (frontline workers), or <strong>Microsoft 365 Business Premium</strong> (SMB). Microsoft 365 E7 includes Agent 365 outright, so nothing changes there. That is a commerce rule; the technical dependency is separate and narrower — Microsoft documents that an Agent 365 subscription needs a product carrying the <code>AAD_PREMIUM</code> service plan, such as Entra ID P1 or Microsoft 365 E3. Two different gates with similar names, so check which one a conversation is actually about. This is why the Agent 365 chip lights no base plan on its own: pick the one you hold.</p>
 </div>
 
 <div id="grid"></div>
@@ -143,10 +148,11 @@
 // auto-lights the chips it includes (cumulative model).
 const CHIPS = [
   { id:'e3',      label:'M365 E3',                     ax:'M365 · per user', grants:['e3'],      includes:[] },
+  { id:'bp',      label:'M365 Business Premium',       ax:'M365 · SMB',      grants:['e3','bp'], includes:[] },
   { id:'e5',      label:'M365 E5',                     ax:'M365 · per user', grants:['e5'],      includes:['e3'] },
   { id:'copilot', label:'M365 Copilot',                ax:'M365 · add-on',   grants:['copilot'], includes:[] },
-  { id:'a365',    label:'Agent 365',                   ax:'M365 · add-on',   grants:['a365'],    includes:['e5'] },
-  { id:'e7',      label:'M365 E7',                     ax:'M365 · per user', grants:['e7'],      includes:['e5','a365'] },
+  { id:'a365',    label:'Agent 365',                   ax:'M365 · add-on',   grants:['a365'],    includes:[] },
+  { id:'e7',      label:'M365 E7',                     ax:'M365 · per user', grants:['e7'],      includes:['e5','a365','copilot'] },
   { id:'lake',    label:'Sentinel + data lake',        ax:'Sentinel axis',   grants:['lake'],    includes:[] },
   { id:'d4c',     label:'Defender for Cloud AI plans', ax:'Azure axis',      grants:['d4c'],     includes:[] },
   { id:'ppayg',   label:'Purview PAYG*',               ax:'Azure-billed',    grants:['ppayg'],   includes:[] },
