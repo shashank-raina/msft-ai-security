@@ -24,6 +24,9 @@
 .chip .ax{font-size:8.5px;opacity:0.75;display:block;letter-spacing:0.06em;}
 .picknote{font-size:12.5px;color:#5a6a8a;margin-top:10px;line-height:1.55;}
 .litcount{font-family:'JetBrains Mono',monospace;font-size:12px;color:#0d1526;margin-top:8px;}
+.prereqwarn{display:none;margin-top:10px;padding:9px 12px;border-radius:8px;background:#fff8e6;border:1px solid #e8c840;
+  font-size:12.5px;line-height:1.55;color:#6a5000;}
+.prereqwarn b{color:#5a4400;}
 .litcount b{color:var(--blue);}
 
 /* ── grid ── */
@@ -109,6 +112,7 @@
   </div>
   <div class="chips" id="chips"></div>
   <div class="litcount" id="litcount"></div>
+  <div class="prereqwarn" id="prereqwarn"></div>
   <p class="picknote">Chips in lighter blue are included by something you selected. Prices are deliberately absent — never quote one from a web page, including this one.</p>
 </div>
 
@@ -280,6 +284,19 @@ function render(){
 
   document.getElementById('litcount').innerHTML =
     'Your selection lights <b>' + lit + '</b> of <b>' + total + '</b> capabilities.';
+
+  // Agent 365 held without a base plan that qualifies it for purchase
+  const warnEl = document.getElementById('prereqwarn');
+  const qualifyingBase = held.has('e5') || held.has('bp');
+  if(held.has('a365') && !qualifyingBase){
+    warnEl.innerHTML = '<b>Agent 365 without a qualifying base plan.</b> Since 1 June 2026, buying Agent 365 standalone ' +
+      'needs Microsoft 365 E5, F5-level Defender and Purview, or Business Premium underneath it. E3 satisfies the separate ' +
+      'technical dependency (<code>AAD_PREMIUM</code>), and tenants licensed before that date keep what they bought — ' +
+      'so the grid still lights everything Agent 365 entitles. The constraint applies when you buy.';
+    warnEl.style.display = 'block';
+  } else {
+    warnEl.style.display = 'none';
+  }
 }
 
 document.addEventListener('DOMContentLoaded', function(){
