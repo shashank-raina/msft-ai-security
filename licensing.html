@@ -103,7 +103,7 @@
 
 <div class="section-label" style="margin-top:36px;">The grid</div>
 <h2>Pick what you hold; watch what lights up</h2>
-<p style="font-size:14px;color:#2e3d5e;max-width:700px;">Every capability below sits on one of the five asset classes and is tagged <strong>see</strong>, <strong>govern</strong>, <strong>protect</strong> or <strong>detect</strong>, with the licence that gates it. Toggle what you actually hold — a selection lights everything it includes (E7 lights Agent&nbsp;365, Copilot and E5; E5 lights E3, Defender for Endpoint&nbsp;P2 and the Purview suite). Greyed capabilities name the gate you're missing.</p>
+<p style="font-size:14px;color:#2e3d5e;max-width:700px;">Every capability below sits on one of the five asset classes and is tagged <strong>see</strong>, <strong>govern</strong>, <strong>protect</strong> or <strong>detect</strong>, with the licence that gates it. Toggle what you actually hold — a selection lights everything it includes (E7 lights Agent&nbsp;365, Copilot, the Entra&nbsp;Suite and E5; E5 lights E3, Defender for Endpoint&nbsp;P2, Entra&nbsp;ID&nbsp;P2 and the Purview suite). Greyed capabilities name the gate you're missing.</p>
 
 <div class="picker">
   <div class="phead">
@@ -156,7 +156,8 @@ const CHIPS = [
   { id:'e5',      label:'M365 E5',                     ax:'M365 · per user', grants:['e5'],      includes:['e3'] },
   { id:'copilot', label:'M365 Copilot',                ax:'M365 · add-on',   grants:['copilot'], includes:[] },
   { id:'a365',    label:'Agent 365',                   ax:'M365 · add-on',   grants:['a365'],    includes:[] },
-  { id:'e7',      label:'M365 E7',                     ax:'M365 · per user', grants:['e7'],      includes:['e5','a365','copilot'] },
+  { id:'e7',      label:'M365 E7',                     ax:'M365 · per user', grants:['e7'],      includes:['e5','a365','copilot','esuite'] },
+  { id:'esuite',  label:'Entra Suite',                 ax:'Entra · add-on',  grants:['esuite'],  includes:[] },
   { id:'lake',    label:'Sentinel + data lake',        ax:'Sentinel axis',   grants:['lake'],    includes:[] },
   { id:'d4c',     label:'Defender for Cloud AI plans', ax:'Azure axis',      grants:['d4c'],     includes:[] },
   { id:'ppayg',   label:'Purview PAYG*',               ax:'Azure-billed',    grants:['ppayg'],   includes:[] },
@@ -173,8 +174,10 @@ const CLASSES = [
   { v:'see', t:'DSPM for AI dashboards', req:[['e5']], gate:'E5 Purview' },
   { v:'gov', t:'Sensitivity labels + inheritance in Copilot', req:[['e5']], gate:'E5 Purview' },
   { v:'gov', t:'Unsanctioned AI app blocking (via MDE)', req:[['e5']], gate:'E5 · MDE' },
+  { v:'see', t:'Internet Access traffic logs for AI and SaaS destinations', req:[['esuite']], gate:'Entra Suite · Internet Access' },
   { v:'pro', t:'Purview DLP for Copilot', req:[['e5']], gate:'E5 Purview' },
   { v:'pro', t:'Endpoint DLP — paste to AI sites (standard SITs only)', req:[['e5']], gate:'E5' },
+  { v:'pro', t:'Secure Web Gateway filtering of public AI sites — reaches unsanctioned destinations session policies cannot', req:[['esuite']], gate:'Entra Suite · Internet Access' },
   { v:'det', t:'Jailbreak / XPIA verdicts per interaction', req:[['e5']], gate:'E5' },
   { v:'det', t:'Defender XDR alerts for Copilot', req:[['e5']], gate:'E5' }
 ]},
@@ -198,9 +201,11 @@ const CLASSES = [
   { v:'gov', t:'Conditions-based lifecycle rules', req:[['e3']], gate:'base M365 plans' },
   { v:'gov', t:'Conditional Access for agents', req:[['a365']], gate:'Agent 365 + Entra P1/P2' },
   { v:'gov', t:'ID Protection for agents', req:[['a365','e5']], gate:'Agent 365 + Entra P2' },
+  { v:'gov', t:'Access packages, access reviews and sponsor-driven lifecycle for agent identities', req:[['a365']], gate:'Agent 365 / E7 · via Entra ID Governance' },
   { v:'gov', t:'Purview extensions for agents (audit, eDiscovery, DLP, labels)', req:[['a365']], gate:'Agent 365 / E7' },
   { v:'pro', t:'Tenant-wide control of tools & MCP servers agents may use', req:[['a365']], gate:'Agent 365 / E7' },
   { v:'pro', t:'Suspicious tool-invocation blocking', req:[['a365']], gate:'Agent 365 / E7 · Defender' },
+  { v:'pro', t:'Agent network traffic monitoring and blocking', req:[['a365']], gate:'Agent 365 / E7' },
   { v:'det', t:'Runtime telemetry: InvokeAgent · InferenceCall · ExecuteToolBy*', req:[['a365']], gate:'Agent 365 instrumentation' },
   { v:'det', t:'Registry Risks column + Security tab', req:[['a365']], gate:'Agent 365 / E7' }
 ]},
