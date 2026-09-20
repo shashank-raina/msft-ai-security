@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>End User AI Architecture — Securing AI with Microsoft</title>
+<meta name="description" content="Where every piece of AI end users actually touch sits in a Microsoft-native estate, and which control covers it — with Entra's share of the work called out separately.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F2F5F6; --card:#FFFFFF; --ink:#132029; --ink-soft:#4A5C67;
+  --rule:#D5DDE1;
+  --device:#E4E9EB; --device-line:#93A4AE;
+  --ai:#F4E6D2; --ai-line:#C09A5E;
+  --entra:#15707F; --entra-fill:#DCEDEF;
+  --ms:#2E6FA8; --ms-fill:#DEEAF4;
+  --ops:#4C7A46; --ops-fill:#E1EDDF;
+  --gap:#96671C; --gap-fill:#F3E8D2;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0E181F; --card:#16242D; --ink:#E6EDF0; --ink-soft:#9FB1BC;
+    --rule:#283A44;
+    --device:#25333C; --device-line:#7B8D98;
+    --ai:#3A2F1F; --ai-line:#B08F58;
+    --entra:#4FB3C4; --entra-fill:#12343B;
+    --ms:#6FA8D8; --ms-fill:#152B3C;
+    --ops:#8FBF86; --ops-fill:#1B2C1A;
+    --gap:#D2A24E; --gap-fill:#31260F;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0E181F; --card:#16242D; --ink:#E6EDF0; --ink-soft:#9FB1BC;
+  --rule:#283A44; --device:#25333C; --device-line:#7B8D98;
+  --ai:#3A2F1F; --ai-line:#B08F58; --entra:#4FB3C4; --entra-fill:#12343B;
+  --ms:#6FA8D8; --ms-fill:#152B3C; --ops:#8FBF86; --ops-fill:#1B2C1A;
+  --gap:#D2A24E; --gap-fill:#31260F;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+
+/* ── site nav — identical chrome to every other page (rules mirrored from site.css) ── */
+.topnav{position:sticky;top:0;z-index:300;height:52px;
+  background:rgba(245,247,252,0.97);border-bottom:1px solid #b8c4de;box-shadow:0 1px 10px rgba(0,0,0,0.07);
+  backdrop-filter:blur(12px);
+  display:flex;align-items:center;padding:0 32px;gap:0;}
+.nav-brand{display:flex;align-items:center;gap:8px;margin-right:20px;flex-shrink:0;}
+.msft-logo{width:18px;height:18px;display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.msft-logo div:nth-child(1){background:#f25022;border-radius:1px;}
+.msft-logo div:nth-child(2){background:#7fba00;border-radius:1px;}
+.msft-logo div:nth-child(3){background:#00a4ef;border-radius:1px;}
+.msft-logo div:nth-child(4){background:#ffb900;border-radius:1px;}
+.brand-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;
+  color:#0d1526;letter-spacing:0.01em;white-space:nowrap;line-height:1.2;}
+.nav-links{display:flex;align-items:stretch;height:100%;flex:1;overflow-x:auto;gap:2px;}
+.nav-links::-webkit-scrollbar{display:none;}
+.nav-links a{display:flex;align-items:center;gap:5px;padding:0 9px;
+  text-decoration:none;color:#1a2a4a;font-family:'Plus Jakarta Sans',sans-serif;font-size:11.5px;font-weight:600;
+  border-bottom:2px solid transparent;white-space:nowrap;
+  transition:color 0.15s,border-color 0.15s;}
+.nav-links a:hover{color:#0d1526;}
+.nav-links a.active{color:#0078d4;border-bottom-color:#0078d4;}
+.hamburger{display:none;background:none;border:none;cursor:pointer;
+  padding:6px;flex-direction:column;gap:5px;margin-left:auto;flex-shrink:0;}
+.hamburger span{display:block;width:22px;height:2px;background:#0d1526;
+  border-radius:2px;transition:all 0.2s;}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.mobile-drawer{display:none;position:fixed;top:52px;left:0;right:0;
+  background:rgba(245,247,252,0.98);border-bottom:1px solid #b8c4de;
+  backdrop-filter:blur(16px);z-index:299;padding:12px 20px 20px;
+  flex-direction:column;gap:2px;box-shadow:0 8px 32px rgba(0,0,0,0.1);}
+.mobile-drawer.open{display:flex;}
+.mobile-drawer a{display:block;padding:10px 12px;border-radius:8px;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:600;color:#1a2a4a;text-decoration:none;
+  transition:background 0.12s;}
+.mobile-drawer a:hover,.mobile-drawer a.active{background:#f0f6ff;color:#0078d4;}
+.mobile-drawer-overlay{display:none;position:fixed;inset:0;z-index:298;
+  background:rgba(0,0,0,0.2);}
+.mobile-drawer-overlay.open{display:block;}
+.substack-nav{flex-shrink:0;margin-left:10px;display:flex;align-items:center;gap:5px;
+  background:#0078d4;color:#ffffff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;
+  padding:6px 13px;border-radius:6px;text-decoration:none;white-space:nowrap;letter-spacing:0.03em;}
+.authnote{background:#fff8e6;border-bottom:1px solid #e8c840;padding:8px 32px;font-size:12px;
+  color:#6a5000;text-align:center;font-family:'Plus Jakarta Sans',sans-serif;line-height:1.6;}
+@media(max-width:900px){
+  .nav-links{display:none !important;}
+  .hamburger{display:flex;}
+}
+/* dark theme: same bar, this page's inks */
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .topnav{background:rgba(22,36,45,0.95);border-bottom-color:var(--rule);box-shadow:none;}
+:root:not([data-theme="light"]) .brand-text{color:var(--ink);}
+:root:not([data-theme="light"]) .nav-links a{color:var(--ink-soft);}
+:root:not([data-theme="light"]) .nav-links a:hover{color:var(--ink);}
+:root:not([data-theme="light"]) .nav-links a.active{color:var(--entra);border-bottom-color:var(--entra);}
+:root:not([data-theme="light"]) .hamburger span{background:var(--ink);}
+:root:not([data-theme="light"]) .mobile-drawer{background:rgba(22,36,45,0.97);border-bottom-color:var(--rule);}
+:root:not([data-theme="light"]) .mobile-drawer a{color:var(--ink-soft);}
+:root:not([data-theme="light"]) .mobile-drawer a:hover,:root:not([data-theme="light"]) .mobile-drawer a.active{background:var(--entra-fill);color:var(--entra);}
+:root:not([data-theme="light"]) .authnote{background:#231d0d;border-bottom-color:#453a15;color:#cdb36a;}}
+:root[data-theme="dark"] .topnav{background:rgba(22,36,45,0.95);border-bottom-color:var(--rule);box-shadow:none;}
+:root[data-theme="dark"] .brand-text{color:var(--ink);}
+:root[data-theme="dark"] .nav-links a{color:var(--ink-soft);}
+:root[data-theme="dark"] .nav-links a:hover{color:var(--ink);}
+:root[data-theme="dark"] .nav-links a.active{color:var(--entra);border-bottom-color:var(--entra);}
+:root[data-theme="dark"] .hamburger span{background:var(--ink);}
+:root[data-theme="dark"] .mobile-drawer{background:rgba(22,36,45,0.97);border-bottom-color:var(--rule);}
+:root[data-theme="dark"] .mobile-drawer a{color:var(--ink-soft);}
+:root[data-theme="dark"] .mobile-drawer a:hover,:root[data-theme="dark"] .mobile-drawer a.active{background:var(--entra-fill);color:var(--entra);}
+:root[data-theme="dark"] .authnote{background:#231d0d;border-bottom-color:#453a15;color:#cdb36a;}
+
+.wrap{max-width:1100px;margin:0 auto;padding:3rem 1.25rem 5rem}
+h1{font-size:clamp(1.8rem,4.2vw,2.6rem);line-height:1.14;font-weight:600;letter-spacing:-.02em;margin:0 0 .6rem;max-width:22ch}
+.standfirst{font-size:1.08rem;color:var(--ink-soft);max-width:64ch;margin:0 0 .5rem}
+.updated{font-size:.85rem;color:var(--ink-soft);margin:0 0 2.2rem}
+h2{font-size:1.32rem;font-weight:600;margin:3.2rem 0 .5rem;padding-top:1.3rem;border-top:1px solid var(--rule)}
+h3{font-size:1rem;font-weight:600;margin:1.6rem 0 .25rem}
+p{max-width:68ch;margin:0 0 1rem}
+a{color:var(--entra)}
+.diagram{background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:1rem .6rem;overflow-x:auto;margin:1.4rem 0}
+.diagram svg{display:block;min-width:1180px;width:100%;height:auto}
+.hint{font-size:.82rem;color:var(--ink-soft);margin:.4rem .4rem 0}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;margin:1.1rem 0;font-size:.92rem}
+th,td{text-align:left;padding:.6rem .7rem;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-weight:600;font-size:.79rem;color:var(--ink-soft);white-space:nowrap}
+td:first-child{font-weight:500}
+.note{border-left:3px solid var(--gap);background:var(--gap-fill);padding:.85rem 1.05rem;border-radius:0 4px 4px 0;margin:1.4rem 0}
+.note p{margin:0;max-width:none;font-size:.94rem}
+footer{margin-top:3.5rem;padding-top:1.3rem;border-top:1px solid var(--rule);font-size:.86rem;color:var(--ink-soft)}
+@media(max-width:600px){body{font-size:16px}.wrap{padding:2rem 1rem 3rem}}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-brand">
+    <div class="msft-logo"><div></div><div></div><div></div><div></div></div>
+    <div><div class="brand-text">Securing AI with Microsoft</div></div>
+  </div>
+  <div class="nav-links">
+<a href="index.html" class="">Home</a>
+<a href="surfaces.html" class="">Five Surfaces</a>
+<a href="licensing.html" class="">Licensing</a>
+<a href="agent-telemetry-map.html" class="">Agent Map</a>
+<a href="entra-ai-architecture.html" class="active">End User AI</a>
+<a href="field-notes.html" class="">Field Notes</a>
+<a href="start.html" class="">Start Here</a>
+<a href="contact.html" class="">Contact</a>
+</div>
+  <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+
+<div class="mobile-drawer-overlay" id="drawerOverlay"></div>
+<div class="mobile-drawer" id="mobileDrawer">
+<a href="index.html" class="">Home</a>
+<a href="surfaces.html" class="">Five Surfaces</a>
+<a href="licensing.html" class="">Licensing</a>
+<a href="agent-telemetry-map.html" class="">Agent Map</a>
+<a href="entra-ai-architecture.html" class="active">End User AI</a>
+<a href="field-notes.html" class="">Field Notes</a>
+<a href="start.html" class="">Start Here</a>
+<a href="contact.html" class="">Contact</a>
+</div>
+  <a href="https://aiagentsecurity.substack.com/subscribe" target="_blank" class="substack-nav">📬 Subscribe</a>
+</nav>
+<div class="authnote">
+  📌 <strong>Author's note:</strong> Independent, not affiliated with or endorsed by Microsoft. This site is a <strong>starting point</strong> — verify current product status against Microsoft documentation before architecture or purchasing decisions.
+</div>
+
+<div class="wrap">
+
+<h1>End user AI and agent security, built on Microsoft</h1>
+<p class="standfirst">Where every piece of AI your people actually touch sits in the estate, and which Microsoft control covers it. Entra capabilities are called out separately, because they do more of this than most architectures give them credit for.</p>
+<p class="updated">Last verified: September 20, 2026. Preview and GA status move quickly here, so check the docs before you design against this.</p>
+
+<div class="diagram">
+<svg viewBox="0 0 1320 860" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Architecture diagram showing end user devices routed through Entra Global Secure Access to SaaS AI apps, SaaS AI agents, cloud hosted agents and cloud LLMs, with Purview, Agent 365, Entra Agent ID, Defender and Sentinel providing protection, detection and operations">
+<defs>
+  <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto">
+    <path d="M0 0 L10 5 L0 10 z" fill="var(--ink-soft)"/>
+  </marker>
+</defs>
+<g font-family="IBM Plex Sans, sans-serif">
+
+<!-- ================= GROUPS ================= -->
+<g fill="none" stroke="var(--ink-soft)" stroke-dasharray="4 4" stroke-width="1">
+  <rect x="18" y="96" width="176" height="470" rx="6"/>
+  <rect x="424" y="40" width="300" height="122" rx="6"/>
+  <rect x="424" y="186" width="300" height="176" rx="6"/>
+  <rect x="424" y="386" width="300" height="122" rx="6"/>
+  <rect x="424" y="532" width="300" height="122" rx="6"/>
+</g>
+<g font-size="12" font-weight="600" fill="var(--ink-soft)">
+  <text x="106" y="88" text-anchor="middle">END USER DEVICES</text>
+  <text x="574" y="60" text-anchor="middle">SaaS AI APPS</text>
+  <text x="574" y="206" text-anchor="middle">SaaS AI AGENTS</text>
+  <text x="574" y="406" text-anchor="middle">CLOUD HOSTED AGENTS</text>
+  <text x="574" y="552" text-anchor="middle">CLOUD LLMs</text>
+  <text x="900" y="36" text-anchor="middle">PROTECT AND DETECT</text>
+  <text x="1188" y="36" text-anchor="middle">OPERATIONS</text>
+</g>
+
+<!-- ================= DEVICES ================= -->
+<g>
+  <rect x="34" y="112" width="144" height="42" rx="4" fill="var(--device)" stroke="var(--device-line)" stroke-width="1.3"/>
+  <text x="106" y="138" text-anchor="middle" font-size="13" fill="var(--ink)">Mobile</text>
+
+  <rect x="34" y="176" width="144" height="42" rx="4" fill="var(--device)" stroke="var(--device-line)" stroke-width="1.3"/>
+  <text x="106" y="202" text-anchor="middle" font-size="13" fill="var(--ink)">Windows</text>
+  <rect x="34" y="222" width="144" height="38" rx="4" fill="var(--ai)" stroke="var(--ai-line)" stroke-width="1.3"/>
+  <text x="106" y="240" text-anchor="middle" font-size="11.5" fill="var(--ink)">Locally installed</text>
+  <text x="106" y="253" text-anchor="middle" font-size="11.5" fill="var(--ink)">agent or local LLM</text>
+
+  <rect x="34" y="286" width="144" height="42" rx="4" fill="var(--device)" stroke="var(--device-line)" stroke-width="1.3"/>
+  <text x="106" y="312" text-anchor="middle" font-size="13" fill="var(--ink)">macOS</text>
+  <rect x="34" y="332" width="144" height="38" rx="4" fill="var(--ai)" stroke="var(--ai-line)" stroke-width="1.3"/>
+  <text x="106" y="350" text-anchor="middle" font-size="11.5" fill="var(--ink)">Locally installed</text>
+  <text x="106" y="363" text-anchor="middle" font-size="11.5" fill="var(--ink)">agent or local LLM</text>
+
+  <rect x="34" y="400" width="144" height="52" rx="4" fill="var(--device)" stroke="var(--device-line)" stroke-width="1.3"/>
+  <text x="106" y="420" text-anchor="middle" font-size="13" fill="var(--ink)">Browser</text>
+  <text x="106" y="437" text-anchor="middle" font-size="11" fill="var(--ink-soft)">Edge for Business</text>
+
+  <rect x="34" y="474" width="144" height="52" rx="4" fill="var(--gap-fill)" stroke="var(--gap)" stroke-width="1.3" stroke-dasharray="4 3"/>
+  <text x="106" y="494" text-anchor="middle" font-size="12" font-weight="600" fill="var(--gap)">Unmanaged / BYOD</text>
+  <text x="106" y="510" text-anchor="middle" font-size="10.5" fill="var(--gap)">reachable via Edge sign in</text>
+</g>
+
+<!-- ================= NETWORK / ENTRA GSA ================= -->
+<g>
+  <rect x="226" y="178" width="164" height="212" rx="6" fill="none" stroke="var(--entra)" stroke-width="1.6" stroke-dasharray="5 3"/>
+  <text x="308" y="170" text-anchor="middle" font-size="11.5" font-weight="600" fill="var(--entra)">ENTRA GLOBAL SECURE ACCESS</text>
+
+  <rect x="240" y="196" width="136" height="74" rx="4" fill="var(--entra-fill)" stroke="var(--entra)" stroke-width="1.6"/>
+  <text x="308" y="218" text-anchor="middle" font-size="12.5" font-weight="600" fill="var(--entra)">Internet Access</text>
+  <text x="308" y="234" text-anchor="middle" font-size="10.5" fill="var(--entra)">secure web + AI gateway</text>
+  <text x="308" y="248" text-anchor="middle" font-size="10.5" fill="var(--entra)">shadow AI discovery</text>
+  <text x="308" y="262" text-anchor="middle" font-size="10.5" fill="var(--entra)">prompt injection controls</text>
+
+  <rect x="240" y="288" width="136" height="60" rx="4" fill="var(--entra-fill)" stroke="var(--entra)" stroke-width="1.6"/>
+  <text x="308" y="310" text-anchor="middle" font-size="12.5" font-weight="600" fill="var(--entra)">Private Access</text>
+  <text x="308" y="326" text-anchor="middle" font-size="10.5" fill="var(--entra)">per app segmentation</text>
+  <text x="308" y="340" text-anchor="middle" font-size="10.5" fill="var(--entra)">internal apps, no VPN</text>
+
+  <rect x="240" y="358" width="136" height="24" rx="4" fill="var(--entra-fill)" stroke="var(--entra)" stroke-width="1.3"/>
+  <text x="308" y="374" text-anchor="middle" font-size="11" font-weight="600" fill="var(--entra)">Conditional Access</text>
+</g>
+
+<!-- ================= AI ESTATE ================= -->
+<g font-size="12" fill="var(--ink)">
+  <rect x="440" y="70" width="130" height="38" rx="4" fill="var(--ai)" stroke="var(--ai-line)" stroke-width="1.3"/>
+  <text x="505" y="94" text-anchor="middle">M365 Copilot</text>
+  <rect x="580" y="70" width="130" height="38" rx="4" fill="var(--ai)" stroke="var(--ai-line)" stroke-width="1.3"/>
+  <text x="645" y="94" text-anchor="middle">Security Copilot</text>
+  <rect x="440" y="116" width="270" height="36" rx="4" fill="var(--gap-fill)" stroke="var(--gap)" stroke-width="1.3" stroke-dasharray="4 3"/>
+  <text x="575" y="132" text-anchor="middle" font-size="11.5" font-weight="600" fill="var(--gap)">Consumer AI: ChatGPT, Gemini, DeepSeek</text>
+  <text x="575" y="145" text-anchor="middle" font-size="10.5" fill="var(--gap)">no identity created, no registration</text>
+
+  <rect x="440" y="216" width="130" height="38" rx="4" fill="var(--ai)" stroke="var(--ai-line)" stroke-width="1.3"/>
+  <text x="505" y="240" text-anchor="middle">Copilot Studio</text>
+  <rect x="580" y="216" width="130" height="38" rx="4" fill="var(--ai)" stroke="var(--ai-line)" stroke-width="1.3"/>
+  <text x="645" y="240" text-anchor="middle">M365 agents</text>
+  <rect x="440" y="262" width="130" height="38" rx="4" fill="var(--ai)" stroke="var(--ai-line)" stroke-width="1.3"/>
+  <text x="505" y="286" text-anchor="middle">Security Copilot</text>
+  <rect x="580" y="262" width="130" height="38" rx="4" fill="var(--ai)" stroke="var(--ai-line)" stroke-width="1.3"/>
+  <text x="645" y="280" text-anchor="middle" font-size="11.5">Third party SaaS</text>
+  <text x="645" y="293" text-anchor="middle" font-size="11.5">agents</text>
+  <rect x="440" y="308" width="270" height="34" rx="4" fill="var(--entra-fill)" stroke="var(--entra)" stroke-width="1.3"/>
+  <text x="575" y="329" text-anchor="middle" font-size="11" font-weight="600" fill="var(--entra)">Each should hold an Entra Agent ID principal</text>
+
+  <rect x="440" y="416" width="130" height="38" rx="4" fill="var(--ai)" stroke="var(--ai-line)" stroke-width="1.3"/>
+  <text x="505" y="440" text-anchor="middle">Azure Foundry</text>
+  <rect x="580" y="416" width="130" height="38" rx="4" fill="var(--ai)" stroke="var(--ai-line)" stroke-width="1.3"/>
+  <text x="645" y="440" text-anchor="middle">Azure Container Apps</text>
+  <rect x="440" y="462" width="270" height="34" rx="4" fill="var(--ai)" stroke="var(--ai-line)" stroke-width="1.3"/>
+  <text x="575" y="483" text-anchor="middle" font-size="11.5">Other cloud or on premises, via sidecar or federation</text>
+
+  <rect x="440" y="562" width="130" height="38" rx="4" fill="var(--ai)" stroke="var(--ai-line)" stroke-width="1.3"/>
+  <text x="505" y="586" text-anchor="middle">Azure OpenAI</text>
+  <rect x="580" y="562" width="130" height="38" rx="4" fill="var(--ai)" stroke="var(--ai-line)" stroke-width="1.3"/>
+  <text x="645" y="586" text-anchor="middle">Foundry models</text>
+  <rect x="440" y="608" width="270" height="34" rx="4" fill="var(--ai)" stroke="var(--ai-line)" stroke-width="1.3"/>
+  <text x="575" y="629" text-anchor="middle" font-size="11.5">Workload identities: no secrets to manage</text>
+</g>
+
+<!-- ================= PROTECT / DETECT ================= -->
+<g>
+  <rect x="790" y="52" width="220" height="70" rx="4" fill="var(--ms-fill)" stroke="var(--ms)" stroke-width="1.6"/>
+  <text x="900" y="74" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ms)">Microsoft Purview</text>
+  <text x="900" y="90" text-anchor="middle" font-size="10.5" fill="var(--ms)">DSPM for AI, browser extension,</text>
+  <text x="900" y="103" text-anchor="middle" font-size="10.5" fill="var(--ms)">Endpoint DLP, Insider Risk</text>
+  <text x="900" y="116" text-anchor="middle" font-size="10.5" fill="var(--ms)">Adaptive Protection</text>
+
+  <rect x="790" y="142" width="220" height="56" rx="4" fill="var(--ms-fill)" stroke="var(--ms)" stroke-width="1.6"/>
+  <text x="900" y="164" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ms)">Agent 365</text>
+  <text x="900" y="180" text-anchor="middle" font-size="10.5" fill="var(--ms)">registry, control plane,</text>
+  <text x="900" y="192" text-anchor="middle" font-size="10.5" fill="var(--ms)">runtime observability</text>
+
+  <rect x="790" y="218" width="220" height="70" rx="4" fill="var(--entra-fill)" stroke="var(--entra)" stroke-width="2"/>
+  <text x="900" y="240" text-anchor="middle" font-size="13" font-weight="600" fill="var(--entra)">Entra Agent ID</text>
+  <text x="900" y="256" text-anchor="middle" font-size="10.5" fill="var(--entra)">directory principal per agent</text>
+  <text x="900" y="269" text-anchor="middle" font-size="10.5" fill="var(--entra)">credentials sit on the blueprint,</text>
+  <text x="900" y="282" text-anchor="middle" font-size="10.5" fill="var(--entra)">not the agent</text>
+
+  <rect x="790" y="308" width="220" height="60" rx="4" fill="var(--entra-fill)" stroke="var(--entra)" stroke-width="2"/>
+  <text x="900" y="330" text-anchor="middle" font-size="13" font-weight="600" fill="var(--entra)">Entra ID Governance</text>
+  <text x="900" y="346" text-anchor="middle" font-size="10.5" fill="var(--entra)">entitlement management,</text>
+  <text x="900" y="359" text-anchor="middle" font-size="10.5" fill="var(--entra)">access reviews, lifecycle, expiry</text>
+
+  <rect x="790" y="388" width="220" height="44" rx="4" fill="var(--entra-fill)" stroke="var(--entra)" stroke-width="2"/>
+  <text x="900" y="408" text-anchor="middle" font-size="13" font-weight="600" fill="var(--entra)">Entra ID Protection</text>
+  <text x="900" y="423" text-anchor="middle" font-size="10.5" fill="var(--entra)">risk signals on the identity</text>
+
+  <rect x="790" y="452" width="220" height="56" rx="4" fill="var(--ms-fill)" stroke="var(--ms)" stroke-width="1.6"/>
+  <text x="900" y="474" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ms)">Defender for Cloud</text>
+  <text x="900" y="490" text-anchor="middle" font-size="10.5" fill="var(--ms)">AI workload posture,</text>
+  <text x="900" y="502" text-anchor="middle" font-size="10.5" fill="var(--ms)">model and endpoint exposure</text>
+
+  <rect x="790" y="528" width="220" height="56" rx="4" fill="var(--ms-fill)" stroke="var(--ms)" stroke-width="1.6"/>
+  <text x="900" y="550" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ms)">Defender for Endpoint</text>
+  <text x="900" y="566" text-anchor="middle" font-size="10.5" fill="var(--ms)">finds local agents and shadow AI</text>
+  <text x="900" y="578" text-anchor="middle" font-size="10.5" fill="var(--ms)">on the device itself</text>
+</g>
+
+<!-- ================= OPERATIONS ================= -->
+<g>
+  <rect x="1078" y="212" width="220" height="56" rx="4" fill="var(--ops-fill)" stroke="var(--ops)" stroke-width="1.6"/>
+  <text x="1188" y="234" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ops)">Microsoft Sentinel</text>
+  <text x="1188" y="250" text-anchor="middle" font-size="10.5" fill="var(--ops)">correlation, hunting,</text>
+  <text x="1188" y="262" text-anchor="middle" font-size="10.5" fill="var(--ops)">long term retention</text>
+
+  <rect x="1078" y="300" width="220" height="56" rx="4" fill="var(--ops-fill)" stroke="var(--ops)" stroke-width="1.6"/>
+  <text x="1188" y="322" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ops)">Defender XDR</text>
+  <text x="1188" y="338" text-anchor="middle" font-size="10.5" fill="var(--ops)">incidents, investigation,</text>
+  <text x="1188" y="350" text-anchor="middle" font-size="10.5" fill="var(--ops)">automated response</text>
+
+  <rect x="1078" y="400" width="220" height="44" rx="4" fill="var(--ops-fill)" stroke="var(--ops)" stroke-width="1.3"/>
+  <text x="1188" y="428" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ops)">SOC</text>
+</g>
+
+<!-- ================= FLOWS ================= -->
+<g stroke="var(--ink-soft)" stroke-width="1.3" fill="none" marker-end="url(#ar)">
+  <path d="M178 133 L210 133 L210 228 L236 228"/>
+  <path d="M178 197 L212 197 L212 226 L236 226"/>
+  <path d="M178 307 L214 307 L214 312 L236 312"/>
+  <path d="M178 426 L218 426 L218 250 L236 250"/>
+  <path d="M376 222 L404 222 L404 100 L436 100"/>
+  <path d="M376 232 L400 232 L400 134 L436 134"/>
+  <path d="M376 244 L410 244 L410 258 L436 258"/>
+  <path d="M376 318 L408 318 L408 440 L436 440"/>
+  <path d="M376 330 L404 330 L404 586 L436 586"/>
+</g>
+<g stroke="var(--ms)" stroke-width="1.1" fill="none" marker-end="url(#ar)" opacity=".85">
+  <path d="M712 92 L750 92 L750 84 L786 84"/>
+  <path d="M712 134 L748 134 L748 96 L786 96"/>
+  <path d="M712 240 L752 240 L752 168 L786 168"/>
+</g>
+<g stroke="var(--entra)" stroke-width="1.1" fill="none" marker-end="url(#ar)" opacity=".9">
+  <path d="M712 325 L754 325 L754 252 L786 252"/>
+  <path d="M712 479 L756 479 L756 260 L786 260"/>
+  <path d="M712 625 L758 625 L758 268 L786 268"/>
+</g>
+<g stroke="var(--ops)" stroke-width="1.2" fill="none" marker-end="url(#ar)" opacity=".9">
+  <path d="M1010 88 L1044 88 L1044 228 L1074 228"/>
+  <path d="M1010 170 L1042 170 L1042 234 L1074 234"/>
+  <path d="M1010 253 L1040 253 L1040 240 L1074 240"/>
+  <path d="M1010 410 L1046 410 L1046 246 L1074 246"/>
+  <path d="M1010 480 L1048 480 L1048 322 L1074 322"/>
+  <path d="M1010 556 L1050 556 L1050 334 L1074 334"/>
+  <path d="M1188 268 L1188 296"/>
+  <path d="M1188 356 L1188 396"/>
+</g>
+
+<!-- local agent path to Defender -->
+<g stroke="var(--gap)" stroke-width="1.4" fill="none" marker-end="url(#ar)" stroke-dasharray="5 3">
+  <path d="M178 241 L196 241 L196 700 L900 700 L900 588"/>
+</g>
+<text x="500" y="694" font-size="11" font-weight="600" fill="var(--gap)">Local agents bypass the network layer entirely. Endpoint is the only place they appear.</text>
+
+<!-- labels -->
+<g font-size="10.5" fill="var(--ink-soft)">
+  <text x="392" y="196">all egress</text>
+  <text x="716" y="80">prompt and response</text>
+  <text x="716" y="150">policy matches</text>
+  <text x="716" y="318">agent identities</text>
+  <text x="1014" y="82">signals</text>
+  <text x="1014" y="404">posture</text>
+</g>
+
+<!-- key -->
+<g>
+  <rect x="1078" y="480" width="220" height="150" rx="4" fill="var(--card)" stroke="var(--rule)"/>
+  <text x="1092" y="500" font-size="11" font-weight="600" fill="var(--ink-soft)">KEY</text>
+  <rect x="1092" y="510" width="18" height="12" rx="2" fill="var(--device)" stroke="var(--device-line)"/>
+  <text x="1118" y="520" font-size="11" fill="var(--ink)">Device</text>
+  <rect x="1092" y="532" width="18" height="12" rx="2" fill="var(--ai)" stroke="var(--ai-line)"/>
+  <text x="1118" y="542" font-size="11" fill="var(--ink)">AI app, agent or model</text>
+  <rect x="1092" y="554" width="18" height="12" rx="2" fill="var(--entra-fill)" stroke="var(--entra)" stroke-width="1.6"/>
+  <text x="1118" y="564" font-size="11" fill="var(--ink)">Entra</text>
+  <rect x="1092" y="576" width="18" height="12" rx="2" fill="var(--ms-fill)" stroke="var(--ms)"/>
+  <text x="1118" y="586" font-size="11" fill="var(--ink)">Other Microsoft security</text>
+  <rect x="1092" y="598" width="18" height="12" rx="2" fill="var(--ops-fill)" stroke="var(--ops)"/>
+  <text x="1118" y="608" font-size="11" fill="var(--ink)">SecOps</text>
+  <rect x="1092" y="616" width="18" height="12" rx="2" fill="var(--gap-fill)" stroke="var(--gap)" stroke-dasharray="3 2"/>
+  <text x="1118" y="626" font-size="11" fill="var(--ink)">Gap or open question</text>
+</g>
+
+</g>
+</svg>
+<p class="hint">Scroll sideways on a narrow screen.</p>
+</div>
+
+<h2>How to read it</h2>
+
+<p>Five columns, left to right. The devices your people use. The network layer everything should route through. The four kinds of AI they actually touch. What protects and detects. And where it all lands for whoever runs your SOC.</p>
+
+<p>The two amber boxes are the honest parts. Consumer AI opened in a browser creates no identity and registers nothing, so every control built around agent identity has nothing to attach to. A locally installed agent skips the network layer completely, which is why the endpoint is the only place it turns up. Most versions of this diagram leave both of those out.</p>
+
+<h2>Zone by zone</h2>
+
+<h3>End user devices</h3>
+<p>Windows, macOS, mobile, and whatever people bring from home. The thing to notice here is that two very different populations live in this box. Managed devices you can route, inspect and put an agent on, and everything else.</p>
+<p>The BYOD box is dashed rather than excluded, because the boundary is softer than people assume. Purview data security controls reach Edge for Business on unmanaged Windows and macOS devices provided the user is signed into their Edge for Business profile, and that works without Endpoint DLP on the device. The network layer is stricter: if traffic is not routing through Global Secure Access, Internet Access controls do not apply. So the real line is the sign in, not the device.</p>
+
+<h3>The network layer</h3>
+<p>Everything egressing a managed device should pass through Entra Global Secure Access. Three capabilities sit here and they do different jobs.</p>
+<p><strong>Internet Access</strong> is the one that has changed most. It now works as a secure web and AI gateway. It discovers unsanctioned private apps, shadow IT, generative AI and SaaS alongside Defender, protects against prompt injection at the network layer, and stops data exfiltration by integrating network filtering with Purview classification policies. On this diagram it is the only control that reaches the consumer AI box, because it does not need anything to have been registered first.</p>
+<p><strong>Private Access</strong> handles the other direction: agents and users reaching internal applications, segmented per application rather than trusted at network level. If you have been running a VPN for this, it replaces it.</p>
+<p><strong>Conditional Access</strong> decides who gets through at all, and once agents hold identities it applies to them exactly as it applies to people.</p>
+
+<h3>SaaS AI apps</h3>
+<p>M365 Copilot and Security Copilot sit inside your tenant, so Purview sees prompts and responses natively and the data stays governed by the controls you already run.</p>
+<p>The consumer row underneath is the interesting one. Purview DSPM for AI sorts AI apps into three groups: Copilot experiences and agents, enterprise AI apps such as Foundry, Entra registered AI apps, Anthropic Claude Enterprise and ChatGPT Enterprise, and then other AI apps, meaning consumer ChatGPT, Gemini, consumer Copilot and DeepSeek. Microsoft is upfront that the third group is the hardest to manage because people reach it straight from a browser.</p>
+<p>Two things cover it. Purview, through its browser extension for Edge, Chrome and Firefox plus Endpoint DLP, which can warn or block someone entering sensitive information into a third party AI site. And Internet Access at the network. They are complementary: Purview knows your data and enforces in the browser, Internet Access knows the traffic and enforces at egress.</p>
+
+<h3>SaaS AI agents</h3>
+<p>Copilot Studio agents, agents inside Microsoft 365, Security Copilot agents, and third party SaaS agents from platforms your business already runs.</p>
+<p>Every one of these should hold an Entra Agent ID principal. That is what makes the rest of the column work, because once an agent is a directory identity it inherits Conditional Access, entitlement management, access reviews and lifecycle just like any other principal.</p>
+<p>The detail worth carrying around: agent identities hold no credentials of their own. They authenticate through a blueprint, and permissions granted to a blueprint reach every agent created from it. So the blueprint is the object worth inventorying and protecting, not the individual agent.</p>
+
+<h3>Cloud hosted agents and cloud LLMs</h3>
+<p>Agents running in Azure AI Foundry or Container Apps, and the models behind them. These take the workload identity route: managed identities and federated credentials, so nothing is holding a secret.</p>
+<p>Agents hosted outside Azure, or on premises, can still hold a governed Entra identity. Two patterns exist. The Entra ID Auth SDK runs as a sidecar container alongside the agent, which works for containerised agents and local models including Ollama with LangChain. Or workload identity federation exchanges credentials from an external identity provider directly for Entra tokens, skipping the sidecar.</p>
+<p>Both are real, and both are per agent or per platform engineering work. Neither is discovery. If anyone is planning on the assumption that agents built elsewhere will simply appear under governance, that does not happen.</p>
+
+<h3>Protect and detect</h3>
+<div class="scroll">
+<table>
+<thead><tr><th>Control</th><th>What it does here</th></tr></thead>
+<tbody>
+<tr><td>Purview</td><td>DSPM for AI reporting, browser extension, Endpoint DLP, Insider Risk Management and Adaptive Protection. On the consumer AI path this is your primary control, not a supporting one</td></tr>
+<tr><td>Agent 365</td><td>Registry and control plane. Knows what has been published, across Microsoft 365 and third party agents, plus runtime observability</td></tr>
+<tr><td>Entra Agent ID</td><td>A directory principal per agent, including agents brought in by sidecar or federation from elsewhere</td></tr>
+<tr><td>Entra ID Governance</td><td>Entitlement management, access reviews, lifecycle and expiry, applied to agent identities</td></tr>
+<tr><td>Entra ID Protection</td><td>Risk signals on the identity. Less mature for non human identities than for people, because the behavioural baselines that make human risk scoring work do not transfer cleanly</td></tr>
+<tr><td>Defender for Cloud</td><td>AI workload posture and model exposure for anything you host yourself</td></tr>
+<tr><td>Defender for Endpoint</td><td>Finds local agents and shadow AI on the device. On this diagram it is the only thing that reaches a locally installed agent</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Operations</h3>
+<p>Sentinel for correlation, hunting and retention. Defender XDR for incidents, investigation and automated response. Worth checking the connector position for each source above rather than assuming everything lands, because that is where these architectures usually leak.</p>
+
+<h2>What Entra is carrying</h2>
+
+<p>Pulled out on its own, because this is the part most AI security architectures under use.</p>
+
+<div class="scroll">
+<table>
+<thead><tr><th>Capability</th><th>Covers</th></tr></thead>
+<tbody>
+<tr><td>Internet Access</td><td>All outbound AI traffic, including consumer services nobody registered</td></tr>
+<tr><td>Private Access</td><td>Agents and users reaching internal applications, segmented per app</td></tr>
+<tr><td>Conditional Access</td><td>Which users and which agent principals get through</td></tr>
+<tr><td>Agent ID</td><td>A directory principal per agent, Microsoft built or not</td></tr>
+<tr><td>ID Governance</td><td>Entitlement, access reviews, lifecycle, expiry for agents</td></tr>
+<tr><td>ID Protection</td><td>Risk signals on agent and workload identities</td></tr>
+<tr><td>Workload identities</td><td>Managed identities and federated credentials, so nothing holds a secret</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>If you bought Microsoft 365 E7, Entra Suite came with it. In most tenants I look at, none of this has been switched on, which is not negligence so much as what happens when capability arrives inside a purchase justified on something else.</p>
+
+<h2>Swapping third party tools for Microsoft</h2>
+
+<p>Most enterprise versions of this diagram have non Microsoft products in several boxes. If you are working out whether the Microsoft stack covers the same ground, this is roughly the mapping.</p>
+
+<div class="scroll">
+<table>
+<thead><tr><th>Commonly sits here</th><th>Microsoft equivalent</th><th>Worth knowing</th></tr></thead>
+<tbody>
+<tr><td>SWG or SSE for internet egress</td><td>Entra Internet Access</td><td>Now a secure web and AI gateway, with shadow AI discovery and prompt injection controls at the network layer</td></tr>
+<tr><td>ZTNA for private apps</td><td>Entra Private Access</td><td>Per application segmentation rather than network level trust</td></tr>
+<tr><td>CNAPP for AI workload posture</td><td>Defender for Cloud</td><td>AI workload posture and model exposure. Check coverage against your actual clouds before assuming parity</td></tr>
+<tr><td>Third party SIEM or SOAR</td><td>Microsoft Sentinel and Defender XDR</td><td>Sentinel for correlation and retention, Defender XDR for incidents and response</td></tr>
+<tr><td>Model gateway or proxy</td><td>Azure AI Foundry</td><td>Routing and model management, with workload identities so nothing holds secrets</td></tr>
+<tr><td>Standalone DLP for AI</td><td>Purview DSPM for AI</td><td>Browser extension covers Edge, Chrome and Firefox. One click policies get you to a working control quickly</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="note"><p>Parity on a diagram is not parity in a tenant. Every one of these swaps has edges: which clouds, which browsers, which device join states, and what is preview rather than GA. Test your own combination before committing to a consolidation.</p></div>
+
+<h2>The two gaps</h2>
+
+<h3>Consumer AI in a browser</h3>
+<p>No agent identity, nothing registered, so the agent governance stack has nothing to work with. The control point moves to the user. Purview at the browser and endpoint, Internet Access at the network, Conditional Access deciding who reaches sanctioned services at all.</p>
+<p>One limit to know, both for expectations and for the privacy conversation you will inevitably have: the Purview browser extension logs metadata such as site, timestamp, user and matched policy. Not prompt or response text. DSPM for AI reports on policy matches, not on what people typed.</p>
+
+<h3>Locally installed agents</h3>
+<p>A local agent someone brought in deliberately can hold a governed identity through the sidecar or federation patterns above. A local agent nobody brought in holds nothing, appears in no registry, and shows up only on the endpoint. That is why reconciling Defender for Endpoint against the registry and against Entra is worth an afternoon.</p>
+<p>And a genuinely local agent with no network egress, running against local files for one person, touches none of this. No traffic to inspect, no identity, no telemetry. That is a legitimate architecture and it sits outside everything on this page. Better to say so than pretend otherwise.</p>
+
+<h2>Where I would start</h2>
+
+<ol>
+<li><strong>Discovery on both layers.</strong> Internet Access in discovery mode, and DSPM for AI reporting in audit mode through the browser extension. Find out what is actually happening before enforcing anything. The answer is usually uncomfortable and it is the best input to everything after it.</li>
+<li><strong>The DSPM for AI one click policies</strong>, audit first, then block with override. Fastest route to a real control on the consumer AI path.</li>
+<li><strong>ID Governance for agent identities.</strong> Access reviews and lifecycle. Lowest effort of the agent path controls and it reuses processes you already run for people.</li>
+<li><strong>Conditional Access on agent principals.</strong> Conventional once agents hold identities.</li>
+<li><strong>Private Access for internal reach.</strong> Replaces network level trust with per application segmentation.</li>
+<li><strong>Full Purview classification integration.</strong> Last, because it only works properly once classification is genuinely in place, and that takes longer than anyone wants.</li>
+</ol>
+
+<div class="note"><p>Being entitled to a capability tells you what you are allowed to use. It tells you nothing about whether it is deployed, configured, or covering the agents you think it covers. Those two claims come apart somewhere between the engineering team and the risk committee.</p></div>
+
+<footer>
+<p>Part of a set with the <a href="agent-telemetry-map.html">Agent Telemetry Map</a> and the <a href="licensing.html">AI Security Licensing Grid</a>, which covers which licence gates each capability shown here. Independent research, built from tenant work rather than documentation. Not affiliated with or endorsed by Microsoft.</p>
+</footer>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var btn = document.getElementById('hamburgerBtn');
+  var drawer = document.getElementById('mobileDrawer');
+  var overlay = document.getElementById('drawerOverlay');
+  if(btn){btn.addEventListener('click',function(){drawer.classList.toggle('open');overlay.classList.toggle('open');});
+  overlay.addEventListener('click',function(){drawer.classList.remove('open');overlay.classList.remove('open');});}
+});
+</script>
+</body>
+</html>
