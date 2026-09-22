@@ -179,10 +179,10 @@ footer{margin-top:3.5rem;padding-top:1.3rem;border-top:1px solid var(--rule);fon
 
 <h1>End user AI and agent security, built on Microsoft</h1>
 <p class="standfirst">Where every piece of AI your people actually touch sits in the estate, and which Microsoft control covers it. Entra capabilities are called out separately, because they do more of this than most architectures give them credit for.</p>
-<p class="updated">Last verified: September 20, 2026. Preview and GA status move quickly here, so check the docs before you design against this.</p>
+<p class="updated">Last verified: September 22, 2026. Preview and GA status move quickly here, so check the docs before you design against this.</p>
 
 <div class="diagram">
-<svg viewBox="0 0 1320 860" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Architecture diagram showing end user devices routed through Entra Global Secure Access to SaaS AI apps, SaaS AI agents, cloud hosted agents and cloud LLMs, with Purview, Agent 365, Entra Agent ID, Defender and Sentinel providing protection, detection and operations">
+<svg viewBox="0 0 1320 860" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Architecture diagram showing end user devices routed through Entra Global Secure Access to SaaS AI apps, SaaS AI agents, cloud hosted agents and cloud LLMs, with Purview, Agent 365, Entra Agent ID, Defender and Sentinel providing protection, detection and operations. Cloud hosted agents feed Agent 365, Entra Agent ID and Defender for Cloud; Entra Agent ID feeds ID Governance and ID Protection; Defender for Cloud Apps catalogs generative AI apps; cloud LLMs sit behind Content Safety and an AI gateway and feed Defender for Cloud and Purview">
 <defs>
   <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto">
     <path d="M0 0 L10 5 L0 10 z" fill="var(--ink-soft)"/>
@@ -287,8 +287,9 @@ footer{margin-top:3.5rem;padding-top:1.3rem;border-top:1px solid var(--rule);fon
   <text x="505" y="586" text-anchor="middle">Azure OpenAI</text>
   <rect x="580" y="562" width="130" height="38" rx="4" fill="var(--ai)" stroke="var(--ai-line)" stroke-width="1.3"/>
   <text x="645" y="586" text-anchor="middle">Foundry models</text>
-  <rect x="440" y="608" width="270" height="34" rx="4" fill="var(--ai)" stroke="var(--ai-line)" stroke-width="1.3"/>
-  <text x="575" y="629" text-anchor="middle" font-size="11.5">Workload identities: no secrets to manage</text>
+  <rect x="440" y="608" width="270" height="34" rx="4" fill="var(--ms-fill)" stroke="var(--ms)" stroke-width="1.3"/>
+  <text x="575" y="622" text-anchor="middle" font-size="11" font-weight="600" fill="var(--ms)">In front: Prompt Shields, APIM AI gateway</text>
+  <text x="575" y="635" text-anchor="middle" font-size="10.5" fill="var(--ms)">callers on Entra auth, API keys off</text>
 </g>
 
 <!-- ================= PROTECT / DETECT ================= -->
@@ -312,22 +313,27 @@ footer{margin-top:3.5rem;padding-top:1.3rem;border-top:1px solid var(--rule);fon
 
   <rect x="790" y="308" width="220" height="60" rx="4" fill="var(--entra-fill)" stroke="var(--entra)" stroke-width="2"/>
   <text x="900" y="330" text-anchor="middle" font-size="13" font-weight="600" fill="var(--entra)">Entra ID Governance</text>
-  <text x="900" y="346" text-anchor="middle" font-size="10.5" fill="var(--entra)">entitlement management,</text>
-  <text x="900" y="359" text-anchor="middle" font-size="10.5" fill="var(--entra)">access reviews, lifecycle, expiry</text>
+  <text x="900" y="346" text-anchor="middle" font-size="10.5" fill="var(--entra)">human sponsor per agent, access</text>
+  <text x="900" y="359" text-anchor="middle" font-size="10.5" fill="var(--entra)">packages that expire, access reviews</text>
 
   <rect x="790" y="388" width="220" height="44" rx="4" fill="var(--entra-fill)" stroke="var(--entra)" stroke-width="2"/>
   <text x="900" y="408" text-anchor="middle" font-size="13" font-weight="600" fill="var(--entra)">Entra ID Protection</text>
-  <text x="900" y="423" text-anchor="middle" font-size="10.5" fill="var(--entra)">risk signals on the identity</text>
+  <text x="900" y="423" text-anchor="middle" font-size="10.5" fill="var(--entra)">risky agents, drives CA block</text>
 
   <rect x="790" y="452" width="220" height="56" rx="4" fill="var(--ms-fill)" stroke="var(--ms)" stroke-width="1.6"/>
   <text x="900" y="474" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ms)">Defender for Cloud</text>
-  <text x="900" y="490" text-anchor="middle" font-size="10.5" fill="var(--ms)">AI workload posture,</text>
-  <text x="900" y="502" text-anchor="middle" font-size="10.5" fill="var(--ms)">model and endpoint exposure</text>
+  <text x="900" y="490" text-anchor="middle" font-size="10.5" fill="var(--ms)">AI posture, plus Defender for AI</text>
+  <text x="900" y="502" text-anchor="middle" font-size="10.5" fill="var(--ms)">jailbreak and injection alerts</text>
 
   <rect x="790" y="528" width="220" height="56" rx="4" fill="var(--ms-fill)" stroke="var(--ms)" stroke-width="1.6"/>
-  <text x="900" y="550" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ms)">Defender for Endpoint</text>
-  <text x="900" y="566" text-anchor="middle" font-size="10.5" fill="var(--ms)">finds local agents and shadow AI</text>
-  <text x="900" y="578" text-anchor="middle" font-size="10.5" fill="var(--ms)">on the device itself</text>
+  <text x="900" y="550" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ms)">Defender for Cloud Apps</text>
+  <text x="900" y="566" text-anchor="middle" font-size="10.5" fill="var(--ms)">generative AI app catalog, risk</text>
+  <text x="900" y="578" text-anchor="middle" font-size="10.5" fill="var(--ms)">scores, sanction or block</text>
+
+  <rect x="790" y="604" width="220" height="56" rx="4" fill="var(--ms-fill)" stroke="var(--ms)" stroke-width="1.6"/>
+  <text x="900" y="626" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ms)">Defender for Endpoint</text>
+  <text x="900" y="642" text-anchor="middle" font-size="10.5" fill="var(--ms)">finds local agents and shadow AI</text>
+  <text x="900" y="654" text-anchor="middle" font-size="10.5" fill="var(--ms)">on the device itself</text>
 </g>
 
 <!-- ================= OPERATIONS ================= -->
@@ -362,11 +368,16 @@ footer{margin-top:3.5rem;padding-top:1.3rem;border-top:1px solid var(--rule);fon
   <path d="M712 92 L750 92 L750 84 L786 84"/>
   <path d="M712 134 L748 134 L748 96 L786 96"/>
   <path d="M712 240 L752 240 L752 168 L786 168"/>
+  <path d="M712 479 L786 479"/>
+  <path d="M712 586 L766 586 L766 498 L786 498"/>
+  <path d="M712 424 L758 424 L758 186 L786 186"/>
+  <path d="M960 604 L960 588"/>
 </g>
 <g stroke="var(--entra)" stroke-width="1.1" fill="none" marker-end="url(#ar)" opacity=".9">
   <path d="M712 325 L754 325 L754 252 L786 252"/>
-  <path d="M712 479 L756 479 L756 260 L786 260"/>
-  <path d="M712 625 L758 625 L758 268 L786 268"/>
+  <path d="M712 446 L762 446 L762 266 L786 266"/>
+  <path d="M900 290 L900 305"/>
+  <path d="M900 370 L900 385"/>
 </g>
 <g stroke="var(--ops)" stroke-width="1.2" fill="none" marker-end="url(#ar)" opacity=".9">
   <path d="M1010 88 L1044 88 L1044 228 L1074 228"/>
@@ -375,15 +386,17 @@ footer{margin-top:3.5rem;padding-top:1.3rem;border-top:1px solid var(--rule);fon
   <path d="M1010 410 L1046 410 L1046 246 L1074 246"/>
   <path d="M1010 480 L1048 480 L1048 322 L1074 322"/>
   <path d="M1010 556 L1050 556 L1050 334 L1074 334"/>
+  <path d="M1010 632 L1054 632 L1054 340 L1074 340"/>
   <path d="M1188 268 L1188 296"/>
   <path d="M1188 356 L1188 396"/>
 </g>
 
 <!-- local agent path to Defender -->
 <g stroke="var(--gap)" stroke-width="1.4" fill="none" marker-end="url(#ar)" stroke-dasharray="5 3">
-  <path d="M178 241 L196 241 L196 700 L900 700 L900 588"/>
+  <path d="M178 241 L196 241 L196 700 L900 700 L900 664"/>
 </g>
-<text x="500" y="694" font-size="11" font-weight="600" fill="var(--gap)">Local agents bypass the network layer entirely. Endpoint is the only place they appear.</text>
+<text x="575" y="672" text-anchor="middle" font-size="10.5" fill="var(--ms)">Prompts reach Purview once enabled on the subscription</text>
+<text x="430" y="694" font-size="11" font-weight="600" fill="var(--gap)">Local agents bypass the network layer entirely. Endpoint is the only place they appear.</text>
 
 <!-- labels -->
 <g font-size="10.5" fill="var(--ink-soft)">
@@ -393,6 +406,8 @@ footer{margin-top:3.5rem;padding-top:1.3rem;border-top:1px solid var(--rule);fon
   <text x="716" y="318">agent identities</text>
   <text x="1014" y="82">signals</text>
   <text x="1014" y="404">posture</text>
+  <text x="716" y="604">threat alerts</text>
+  <text x="964" y="600">cloud discovery</text>
 </g>
 
 <!-- key -->
@@ -440,28 +455,44 @@ footer{margin-top:3.5rem;padding-top:1.3rem;border-top:1px solid var(--rule);fon
 <p>M365 Copilot and Security Copilot sit inside your tenant, so Purview sees prompts and responses natively and the data stays governed by the controls you already run.</p>
 <p>The consumer row underneath is the interesting one. Purview DSPM for AI sorts AI apps into three groups: Copilot experiences and agents, enterprise AI apps such as Foundry, Entra registered AI apps, Anthropic Claude Enterprise and ChatGPT Enterprise, and then other AI apps, meaning consumer ChatGPT, Gemini, consumer Copilot and DeepSeek. Microsoft is upfront that the third group is the hardest to manage because people reach it straight from a browser.</p>
 <p>Two things cover it. Purview, through its browser extension for Edge, Chrome and Firefox plus Endpoint DLP, which can warn or block someone entering sensitive information into a third party AI site. And Internet Access at the network. They are complementary: Purview knows your data and enforces in the browser, Internet Access knows the traffic and enforces at egress.</p>
+<p>Behind both sits Defender for Cloud Apps. Its cloud app catalog has a generative AI category with more than a thousand apps, each with a risk score. Internet Access shadow AI discovery matches traffic against that catalog, and Defender for Endpoint feeds it cloud discovery from the device. Tag an app unsanctioned and it can be blocked, and discovery policies can unsanction new AI apps automatically by risk score or user count. This is where the decision about which consumer AI is allowed gets made. Purview and Internet Access then enforce it.</p>
 
 <h3>SaaS AI agents</h3>
 <p>Copilot Studio agents, agents inside Microsoft 365, Security Copilot agents, and third party SaaS agents from platforms your business already runs.</p>
 <p>Every one of these should hold an Entra Agent ID principal. That is what makes the rest of the column work, because once an agent is a directory identity it inherits Conditional Access, entitlement management, access reviews and lifecycle just like any other principal.</p>
 <p>The detail worth carrying around: agent identities hold no credentials of their own. They authenticate through a blueprint, and permissions granted to a blueprint reach every agent created from it. So the blueprint is the object worth inventorying and protecting, not the individual agent.</p>
+<p>Copilot Studio agents also get runtime protection from Defender, a capability that first shipped in Defender for Cloud Apps. It checks tool calls before they run and blocks risky ones, and records each block as a behavior you can hunt on.</p>
 
-<h3>Cloud hosted agents and cloud LLMs</h3>
-<p>Agents running in Azure AI Foundry or Container Apps, and the models behind them. These take the workload identity route: managed identities and federated credentials, so nothing is holding a secret.</p>
+<h3>Cloud hosted agents</h3>
+<p>Agents running in Microsoft Foundry, Container Apps, App Service or Functions. Foundry does the Entra Agent ID work for you: the first agent in a project gets a default blueprint and agent identity, and publishing an agent creates a dedicated blueprint and identity bound to it. App Service and Functions can use the agent identity platform too. Container Apps and anything custom go the managed identity or sidecar route.</p>
+<p>The Foundry detail that catches people out: until an agent is published, every agent in the project shares one identity. Whatever you grant that shared identity, every agent in development gets. So check what the project identity holds before you trust the per agent picture in the directory.</p>
+<p>Publishing also puts the agent in the Agent 365 registry. Every published Foundry agent, prompt or hosted, syncs into it automatically, so Agent 365 is the one inventory that holds Foundry, Copilot Studio and shadow agents together. Two conditions sit behind that. Nothing flows until the tenant has Agent 365 enabled and its terms accepted, whatever the Foundry resource setting says. And activity data from hosted agents needs the Agent 365 SDK in the agent plus Entra permissions for the Agent 365 observability service. Prompt agents send it without that work.</p>
+<p>Hosted agents can also become autopilots. An autopilot acts as itself, not on behalf of a user, because it gets an Entra agent user account on top of its agent identity. After publishing and admin approval its blueprint appears in the Agent 365 registry and people hire instances of it in Teams. Treat those as user shaped identities: they are what the Conditional Access policies for agent users are for.</p>
+<p>One residency point for the privacy team. Foundry keeps data in the Azure region of the resource, Agent 365 stores it in the tenant's geography. Syncing moves agent activity data from one to the other. You can opt individual Foundry resources out.</p>
+<p>The third is Defender for Cloud, which covers posture for the agent and what it runs on, including recommendations specific to Foundry agents, such as flagging an agent exposed to indirect prompt injection whose MCP tool actions do not need human approval. Purview picks up prompts and responses once it is enabled on the Azure subscription, covered under cloud LLMs below because the same condition applies.</p>
 <p>Agents hosted outside Azure, or on premises, can still hold a governed Entra identity. Two patterns exist. The Entra ID Auth SDK runs as a sidecar container alongside the agent, which works for containerised agents and local models including Ollama with LangChain. Or workload identity federation exchanges credentials from an external identity provider directly for Entra tokens, skipping the sidecar.</p>
 <p>Both are real, and both are per agent or per platform engineering work. Neither is discovery. If anyone is planning on the assumption that agents built elsewhere will simply appear under governance, that does not happen.</p>
+
+<h3>Cloud LLMs</h3>
+<p>Azure OpenAI and the other Foundry models. It is tempting to draw a line from here to Entra Agent ID, and it would be wrong. A model deployment is a resource that identities call. It is not an agent and it does not get an agent identity. The identity work here is on the caller side: callers use Entra auth with managed identities, and you turn key based access off so nothing is holding a key that works from anywhere.</p>
+<p>Three controls do the actual work.</p>
+<p><strong>Defender for AI Services</strong>, the AI threat protection plan in Defender for Cloud. It raises runtime alerts for jailbreak attempts, credential leakage in model responses, ASCII smuggling, phishing URLs, wallet attacks and anomalous tool calls, and those alerts go to Defender XDR. It covers Azure OpenAI and Foundry model inference, text tokens only, in commercial clouds only. Prompt evidence in alerts is a separate toggle. If you leave it off, detection still runs but the SOC sees masked prompts.</p>
+<p><strong>Content Safety Prompt Shields, with an AI gateway in front.</strong> Prompt Shields blocks or flags direct and indirect prompt injection at the model. The API Management AI gateway puts a single policy point in front of every model deployment: content safety checks, per consumer token limits, and managed identity to the backend. If more than one team or app calls your models, this is where you enforce anything consistently.</p>
+<p><strong>Purview</strong>, through the Foundry integration. Enable it on the subscription and prompts and responses land in Audit and DSPM for AI as enterprise AI app interactions. The caveat that decides whether this is a control or just a log: Purview data security policies only enforce on calls that carry a user context token. An app calling the model with its own managed identity gets audit and classification, not enforcement. Most agent traffic is the second kind.</p>
 
 <h3>Protect and detect</h3>
 <div class="scroll">
 <table>
 <thead><tr><th>Control</th><th>What it does here</th></tr></thead>
 <tbody>
-<tr><td>Purview</td><td>DSPM for AI reporting, browser extension, Endpoint DLP, Insider Risk Management and Adaptive Protection. On the consumer AI path this is your primary control, not a supporting one</td></tr>
-<tr><td>Agent 365</td><td>Registry and control plane. Knows what has been published, across Microsoft 365 and third party agents, plus runtime observability</td></tr>
-<tr><td>Entra Agent ID</td><td>A directory principal per agent, including agents brought in by sidecar or federation from elsewhere</td></tr>
-<tr><td>Entra ID Governance</td><td>Entitlement management, access reviews, lifecycle and expiry, applied to agent identities</td></tr>
-<tr><td>Entra ID Protection</td><td>Risk signals on the identity. Less mature for non human identities than for people, because the behavioural baselines that make human risk scoring work do not transfer cleanly</td></tr>
-<tr><td>Defender for Cloud</td><td>AI workload posture and model exposure for anything you host yourself</td></tr>
+<tr><td>Purview</td><td>DSPM for AI reporting, browser extension, Endpoint DLP, Insider Risk Management and Adaptive Protection. On the consumer AI path this is your primary control, not a supporting one. On Foundry it audits everything but only enforces on calls that carry user context</td></tr>
+<tr><td>Agent 365</td><td>Registry and control plane. Knows what has been published, across Microsoft 365, third party and Foundry agents (every published Foundry agent syncs in), plus runtime observability</td></tr>
+<tr><td>Entra Agent ID</td><td>A directory principal per agent. Created automatically for Foundry and, when enabled, Copilot Studio agents. Agents from elsewhere come in by sidecar or federation. Not for models, which are resources rather than principals</td></tr>
+<tr><td>Entra ID Governance</td><td>Every agent identity and blueprint needs a human sponsor, and sponsorship passes to the sponsor's manager automatically if they leave. Access comes through access packages that expire, with the sponsor notified to renew or let it lapse. Access reviews and Lifecycle Workflows cover the rest</td></tr>
+<tr><td>Entra ID Protection</td><td>A Risky Agents report with agent specific detections such as unfamiliar resource access and sign in spikes. Agent risk is a Conditional Access condition, so a high risk agent can be blocked automatically. Learning mode suppresses behavioural detections until a new agent has a history, so expect a quiet first few weeks. Needs P2 in preview, and Microsoft says an Agent 365 licence will be needed soon</td></tr>
+<tr><td>Defender for Cloud</td><td>AI security posture for anything you host yourself, plus Defender for AI Services runtime alerts on model deployments: jailbreak, credential leakage, wallet attacks, anomalous tool calls. Alerts go to Defender XDR</td></tr>
+<tr><td>Content Safety and AI gateway</td><td>Prompt Shields at the model, and API Management AI gateway policies for content safety and token limits across every caller. Prevention, where Defender for AI is detection</td></tr>
+<tr><td>Defender for Cloud Apps</td><td>Generative AI app catalog with risk scores, sanction and block, and discovery policies. It is the catalog behind shadow AI discovery in Internet Access</td></tr>
 <tr><td>Defender for Endpoint</td><td>Finds local agents and shadow AI on the device. On this diagram it is the only thing that reaches a locally installed agent</td></tr>
 </tbody>
 </table>
@@ -480,11 +511,11 @@ footer{margin-top:3.5rem;padding-top:1.3rem;border-top:1px solid var(--rule);fon
 <tbody>
 <tr><td>Internet Access</td><td>All outbound AI traffic, including consumer services nobody registered</td></tr>
 <tr><td>Private Access</td><td>Agents and users reaching internal applications, segmented per app</td></tr>
-<tr><td>Conditional Access</td><td>Which users and which agent principals get through</td></tr>
+<tr><td>Conditional Access</td><td>Which users and which agent principals get through. For agents the only grant is block, since they cannot do MFA</td></tr>
 <tr><td>Agent ID</td><td>A directory principal per agent, Microsoft built or not</td></tr>
-<tr><td>ID Governance</td><td>Entitlement, access reviews, lifecycle, expiry for agents</td></tr>
-<tr><td>ID Protection</td><td>Risk signals on agent and workload identities</td></tr>
-<tr><td>Workload identities</td><td>Managed identities and federated credentials, so nothing holds a secret</td></tr>
+<tr><td>ID Governance</td><td>Sponsors, access packages that expire, access reviews and Lifecycle Workflows for agents</td></tr>
+<tr><td>ID Protection</td><td>Risky agent detections, fed into Conditional Access as agent risk</td></tr>
+<tr><td>Workload identities</td><td>Managed identities and federated credentials for whatever calls your models, so nothing holds a secret</td></tr>
 </tbody>
 </table>
 </div>
@@ -499,11 +530,13 @@ footer{margin-top:3.5rem;padding-top:1.3rem;border-top:1px solid var(--rule);fon
 <table>
 <thead><tr><th>Commonly sits here</th><th>Microsoft equivalent</th><th>Worth knowing</th></tr></thead>
 <tbody>
+<tr><td>CASB for SaaS and AI app discovery</td><td>Defender for Cloud Apps</td><td>Generative AI category in the app catalog, with risk scores and sanction or block. Shares its catalog with Internet Access shadow AI discovery</td></tr>
 <tr><td>SWG or SSE for internet egress</td><td>Entra Internet Access</td><td>Now a secure web and AI gateway, with shadow AI discovery and prompt injection controls at the network layer</td></tr>
 <tr><td>ZTNA for private apps</td><td>Entra Private Access</td><td>Per application segmentation rather than network level trust</td></tr>
 <tr><td>CNAPP for AI workload posture</td><td>Defender for Cloud</td><td>AI workload posture and model exposure. Check coverage against your actual clouds before assuming parity</td></tr>
 <tr><td>Third party SIEM or SOAR</td><td>Microsoft Sentinel and Defender XDR</td><td>Sentinel for correlation and retention, Defender XDR for incidents and response</td></tr>
-<tr><td>Model gateway or proxy</td><td>Azure AI Foundry</td><td>Routing and model management, with workload identities so nothing holds secrets</td></tr>
+<tr><td>LLM gateway or proxy</td><td>Azure API Management AI gateway</td><td>Token limits, content safety checks and managed identity to the backend, for Foundry models and other providers. Can be attached from inside Foundry</td></tr>
+<tr><td>AI runtime protection or LLM firewall</td><td>Defender for AI Services and Content Safety Prompt Shields</td><td>Prompt Shields prevents, Defender for AI detects and alerts. Azure hosted models only, text only</td></tr>
 <tr><td>Standalone DLP for AI</td><td>Purview DSPM for AI</td><td>Browser extension covers Edge, Chrome and Firefox. One click policies get you to a working control quickly</td></tr>
 </tbody>
 </table>
@@ -526,8 +559,9 @@ footer{margin-top:3.5rem;padding-top:1.3rem;border-top:1px solid var(--rule);fon
 <ol>
 <li><strong>Discovery on both layers.</strong> Internet Access in discovery mode, and DSPM for AI reporting in audit mode through the browser extension. Find out what is actually happening before enforcing anything. The answer is usually uncomfortable and it is the best input to everything after it.</li>
 <li><strong>The DSPM for AI one click policies</strong>, audit first, then block with override. Fastest route to a real control on the consumer AI path.</li>
-<li><strong>ID Governance for agent identities.</strong> Access reviews and lifecycle. Lowest effort of the agent path controls and it reuses processes you already run for people.</li>
-<li><strong>Conditional Access on agent principals.</strong> Conventional once agents hold identities.</li>
+<li><strong>Defender for AI Services on every subscription that hosts models</strong>, with prompt evidence on if your privacy position allows it. Cheap to turn on and it gives the SOC its first signal from the model layer.</li>
+<li><strong>ID Governance for agent identities.</strong> A sponsor on every agent identity and blueprint first, because expiry notices and access reviews go to the sponsor. Then access packages with an end date instead of direct grants. Lowest effort of the agent path controls and it reuses processes you already run for people.</li>
+<li><strong>Conditional Access on agent principals.</strong> Start with the template that blocks high risk agents, which is what makes ID Protection for agents do anything. Write separate policies for agents rather than reusing user ones, because agents cannot satisfy MFA. Run them in report only mode first.</li>
 <li><strong>Private Access for internal reach.</strong> Replaces network level trust with per application segmentation.</li>
 <li><strong>Full Purview classification integration.</strong> Last, because it only works properly once classification is genuinely in place, and that takes longer than anyone wants.</li>
 </ol>
