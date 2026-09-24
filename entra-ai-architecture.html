@@ -554,6 +554,12 @@ footer{margin-top:3.5rem;padding-top:1.3rem;border-top:1px solid var(--rule);fon
 <p>A local agent someone brought in deliberately can hold a governed identity through the sidecar or federation patterns above. A local agent nobody brought in holds nothing, appears in no registry, and shows up only on the endpoint. That is why reconciling Defender for Endpoint against the registry and against Entra is worth an afternoon.</p>
 <p>And a genuinely local agent with no network egress, running against local files for one person, touches none of this. No traffic to inspect, no identity, no telemetry. That is a legitimate architecture and it sits outside everything on this page. Better to say so than pretend otherwise.</p>
 
+<h2>Why every screen shows a different agent count</h2>
+
+<p>Ask Microsoft how many agents you have and each screen gives a different answer, because each one counts a different thing. The Agent 365 registry counts published titles, things someone could run. It pads the number with Power Platform and Dynamics 365 entries, and Foundry agents show up only once they are published and Agent 365 is enabled. Entra counts directory principals. It misses classic Copilot Studio agents that still use ordinary app registrations. Every unpublished Foundry agent in a project shares one identity, so Entra undercounts those too. Defender counts what security tooling can see, and it is the only view that includes agents on laptops. Defender for Cloud Apps counts apps, not agents, so its generative AI number answers a different question entirely.</p>
+
+<p>Licensing then decides which of those views you can see at all. The registry and Entra agent identities are visible on base Microsoft 365 plans and any Entra tier. In Defender's <code>AgentsInfo</code>, cloud agents only appear with Agent 365, while local agents need only Defender for Endpoint P2. So an E5 tenant without Agent 365 holds three partial inventories and no complete one, and switching Agent 365 on makes the numbers jump without a single new agent being built. Never quote an agent count without naming the screen and the licence behind it. How to reconcile them is on the <a href="agent-telemetry-map.html#four-screens">Agent Map</a> page.</p>
+
 <h2>Where I would start</h2>
 
 <ol>
