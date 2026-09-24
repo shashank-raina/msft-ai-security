@@ -556,9 +556,26 @@ footer{margin-top:3.5rem;padding-top:1.3rem;border-top:1px solid var(--rule);fon
 
 <h2>Why every screen shows a different agent count</h2>
 
-<p>Ask Microsoft how many agents you have and each screen gives a different answer, because each one counts a different thing. The Agent 365 registry counts published titles, things someone could run. It pads the number with Power Platform and Dynamics 365 entries, and Foundry agents show up only once they are published and Agent 365 is enabled. Entra counts directory principals. It misses classic Copilot Studio agents that still use ordinary app registrations. Every unpublished Foundry agent in a project shares one identity, so Entra undercounts those too. Defender counts what security tooling can see, and it is the only view that includes agents on laptops. Defender for Cloud Apps counts apps, not agents, so its generative AI number answers a different question entirely.</p>
+<p>Ask Microsoft how many agents you have and each screen gives a different answer, because each one counts a different thing.</p>
 
-<p>Licensing then decides which of those views you can see at all. The registry and Entra agent identities are visible on base Microsoft 365 plans and any Entra tier. In Defender's <code>AgentsInfo</code>, cloud agents only appear with Agent 365, while local agents need only Defender for Endpoint P2. So an E5 tenant without Agent 365 holds three partial inventories and no complete one, and switching Agent 365 on makes the numbers jump without a single new agent being built. Never quote an agent count without naming the screen and the licence behind it. How to reconcile them is on the <a href="agent-telemetry-map.html#four-screens">Agent Map</a> page.</p>
+<div class="scroll">
+<table>
+<thead><tr><th>Screen</th><th>What it counts</th><th>Where it goes wrong</th></tr></thead>
+<tbody>
+<tr><td>Agent 365 registry</td><td>Agents available to the tenant</td><td>Overcounts. It lists third party and Microsoft out of the box agents that have not been installed or used anywhere, plus Power Platform and Dynamics 365 entries. Foundry agents appear only once published and Agent 365 is enabled</td></tr>
+<tr><td>Entra Agent ID</td><td>Directory principals</td><td>Counts agents before they exist in any meaningful sense. A Copilot Studio agent I built and never published showed up straight away, because it sits under the shared Copilot Studio blueprint. It also misses classic Copilot Studio agents on ordinary app registrations, and unpublished Foundry agents share one project identity</td></tr>
+<tr><td>Security Dashboard for AI</td><td>Agents with activity and risk signals</td><td>Undercounts new work. The same unpublished agent did not appear, because it had not done anything yet</td></tr>
+<tr><td>Defender <code>AgentsInfo</code></td><td>What security tooling can see</td><td>Depends on licence (below). The only view that includes agents on laptops</td></tr>
+<tr><td>Defender for Cloud Apps</td><td>Generative AI apps</td><td>Counts apps, not agents. A different question</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>So one unpublished agent can be in Entra, missing from the dashboard and missing from the registry, all at once, and every screen is correct about what it measures.</p>
+
+<p>Licensing then decides which of those views you can see at all. The registry and Entra agent identities are visible on base Microsoft 365 plans and any Entra tier. <code>AgentsInfo</code> is split. Local agents appear with Defender for Endpoint P2. Everything else, meaning Copilot Studio, Foundry and partner agents, appears only with Agent 365. So an E5 tenant without Agent 365 sees only laptop agents in <code>AgentsInfo</code>. It holds three partial inventories and no complete one, and switching Agent 365 on makes the numbers jump without a single new agent being built.</p>
+
+<p>Never quote an agent count without naming the screen and the licence behind it. How to reconcile them is on the <a href="agent-telemetry-map.html#four-screens">Agent Map</a> page.</p>
 
 <h2>Where I would start</h2>
 
