@@ -28,10 +28,10 @@ body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-ap
 a{color:var(--accent)}
 button{font:inherit;color:inherit;cursor:pointer}
 .wrap{max-width:1080px;margin:0 auto;padding:0 18px}
-header.top{background:#17202e;color:#fff;padding:26px 0 20px}
-header.top h1{margin:0 0 8px;font-size:clamp(24px,4.6vw,34px);line-height:1.2;font-weight:700}
-header.top p{margin:0 0 6px;max-width:680px;opacity:.85;font-size:15px}
-.asof{margin-top:14px;font-size:13px;opacity:.85;display:flex;flex-wrap:wrap;gap:6px 16px}
+header.top{background:#17202e;color:#fff;padding:18px 0 14px}
+header.top h1{margin:0 0 4px;font-size:clamp(22px,4.2vw,30px);line-height:1.2;font-weight:700}
+header.top p{margin:0;max-width:680px;opacity:.85;font-size:15px}
+.asof{margin:0 0 10px;font-size:13px;display:flex;flex-wrap:wrap;gap:6px 16px}
 .toggles{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
 .toggles .wrap{display:flex;flex-wrap:wrap;gap:8px;padding-top:10px;padding-bottom:10px;align-items:center}
 .toggles .lbl{font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:.06em;margin-right:4px}
@@ -160,19 +160,18 @@ input[type=number]{font:inherit;padding:5px 8px;border:1.5px solid var(--line);b
 <header class="top">
   <div class="wrap">
     <h1 id="tagline"></h1>
-    <p id="disc"></p>
-    <div class="asof" id="asof"></div>
+    <p id="tagp"></p>
   </div>
 </header>
 <main><div class="wrap" id="app"><noscript><p>This page needs JavaScript to show the announcements. The full list is in the <a href="https://news.microsoft.com/events/ignite/2026/book-of-news/">Microsoft Ignite 2026 Book of News</a>.</p></noscript></div></main>
-<footer><div class="wrap"><div id="foot"></div></div></footer>
+<footer><div class="wrap"><div id="foot"><p id="disc"></p><div class="asof" id="asof"></div></div></div></footer>
 
 <script type="application/json" id="page-data">
 {
  "meta": {
   "name": "Ignite 2026 security map",
   "nameNote": "Change meta.name, meta.tagline and the domain in one place.",
-  "tagline": "What Microsoft announced for security at Ignite 2026, grouped three ways: the fundamentals, security for AI, and AI for security.",
+  "tagline": "Security announcements from Microsoft Ignite 2026, in three groups.",
   "asOf": "2026-11-27",
   "reviewBy": "2027-01-31",
   "author": "Written by an Ignite 2026 attendee. Personal site. Views are my own.",
@@ -1859,11 +1858,11 @@ function itemList(items, base){
 /* header */
 document.title = D.meta.name + " | aiagentsecurity.guide";
 $("tagline").textContent = D.meta.name;
-$("disc").textContent = D.meta.tagline + " " + D.meta.disclaimer;
+$("tagp").textContent = D.meta.tagline;
+$("disc").textContent = D.meta.disclaimer;
 $("asof").appendChild(h("span", null, "As of " + D.meta.asOf));
 $("asof").appendChild(h("span", null, "Review by " + D.meta.reviewBy));
 $("asof").appendChild(h("span", null, D.meta.author));
-$("foot").appendChild(h("p", null, D.meta.disclaimer));
 $("foot").appendChild(h("p", null, "Everything here comes from Microsoft's Book of News, and it is a subset of the announcements. The full list is in the ", h("a", {href:"https://news.microsoft.com/events/ignite/2026/book-of-news/", target:"_blank", rel:"noopener"}, "Book of News"), "."));
 
 /* toggles */
@@ -1922,9 +1921,6 @@ function renderTiers(){
 /* ---------- views ---------- */
 function home(){
   var app = $("app"); clear(app);
-  app.appendChild(h("h2", null, "What Ignite 2026 announced for security"));
-  app.appendChild(h("p", {class:"sub"}, "Three groups. Fundamentals are the base, because agents inherit every weakness there. Security for AI protects agents and Copilots. AI for security is AI that helps defenders."));
-  app.appendChild(h("p", {class:"strip"}, h("b", null, String(D.nodes.length)), " announcement areas from the Book of News. A subset, not the full list."));
   app.appendChild(h("div", {class:"pf-lbl"}, "Filter by product"));
   app.appendChild(renderFilter());
   app.appendChild(renderTiers());
