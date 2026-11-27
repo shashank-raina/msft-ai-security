@@ -54,12 +54,14 @@ h2{font-size:22px;margin:30px 0 10px}
 .th h3{margin:0;font-size:19px}
 .tc{font-size:13px;color:var(--mute)}
 .ti{margin:8px 0 12px;color:var(--mute);font-size:14.5px}
-.agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
-.acard{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;padding:12px 14px;background:var(--panel);border:1px solid var(--line);border-radius:8px;transition:border-color .15s,opacity .15s}
-.acard:hover,.acard:focus-visible{border-color:var(--accent)}
-.acard .an{font-weight:650;font-size:15.5px;line-height:1.25}
-.acard .at{font-size:13.5px;color:var(--mute);line-height:1.4}
-.acard .as{font-size:12px;margin-top:auto;padding-top:4px;font-weight:600}
+.agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;align-items:start}
+.acard{display:flex;flex-direction:column;gap:6px;padding:14px 16px;background:var(--panel);border:1px solid var(--line);border-radius:8px;transition:opacity .15s}
+.acard .an{margin:0;font-weight:650;font-size:16px;line-height:1.3}
+.acard .as{font-size:12px;font-weight:600}
+.acard ul.items li{padding:6px 0;font-size:14.5px;line-height:1.45}
+.acard details.ck{margin-top:6px;font-size:13.5px;color:var(--mute)}
+.acard details.ck summary{cursor:pointer;color:var(--accent)}
+.acard details.ck ul{margin:6px 0 0;padding-left:18px}
 .acard.fdim{opacity:.25}
 .pf{display:flex;gap:6px;overflow-x:auto;padding:2px 0 10px;margin:0 0 6px;-webkit-overflow-scrolling:touch}
 .pf .pill{white-space:nowrap;flex:none}
@@ -1897,14 +1899,29 @@ function renderFilter(){
   D.products.forEach(function(p){ mk(p, p); });
   return row;
 }
+function announcements(nd){
+  var all = nd.what.concat(nd.features.reduce(function(a,f){ return a.concat(f.items); }, []));
+  var bon = all.filter(function(i){ return i.s === "BoN"; });
+  var other = all.filter(function(i){ return layerOf(i.s) !== "ms"; });
+  return bon.concat(other);
+}
 function renderTiers(){
   var wrap = h("div", {class:"tiers"});
   D.tiers.forEach(function(T){
     var list = D.nodes.filter(function(n){ return n.tier === T.id; });
     var grid = h("div", {class:"agrid"});
     list.forEach(function(nd){
-      grid.appendChild(h("button", {class:"acard", "data-id":nd.id, onclick:function(){ go("node/"+nd.id); }},
-        h("span", {class:"an"}, nd.name), h("span", {class:"at"}, nd.tagline), h("span", {class:"as s-"+nd.status}, nd.statusLabel)));
+      var card = h("article", {class:"acard", "data-id":nd.id},
+        h("h4", {class:"an"}, nd.name),
+        h("span", {class:"as s-"+nd.status}, nd.statusLabel));
+      var items = itemList(announcements(nd));
+      if (items) card.appendChild(items);
+      if (nd.check && nd.check.length){
+        var ck = h("details", {class:"ck"}, h("summary", null, "Check before you rely on this"));
+        var ul = h("ul"); nd.check.forEach(function(c){ ul.appendChild(h("li", null, c)); });
+        ck.appendChild(ul); card.appendChild(ck);
+      }
+      grid.appendChild(card);
     });
     wrap.appendChild(h("section", {class:"tier"},
       h("div", {class:"th"}, h("h3", null, T.label), h("span", {class:"tc"}, list.length + (list.length === 1 ? " announcement" : " announcements"))),
@@ -1912,11 +1929,12 @@ function renderTiers(){
   });
   return wrap;
 }
+
 /* ---------- views ---------- */
 function home(){
   var app = $("app"); clear(app);
   app.appendChild(h("h2", null, "What Ignite 2026 announced for security"));
-  app.appendChild(h("p", {class:"sub"}, "Three groups. Fundamentals are the base, because agents inherit every weakness there. Security for AI protects agents and Copilots. AI for security is AI that helps defenders. Open a card for the detail."));
+  app.appendChild(h("p", {class:"sub"}, "Three groups. Fundamentals are the base, because agents inherit every weakness there. Security for AI protects agents and Copilots. AI for security is AI that helps defenders."));
   var total = D.nodes.reduce(function(n, nd){ return n + bonCount(nd); }, 0);
   app.appendChild(h("p", {class:"strip"}, h("b", null, String(D.nodes.length)), " announcements, with ", h("b", null, String(total)), " Book of News items behind them."));
   app.appendChild(h("div", {class:"pf-lbl"}, "Filter by product"));
@@ -1930,405 +1948,15 @@ function home(){
   var today = new Date().toISOString().slice(0,10);
   D.timeline.filter(function(t){ return t.d >= today; }).forEach(function(t){
     var L = layerOf(t.s);
-    ul.appendChild(h("li", {class:"l-"+L, onclick:function(){ go("node/"+t.node); }},
+    ul.appendChild(h("li", {class:"l-"+L},
       h("time", {datetime:t.d}, t.d), t.t + " ", h("span", {class:"chip l-"+L}, t.s)));
   });
   app.appendChild(ul);
 }
 
-function nodePage(id){
-  var nd = NODE[id]; if (!nd) return home();
-  var app = $("app"); clear(app);
-  var tierObj = D.tiers.filter(function(x){ return x.id === nd.tier; })[0];
-  app.appendChild(h("div", {class:"crumb"}, h("button", {onclick:function(){ go(""); }}, "Back to the map")));
-  app.appendChild(h("div", {class:"tiercrumb"}, h("span", null, tierObj ? tierObj.label : ""), h("span", null, nd.product)));
-  app.appendChild(h("div", {class:"card hero"},
-    h("div", {class:"ic"}, icon(nd.icon)),
-    h("div", null, h("h1", null, nd.name), h("div", {class:"tag"}, nd.tagline),
-      h("span", {class:"stbadge s-"+nd.status}, nd.statusLabel))));
 
-  var what = h("div", {class:"card sec"}, h("h2", null, "What it is"), itemList(nd.what));
-  var links = h("div", {class:"links"});
-  nd.links.forEach(function(l){ links.appendChild(h("a", {href:l.url, target:"_blank", rel:"noopener"}, l.title)); });
-  what.appendChild(links);
-  app.appendChild(what);
-
-  var mfn = nd.model ? MODELS[nd.model.key] : null;
-  if (mfn){
-    var m = h("div", {class:"card model"},
-      h("h2", null, h("span", {class:"badge-ill"}, "Illustrative"), nd.model.title),
-      h("p", {class:"cap"}, nd.model.caption));
-    var inner = h("div"); m.appendChild(inner);
-    mfn(inner, nd);
-    app.appendChild(m);
-  }
-
-  var fs = h("div", {class:"card sec"}, h("h2", null, "What Ignite 2026 announced, and the detail"));
-  var any = false;
-  nd.features.forEach(function(f, idx){
-    var body = itemList(f.items);
-    if (!body) return;
-    any = true;
-    var d = h("details", {class:"feat", open: idx === 0 ? "open" : null},
-      h("summary", null, f.name, h("span", {class:"stbadge s-"+f.status}, D.statusLabel[f.status])),
-      h("div", {class:"body"}, body));
-    fs.appendChild(d);
-  });
-  if (!nd.features.length) fs = null;
-  else if (!any) fs.appendChild(h("p", {class:"empty"}, "Nothing shown with the current layers."));
-  if (fs) app.appendChild(fs);
-
-  var takeCount = nd.features.concat([{items:nd.what}]).reduce(function(n,f){ return n + f.items.filter(function(i){ return layerOf(i.s)==="take"; }).length; }, 0);
-  if (STATE.take && !takeCount){
-    app.appendChild(h("div", {class:"card sec"}, h("h2", null, "My take"), h("p", {class:"empty"}, "Nothing here yet.")));
-  }
-
-  if (nd.check && nd.check.length){
-    var ck = h("div", {class:"card sec check"}, h("h2", null, "Check before you rely on this"));
-    var ul = h("ul"); nd.check.forEach(function(c){ ul.appendChild(h("li", null, c)); });
-    ck.appendChild(ul); app.appendChild(ck);
-  }
-
-  var rel = D.edges.filter(function(e){ return e.a === id || e.b === id; });
-  if (rel.length){
-    var cs = h("div", {class:"card sec"}, h("h2", null, "How it connects"), h("div", {class:"conn"}));
-    rel.forEach(function(e){
-      var other = NODE[e.a === id ? e.b : e.a];
-      cs.lastChild.appendChild(h("button", {onclick:function(){ go("node/"+other.id); }},
-        h("span", {class:"arrow"}, e.a === id ? "to" : "from"), h("b", null, other.name), h("span", {class:"empty"}, e.label), h("span", {class:"chip l-"+layerOf(e.s)}, e.s)));
-    });
-    app.appendChild(cs);
-  }
-  window.scrollTo(0, 0);
-}
-
-/* ---------- models ---------- */
-var MODELS = {};
-function pill(label, on, fn){ return h("button", {class:"pill"+(on?" on":""), "aria-pressed":String(!!on), onclick:fn}, label); }
-
-MODELS.plans = function(box){
-  var after = false;
-  var pols = ["Admins: MFA","Admins: compliant device","Admins: block legacy auth","Staff: MFA","Staff: compliant device","Staff: block legacy auth","Staff: block high risk sign in","Guests: MFA","Guests: block legacy auth","Guests: limit to web apps","Contractors: MFA","Contractors: compliant device"];
-  var plans = [
-    {n:"Admins plan", shared:"Shared: all admin roles, all apps", rules:["MFA","Compliant device","Block legacy auth"]},
-    {n:"Staff plan", shared:"Shared: all employees, all apps", rules:["MFA","Compliant device","Block legacy auth","Block high risk sign in"]},
-    {n:"External plan", shared:"Shared: guests and contractors", rules:["MFA (both)","Block legacy auth","Limit guests to web apps","Compliant device (contractors)"]}
-  ];
-  var out = h("div"), stat = h("div", {class:"big"});
-  var btn = h("button", {class:"btn", onclick:function(){ after = !after; draw(); }}, "Show plans");
-  box.appendChild(h("div", {class:"row"}, btn, stat));
-  box.appendChild(out);
-  function draw(){
-    clear(out);
-    btn.textContent = after ? "Show separate policies" : "Show plans";
-    btn.classList.toggle("on", after);
-    if (!after){
-      stat.textContent = "12 policies";
-      var w = h("div"); pols.forEach(function(p, i){ w.appendChild(h("span", {class:"pol", style:"animation-delay:"+(i*30)+"ms"}, p)); });
-      out.appendChild(w);
-    } else {
-      stat.textContent = "3 plans, 11 rules";
-      var g = h("div", {class:"grid2"});
-      plans.forEach(function(pl, i){
-        g.appendChild(h("div", {class:"planbox", style:"animation-delay:"+(i*120)+"ms"}, h("b", null, pl.n), h("div", {class:"shared"}, pl.shared),
-          pl.rules.map(function(r){ return h("span", {class:"pol"}, r); })));
-      });
-      out.appendChild(g);
-    }
-  }
-  draw();
-};
-
-MODELS.risk = function(box){
-  var v = {rt:0, po:0, bl:0};
-  var names = {rt:"Runtime signals", po:"Posture", bl:"Blast radius"};
-  var desc = [["Quiet","Some","Active threats"],["Hardened","Gaps","Weak"],["Small","Medium","Wide reach"]];
-  var res = h("div", {class:"msg"});
-  var keys = ["rt","po","bl"];
-  keys.forEach(function(k, ki){
-    var row = h("div", {class:"row"}, h("b", {style:"width:130px"}, names[k]));
-    [0,1,2].forEach(function(n){
-      var p = h("button", {class:"pill"+(v[k]===n?" on":""), onclick:function(){ v[k]=n; refresh(); }}, desc[ki][n]);
-      p.dataset.k = k; p.dataset.n = n; row.appendChild(p);
-    });
-    box.appendChild(row);
-  });
-  box.appendChild(res);
-  function refresh(){
-    box.querySelectorAll(".pill").forEach(function(p){ p.classList.toggle("on", v[p.dataset.k] === +p.dataset.n); });
-    var score = v.rt*2 + v.po + v.bl;           // toy weighting, not Microsoft's
-    var lvl = score >= 5 ? "high" : (score >= 3 ? "med" : "low");
-    var txt = {low:"Low", med:"Medium", high:"High"}[lvl];
-    clear(res);
-    res.appendChild(document.createTextNode("Toy result: "));
-    res.appendChild(h("span", {class:"lvl "+lvl}, txt));
-    res.appendChild(document.createTextNode("  Score "+score+" of 8 in this model. Runtime counts double here only to show that inputs can carry different weight. Microsoft hasn't said how it weighs them."));
-  }
-  refresh();
-};
-
-MODELS.runtime = function(box){
-  var mode = "Block", busy = false;
-  var stage = h("div", {class:"stage"});
-  ["Agent","Inspect","Tool or shell"].forEach(function(t, i){
-    stage.appendChild(h("div", {class:"node", style:"left:"+(8+i*37)+"%"}, h("div", {class:"bx"}, i === 1 ? icon("shield") : (i===0 ? icon("terminal") : icon("window"))), t));
-  });
-  stage.querySelectorAll("svg").forEach(function(s){ s.style.width="24px"; s.style.height="24px"; s.setAttribute("stroke","currentColor"); s.style.color="var(--accent)"; });
-  var pkt = h("div", {class:"pkt bad", style:"display:none"});
-  stage.appendChild(pkt);
-  var msg = h("div", {class:"msg"}, "Pick a mode, then send a prompt that looks like prompt injection.");
-  var send = h("button", {class:"btn", onclick:run}, "Send risky prompt");
-  var row = h("div", {class:"row"}, h("span", null, "Mode:"),
-    pill("Audit", false, function(){ mode="Audit"; sync(); }), pill("Block", true, function(){ mode="Block"; sync(); }), send);
-  function sync(){ row.querySelectorAll(".pill").forEach(function(p){ p.classList.toggle("on", p.textContent === mode); }); }
-  box.appendChild(row); box.appendChild(stage); box.appendChild(msg);
-  function move(from, to, ms, cb){
-    if (reduce){ pkt.style.left = to+"%"; setTimeout(cb, 50); return; }
-    var t0 = null;
-    function f(t){ if (!t0) t0 = t; var k = Math.min(1,(t-t0)/ms); pkt.style.left = (from+(to-from)*k)+"%"; if (k<1) requestAnimationFrame(f); else cb(); }
-    requestAnimationFrame(f);
-  }
-  function run(){
-    if (busy) return; busy = true; send.disabled = true;
-    pkt.style.display = "block"; pkt.className = "pkt bad"; pkt.style.left = "6%";
-    msg.textContent = "The agent loop produces a prompt carrying an injected instruction.";
-    move(6, 44, 900, function(){
-      if (mode === "Block"){
-        msg.textContent = "Block: the action is stopped and a Suspicious AI prompt injection alert is raised. The tool never receives it.";
-        pkt.style.opacity = ".4"; done();
-      } else {
-        msg.textContent = "Audit: the prompt is allowed through and an informational alert is raised. Good for learning what would be blocked.";
-        pkt.className = "pkt ok"; move(44, 80, 800, done);
-      }
-    });
-    function done(){ setTimeout(function(){ busy=false; send.disabled=false; pkt.style.opacity="1"; }, 400); }
-  }
-};
-
-MODELS.observe = function(box){
-  var stages = [
-    {n:"Learn", d:"Observe what agents and apps do. Nothing is stopped. Build a baseline."},
-    {n:"Permissive", d:"Review what would have been blocked. Add allow entries for real work."},
-    {n:"Enforce", d:"Anything outside the baseline is blocked. Keep a break glass route."}
-  ];
-  var i = 0;
-  var steps = h("div", {class:"steps"}), msg = h("div", {class:"msg"}), mt = h("div", {class:"meter"}, h("div"));
-  var acts = [["Reads project files","ok"],["Writes to temp folder","ok"],["Runs unknown script","?"],["Opens a new network socket","?"]];
-  var list = h("ul", {class:"items"});
-  box.appendChild(h("div", {class:"row"}, pill("Back", false, function(){ i = Math.max(0, i-1); draw(); }), pill("Next", false, function(){ i = Math.min(2, i+1); draw(); })));
-  box.appendChild(steps); box.appendChild(mt); box.appendChild(msg); box.appendChild(h("h3", {style:"margin:12px 0 0;font-size:14px"}, "Four example actions in this stage")); box.appendChild(list);
-  function draw(){
-    clear(steps); stages.forEach(function(s, k){ steps.appendChild(h("div", {class:"step"+(k===i?" on":"")}, h("b", null, s.n))); });
-    mt.firstChild.style.width = ((i+1)/3*100)+"%";
-    msg.textContent = stages[i].d;
-    clear(list);
-    acts.forEach(function(a){
-      var out = a[1]==="ok" ? "Allowed" : (i===0 ? "Allowed and logged" : (i===1 ? "Allowed and flagged for review" : "Blocked"));
-      list.appendChild(h("li", null, h("span", {class:"chip l-ms"}, out), h("span", null, a[0])));
-    });
-  }
-  draw();
-};
-
-MODELS.dlp = function(box){
-  var s = {label:true, sit:true, lic:"E5"};
-  var res = h("div", {class:"msg"});
-  box.appendChild(h("div", {class:"row"}, h("b", null, "File"),
-    pill("Labelled Confidential", true, function(e){ s.label=!s.label; e.currentTarget.classList.toggle("on", s.label); draw(); }),
-    pill("Contains card numbers", true, function(e){ s.sit=!s.sit; e.currentTarget.classList.toggle("on", s.sit); draw(); })));
-  var lr = h("div", {class:"row"}, h("b", null, "Licence"));
-  ["E3","E5"].forEach(function(l){ lr.appendChild(pill("Microsoft 365 "+l, l===s.lic, function(){ s.lic=l; lr.querySelectorAll(".pill").forEach(function(p){ p.classList.toggle("on", p.textContent.indexOf(s.lic)>0); }); draw(); })); });
-  box.appendChild(lr); box.appendChild(res);
-  function draw(){
-    var hit = s.label || s.sit;
-    var txt;
-    if (!hit) txt = "No rule matches, so Copilot can use the file.";
-    else if (s.lic === "E3") txt = "A rule would match, but restricting Copilot from processing files and emails isn't included in E3. Copilot can still use it. DLP for prompts is available to all Copilot users.";
-    else txt = "A rule matches. With a DLP policy scoped to Copilot, Copilot is restricted from processing this file.";
-    res.textContent = txt;
-  }
-  draw();
-};
-
-MODELS.mcp = function(box){
-  var policy = "block", busy = false;
-  var stage = h("div", {class:"stage"});
-  ["Agent","Firewall in the network path","MCP server"].forEach(function(t,i){
-    stage.appendChild(h("div", {class:"node", style:"left:"+(6+i*38)+"%;width:96px"}, h("div", {class:"bx"}, icon(i===1?"globe":(i===0?"badge":"layers"))), t));
-  });
-  stage.querySelectorAll("svg").forEach(function(s){ s.style.width="24px"; s.style.height="24px"; s.setAttribute("stroke","currentColor"); s.style.color="var(--accent)"; });
-  var pkt = h("div", {class:"pkt", style:"display:none"}); stage.appendChild(pkt);
-  var msg = h("div", {class:"msg"}, "Pick a tool and a rule, then call it.");
-  var tool = "search_docs";
-  var tr = h("div", {class:"row"}, h("span", null, "Tool call:"),
-    pill("search_docs", true, function(){ tool="search_docs"; sync(); }), pill("delete_records", false, function(){ tool="delete_records"; sync(); }));
-  var pr = h("div", {class:"row"}, h("span", null, "Rule for delete_records:"),
-    pill("Block", true, function(){ policy="block"; sync(); }), pill("Allow", false, function(){ policy="allow"; sync(); }));
-  var go2 = h("button", {class:"btn", onclick:run}, "Call tool");
-  function sync(){
-    tr.querySelectorAll(".pill").forEach(function(p){ p.classList.toggle("on", p.textContent===tool); });
-    pr.querySelectorAll(".pill").forEach(function(p){ p.classList.toggle("on", p.textContent.toLowerCase()===policy); });
-  }
-  box.appendChild(tr); box.appendChild(pr); box.appendChild(h("div", {class:"row"}, go2)); box.appendChild(stage); box.appendChild(msg);
-  function move(a,b,ms,cb){
-    if (reduce){ pkt.style.left=b+"%"; setTimeout(cb,50); return; }
-    var t0=null; function f(t){ if(!t0)t0=t; var k=Math.min(1,(t-t0)/ms); pkt.style.left=(a+(b-a)*k)+"%"; if(k<1)requestAnimationFrame(f); else cb(); } requestAnimationFrame(f);
-  }
-  function run(){
-    if (busy) return; busy=true; go2.disabled=true; pkt.style.display="block"; pkt.className="pkt"; pkt.style.opacity="1"; pkt.style.left="8%";
-    msg.textContent = "Agent sends a call for " + tool + ".";
-    move(8, 48, 800, function(){
-      var deny = tool==="delete_records" && policy==="block";
-      if (deny){ pkt.className="pkt bad"; pkt.style.opacity=".4"; msg.textContent = "Blocked at the firewall. The MCP server never sees it."; fin(); }
-      else { pkt.className="pkt ok"; msg.textContent = "Allowed. The call continues to the MCP server."; move(48, 84, 800, fin); }
-    });
-    function fin(){ setTimeout(function(){ busy=false; go2.disabled=false; }, 400); }
-  }
-};
-
-MODELS.tiers = function(box){
-  var q = {freq:"often", keep:"short"};
-  var res = h("div", {class:"msg"});
-  var r1 = h("div", {class:"row"}, h("b", null, "Queried"), pill("Often", true, function(){ q.freq="often"; sync(); }), pill("Rarely", false, function(){ q.freq="rarely"; sync(); }));
-  var r2 = h("div", {class:"row"}, h("b", null, "Keep for"), pill("Short term", true, function(){ q.keep="short"; sync(); }), pill("Years", false, function(){ q.keep="long"; sync(); }));
-  box.appendChild(r1); box.appendChild(r2); box.appendChild(res);
-  function sync(){
-    r1.querySelectorAll(".pill").forEach(function(p){ p.classList.toggle("on", p.textContent.toLowerCase()===q.freq); });
-    r2.querySelectorAll(".pill").forEach(function(p){ p.classList.toggle("on", (p.textContent==="Years") === (q.keep==="long")); });
-    var t;
-    if (q.freq==="often") t = "Analytics tier. It's built for hunting, alerting and incidents. The data is mirrored to the lake, so you still have one copy for longer retention.";
-    else if (q.keep==="long") t = "Lake tier. Low cost retention of up to 12 years in open format. Promote data back to the analytics tier with a job when you need to hunt.";
-    else t = "Lake tier is likely enough for data you rarely query. Promote it to analytics when an investigation needs it.";
-    res.textContent = t;
-  }
-  sync();
-};
-
-MODELS.isoc = function(box){
-  var chips = [["Defender Suite",true],["Microsoft 365 E5",true],["Microsoft 365 E7",true],["Microsoft 365 E3",false],["Business Premium",false]];
-  var pick = null;
-  var res = h("div", {class:"msg"}, "Pick your licence to see eligibility.");
-  var row = h("div", {class:"row"}, h("b", null, "My licence"));
-  chips.forEach(function(c){ row.appendChild(pill(c[0], false, function(){ pick=c; row.querySelectorAll(".pill").forEach(function(p){ p.classList.toggle("on", p.textContent===c[0]); }); res.textContent = c[1] ? "Eligible per Learn: Defender Suite, Microsoft 365 E5 or E7 customers." : "Not listed as eligible on the Learn pages I read. Check the current eligibility list."; }));});
-  box.appendChild(row); box.appendChild(res);
-  box.appendChild(h("h3", {style:"margin:16px 0 4px;font-size:15px"}, "Included retention: two Microsoft sources disagree"));
-  [["Learn overview page",30],["Book of News and Partner Center",90]].forEach(function(r){
-    box.appendChild(h("div", {class:"bar"}, h("span", {class:"nm"}, r[0]), h("div", {class:"tr"}, h("div", {style:"width:"+(r[1]/180*100)+"%"})), h("b", null, r[1]+" days")));
-  });
-  box.appendChild(h("p", {class:"cap"}, "The Partner Center post of November 18, 2026 says 90 days, up from 30."));
-  if (STATE.lab){
-    var labbox = h("div", {style:"margin-top:14px;padding:12px;border:1.5px dashed var(--lab);border-radius:12px"});
-    labbox.appendChild(h("div", null, h("span", {class:"chip l-lab"}, "Labs and sessions · Slide"), " Cost estimate for non Microsoft data. Prices are from a session slide, US list, not on Learn. Check before you quote them."));
-    var gb = h("input", {type:"number", value:"500", min:"0", step:"50", "aria-label":"GB per month"});
-    var out = h("div", {class:"grid2", style:"margin-top:8px"});
-    var mo = h("input", {type:"number", value:"12", min:"1", max:"144", step:"1", "aria-label":"Months of lake storage"});
-    labbox.appendChild(h("div", {class:"row"}, h("span", null, "GB ingested per month"), gb, h("span", null, "Months in lake"), mo));
-    labbox.appendChild(out); box.appendChild(labbox);
-    var calc = function(){
-      var g = Math.max(0, +gb.value || 0), m = Math.max(1, +mo.value || 1);
-      var an = g*2.40, sen = g*4.30, lake = g*0.15, store = g*0.026*(m*(m+1)/2); // cumulative storage over m months of steady inflow
-      clear(out);
-      out.appendChild(h("div", null, h("div", {class:"big"}, "$"+an.toFixed(0)), h("small", null, "Analytics tier a month ($2.40 per GB)")));
-      out.appendChild(h("div", null, h("div", {class:"big"}, "$"+sen.toFixed(0)), h("small", null, "Sentinel for comparison ($4.30 per GB)")));
-      out.appendChild(h("div", null, h("div", {class:"big"}, "$"+lake.toFixed(0)), h("small", null, "Lake ingestion a month ($0.15 per GB)")));
-      out.appendChild(h("div", null, h("div", {class:"big"}, "$"+store.toFixed(0)), h("small", null, "Lake storage over "+m+" months of steady inflow ($0.026 per GB per month)")));
-    };
-    gb.addEventListener("input", calc); mo.addEventListener("input", calc); calc();
-  } else {
-    box.appendChild(h("p", {class:"empty"}, "Switch on 'From the labs and sessions' to see the cost calculator built on session slide prices."));
-  }
-};
-
-MODELS.perception = function(box){
-  var dots = h("div", {class:"dots", role:"img", "aria-label":"One hundred alerts. Eighty are highlighted as covered by triage."});
-  var cells = []; for (var i=0;i<100;i++){ var c = h("i"); cells.push(c); dots.appendChild(c); }
-  var order = []; for (var j=0;j<100;j++) order.push(j);
-  var seed = 7; order.sort(function(){ seed = (seed*9301+49297)%233280; return seed/233280 - .5; });
-  var btn = h("button", {class:"btn", onclick:run}, "Run triage on 100 alerts");
-  var msg = h("div", {class:"msg"}, "Microsoft says the Triage Agent covers about 80% of alerts in a typical Defender queue. Which alerts is random here.");
-  box.appendChild(h("div", {class:"row"}, btn)); box.appendChild(dots); box.appendChild(msg);
-  function run(){
-    cells.forEach(function(c){ c.classList.remove("on"); });
-    var k = 0, id = null;
-    if (reduce){ order.slice(0,80).forEach(function(n){ cells[n].classList.add("on"); }); return; }
-    id = setInterval(function(){ if (k>=80){ clearInterval(id); return; } cells[order[k]].classList.add("on"); k++; }, 25);
-  }
-};
-
-MODELS.mdash = function(box){
-  var st = ["Map the attack surface","Scan code","Validate through agent debate","Remove duplicates"];
-  var cur = 0, steps = h("div", {class:"steps"}), note = h("div", {class:"msg"});
-  box.appendChild(h("div", {class:"row"}, pill("Back", false, function(){ cur=Math.max(0,cur-1); dr(); }), pill("Next", false, function(){ cur=Math.min(3,cur+1); dr(); })));
-  box.appendChild(steps); box.appendChild(note);
-  function dr(){
-    clear(steps);
-    st.forEach(function(s,i){ steps.appendChild(h("div", {class:"step"+(i===cur?" on":"")}, h("b", null, (i+1)+". "+s))); });
-    note.textContent = "Stage " + (cur+1) + " of 4: " + st[cur] + ". The Book of News names the stages and says more than 100 agents work across them.";
-  }
-  dr();
-};
-
-MODELS.scu = function(box){
-  var inp = h("input", {type:"range", min:"0", max:"30000", step:"100", value:"4000", "aria-label":"Paid user licences"});
-  var n = h("input", {type:"number", value:"4000", min:"0", step:"100", "aria-label":"Paid user licences"});
-  var big = h("div", {class:"big"}), mt = h("div", {class:"meter"}, h("div")), msg = h("div", {class:"msg"});
-  box.appendChild(h("div", {class:"row"}, h("span", null, "Paid E5 or E7 user licences"), n));
-  box.appendChild(inp); box.appendChild(h("div", {style:"margin-top:10px"}, big, h("small", null, "SCUs a month, shared across the whole tenant"))); box.appendChild(mt); box.appendChild(msg);
-  function draw(v){
-    v = Math.max(0, +v || 0);
-    var scu = Math.min(v*0.4, 10000);
-    big.textContent = Math.round(scu).toLocaleString("en-GB");
-    mt.firstChild.style.width = (scu/10000*100)+"%";
-    var over = Math.max(0, v*0.4 - 10000);
-    msg.textContent = v >= 25000 ? "At 25,000 licences you hit the 10,000 a month cap. More licences don't add SCUs." : "Formula: 400 SCUs per 1,000 licences, capped at 10,000 a month. Unused SCUs don't roll over. Beyond the allocation, pay as you go is $6 per SCU when throttling starts, with 30 days notice.";
-    if (over > 0) msg.textContent += " Your licences would give " + Math.round(over).toLocaleString("en-GB") + " more than the cap.";
-  }
-  inp.addEventListener("input", function(){ n.value = inp.value; draw(inp.value); });
-  n.addEventListener("input", function(){ inp.value = Math.min(30000, +n.value||0); draw(n.value); });
-  draw(4000);
-};
-
-MODELS.a365 = function(box){
-  var s = {who:"ms", what:"mgmt"};
-  var res = h("div", {class:"msg"});
-  var r1 = h("div", {class:"row"}, h("b", null, "Agents from"), pill("Microsoft", true, function(){ s.who="ms"; sync(); }), pill("Other vendors", false, function(){ s.who="3p"; sync(); }));
-  var r2 = h("div", {class:"row"}, h("b", null, "I want"), pill("Management insights", true, function(){ s.what="mgmt"; sync(); }),
-    pill("Enterprise management and governance", false, function(){ s.what="gov"; sync(); }), pill("Business Analytics", false, function(){ s.what="ba"; sync(); }));
-  box.appendChild(r1); box.appendChild(r2); box.appendChild(res);
-  var T = {
-    "ms/mgmt":"Management insights for Microsoft agents are GA with no Agent 365 licence. Viva Insights keeps a minimum of 50 assigned Copilot licences.",
-    "ms/gov":"Enterprise grade management, security and governance needs an Agent 365 or Microsoft 365 E7 licence.",
-    "ms/ba":"Business Analytics (Frontier program): insights for Microsoft services need at least one Microsoft 365 Copilot licence.",
-    "3p/mgmt":"The Book of News doesn't give a separate rule for basic management insights on other vendors' agents. Check the current licensing page.",
-    "3p/gov":"Enterprise grade management, security and governance needs an Agent 365 or Microsoft 365 E7 licence. Full insights for third party agents, including Purview, also need Agent 365.",
-    "3p/ba":"Business Analytics (Frontier program): insights for non Microsoft services need an Agent 365 licence."
-  };
-  function sync(){
-    r1.querySelectorAll(".pill").forEach(function(p){ p.classList.toggle("on", (p.textContent==="Microsoft") === (s.who==="ms")); });
-    var lab = {mgmt:"Management insights", gov:"Enterprise management and governance", ba:"Business Analytics"};
-    r2.querySelectorAll(".pill").forEach(function(p){ p.classList.toggle("on", p.textContent===lab[s.what]); });
-    res.textContent = T[s.who+"/"+s.what];
-  }
-  sync();
-};
-
-/* ---------- routing ---------- */
-function route(keepScroll){
-  var hash = "";
-  try { hash = (location.hash || "").replace(/^#\/?/, ""); } catch(e){}
-  var y = window.scrollY;
-  if (hash.indexOf("node/") === 0) nodePage(hash.slice(5)); else home();
-  if (keepScroll) window.scrollTo(0, y);
-}
-function go(path){
-  try { location.hash = path ? "/"+path : ""; } catch(e){}
-  // preview sandboxes may ignore the hash change, so render directly as well
-  var hash = path || "";
-  if (hash.indexOf("node/") === 0) nodePage(hash.slice(5)); else { home(); window.scrollTo(0,0); }
-}
-window.addEventListener("hashchange", function(){ route(false); });
-
-route(false);
+/* ---------- start ---------- */
+home();
 })();
 </script>
 </body>
