@@ -1,0 +1,2436 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ignite 2026 security map | aiagentsecurity.guide</title>
+<meta name="description" content="Microsoft security, end to end. Independent and unofficial.">
+<style>
+:root{
+  --bg:#f6f7fb;--panel:#fff;--ink:#14171f;--mute:#5b6475;--line:#dfe3ec;--soft:#eef1f7;
+  --ms:#2563eb;--lab:#0d9488;--heard:#d97706;--take:#db2777;
+  --ga:#16a34a;--preview:#7c3aed;--none:#64748b;
+  --plate1:#e8edf8;--plate2:#d6deef;--plate3:#c4cee6;--accent:#2563eb;--shadow:0 6px 24px rgba(20,30,60,.08);
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0c0f16;--panel:#141925;--ink:#e9edf6;--mute:#9aa4b8;--line:#263044;--soft:#1a2132;
+  --ms:#60a5fa;--lab:#2dd4bf;--heard:#fbbf24;--take:#f472b6;
+  --ga:#4ade80;--preview:#a78bfa;--none:#94a3b8;
+  --plate1:#1b2438;--plate2:#222d47;--plate3:#2b3856;--accent:#60a5fa;--shadow:0 6px 24px rgba(0,0,0,.4);
+}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:var(--accent)}
+button{font:inherit;color:inherit;cursor:pointer}
+.wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+header.top{background:linear-gradient(135deg,#0b1736,#1d3a8a 55%,#0d9488);color:#fff;padding:28px 0 22px;position:relative;overflow:hidden}
+header.top::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 85% 20%,rgba(255,255,255,.18),transparent 45%);pointer-events:none}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:.04em;text-transform:uppercase;opacity:.9}
+.brand svg{width:26px;height:26px}
+header.top h1{margin:10px 0 6px;font-size:clamp(26px,5vw,40px);line-height:1.15}
+header.top p{margin:0;max-width:640px;opacity:.92}
+.asof{margin-top:14px;font-size:13px;opacity:.85;display:flex;flex-wrap:wrap;gap:6px 16px}
+.toggles{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.toggles .wrap{display:flex;flex-wrap:wrap;gap:8px;padding-top:10px;padding-bottom:10px;align-items:center}
+.toggles .lbl{font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:.06em;margin-right:4px}
+.tg{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--c);color:var(--ink);background:var(--panel);border-radius:99px;padding:5px 12px 5px 9px;font-size:13.5px;transition:background .2s,opacity .2s}
+.tg i{width:12px;height:12px;border-radius:50%;background:var(--c);display:inline-block;transition:transform .2s}
+.tg[aria-pressed="false"]{opacity:.55;border-style:dashed}
+.tg[aria-pressed="false"] i{background:transparent;border:2px solid var(--c)}
+.tg[aria-pressed="true"]{background:color-mix(in srgb,var(--c) 14%,var(--panel))}
+.tg small{color:var(--mute)}
+.tg[disabled]{cursor:default}
+.l-ms{--c:var(--ms)}.l-lab{--c:var(--lab)}.l-heard{--c:var(--heard)}.l-take{--c:var(--take)}
+main{padding:22px 0 60px}
+h2{font-size:22px;margin:30px 0 10px}
+.sub{color:var(--mute);margin:0 0 14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+/* map */
+.mapbox{padding:8px;position:relative}
+#iso{display:block;width:100%;height:auto}
+.mapnote{font-size:13px;color:var(--mute);padding:4px 12px 10px}
+.phonelist{display:none}
+.plate{fill:color-mix(in srgb,var(--pc) 20%,var(--panel));stroke:color-mix(in srgb,var(--pc) 55%,transparent);stroke-width:1.5}
+.plateside{fill:color-mix(in srgb,var(--pc) 38%,var(--panel))}
+.pl0{--pc:#6366f1}.pl1{--pc:#0ea5e9}.pl2{--pc:#14b8a6}.pl3{--pc:#22c55e}.pl4{--pc:#f97316}.pl5{--pc:#ec4899}
+.drop{animation:drop .8s cubic-bezier(.2,.9,.3,1.2) both}
+@keyframes drop{from{opacity:0;transform:translateY(70px)}to{opacity:1;transform:none}}
+.fadein{animation:fade .6s both}
+.edges{animation:fade 1s 1.2s both}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.lift{transition:transform .22s ease,filter .22s}
+.tile:hover .lift,.tile:focus .lift,.tile.on .lift{transform:translateY(-6px);filter:drop-shadow(0 10px 8px rgba(0,0,0,.28))}
+.tile.pulse .top{animation:pulse .9s ease-out}
+@keyframes pulse{0%{stroke-width:1.6}40%{stroke-width:7;stroke:var(--pc,var(--accent))}100%{stroke-width:1.6}}
+.pktg{fill:#fff;stroke:var(--accent);stroke-width:3;filter:drop-shadow(0 0 8px var(--accent))}
+.ctl{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
+.info{margin:10px 12px 12px;padding:10px 14px;border-radius:12px;background:var(--soft);border:1px solid var(--line);min-height:62px;font-size:14.5px}
+.info b{font-size:15px}
+.info .st{color:var(--mute);font-size:12.5px;display:block;margin-bottom:2px}
+.platelabel{font-size:12.5px;font-weight:700;fill:var(--ink)}
+.platesub{font-size:10.5px;fill:var(--mute)}
+.tile{cursor:pointer;outline:none;transition:transform .2s,opacity .2s}
+.tile .top{fill:var(--panel);stroke:var(--accent);stroke-width:1.6;transition:fill .2s}
+.tile:hover .top,.tile:focus .top,.tile.on .top{fill:color-mix(in srgb,var(--accent) 18%,var(--panel))}
+.tile text{font-size:11.5px;font-weight:600;fill:var(--ink);text-anchor:middle;pointer-events:none}
+.tile.dim{opacity:.35}
+.tile:focus-visible .top{stroke-width:3}
+.edge{fill:none;stroke:var(--accent);stroke-width:1.4;stroke-dasharray:3 7;opacity:.5;animation:flow 1.6s linear infinite}
+.edge.hot{opacity:1;stroke-width:2.4}
+.edge.off{opacity:.07}
+@keyframes flow{to{stroke-dashoffset:-20}}
+.dot{fill:var(--accent)}
+.stbadge{font-size:12px;border-radius:99px;padding:2px 9px;border:1px solid currentColor;display:inline-block;white-space:nowrap}
+.s-ga{color:var(--ga)}.s-mixed{color:var(--accent)}.s-preview{color:var(--preview)}.s-none{color:var(--none)}
+.layercard{padding:12px 14px;margin-bottom:10px}
+.layercard h3{margin:0 0 2px;font-size:15px}
+.layercard p{margin:0 0 8px;font-size:13px;color:var(--mute)}
+.nodebtn{display:flex;width:100%;text-align:left;align-items:center;gap:10px;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:6px}
+.nodebtn svg{width:22px;height:22px;flex:none;stroke:var(--accent)}
+.nodebtn b{display:block;font-size:14.5px}
+.nodebtn span.t{display:block;font-size:12.5px;color:var(--mute)}
+
+.pyr{display:flex;flex-direction:column;align-items:center;gap:6px;perspective:800px}
+.ptier{padding:11px 7% 13px;text-align:center;position:relative;overflow:hidden;clip-path:polygon(6% 0,94% 0,100% 100%,0 100%);background:color-mix(in srgb,var(--pc) 24%,var(--panel));animation:tierin .7s cubic-bezier(.2,.9,.3,1.15) both}
+@keyframes tierin{from{opacity:0;transform:translateY(60px) scale(.9)}to{opacity:1;transform:none}}
+.ptier::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);transform:translateX(-120%);animation:sweep 6s ease-in-out infinite;animation-delay:var(--sd,0s);pointer-events:none}
+@keyframes sweep{0%,60%{transform:translateX(-120%)}85%,100%{transform:translateX(120%)}}
+.ptl{font-weight:800;font-size:14.5px;letter-spacing:.01em}
+.pts{font-size:11.5px;color:var(--mute);margin-bottom:8px}
+.pchips{display:flex;flex-wrap:wrap;gap:7px;justify-content:center}
+.pchip{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1 1 104px;max-width:170px;padding:10px 6px 9px;border-radius:14px;border:1.5px solid var(--accent);background:var(--panel);position:relative;transition:transform .2s,box-shadow .2s;animation:pop .5s cubic-bezier(.2,1.4,.4,1) both;animation-delay:var(--cd,0s);z-index:1}
+@keyframes pop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+.pchip svg{width:22px;height:22px;stroke:var(--accent)}
+.pchip .pn{font-size:13px;font-weight:700;line-height:1.2}
+.pchip .pc{font-size:10.5px;color:var(--mute)}
+.pchip .pd{position:absolute;top:7px;right:7px;width:9px;height:9px;border-radius:50%;background:currentColor;box-shadow:0 0 0 0 currentColor;animation:ping 2.4s ease-out infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 color-mix(in srgb,currentColor 55%,transparent)}70%,100%{box-shadow:0 0 0 8px transparent}}
+.pchip:active{transform:scale(.96)}
+.pchip.on{transform:translateY(-4px) scale(1.05);box-shadow:0 10px 20px rgba(0,0,0,.28);background:color-mix(in srgb,var(--accent) 18%,var(--panel))}
+.phonelist .info{margin:12px 0 0}
+.strip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.stat{padding:10px 8px;text-align:center;border-radius:14px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow);animation:rise .5s both}
+.stat b{display:block;font-size:26px;line-height:1.1;color:var(--accent)}
+.stat span{font-size:12px;color:var(--mute)}
+.sheetbg{position:fixed;inset:0;background:rgba(5,10,25,.55);z-index:50;opacity:0;transition:opacity .25s;display:flex;align-items:flex-end;justify-content:center}
+.sheetbg.show{opacity:1}
+.sheet{width:100%;max-width:560px;background:var(--panel);border-radius:22px 22px 0 0;padding:18px 18px 22px;transform:translateY(100%);transition:transform .35s cubic-bezier(.2,.9,.3,1);max-height:82vh;overflow:auto}
+.sheetbg.show .sheet{transform:none}
+.sheet h3{margin:6px 0 2px;font-size:20px}
+.sheet .grab{width:42px;height:4px;border-radius:4px;background:var(--line);margin:0 auto 8px}
+.sheet .row{margin-top:12px}
+/* timeline */
+.tl{position:relative;padding:6px 0 6px 22px;margin:0;list-style:none}
+.tl::before{content:"";position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:var(--line)}
+.tl li{position:relative;padding:8px 12px;margin:8px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;cursor:pointer}
+.tl li::before{content:"";position:absolute;left:-21px;top:16px;width:12px;height:12px;border-radius:50%;background:var(--c,var(--ms));border:2px solid var(--bg)}
+.tl time{font-size:12.5px;color:var(--mute);margin-right:8px}
+/* page */
+.crumb{margin:6px 0 10px}
+.crumb button{background:none;border:none;color:var(--accent);padding:0;text-decoration:underline}
+.hero{padding:18px 20px;display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap}
+.hero .ic{width:52px;height:52px;border-radius:14px;background:color-mix(in srgb,var(--accent) 14%,var(--panel));display:grid;place-items:center;flex:none}
+.hero .ic svg{width:28px;height:28px;stroke:var(--accent)}
+.hero h1{margin:0;font-size:clamp(22px,4vw,30px);line-height:1.2}
+.hero .tag{color:var(--mute);margin:2px 0 8px}
+ul.items{list-style:none;margin:0;padding:0}
+ul.items li{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-top:1px solid var(--line);animation:rise .35s both}
+ul.items li:first-child{border-top:none}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.chip{flex:none;font-size:11px;font-weight:600;border-radius:6px;padding:2px 7px;margin-top:3px;color:var(--c);background:color-mix(in srgb,var(--c) 13%,var(--panel));border:1px solid color-mix(in srgb,var(--c) 40%,transparent);white-space:nowrap}
+.sec{padding:16px 18px;margin-top:14px}
+.sec h2{margin:0 0 6px;font-size:18px}
+.links{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.links a{font-size:13px;text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:3px 11px;background:var(--soft)}
+details.feat{border:1px solid var(--line);border-radius:12px;margin-top:10px;background:var(--panel);overflow:hidden}
+details.feat summary{list-style:none;cursor:pointer;padding:11px 14px;display:flex;align-items:center;gap:10px;font-weight:600}
+details.feat summary::-webkit-details-marker{display:none}
+details.feat summary::after{content:"+";margin-left:auto;font-size:20px;color:var(--mute);transition:transform .2s}
+details.feat[open] summary::after{transform:rotate(45deg)}
+details.feat .body{padding:0 14px 10px}
+.check{border-left:4px solid var(--heard);background:color-mix(in srgb,var(--heard) 8%,var(--panel))}
+.check ul{margin:6px 0 0;padding-left:18px}
+.conn{display:grid;gap:8px;margin-top:8px}
+.conn button{display:flex;gap:8px;align-items:center;text-align:left;background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.conn .arrow{color:var(--accent);font-weight:700}
+.empty{color:var(--mute);font-style:italic}
+footer{border-top:1px solid var(--line);padding:22px 0 40px;color:var(--mute);font-size:13px}
+/* models */
+.model{padding:16px 18px;margin-top:14px;border:1.5px solid color-mix(in srgb,var(--accent) 35%,var(--line));background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 6%,var(--panel)),var(--panel))}
+.model h2{margin:0 0 2px;font-size:18px}
+.model .cap{font-size:13px;color:var(--mute);margin:0 0 12px}
+.badge-ill{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--preview);border:1px solid currentColor;border-radius:6px;padding:1px 6px;margin-right:6px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+.btn{border:1.5px solid var(--accent);background:var(--panel);border-radius:10px;padding:6px 14px;font-size:14px}
+.btn.on{background:var(--accent);color:#fff}
+.btn:disabled{opacity:.5;cursor:default}
+.pill{border:1.5px solid var(--line);background:var(--soft);border-radius:99px;padding:4px 12px;font-size:13.5px}
+.pill.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 16%,var(--panel));font-weight:600}
+input[type=range]{width:100%;accent-color:var(--accent)}
+input[type=number]{font:inherit;padding:5px 8px;border:1.5px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink);width:130px}
+.big{font-size:30px;font-weight:700;line-height:1.1}
+.meter{height:16px;background:var(--soft);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.meter>div{height:100%;background:linear-gradient(90deg,var(--accent),var(--lab));transition:width .45s ease}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:640px){.grid2{grid-template-columns:1fr}}
+.pol{display:inline-block;margin:3px;padding:3px 8px;border-radius:8px;font-size:12px;background:var(--soft);border:1px solid var(--line);animation:rise .4s both}
+.planbox{border:1.5px solid var(--accent);border-radius:12px;padding:8px;margin-bottom:8px;animation:rise .45s both}
+.planbox b{font-size:13px}
+.planbox .shared{font-size:11.5px;color:var(--mute)}
+.stage{position:relative;height:150px;border:1px dashed var(--line);border-radius:12px;background:var(--soft);overflow:hidden}
+.node{position:absolute;top:50%;transform:translateY(-50%);width:82px;text-align:center;font-size:12px;font-weight:600}
+.node .bx{height:46px;border-radius:12px;border:2px solid var(--accent);background:var(--panel);display:grid;place-items:center;margin-bottom:4px}
+.pkt{position:absolute;top:calc(50% - 7px);left:0;width:14px;height:14px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 25%,transparent)}
+.pkt.bad{background:#dc2626;box-shadow:0 0 0 4px rgba(220,38,38,.25)}
+.pkt.ok{background:var(--ga)}
+.msg{margin-top:8px;padding:8px 12px;border-radius:10px;background:var(--soft);border:1px solid var(--line);font-size:14px;min-height:42px}
+.dots{display:grid;grid-template-columns:repeat(20,1fr);gap:4px;max-width:480px}
+.dots i{aspect-ratio:1;border-radius:50%;background:var(--line);transition:background .4s,transform .4s}
+.dots i.on{background:var(--accent);transform:scale(1.05)}
+.steps{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.step{flex:1 1 120px;border:1.5px solid var(--line);border-radius:10px;padding:8px;font-size:13px;background:var(--soft);transition:all .3s}
+.step.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--panel))}
+.bar{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:13px}
+.bar .nm{width:120px;flex:none}
+.bar .tr{flex:1;height:18px;background:var(--soft);border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+.bar .tr>div{height:100%;background:var(--accent);transition:width .5s}
+.lvl{display:inline-block;padding:3px 14px;border-radius:99px;color:#fff;font-weight:700}
+.lvl.low{background:#16a34a}.lvl.med{background:#d97706}.lvl.high{background:#dc2626}
+@media(max-width:719px){
+  .mapbox,.mapnote,.mapctl{display:none}
+  .phonelist{display:block}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<a href="index.html" style="display:block;background:#0d1526;color:#fff;text-align:center;padding:8px 12px;font:600 13px system-ui,sans-serif;text-decoration:none">Back to aiagentsecurity.guide</a>
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7" stroke-linejoin="round"><path d="M12 3l9 4.5-9 4.5-9-4.5z"/><path d="M3 12l9 4.5 9-4.5"/><path d="M3 16.5l9 4.5 9-4.5"/></svg><span id="brandName"></span></div>
+    <h1 id="tagline"></h1>
+    <p id="disc"></p>
+    <div class="asof" id="asof"></div>
+  </div>
+</header>
+<div class="toggles"><div class="wrap" id="toggles"></div></div>
+<main><div class="wrap" id="app"></div></main>
+<footer><div class="wrap"><div id="foot"></div></div></footer>
+
+<script type="application/json" id="page-data">
+{
+ "meta": {
+  "name": "Ignite 2026 security map",
+  "nameNote": "PLACEHOLDER. Change meta.name, meta.tagline and the domain in one place.",
+  "tagline": "Microsoft security, end to end. What each piece is and what Ignite 2026 changed.",
+  "asOf": "2026-11-27",
+  "reviewBy": "2027-01-31",
+  "author": "Written by an Ignite 2026 attendee. Personal site. Views are my own.",
+  "disclaimer": "Independent and unofficial. Not affiliated with or endorsed by Microsoft. Status and licensing change fast: check Microsoft Learn before you rely on anything here."
+ },
+ "layersContent": [
+  {
+   "key": "ms",
+   "label": "Microsoft",
+   "short": "Microsoft",
+   "locked": true,
+   "desc": "Book of News and Microsoft Learn. The base layer. Always on."
+  },
+  {
+   "key": "lab",
+   "label": "From the labs and sessions",
+   "short": "Labs and sessions",
+   "locked": false,
+   "desc": "What I saw on slides and in hands on labs, in my own words. Not published as official guidance."
+  },
+  {
+   "key": "heard",
+   "label": "Heard at Ignite",
+   "short": "Heard",
+   "locked": false,
+   "desc": "Hallway talk and third party posts. Unconfirmed. Treat as leads, not facts."
+  },
+  {
+   "key": "take",
+   "label": "My take",
+   "short": "My take",
+   "locked": false,
+   "desc": "My own views and questions. Clearly mine, not Microsoft's."
+  }
+ ],
+ "sources": {
+  "BoN": {
+   "layer": "ms",
+   "note": "Microsoft Ignite 2026 Book of News"
+  },
+  "Learn": {
+   "layer": "ms",
+   "note": "Microsoft Learn or another Microsoft documentation page"
+  },
+  "MS": {
+   "layer": "ms",
+   "note": "Another Microsoft source, such as a Microsoft blog or video"
+  },
+  "Slide": {
+   "layer": "lab",
+   "note": "A Microsoft slide seen in a session or lab, paraphrased"
+  },
+  "Lab": {
+   "layer": "lab",
+   "note": "Hands on lab or a lab conversation"
+  },
+  "Hall": {
+   "layer": "heard",
+   "note": "Hallway conversation. Unconfirmed."
+  },
+  "3P": {
+   "layer": "heard",
+   "note": "Third party post or briefing. Not Microsoft. Unconfirmed."
+  },
+  "Me": {
+   "layer": "take",
+   "note": "My own view"
+  }
+ },
+ "stackLayers": [
+  {
+   "id": "identity",
+   "label": "Identity",
+   "blurb": "Who or what is asking for access"
+  },
+  {
+   "id": "devices",
+   "label": "Devices and apps",
+   "blurb": "Where work and agents run"
+  },
+  {
+   "id": "data",
+   "label": "Data",
+   "blurb": "What needs protecting"
+  },
+  {
+   "id": "network",
+   "label": "Network",
+   "blurb": "How traffic reaches resources"
+  },
+  {
+   "id": "soc",
+   "label": "Detect and respond",
+   "blurb": "Seeing and stopping attacks"
+  },
+  {
+   "id": "agents",
+   "label": "AI agents",
+   "blurb": "Governing the new workforce"
+  }
+ ],
+ "statusLabel": {
+  "ga": "GA",
+  "mixed": "GA and preview",
+  "preview": "Preview",
+  "none": "Not in Book of News"
+ },
+ "nodes": [
+  {
+   "id": "entra-ca",
+   "layer": "identity",
+   "icon": "key",
+   "name": "Entra and Conditional Access",
+   "tagline": "The policy engine that decides who gets in",
+   "status": "mixed",
+   "statusLabel": "Core GA, plans in preview",
+   "what": [
+    {
+     "t": "Conditional Access is the policy engine in Microsoft Entra. It takes signals such as user, group or agent, location, device, application and risk, then decides to allow, block, or ask for more, like multifactor authentication.",
+     "s": "Learn"
+    },
+    {
+     "t": "Policies are if then statements: if someone wants a resource, then they must do something first. They're enforced after first factor authentication.",
+     "s": "Learn"
+    }
+   ],
+   "links": [
+    {
+     "title": "What is Conditional Access?",
+     "url": "https://learn.microsoft.com/entra/identity/conditional-access/overview"
+    },
+    {
+     "title": "Conditional Access for agents",
+     "url": "https://learn.microsoft.com/entra/identity/conditional-access/agent-id"
+    }
+   ],
+   "model": {
+    "key": "plans",
+    "title": "Policy plans: before and after",
+    "caption": "Illustrative tenant. Not real data, and not how Microsoft migrates policies. It shows the idea of one plan with shared conditions and nested rules.",
+    "src": [
+     "MS",
+     "Learn"
+    ]
+   },
+   "features": [
+    {
+     "name": "Policy plans",
+     "status": "preview",
+     "items": [
+      {
+       "t": "Conditional Access policy plans are listed in preview. The sources I read give no licence or date.",
+       "s": "BoN"
+      },
+      {
+       "t": "One plan holds the shared conditions, with nested rules for each audience. Microsoft also announced metadata, a migration tool and templates (Microsoft Mechanics, Oct 29, 2026).",
+       "s": "MS"
+      },
+      {
+       "t": "In Microsoft Graph the plans API is beta (/identity/conditionalAccess/plans). The existing policies API is v1.0.",
+       "s": "Learn"
+      }
+     ]
+    },
+    {
+     "name": "Conditional Access for agents",
+     "status": "preview",
+     "items": [
+      {
+       "t": "Policies can target users, groups and agents (preview). Agent identities and agent users bring the same engine to AI workloads.",
+       "s": "Learn"
+      },
+      {
+       "t": "An agent can act for a signed in user, use its own agent identity, or use its own agent user account.",
+       "s": "Learn"
+      },
+      {
+       "t": "It needs Microsoft 365 E7, or an Agent 365 licence paired with at least Entra P1 or Microsoft 365 E3.",
+       "s": "Learn"
+      },
+      {
+       "t": "A lab slide showed assistive agents (acting as the user) and agent users as public preview.",
+       "s": "Slide"
+      }
+     ]
+    },
+    {
+     "name": "Privileged Identity Management",
+     "status": "preview",
+     "items": [
+      {
+       "t": "Privileged Identity Management is listed in preview under Entra ID Governance. The text I could read doesn't say which new capability.",
+       "s": "BoN"
+      },
+      {
+       "t": "I don't know what Conditional Access does when PIM elevates an agent for a set period.",
+       "s": "Me"
+      }
+     ]
+    },
+    {
+     "name": "Other Entra previews",
+     "status": "preview",
+     "items": [
+      {
+       "t": "Preview: high assurance credentials, Entra Backup and Recovery Premium (30 day backup retention), and cross tenant configuration management in Entra Tenant Governance.",
+       "s": "BoN"
+      },
+      {
+       "t": "GA: Microsoft MCP Server for Enterprise.",
+       "s": "BoN"
+      },
+      {
+       "t": "AI Readiness Initiatives arrive in preview in January. They cover patching and vulnerability management, modernising authentication, and agent discovery and governance.",
+       "s": "BoN"
+      }
+     ]
+    },
+    {
+     "name": "AI help with policies",
+     "status": "none",
+     "items": [
+      {
+       "t": "The Conditional Access Optimization Agent in Security Copilot suggests new policies and changes. It needs at least Entra ID P1 and security compute units.",
+       "s": "Learn"
+      },
+      {
+       "t": "Perception's Identity Risk Reduction Agent recommends Conditional Access changes for admins to review and approve.",
+       "s": "Learn"
+      }
+     ]
+    }
+   ],
+   "check": [
+    "Policy plans: no licence statement or GA date in the sources I read.",
+    "The Book of News lists PIM as preview without naming the new capability."
+   ]
+  },
+  {
+   "id": "agent-id",
+   "layer": "identity",
+   "icon": "badge",
+   "name": "Agent identity and risk",
+   "tagline": "Giving AI agents identities, owners and a risk level",
+   "status": "preview",
+   "statusLabel": "Preview",
+   "what": [
+    {
+     "t": "Microsoft Entra Agent ID extends Entra to AI agents. An agent identity is a special service principal created from a reusable blueprint, so you can apply consistent policy across many agents.",
+     "s": "Learn"
+    },
+    {
+     "t": "Agents don't use passwords or passkeys. Credentials sit on the blueprint, as federated credentials, certificates or client secrets. Each identity can have a sponsor: the human or group accountable for it.",
+     "s": "Learn"
+    }
+   ],
+   "links": [
+    {
+     "title": "What is Microsoft Entra Agent ID?",
+     "url": "https://learn.microsoft.com/entra/agent-id/what-is-microsoft-entra-agent-id"
+    },
+    {
+     "title": "Agent identities",
+     "url": "https://learn.microsoft.com/entra/agent-id/agent-identities"
+    },
+    {
+     "title": "Agent Registry convergence with Agent 365",
+     "url": "https://learn.microsoft.com/entra/agent-id/agent-registry-convergence"
+    }
+   ],
+   "model": {
+    "key": "risk",
+    "title": "How an agent risk level could come together",
+    "caption": "Conceptual only. Microsoft hasn't published the scoring logic. The Book of News names three inputs and a low, medium or high result. This toy shows how inputs might combine.",
+    "src": [
+     "BoN"
+    ]
+   },
+   "features": [
+    {
+     "name": "Agent identities",
+     "status": "preview",
+     "items": [
+      {
+       "t": "Agent ID for discovered local agents is in preview, starting with GitHub Copilot CLI and Claude Code.",
+       "s": "BoN"
+      },
+      {
+       "t": "Agent ID for Microsoft cloud agents is in preview and extends to Microsoft Autopilot agents.",
+       "s": "BoN"
+      },
+      {
+       "t": "Agent identities are single tenant. Blueprints can be multitenant.",
+       "s": "Learn"
+      },
+      {
+       "t": "It works with non Microsoft platforms such as AWS Bedrock and n8n, through an SDK sidecar or workload identity federation.",
+       "s": "Learn"
+      },
+      {
+       "t": "One third party source says agent identity lifecycle policies are GA, and the default disables identities inactive for 60 days.",
+       "s": "3P"
+      }
+     ]
+    },
+    {
+     "name": "Dynamic Agent Risk",
+     "status": "preview",
+     "items": [
+      {
+       "t": "Dynamic Agent Risk is in preview. It fuses runtime signals (identity, access, data, endpoints, cloud and network), posture and blast radius into one assessment.",
+       "s": "BoN"
+      },
+      {
+       "t": "Microsoft computes a unified low, medium or high level, visible across the admin center, Defender, Entra, Intune and Purview.",
+       "s": "BoN"
+      },
+      {
+       "t": "Signals from Check Point, Cyera, Darktrace and Zenity flow into Sentinel as evidence. The Book of News calls this a planned flow.",
+       "s": "BoN"
+      },
+      {
+       "t": "A lab slide called it public preview. The Book of News says preview.",
+       "s": "Slide"
+      },
+      {
+       "t": "Dynamic controls (limited preview, lab slides only): allow, constrain access, ask for human approval, restrict sensitive data, or block, driven by the risk score. I found no Learn page by that name.",
+       "s": "Slide"
+      }
+     ]
+    },
+    {
+     "name": "Open question: what 'blocked' means",
+     "status": "none",
+     "items": [
+      {
+       "t": "A gap I raised with Microsoft: 'blocked' means two things. In Agent 365 the agent is made unavailable. In Conditional Access it means a policy failed.",
+       "s": "Me"
+      }
+     ]
+    }
+   ],
+   "check": [
+    "Dynamic Agent Risk: preview in the Book of News, public preview on a lab slide.",
+    "Dynamic controls: no official page found, so availability is unclear.",
+    "Secretless authentication for agents was said to be announced. I couldn't find it in the Book of News text I could read, and Learn still lists federated credentials, certificates and client secrets."
+   ]
+  },
+  {
+   "id": "defender",
+   "layer": "devices",
+   "icon": "terminal",
+   "name": "Defender XDR and agent runtime protection",
+   "tagline": "Detection and response across endpoints, identities, email and apps",
+   "status": "mixed",
+   "statusLabel": "XDR GA, agent items vary",
+   "what": [
+    {
+     "t": "Microsoft Defender XDR is a unified pre and post breach defence suite. It coordinates detection, prevention, investigation and response across endpoints, identities, email and apps.",
+     "s": "Learn"
+    },
+    {
+     "t": "It correlates signals from the Microsoft security products you've licensed and provisioned, and it can apply automatic containment such as isolating endpoints.",
+     "s": "Learn"
+    }
+   ],
+   "links": [
+    {
+     "title": "What is Microsoft Defender XDR?",
+     "url": "https://learn.microsoft.com/defender-xdr/microsoft-365-defender"
+    },
+    {
+     "title": "AI agent runtime protection",
+     "url": "https://learn.microsoft.com/defender-endpoint/ai-agent-runtime-protection-overview"
+    },
+    {
+     "title": "Local AI agent discovery",
+     "url": "https://learn.microsoft.com/defender-endpoint/local-agent-discovery-overview"
+    }
+   ],
+   "model": {
+    "key": "runtime",
+    "title": "Audit or Block: what happens to a risky prompt",
+    "caption": "A simplified model of the two modes. Block stops the action. Audit allows it and raises an informational alert.",
+    "src": [
+     "Learn",
+     "BoN"
+    ]
+   },
+   "features": [
+    {
+     "name": "Runtime protection for local AI agents",
+     "status": "mixed",
+     "items": [
+      {
+       "t": "GA on Windows, in Audit or Block mode, configured from the Defender or Intune portal.",
+       "s": "BoN"
+      },
+      {
+       "t": "Agent native: Claude Code, GitHub Copilot CLI, GitHub Copilot app, Claude Desktop (Code), and the VS Code GitHub Copilot and Claude Code extensions.",
+       "s": "BoN"
+      },
+      {
+       "t": "Network based: Open Claw, Ollama Desktop, ChatGPT Classic and ChatGPT Desktop (Chat).",
+       "s": "BoN"
+      },
+      {
+       "t": "Defender inspects the agent loop two ways: agent native events, and network inspection. Block mode stops the prompt and raises a Suspicious AI prompt injection alert. Audit mode lets it through and raises an informational alert.",
+       "s": "Learn"
+      },
+      {
+       "t": "Prerequisites list Defender for Endpoint Plan 2, Microsoft 365 E5, Agent 365 or Microsoft 365 E7, with Defender Antivirus active and real time protection on.",
+       "s": "Learn"
+      },
+      {
+       "t": "In the lab it was off until onboarded. Windows came first, then Linux and macOS.",
+       "s": "Lab"
+      },
+      {
+       "t": "Agent profiles are per agent, user and device, so counts run higher than the number of agents.",
+       "s": "Lab"
+      }
+     ]
+    },
+    {
+     "name": "Discovery and threats to agents",
+     "status": "preview",
+     "items": [
+      {
+       "t": "Defender discovers local AI agents and their configured MCP servers on onboarded devices, after it observes agent activity. Discovery doesn't need runtime protection switched on.",
+       "s": "Learn"
+      },
+      {
+       "t": "For agents managed in Agent 365, Defender raises near real time alerts for jailbreak attempts, indirect prompt injection, credential leakage and similar (preview).",
+       "s": "Learn"
+      }
+     ]
+    },
+    {
+     "name": "Other Defender news",
+     "status": "preview",
+     "items": [
+      {
+       "t": "Vulnerability shielding is available in preview.",
+       "s": "BoN"
+      },
+      {
+       "t": "The threat intelligence experience for zero day and emerging threats is available in preview.",
+       "s": "BoN"
+      },
+      {
+       "t": "From September 1, 2026, automated investigation and response no longer runs as a separate experience for Defender for Endpoint alerts. Its capabilities are in the default antivirus stack.",
+       "s": "Learn"
+      }
+     ]
+    }
+   ],
+   "check": [
+    "Runtime protection: the Book of News says GA. The Learn pages I read still label it Preview. Docs may lag.",
+    "Licence: the Book of News says Defender for Endpoint P2 customers. Learn's prerequisites list P2, E5, Agent 365 or E7.",
+    "Local agent discovery: one third party post said GA, other sources say preview."
+   ]
+  },
+  {
+   "id": "windows-edge",
+   "layer": "devices",
+   "icon": "window",
+   "name": "Windows, Edge and Intune",
+   "tagline": "Containing and governing agents on the device and in the browser",
+   "status": "mixed",
+   "statusLabel": "GA and preview",
+   "what": [
+    {
+     "t": "Intune compliance policies are rules that evaluate managed devices. Conditional Access can use a device's compliance status to allow or block access to company resources.",
+     "s": "Learn"
+    },
+    {
+     "t": "Microsoft Edge for Business works with Conditional Access, Purview DLP and Defender SmartScreen, and its management service gives control over extensions, including an inventory with risk levels.",
+     "s": "Learn"
+    }
+   ],
+   "links": [
+    {
+     "title": "Conditional Access and Intune",
+     "url": "https://learn.microsoft.com/intune/device-security/conditional-access-integration/overview"
+    },
+    {
+     "title": "Intune compliance policies",
+     "url": "https://learn.microsoft.com/intune/device-security/compliance/overview"
+    },
+    {
+     "title": "Edge security for your business",
+     "url": "https://learn.microsoft.com/deployedge/ms-edge-security-for-business"
+    },
+    {
+     "title": "Edge extensions monitoring",
+     "url": "https://learn.microsoft.com/deployedge/microsoft-edge-extensions-monitoring"
+    }
+   ],
+   "model": {
+    "key": "observe",
+    "title": "Observe first, then enforce",
+    "caption": "A staged rollout idea. The Book of News lists a learning and permissive mode as GA among the Windows controls for isolating and governing AI agents. The stages below are an illustration, not Microsoft's wording.",
+    "src": [
+     "BoN"
+    ]
+   },
+   "features": [
+    {
+     "name": "Windows controls for AI agents",
+     "status": "mixed",
+     "items": [
+      {
+       "t": "Process container capabilities are in preview.",
+       "s": "BoN"
+      },
+      {
+       "t": "A learning and permissive mode is now GA.",
+       "s": "BoN"
+      },
+      {
+       "t": "The Book of News mentions Microsoft Execution Containers under Windows Server 2028 hybrid intelligence, which is early access.",
+       "s": "BoN"
+      },
+      {
+       "t": "A third party briefing called Execution Containers GA.",
+       "s": "3P"
+      }
+     ]
+    },
+    {
+     "name": "Windows security platform",
+     "status": "mixed",
+     "items": [
+      {
+       "t": "Windows Endpoint Security Platform is now GA.",
+       "s": "BoN"
+      },
+      {
+       "t": "Windows baseline protection is in private preview.",
+       "s": "BoN"
+      },
+      {
+       "t": "Context based redirections for Windows 365, using Entra authentication context, are now GA.",
+       "s": "BoN"
+      },
+      {
+       "t": "Windows Server 2028 for client like scenarios is in private preview, and its security features are in preview through the Windows Server Insider Program.",
+       "s": "BoN"
+      }
+     ]
+    },
+    {
+     "name": "Intune local AI agent governance",
+     "status": "preview",
+     "items": [
+      {
+       "t": "Local AI agent governance is in preview. It works with Agent 365, Intune compliance and Conditional Access.",
+       "s": "BoN"
+      }
+     ]
+    },
+    {
+     "name": "Edge for Business",
+     "status": "mixed",
+     "items": [
+      {
+       "t": "Extension safety is GA. Extension leak control, a native Sentinel connector and Global Secure Access in Edge for Business are in preview.",
+       "s": "BoN"
+      },
+      {
+       "t": "A managed agent browsing experience, with an Entra agent identity, is in preview.",
+       "s": "BoN"
+      },
+      {
+       "t": "Extensions monitoring shows inventory and risk levels. Third party risk scores are in public preview, and data is Windows only for now.",
+       "s": "Learn"
+      }
+     ]
+    }
+   ],
+   "check": [
+    "Execution Containers: GA per a third party briefing, early access in the Book of News."
+   ]
+  },
+  {
+   "id": "purview",
+   "layer": "data",
+   "icon": "doc-lock",
+   "name": "Purview data security for AI",
+   "tagline": "Keeping sensitive data out of the wrong prompts and places",
+   "status": "preview",
+   "statusLabel": "Preview",
+   "what": [
+    {
+     "t": "Microsoft Purview data loss prevention identifies, monitors and protects sensitive information across apps, devices and web traffic, using DLP policies.",
+     "s": "Learn"
+    },
+    {
+     "t": "It uses deep content analysis, not a simple text scan: keywords, regular expressions, proximity to related data, and machine learning.",
+     "s": "Learn"
+    }
+   ],
+   "links": [
+    {
+     "title": "Learn about data loss prevention",
+     "url": "https://learn.microsoft.com/purview/dlp-learn-about-dlp"
+    },
+    {
+     "title": "Endpoint DLP",
+     "url": "https://learn.microsoft.com/purview/endpoint-dlp-learn-about"
+    },
+    {
+     "title": "Purview service description (licensing)",
+     "url": "https://learn.microsoft.com/office365/servicedescriptions/microsoft-365-service-descriptions/microsoft-365-tenantlevel-services-licensing-guidance/microsoft-purview-service-description"
+    }
+   ],
+   "model": {
+    "key": "dlp",
+    "title": "Should Copilot be allowed to use this file?",
+    "caption": "A conceptual decision model. Real policies depend on your sensitive information types, labels and licence. Toggle the file's properties.",
+    "src": [
+     "Learn",
+     "BoN"
+    ]
+   },
+   "features": [
+    {
+     "name": "DLP for Copilot",
+     "status": "preview",
+     "items": [
+      {
+       "t": "The Book of News section intro lists automatic classification and labelling, Copilot DLP and endpoint agent protection as preview.",
+       "s": "BoN"
+      },
+      {
+       "t": "Copilot as a DLP location lets you identify and restrict sensitive content in Copilot grounding and interactions, based on sensitive information types and sensitivity labels.",
+       "s": "Learn"
+      },
+      {
+       "t": "Restricting Copilot from processing files and emails is included in Microsoft 365 E5 and the Purview suites, not in E3. DLP for prompts is available to all Copilot users.",
+       "s": "Learn"
+      }
+     ]
+    },
+    {
+     "name": "Endpoint DLP",
+     "status": "none",
+     "items": [
+      {
+       "t": "Endpoint DLP extends monitoring and protection to Windows 10 and 11 and macOS. Files are scanned when created or modified.",
+       "s": "Learn"
+      }
+     ]
+    },
+    {
+     "name": "Network data security",
+     "status": "none",
+     "items": [
+      {
+       "t": "Inline protection for data shared with cloud apps across the network. Learn describes these as pay as you go capabilities and lists them against the E5 family. Check the table for your licence.",
+       "s": "Learn"
+      }
+     ]
+    },
+    {
+     "name": "Dates to know",
+     "status": "none",
+     "items": [
+      {
+       "t": "The data risk graph in Insider Risk Management retires on November 24, 2026.",
+       "s": "Learn"
+      },
+      {
+       "t": "Partner Center, November 12, 2026: Microsoft Purview Data Governance is retiring. End of support is November 12, 2027, and OneLake catalog is the recommended path.",
+       "s": "Learn"
+      }
+     ]
+    }
+   ],
+   "check": [
+    "The Book of News groups the Purview items under one preview label, so per feature status isn't stated."
+   ]
+  },
+  {
+   "id": "gsa",
+   "layer": "network",
+   "icon": "globe",
+   "name": "Global Secure Access",
+   "tagline": "Identity aware network access, including for agents and MCP",
+   "status": "mixed",
+   "statusLabel": "GA and preview",
+   "what": [
+    {
+     "t": "Microsoft Entra Internet Access and Entra Private Access make up Microsoft's Security Service Edge solution. Global Secure Access is the name for both, in one place in the Entra admin center.",
+     "s": "Learn"
+    },
+    {
+     "t": "Internet Access is an identity based secure web gateway. Private Access gives per app access to private resources without a VPN. The service runs on Microsoft's network across 70 regions and 190 plus edge locations.",
+     "s": "Learn"
+    }
+   ],
+   "links": [
+    {
+     "title": "What is Global Secure Access?",
+     "url": "https://learn.microsoft.com/entra/global-secure-access/overview-what-is-global-secure-access"
+    }
+   ],
+   "model": {
+    "key": "mcp",
+    "title": "An agent calls a tool through the network",
+    "caption": "Conceptual. The Book of News lists an MCP Firewall in preview. This animation shows the idea of inspecting agent to tool traffic. It isn't a product walkthrough.",
+    "src": [
+     "BoN"
+    ]
+   },
+   "features": [
+    {
+     "name": "New for agents",
+     "status": "mixed",
+     "items": [
+      {
+       "t": "Agentic traffic acquisition is GA.",
+       "s": "BoN"
+      },
+      {
+       "t": "In preview: local agents, MCP Firewall, unsanctioned agents (coordinated through Agent 365), and adaptive access.",
+       "s": "BoN"
+      },
+      {
+       "t": "Global Secure Access in Edge for Business is in preview.",
+       "s": "BoN"
+      },
+      {
+       "t": "A third party post described MCP Firewall as covering servers, tools, resources, prompts and transports.",
+       "s": "3P"
+      }
+     ]
+    },
+    {
+     "name": "Licensing",
+     "status": "none",
+     "items": [
+      {
+       "t": "Internet Access and Private Access are included in the Entra Suite and sold standalone. Internet Access for Microsoft services is included in Entra ID P1 or P2.",
+       "s": "Learn"
+      },
+      {
+       "t": "Network data security with Purview needs a separate licence check. See the Purview page.",
+       "s": "Learn"
+      }
+     ]
+    }
+   ],
+   "check": [
+    "The Book of News gives no licence for the new agent features."
+   ]
+  },
+  {
+   "id": "sentinel",
+   "layer": "soc",
+   "icon": "layers",
+   "name": "Microsoft Sentinel",
+   "tagline": "The SIEM and security data platform",
+   "status": "none",
+   "statusLabel": "Not in Book of News",
+   "what": [
+    {
+     "t": "Microsoft Sentinel is a cloud native SIEM and a security platform for agentic defence. It has a data lake, a graph, and a hosted MCP server.",
+     "s": "Learn"
+    },
+    {
+     "t": "The data lake is fully managed, uses open format data and keeps a single copy. It has an analytics tier for hunting, alerting and incidents, and a lake tier for low cost retention of up to 12 years.",
+     "s": "Learn"
+    }
+   ],
+   "links": [
+    {
+     "title": "What is Microsoft Sentinel?",
+     "url": "https://learn.microsoft.com/azure/sentinel/sentinel-overview"
+    },
+    {
+     "title": "What is Sentinel data lake?",
+     "url": "https://learn.microsoft.com/azure/sentinel/datalake/sentinel-lake-overview"
+    },
+    {
+     "title": "What's new in Sentinel",
+     "url": "https://learn.microsoft.com/azure/sentinel/whats-new"
+    }
+   ],
+   "model": {
+    "key": "tiers",
+    "title": "Where should a table live?",
+    "caption": "Learn's description of the two tiers, as a simple chooser. Costs aren't shown here.",
+    "src": [
+     "Learn"
+    ]
+   },
+   "features": [
+    {
+     "name": "Data lake and tiers",
+     "status": "none",
+     "items": [
+      {
+       "t": "The data lake pulls logs from Microsoft 365, Defender, Azure, Entra, Purview, Intune and more than 350 connectors, including AWS and GCP.",
+       "s": "Learn"
+      },
+      {
+       "t": "Data in the analytics tier is mirrored to the lake tier, so there's a single copy. You can promote data from the lake to the analytics tier with jobs.",
+       "s": "Learn"
+      }
+     ]
+    },
+    {
+     "name": "Graph and MCP server",
+     "status": "preview",
+     "items": [
+      {
+       "t": "Sentinel graph and the hosted MCP server were preview in Learn's September 2025 what's new page. Check the current status.",
+       "s": "Learn"
+      }
+     ]
+    },
+    {
+     "name": "Moving to the Defender portal",
+     "status": "none",
+     "items": [
+      {
+       "t": "Sentinel is generally available in the Defender portal, with or without Defender XDR or an E5 licence.",
+       "s": "Learn"
+      },
+      {
+       "t": "Learn's July 2025 what's new said Sentinel in the Azure portal would retire in July 2026. A third party briefing now says March 31, 2027.",
+       "s": "3P"
+      }
+     ]
+    }
+   ],
+   "check": [
+    "I couldn't find Sentinel data lake in the Book of News text I could read.",
+    "Azure portal retirement date: July 2026 on an older Learn page, March 31, 2027 per a third party briefing."
+   ]
+  },
+  {
+   "id": "isoc",
+   "layer": "soc",
+   "icon": "monitor",
+   "name": "ISOC: Integrated Security Operations Center",
+   "tagline": "SIEM and XDR together in the Defender portal",
+   "status": "mixed",
+   "statusLabel": "Core GA, breadth in preview",
+   "what": [
+    {
+     "t": "Integrated Security Operations Center (ISOC) in Microsoft Defender brings XDR and SIEM capabilities, threat intelligence, automation and AI together in the Defender portal.",
+     "s": "Learn"
+    },
+    {
+     "t": "It's a feature benefit for eligible customers, not a standalone product. Native Defender data doesn't need ingesting into an ISOC workspace. Other Microsoft and non Microsoft data comes in through connectors.",
+     "s": "Learn"
+    }
+   ],
+   "links": [
+    {
+     "title": "ISOC in Microsoft Defender",
+     "url": "https://learn.microsoft.com/defender-xdr/isoc-overview"
+    },
+    {
+     "title": "Data ingestion, retention and billing",
+     "url": "https://learn.microsoft.com/defender-xdr/integrated-security-operations-data-billing-retention"
+    },
+    {
+     "title": "Partner Center: November 2026 announcements",
+     "url": "https://learn.microsoft.com/partner-center/announcements/2026-november"
+    }
+   ],
+   "model": {
+    "key": "isoc",
+    "title": "Eligibility, retention and cost",
+    "caption": "Eligibility and retention come from Microsoft Learn. The cost calculator uses prices from a session slide, so it only shows if you switch on the labs and sessions layer.",
+    "src": [
+     "Learn",
+     "Slide"
+    ]
+   },
+   "features": [
+    {
+     "name": "Who can use it",
+     "status": "none",
+     "items": [
+      {
+       "t": "Available to eligible customers with Microsoft Defender Suite, Microsoft 365 E5 or Microsoft 365 E7.",
+       "s": "Learn"
+      },
+      {
+       "t": "Customers without Sentinel can start in the Defender portal. Existing Sentinel customers can choose to transition and aren't moved automatically.",
+       "s": "Learn"
+      }
+     ]
+    },
+    {
+     "name": "Status and retention",
+     "status": "mixed",
+     "items": [
+      {
+       "t": "Core capabilities are GA. Full SIEM breadth and 90 days of included Defender data retention are in preview.",
+       "s": "BoN"
+      },
+      {
+       "t": "Partner Center, November 18, 2026: Microsoft expanded the public preview with the full SIEM breadth (content hub, SOC optimization, CI/CD repositories), 90 days of retention up from 30, and an opt in path for Sentinel customers.",
+       "s": "Learn"
+      },
+      {
+       "t": "The ISOC overview page still says 30 days of included retention during this phase of the preview.",
+       "s": "Learn"
+      }
+     ]
+    },
+    {
+     "name": "What's in it",
+     "status": "none",
+     "items": [
+      {
+       "t": "Case management, workbooks, natural language playbook generation and SOC optimization start without an ISOC workspace.",
+       "s": "Learn"
+      },
+      {
+       "t": "UEBA, threat intelligence and Azure or third party data need an ISOC workspace. More than 500 data connectors are available, and extra ingestion charges might apply.",
+       "s": "Learn"
+      },
+      {
+       "t": "Entra sign in tables are on the included list. SecurityEvent isn't.",
+       "s": "Learn"
+      }
+     ]
+    },
+    {
+     "name": "Cost",
+     "status": "none",
+     "items": [
+      {
+       "t": "A session slide showed non Microsoft data in the analytics tier at $2.40 per GB (Sentinel $4.30), data lake ingestion at $0.15 per GB and lake storage at $0.026 per GB per month. US list prices. They aren't on Learn.",
+       "s": "Slide"
+      },
+      {
+       "t": "I was told non Microsoft data is a flat rate with no tiering.",
+       "s": "Hall"
+      },
+      {
+       "t": "Open question I'm chasing: how do large customers on commitment tiers compare with the flat rate for non Microsoft data?",
+       "s": "Me"
+      }
+     ]
+    },
+    {
+     "name": "Migration",
+     "status": "none",
+     "items": [
+      {
+       "t": "Learn says to stop duplicate ingestion only after updating dependent detections, workbooks and automation.",
+       "s": "Learn"
+      },
+      {
+       "t": "I was told a one click move from analytics rules to custom detections is coming but wasn't ready.",
+       "s": "Hall"
+      }
+     ]
+    }
+   ],
+   "check": [
+    "Retention: 30 days on the overview page, 90 days in the Book of News and Partner Center.",
+    "Status: the Book of News says core GA, Partner Center says public preview. Check your tenant.",
+    "Is SecurityEvent from the Azure Monitor Agent free or charged?",
+    "When does one click rule migration ship?"
+   ]
+  },
+  {
+   "id": "perception",
+   "layer": "soc",
+   "icon": "radar",
+   "name": "Perception: agentic defence",
+   "tagline": "Red, blue and green team agents working through playbooks",
+   "status": "mixed",
+   "statusLabel": "GA, some preview",
+   "what": [
+    {
+     "t": "Perception is a multi agent security system. Red team agents expose vulnerabilities, blue team agents detect, triage and investigate threats, and green team agents remediate and harden posture.",
+     "s": "Learn"
+    },
+    {
+     "t": "Playbooks are reusable templates that coordinate agents. Agents ask for approval when needed, so people stay in control. Perception agents are Microsoft published and need an agent identity and a role assignment.",
+     "s": "Learn"
+    }
+   ],
+   "links": [
+    {
+     "title": "What is Perception?",
+     "url": "https://learn.microsoft.com/security/agentic-security/agentic-security-overview"
+    },
+    {
+     "title": "Key concepts in Perception",
+     "url": "https://learn.microsoft.com/security/agentic-security/agentic-security-concepts"
+    },
+    {
+     "title": "Get started with Perception",
+     "url": "https://learn.microsoft.com/security/agentic-security/agentic-security-get-started"
+    }
+   ],
+   "model": {
+    "key": "perception",
+    "title": "What 80% of alerts looks like, and how MDASH works",
+    "caption": "The 80% figure is Microsoft's number for a typical Defender queue, not a guarantee. The dots are illustrative. The pipeline stages follow the Book of News.",
+    "src": [
+     "BoN"
+    ]
+   },
+   "features": [
+    {
+     "name": "The agents",
+     "status": "none",
+     "items": [
+      {
+       "t": "Recon (red). Triage, Threat Intelligence, Attack Investigation and Detection Authoring (blue). Posture Prioritization and Identity Risk Reduction (green).",
+       "s": "Learn"
+      },
+      {
+       "t": "Agents are designed to collaborate. Threat intelligence extracted by one agent feeds detections created by another.",
+       "s": "Learn"
+      }
+     ]
+    },
+    {
+     "name": "Playbooks and chat",
+     "status": "none",
+     "items": [
+      {
+       "t": "All playbooks run manually. Some also run from automation rules, on a trigger or a schedule.",
+       "s": "Learn"
+      },
+      {
+       "t": "Chat starts a session in natural language. Perception picks the playbook and fills in the inputs.",
+       "s": "Learn"
+      },
+      {
+       "t": "Sections in the Defender portal: New Chat, Sessions, Agents, Playbooks and Insights.",
+       "s": "Learn"
+      }
+     ]
+    },
+    {
+     "name": "New at Ignite",
+     "status": "mixed",
+     "items": [
+      {
+       "t": "Microsoft Perception, previously Project Perception, is now generally available.",
+       "s": "BoN"
+      },
+      {
+       "t": "Microsoft says the Triage Agent covers about 80% of alerts in a typical Defender queue.",
+       "s": "BoN"
+      },
+      {
+       "t": "In preview: Web App Pen Test Agent, Reduce exposure risk playbook, Protect against a threat playbook. Private preview: Secure AI agents and playbooks.",
+       "s": "BoN"
+      },
+      {
+       "t": "Codename MDASH is in preview for eligible organisations. More than 100 agents work in four stages: map the attack surface, scan code, validate through agent debate, and remove duplicates.",
+       "s": "BoN"
+      },
+      {
+       "t": "MDASH supports MAI Cyber 1.1 Flash now. MAI-Cyber-2 follows once evaluation is complete.",
+       "s": "BoN"
+      }
+     ]
+    },
+    {
+     "name": "Access and tenancy",
+     "status": "none",
+     "items": [
+      {
+       "t": "You need the Defender portal and unified RBAC enabled across all Defender workloads. Agent identities need access to every scope they work in.",
+       "s": "Learn"
+      },
+      {
+       "t": "In the lab I was told sessions are shared through RBAC, so anyone with access sees every session. Multi tenant isn't there yet.",
+       "s": "Lab"
+      }
+     ]
+    },
+    {
+     "name": "Billing",
+     "status": "none",
+     "items": [
+      {
+       "t": "In a lab, billing was described as outcome driven and pay as you go, with a cost calculator promised.",
+       "s": "Lab"
+      },
+      {
+       "t": "I heard it doesn't draw on the Security Copilot SCUs that E5 and E7 customers get. Not confirmed.",
+       "s": "Hall"
+      }
+     ]
+    }
+   ],
+   "check": [
+    "Status: the Book of News says GA. The Learn Get started page I read still says Limited Public Preview, invitation only.",
+    "An earlier Learn page I read said custom playbooks aren't supported. The application card describes playbooks as extensible. Check the current docs.",
+    "Do Perception sessions use SCUs? Only a hallway claim so far."
+   ]
+  },
+  {
+   "id": "copilot",
+   "layer": "soc",
+   "icon": "spark",
+   "name": "Security Copilot",
+   "tagline": "Generative AI assistant and agents for security and IT teams",
+   "status": "none",
+   "statusLabel": "Not in Book of News",
+   "what": [
+    {
+     "t": "Microsoft Security Copilot is a generative AI security product that helps security and IT professionals respond to threats, process signals and assess risk at the speed of AI.",
+     "s": "Learn"
+    },
+    {
+     "t": "It's used through a standalone portal, experiences embedded in Defender, Entra, Intune and Purview, and agents built by Microsoft and partners.",
+     "s": "Learn"
+    }
+   ],
+   "links": [
+    {
+     "title": "Security Copilot for E5 and E7 included customers",
+     "url": "https://learn.microsoft.com/copilot/security/security-copilot-inclusion"
+    },
+    {
+     "title": "Security Compute Units and capacity",
+     "url": "https://learn.microsoft.com/copilot/security/security-compute-units-capacity"
+    }
+   ],
+   "model": {
+    "key": "scu",
+    "title": "How many SCUs come with my licences?",
+    "caption": "Learn's inclusion formula: 400 SCUs a month per 1,000 paid user licences, up to 10,000 a month, for Microsoft 365 E5 and E7. Allocations reset monthly and don't roll over.",
+    "src": [
+     "Learn"
+    ]
+   },
+   "features": [
+    {
+     "name": "Licensing and capacity",
+     "status": "none",
+     "items": [
+      {
+       "t": "E5 and E7 customers get 400 SCUs a month for every 1,000 paid user licences, up to 10,000 a month, at no extra cost. It scales down for fewer than 1,000 licences.",
+       "s": "Learn"
+      },
+      {
+       "t": "The default capacity is shared across all users and experiences in the tenant. It resets monthly and doesn't roll over.",
+       "s": "Learn"
+      },
+      {
+       "t": "Beyond the included amount, usage will be throttled at a future date. Customers can then scale at $6 per SCU pay as you go, with 30 days notice.",
+       "s": "Learn"
+      }
+     ]
+    },
+    {
+     "name": "What's covered",
+     "status": "none",
+     "items": [
+      {
+       "t": "Chat, promptbooks and agent scenarios across Entra, Intune, Purview and Defender. Developer tools and partner built agents SCU costs are included until further notice.",
+       "s": "Learn"
+      },
+      {
+       "t": "Not covered: Sentinel data lake compute and storage, and Logic Apps charges.",
+       "s": "Learn"
+      }
+     ]
+    },
+    {
+     "name": "Rollout",
+     "status": "none",
+     "items": [
+      {
+       "t": "Rollout started November 18, 2025 for existing Security Copilot E5 customers, and continues for all eligible E5 and E7 customers.",
+       "s": "Learn"
+      },
+      {
+       "t": "At Ignite 2025 Microsoft announced 12 new agents across Defender, Entra, Intune and Purview.",
+       "s": "Learn"
+      }
+     ]
+    }
+   ],
+   "check": [
+    "I couldn't find Security Copilot in the Book of News text I could read. The page was partly cut off in my tools."
+   ]
+  },
+  {
+   "id": "agent-365",
+   "layer": "agents",
+   "icon": "sliders",
+   "name": "Agent 365: manage, govern and secure agents",
+   "tagline": "One registry and control plane for every agent",
+   "status": "mixed",
+   "statusLabel": "GA and preview",
+   "what": [
+    {
+     "t": "Microsoft Agent 365 is an observability platform and control plane for AI agents, built on four pillars: management, governance, security and business value.",
+     "s": "Learn"
+    },
+    {
+     "t": "The agent registry in the Microsoft 365 admin center lists agents from Microsoft, partners and your own teams, with owner, usage and risk. Agent Map shows them on a visual map. Entra Agent ID stays the identity foundation.",
+     "s": "Learn"
+    }
+   ],
+   "links": [
+    {
+     "title": "Overview of Microsoft Agent 365",
+     "url": "https://learn.microsoft.com/microsoft-agent-365/overview"
+    },
+    {
+     "title": "Agent registry",
+     "url": "https://learn.microsoft.com/microsoft-agent-365/admin/agent-registry-overview"
+    },
+    {
+     "title": "Registry convergence with Entra Agent ID",
+     "url": "https://learn.microsoft.com/entra/agent-id/agent-registry-convergence"
+    }
+   ],
+   "model": {
+    "key": "a365",
+    "title": "Which licence do I need?",
+    "caption": "Built from the Book of News licence statements. Choose whose agent it is and what you want to do.",
+    "src": [
+     "BoN"
+    ]
+   },
+   "features": [
+    {
+     "name": "Registry and governance",
+     "status": "none",
+     "items": [
+      {
+       "t": "Admins can approve agents before they publish, assign owners to ownerless agents, control which tools agents connect to, and apply standard policies. Purview keeps a record of agent activity.",
+       "s": "Learn"
+      },
+      {
+       "t": "Defender integrates with Agent 365 for discovery, posture, real time protection and investigation of agents.",
+       "s": "Learn"
+      }
+     ]
+    },
+    {
+     "name": "New at Ignite",
+     "status": "mixed",
+     "items": [
+      {
+       "t": "Plugins and skills governance is GA.",
+       "s": "BoN"
+      },
+      {
+       "t": "In preview: MCP server and tool governance (with Azure AI Gateway and LiteLLM support), local and shadow agent governance, and business use case classification in Agent Map.",
+       "s": "BoN"
+      },
+      {
+       "t": "The action center is expected to enter private preview in December. It will first surface inactive and ownerless agents for review and cleanup.",
+       "s": "BoN"
+      },
+      {
+       "t": "A slide showed per operation policies (access, create, edit, delete, share) with allow, assign, scope or block.",
+       "s": "Slide"
+      }
+     ]
+    },
+    {
+     "name": "Cost and analytics",
+     "status": "mixed",
+     "items": [
+      {
+       "t": "Cost management in preview: spend visibility, spending policies, limits, alerts and Fabric chargeback.",
+       "s": "BoN"
+      },
+      {
+       "t": "Spend forecasting, plain language questions and optimisation recommendations are available in the Frontier program this month. Value insights and delegation to business leaders expand in December.",
+       "s": "BoN"
+      },
+      {
+       "t": "Business Analytics is in the Frontier program. Insights for Microsoft services need at least one Microsoft 365 Copilot licence. Insights for non Microsoft services need an Agent 365 licence.",
+       "s": "BoN"
+      },
+      {
+       "t": "In the lab: scheduled reports weren't in yet (point in time export only), only consumption costs showed (no monthly licences such as Copilot Premium), categories weren't customisable. APIs and an MCP server were available.",
+       "s": "Lab"
+      }
+     ]
+    },
+    {
+     "name": "Licensing",
+     "status": "none",
+     "items": [
+      {
+       "t": "Management insights for Microsoft agents are GA with no Agent 365 licence. Viva Insights keeps a requirement of at least 50 assigned Copilot licences.",
+       "s": "BoN"
+      },
+      {
+       "t": "Enterprise grade management, security and governance needs an Agent 365 or Microsoft 365 E7 licence. Full insights for third party agents, including Purview, also need an Agent 365 licence.",
+       "s": "BoN"
+      }
+     ]
+    }
+   ],
+   "check": [
+    "Which licence covers Agent 365 tool governance? The Book of News doesn't say item by item.",
+    "Local agent discovery: GA per a third party post, preview per the Book of News."
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "a": "gsa",
+   "b": "entra-ca",
+   "label": "Network signals feed Conditional Access",
+   "s": "Learn"
+  },
+  {
+   "a": "entra-ca",
+   "b": "isoc",
+   "label": "Entra sign in tables are included",
+   "s": "Learn"
+  },
+  {
+   "a": "defender",
+   "b": "isoc",
+   "label": "Native Defender data, no ingestion needed",
+   "s": "Learn"
+  },
+  {
+   "a": "sentinel",
+   "b": "isoc",
+   "label": "Existing customers can opt in to move",
+   "s": "Learn"
+  },
+  {
+   "a": "purview",
+   "b": "sentinel",
+   "label": "Purview logs flow into the data lake",
+   "s": "Learn"
+  },
+  {
+   "a": "gsa",
+   "b": "purview",
+   "label": "Network data security uses Purview DLP",
+   "s": "Learn"
+  },
+  {
+   "a": "isoc",
+   "b": "perception",
+   "label": "Agents and analysts share signals and workflows",
+   "s": "Learn"
+  },
+  {
+   "a": "perception",
+   "b": "entra-ca",
+   "label": "Identity Risk Reduction Agent proposes policy changes",
+   "s": "Learn"
+  },
+  {
+   "a": "perception",
+   "b": "agent-id",
+   "label": "Every Perception agent needs an agent identity",
+   "s": "Learn"
+  },
+  {
+   "a": "sentinel",
+   "b": "copilot",
+   "label": "Copilot agents can run on lake data",
+   "s": "Learn"
+  },
+  {
+   "a": "agent-id",
+   "b": "entra-ca",
+   "label": "Conditional Access for agents",
+   "s": "Learn"
+  },
+  {
+   "a": "agent-id",
+   "b": "agent-365",
+   "label": "Entra is the identity foundation for Agent 365",
+   "s": "Learn"
+  },
+  {
+   "a": "agent-365",
+   "b": "defender",
+   "label": "Defender secures agents managed in Agent 365",
+   "s": "Learn"
+  },
+  {
+   "a": "windows-edge",
+   "b": "sentinel",
+   "label": "Edge for Business Sentinel connector (preview)",
+   "s": "BoN"
+  },
+  {
+   "a": "windows-edge",
+   "b": "entra-ca",
+   "label": "Intune compliance feeds Conditional Access",
+   "s": "Learn"
+  }
+ ],
+ "timeline": [
+  {
+   "d": "2026-09-01",
+   "t": "Defender for Endpoint AIR stops running as a separate experience",
+   "s": "Learn",
+   "node": "defender"
+  },
+  {
+   "d": "2026-11-18",
+   "t": "ISOC public preview expanded at Ignite",
+   "s": "Learn",
+   "node": "isoc"
+  },
+  {
+   "d": "2026-11-24",
+   "t": "Purview data risk graph retires",
+   "s": "Learn",
+   "node": "purview"
+  },
+  {
+   "d": "2026-11-28",
+   "t": "Agent 365 forecasting in the Frontier program ('this month')",
+   "s": "BoN",
+   "node": "agent-365"
+  },
+  {
+   "d": "2026-12-15",
+   "t": "Agent 365 action center private preview expected",
+   "s": "BoN",
+   "node": "agent-365"
+  },
+  {
+   "d": "2026-12-28",
+   "t": "Agent 365 value insights expand ('December')",
+   "s": "BoN",
+   "node": "agent-365"
+  },
+  {
+   "d": "2027-01-15",
+   "t": "AI Readiness Initiatives in preview ('January')",
+   "s": "BoN",
+   "node": "entra-ca"
+  },
+  {
+   "d": "2027-03-31",
+   "t": "Sentinel Azure portal retirement (third party briefing)",
+   "s": "3P",
+   "node": "sentinel"
+  },
+  {
+   "d": "2027-11-12",
+   "t": "Purview Data Governance end of support",
+   "s": "Learn",
+   "node": "purview"
+  }
+ ]
+}
+</script>
+<script>
+(function(){
+"use strict";
+var D = JSON.parse(document.getElementById("page-data").textContent);
+var NS = "http://www.w3.org/2000/svg";
+
+/* helpers: textContent only, no data injected as HTML */
+function h(tag, attrs){
+  var el = document.createElement(tag);
+  for (var k in (attrs||{})){
+    var v = attrs[k];
+    if (v == null || v === false) continue;
+    if (k === "class") el.className = v;
+    else if (k.slice(0,2) === "on") el.addEventListener(k.slice(2), v);
+    else el.setAttribute(k, v);
+  }
+  for (var i=2;i<arguments.length;i++) add(el, arguments[i]);
+  return el;
+}
+function add(el, c){
+  if (c == null || c === false) return;
+  if (Array.isArray(c)) { c.forEach(function(x){add(el,x);}); return; }
+  el.appendChild(typeof c === "object" ? c : document.createTextNode(String(c)));
+}
+function sv(tag, attrs){
+  var el = document.createElementNS(NS, tag);
+  for (var k in (attrs||{})) el.setAttribute(k, attrs[k]);
+  for (var i=2;i<arguments.length;i++) if (arguments[i]) el.appendChild(arguments[i]);
+  return el;
+}
+function clear(el){ while(el.firstChild) el.removeChild(el.firstChild); }
+function $(id){ return document.getElementById(id); }
+
+/* icons: fixed strings only */
+var ICONS = {
+  key:'<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3M14 9l2 2"/>',
+  badge:'<rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="12" cy="10" r="2.6"/><path d="M7.5 17c.8-2.2 2.6-3 4.5-3s3.7.8 4.5 3"/>',
+  terminal:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3M12 16h5"/>',
+  window:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M12 9v11"/>',
+  "doc-lock":'<path d="M6 3h8l4 4v14H6z"/><rect x="9" y="12" width="6" height="5" rx="1"/><path d="M10 12v-1.5a2 2 0 014 0V12"/>',
+  globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',
+  layers:'<path d="M12 3l9 4.5-9 4.5-9-4.5z"/><path d="M3 12l9 4.5 9-4.5M3 16.5l9 4.5 9-4.5"/>',
+  monitor:'<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4M7 11l3-3 3 3 3-4"/>',
+  radar:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12l6-6"/>',
+  spark:'<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M18 16l.8 2.2L21 19l-2.2.8L18 22l-.8-2.2L15 19l2.2-.8z"/>',
+  sliders:'<path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/>',
+  shield:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/>'
+};
+function icon(name, cls){
+  var s = sv("svg", {viewBox:"0 0 24 24", fill:"none", "stroke-width":"1.7", "stroke-linecap":"round", "stroke-linejoin":"round", "aria-hidden":"true"});
+  if (cls) s.setAttribute("class", cls);
+  s.innerHTML = ICONS[name] || ICONS.shield; // fixed strings from ICONS only
+  return s;
+}
+
+var SHORT = {"entra-ca":"Entra and CA","agent-id":"Agent ID","defender":"Defender","windows-edge":"Windows, Edge","purview":"Purview","gsa":"Global Secure","sentinel":"Sentinel","isoc":"ISOC","perception":"Perception","copilot":"Copilot","agent-365":"Agent 365"};
+var NODE = {}; D.nodes.forEach(function(n){ NODE[n.id] = n; });
+var LAYERC = {}; D.layersContent.forEach(function(l){ LAYERC[l.key] = l; });
+var STATE = {lab:true, heard:true, take:true};
+var reduce = false;
+try { reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch(e){}
+
+function layerOf(tag){ var s = D.sources[tag]; return s ? s.layer : "ms"; }
+function visible(item){ var L = layerOf(item.s); return L === "ms" || STATE[L]; }
+
+function chip(item){
+  var L = layerOf(item.s);
+  return h("span", {class:"chip l-"+L, title:D.sources[item.s] ? D.sources[item.s].note : ""}, LAYERC[L].short + " · " + item.s);
+}
+function itemList(items, base){
+  var vis = items.filter(visible);
+  if (!vis.length) return null;
+  var ul = h("ul", {class:"items"});
+  vis.forEach(function(it, i){
+    var li = h("li", {style:"animation-delay:"+(i*40)+"ms"}, chip(it), h("span", null, it.t));
+    ul.appendChild(li);
+  });
+  return ul;
+}
+
+/* header */
+document.title = D.meta.name + ": Microsoft security, end to end";
+$("brandName").textContent = D.meta.name;
+$("tagline").textContent = D.meta.tagline;
+$("disc").textContent = D.meta.disclaimer;
+$("asof").appendChild(h("span", null, "As of " + D.meta.asOf));
+$("asof").appendChild(h("span", null, "Review by " + D.meta.reviewBy));
+$("asof").appendChild(h("span", null, D.meta.author));
+$("foot").appendChild(h("p", null, D.meta.disclaimer));
+$("foot").appendChild(h("p", null, "Every statement is tagged with where it came from. Microsoft means the Book of News and Microsoft Learn. The other layers are my notes and can be wrong."));
+
+/* toggles */
+function countLayer(key){
+  var n = 0;
+  D.nodes.forEach(function(nd){
+    nd.what.forEach(function(i){ if (layerOf(i.s) === key) n++; });
+    nd.features.forEach(function(f){ f.items.forEach(function(i){ if (layerOf(i.s) === key) n++; }); });
+  });
+  return n;
+}
+function renderToggles(){
+  var box = $("toggles"); clear(box);
+  box.appendChild(h("span", {class:"lbl"}, "Layers"));
+  D.layersContent.forEach(function(l){
+    var on = l.locked ? true : STATE[l.key];
+    var b = h("button", {class:"tg l-"+l.key, "aria-pressed":String(on), title:l.desc, disabled:l.locked ? "disabled" : null,
+      onclick:function(){ if (l.locked) return; STATE[l.key] = !STATE[l.key]; renderToggles(); route(true); }},
+      h("i"), l.label + " ", h("small", null, "(" + countLayer(l.key) + ")"));
+    box.appendChild(b);
+  });
+}
+
+/* ---------- isometric map ---------- */
+var ISO = {W:960, H:660, cx:480, bandH:94, gap:6, topY:16, wTop:380, wBase:940};
+var EXPLODE = false, MAP = null, STORY = 0;
+function geom(){
+  ISO.gap = EXPLODE ? 38 : 6;
+  ISO.total = 6*ISO.bandH + 5*ISO.gap;
+  ISO.H = ISO.total + ISO.topY*2;
+}
+function bandTop(i){ return ISO.topY + (5-i)*(ISO.bandH + ISO.gap); }   /* i=0 is the base */
+function halfW(y){ return (ISO.wTop + (y-ISO.topY)/ISO.total*(ISO.wBase-ISO.wTop))/2; }
+function nodeLayout(){
+  var pos = {};
+  D.stackLayers.forEach(function(L, i){
+    var list = D.nodes.filter(function(n){ return n.layer === L.id; });
+    var n = list.length, step = n === 1 ? 0 : (n === 2 ? 200 : (n === 3 ? 160 : 118));
+    list.forEach(function(nd, k){
+      pos[nd.id] = {x: ISO.cx + (k - (n-1)/2) * step, y: bandTop(i) + 36 + 27, i:i};
+    });
+  });
+  return pos;
+}
+function setInfo(nd, extra){
+  var box = $("mapinfo"); if (!box) return; clear(box);
+  if (!nd){ box.appendChild(h("span", {class:"st"}, "Hover, focus or tap a tile")); box.appendChild(document.createTextNode("Or press Follow an agent request to watch a request travel up the stack.")); return; }
+  box.appendChild(h("span", {class:"st"}, nd.statusLabel));
+  box.appendChild(h("b", null, nd.name));
+  box.appendChild(document.createTextNode(": " + (extra || nd.tagline)));
+}
+function renderMap(){
+  STORY++; geom();
+  var host = $("isohost"); clear(host);
+  var s = sv("svg", {id:"iso", viewBox:"0 0 "+ISO.W+" "+ISO.H, role:"group", "aria-label":"Layered map of the Microsoft security stack. Choose a tile to open its page."});
+  var pos = nodeLayout();
+  D.stackLayers.forEach(function(L, i){
+    var y0 = bandTop(i), y1 = y0 + ISO.bandH, w0 = halfW(y0), w1 = halfW(y1), cx = ISO.cx;
+    var pts = [[cx-w0,y0],[cx+w0,y0],[cx+w1,y1],[cx-w1,y1]].map(function(q){return q.join(",");}).join(" ");
+    var g = sv("g", {class:"pl"+i+" drop", style:"animation-delay:"+(i*120)+"ms"},
+      sv("polygon", {points:pts, class:"plate"}));
+    var t1 = sv("text", {x:cx, y:y0+19, class:"platelabel", "text-anchor":"middle"}); t1.textContent = L.label;
+    var t2 = sv("text", {x:cx, y:y0+32, class:"platesub", "text-anchor":"middle"}); t2.textContent = L.blurb;
+    g.appendChild(t1); g.appendChild(t2);
+    s.appendChild(g);
+  });
+  var eg = sv("g", {class:"edges"});
+  var edgeEls = [];
+  D.edges.forEach(function(e){
+    var a = pos[e.a], b = pos[e.b]; if (!a || !b) return;
+    var mx = (a.x+b.x)/2, my = (a.y+b.y)/2 - (a.i === b.i ? 38 : 0);
+    var p = sv("path", {d:"M"+a.x+","+a.y+" Q"+mx+","+my+" "+b.x+","+b.y, class:"edge"});
+    var t = sv("title"); t.textContent = e.label + " (" + e.s + ")"; p.appendChild(t);
+    p._e = e; eg.appendChild(p); edgeEls.push(p);
+  });
+  s.appendChild(eg);
+  var tiles = [], byId = {};
+  D.nodes.forEach(function(nd){
+    var p = pos[nd.id]; if (!p) return;
+    var g = sv("g", {class:"tile pl"+p.i+" fadein", style:"animation-delay:"+(p.i*120+300)+"ms", tabindex:"0", role:"link", "aria-label":nd.name+". "+nd.statusLabel, transform:"translate("+(p.x-50)+","+(p.y-27)+")"});
+    var lift = sv("g", {class:"lift"});
+    lift.appendChild(sv("rect", {width:"100", height:"54", rx:"12", class:"top"}));
+    var ic = icon(nd.icon); ic.setAttribute("x","41"); ic.setAttribute("y","6"); ic.setAttribute("width","18"); ic.setAttribute("height","18");
+    ic.setAttribute("stroke","currentColor"); ic.style.color = "var(--accent)";
+    lift.appendChild(ic);
+    var tx = sv("text", {x:50, y:43}); tx.textContent = SHORT[nd.id] || nd.name; lift.appendChild(tx);
+    g.appendChild(lift);
+    function hot(on){
+      tiles.forEach(function(o){ o.el.classList.toggle("dim", on && o.id !== nd.id && !connected(nd.id, o.id)); });
+      edgeEls.forEach(function(el){
+        var rel = el._e.a === nd.id || el._e.b === nd.id;
+        el.classList.toggle("hot", on && rel); el.classList.toggle("off", on && !rel);
+      });
+      if (!STORYPLAY) setInfo(on ? nd : null);
+    }
+    g.addEventListener("mouseenter", function(){ hot(true); });
+    g.addEventListener("mouseleave", function(){ hot(false); });
+    g.addEventListener("focus", function(){ hot(true); });
+    g.addEventListener("blur", function(){ hot(false); });
+    g.addEventListener("click", function(){ go("node/"+nd.id); });
+    g.addEventListener("keydown", function(ev){ if (ev.key === "Enter" || ev.key === " "){ ev.preventDefault(); go("node/"+nd.id); } });
+    var o = {id:nd.id, el:g}; tiles.push(o); byId[nd.id] = o;
+    s.appendChild(g);
+  });
+  host.appendChild(s);
+  MAP = {svg:s, pos:pos, byId:byId, tiles:tiles};
+  if (!reduce){
+    edgeEls.forEach(function(p, k){
+      var c = sv("circle", {r:"3.2", class:"dot"});
+      var am = sv("animateMotion", {dur:(3.2+(k%4)*0.6)+"s", repeatCount:"indefinite", begin:"-"+(k*0.7).toFixed(1)+"s"});
+      am.setAttribute("path", p.getAttribute("d"));
+      c.appendChild(am); s.insertBefore(c, s.querySelector(".tile"));
+    });
+  }
+  setInfo(null);
+}
+var STORYPLAY = false;
+var STEPS = [
+  ["agent-id", "An agent gets an identity and a named sponsor. Agent identities are special service principals made from a blueprint."],
+  ["entra-ca", "It asks for access. Conditional Access takes the signals and decides: allow, block, or ask for more."],
+  ["gsa", "Its traffic to a tool or MCP server crosses the network layer, where agent traffic can be acquired and inspected."],
+  ["purview", "Data policies decide what the agent's tools and Copilot may touch."],
+  ["defender", "Runtime protection inspects the agent's prompts, in Audit or Block mode."],
+  ["isoc", "Alerts and signals land in the Defender portal, where SIEM and XDR sit together."],
+  ["perception", "Triage agents work the alert. People approve, reject or stop the agent's work."],
+  ["agent-365", "Agent 365 shows the owner, the registry entry and the risk level for the agent."]
+];
+function playStory(btn){
+  if (!MAP) return;
+  var my = ++STORY; STORYPLAY = true;
+  MAP.tiles.forEach(function(o){ o.el.classList.remove("on","dim","pulse"); });
+  var old = MAP.svg.querySelector(".pktg"); if (old) old.remove();
+  var pk = sv("circle", {r:"9", class:"pktg"}); MAP.svg.appendChild(pk);
+  var first = MAP.pos[STEPS[0][0]]; pk.setAttribute("cx", first.x); pk.setAttribute("cy", first.y);
+  var i = 0, cur = {x:first.x, y:first.y};
+  function arrive(){
+    if (my !== STORY) return;
+    var id = STEPS[i][0], nd = NODE[id], o = MAP.byId[id];
+    MAP.tiles.forEach(function(q){ q.el.classList.remove("on"); });
+    o.el.classList.add("on"); o.el.classList.remove("pulse"); void o.el.getBoundingClientRect(); o.el.classList.add("pulse");
+    setInfo(nd, "Step " + (i+1) + " of " + STEPS.length + ". " + STEPS[i][1]);
+    i++;
+    if (i >= STEPS.length){ setTimeout(function(){ if (my === STORY){ STORYPLAY = false; pk.remove(); if (btn) btn.disabled = false; } }, 2600); return; }
+    setTimeout(function(){ hop(MAP.pos[STEPS[i][0]]); }, 2200);
+  }
+  function hop(to){
+    if (my !== STORY) return;
+    if (reduce){ pk.setAttribute("cx", to.x); pk.setAttribute("cy", to.y); cur = {x:to.x,y:to.y}; arrive(); return; }
+    var from = {x:cur.x, y:cur.y}, t0 = null, ms = 1100;
+    function f(ts){
+      if (my !== STORY) return;
+      if (!t0) t0 = ts; var k = Math.min(1,(ts-t0)/ms), e = k<.5 ? 2*k*k : 1-Math.pow(-2*k+2,2)/2;
+      var x = from.x + (to.x-from.x)*e, y = from.y + (to.y-from.y)*e - Math.sin(Math.PI*e)*28;
+      pk.setAttribute("cx", x); pk.setAttribute("cy", y);
+      if (k<1) requestAnimationFrame(f); else { cur = {x:to.x,y:to.y}; arrive(); }
+    }
+    requestAnimationFrame(f);
+  }
+  if (btn) btn.disabled = true;
+  arrive();
+}
+function connected(a, b){
+  return D.edges.some(function(e){ return (e.a===a&&e.b===b)||(e.a===b&&e.b===a); });
+}
+function bonCount(nd){
+  return nd.what.concat(nd.features.reduce(function(a,f){ return a.concat(f.items); }, [])).filter(function(i){ return i.s === "BoN"; }).length;
+}
+function openSheet(nd){
+  var bg = h("div", {class:"sheetbg", onclick:function(e){ if (e.target === bg) close(); }});
+  function close(){ bg.classList.remove("show"); setTimeout(function(){ bg.remove(); document.removeEventListener("keydown", esc); }, 280); }
+  function esc(e){ if (e.key === "Escape") close(); }
+  var news = nd.features.reduce(function(a,f){ return a.concat(f.items); }, []).filter(function(i){ return i.s === "BoN"; }).slice(0,2);
+  if (!news.length) news = nd.what.slice(0,1);
+  var sh = h("div", {class:"sheet", role:"dialog", "aria-label":nd.name},
+    h("div", {class:"grab"}),
+    h("span", {class:"stbadge s-"+nd.status}, nd.statusLabel),
+    h("h3", null, nd.name), h("div", {class:"sub"}, nd.tagline),
+    h("ul", {class:"items"}, news.map(function(it){ return h("li", null, chip(it), h("span", null, it.t)); })),
+    h("div", {class:"row"}, h("button", {class:"btn on", onclick:function(){ close(); setTimeout(function(){ go("node/"+nd.id); }, 120); }}, "Open the full page"), h("button", {class:"btn", onclick:close}, "Close")));
+  bg.appendChild(sh); document.body.appendChild(bg);
+  document.addEventListener("keydown", esc);
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ bg.classList.add("show"); }); });
+}
+function counter(el, to){
+  if (reduce){ el.textContent = to; return; }
+  var t0 = null;
+  function f(ts){ if (!t0) t0 = ts; var k = Math.min(1,(ts-t0)/1100); el.textContent = Math.round(to*(1-Math.pow(1-k,3))); if (k<1) requestAnimationFrame(f); }
+  requestAnimationFrame(f);
+}
+function renderStrip(){
+  var total = D.nodes.reduce(function(n, nd){ return n + bonCount(nd); }, 0);
+  var vals = [[D.nodes.length, "products on the map"],[total, "Book of News items"],[D.layersContent.length, "source layers"]];
+  var s = h("div", {class:"strip"});
+  vals.forEach(function(v, i){ var b = h("b", null, "0"); s.appendChild(h("div", {class:"stat", style:"animation-delay:"+(i*120)+"ms"}, b, h("span", null, v[1]))); counter(b, v[0]); });
+  return s;
+}
+function renderPhoneList(){
+  var host = $("phonehost"); clear(host);
+  var info = h("div", {class:"info", id:"pinfo", "aria-live":"polite"}, h("span", {class:"st"}, "Tap a card for a quick look"), "Or follow a request up through the pyramid.");
+  var btn = h("button", {class:"btn on", style:"margin-bottom:12px", onclick:function(){ phoneStory(btn, info); }}, "Follow an agent request");
+  host.appendChild(btn);
+  var pyr = h("div", {class:"pyr"});
+  var order = D.stackLayers.slice().reverse(), n = 0;
+  order.forEach(function(L, k){
+    var idx = D.stackLayers.indexOf(L);
+    var tier = h("div", {class:"ptier pl"+idx, style:"width:"+(78+k*4.4)+"%;animation-delay:"+((5-idx)*130)+"ms;--sd:"+(idx*0.35)+"s"},
+      h("div", {class:"ptl"}, L.label), h("div", {class:"pts"}, L.blurb));
+    var row = h("div", {class:"pchips"});
+    D.nodes.filter(function(nd){ return nd.layer === L.id; }).forEach(function(nd){
+      var c = h("button", {class:"pchip", "data-id":nd.id, style:"--cd:"+(0.5+(5-idx)*0.13+0.07*(n++ % 4))+"s", onclick:function(){ openSheet(nd); }},
+        icon(nd.icon), h("span", {class:"pn"}, SHORT[nd.id] || nd.name), h("span", {class:"pc"}, (bonCount(nd) ? bonCount(nd) + " Ignite items" : "Learn only")), h("span", {class:"pd s-"+nd.status, title:nd.statusLabel}));
+      row.appendChild(c);
+    });
+    tier.appendChild(row); pyr.appendChild(tier);
+  });
+  host.appendChild(pyr);
+  host.appendChild(info);
+  host.appendChild(h("p", {class:"mapnote", style:"display:block;padding:6px 2px"}, "Dots show status: green GA, blue GA and preview, purple preview, grey not in the Book of News. The walk through is a story, not an architecture diagram."));
+}
+var PSTORY = 0;
+function phoneStory(btn, info){
+  var my = ++PSTORY, i = 0; btn.disabled = true;
+  var chips = document.querySelectorAll(".pchip");
+  function step(){
+    if (my !== PSTORY) return;
+    chips.forEach(function(c){ c.classList.remove("on"); });
+    if (i >= STEPS.length){ btn.disabled = false; return; }
+    var id = STEPS[i][0], nd = NODE[id];
+    var c = document.querySelector('.pchip[data-id="'+id+'"]'); if (c){ c.classList.add("on"); try { c.scrollIntoView({block:"center", behavior: reduce ? "auto" : "smooth"}); } catch(e){} }
+    clear(info);
+    info.appendChild(h("span", {class:"st"}, "Step " + (i+1) + " of " + STEPS.length));
+    info.appendChild(h("b", null, nd.name)); info.appendChild(document.createTextNode(": " + STEPS[i][1]));
+    i++; setTimeout(step, 3200);
+  }
+  step();
+}
+/* ---------- views ---------- */
+function home(){
+  var app = $("app"); clear(app);
+  app.appendChild(h("h2", null, "The stack"));
+  app.appendChild(h("p", {class:"sub"}, "Identity is the base, AI agents sit at the top. Choose a tile to see what it is, what Ignite 2026 announced and how it connects. Lines show links documented by Microsoft."));
+  app.appendChild(renderStrip());
+  var playBtn = h("button", {class:"btn", onclick:function(){ playStory(playBtn); }}, "Follow an agent request");
+  var exBtn = h("button", {class:"btn", "aria-pressed":"false", onclick:function(){ EXPLODE = !EXPLODE; exBtn.classList.toggle("on", EXPLODE); exBtn.setAttribute("aria-pressed", String(EXPLODE)); STORYPLAY = false; playBtn.disabled = false; renderMap(); }}, "Explode the stack");
+  app.appendChild(h("div", {class:"ctl mapctl"}, playBtn, exBtn));
+  var mb = h("div", {class:"card mapbox"}, h("div", {id:"isohost"}), h("div", {class:"info", id:"mapinfo", "aria-live":"polite"}));
+  app.appendChild(mb);
+  app.appendChild(h("p", {class:"mapnote"}, "Tip: hover or focus a tile to light up what it connects to. The walk through is a story, not an architecture diagram."));
+  app.appendChild(h("div", {class:"phonelist", id:"phonehost"}));
+  renderMap(); renderPhoneList();
+
+  app.appendChild(h("h2", null, "Dates to watch"));
+  app.appendChild(h("p", {class:"sub"}, "Dates come from Microsoft documents unless tagged otherwise. Phrases like 'this month' are converted to a rough date and shown that way."));
+  var ul = h("ul", {class:"tl"});
+  D.timeline.forEach(function(t){
+    var L = layerOf(t.s);
+    ul.appendChild(h("li", {class:"l-"+L, onclick:function(){ go("node/"+t.node); }},
+      h("time", {datetime:t.d}, t.d), t.t + " ", h("span", {class:"chip l-"+L}, t.s)));
+  });
+  app.appendChild(ul);
+}
+
+function nodePage(id){
+  var nd = NODE[id]; if (!nd) return home();
+  var app = $("app"); clear(app);
+  app.appendChild(h("div", {class:"crumb"}, h("button", {onclick:function(){ go(""); }}, "Back to the stack")));
+  app.appendChild(h("div", {class:"card hero"},
+    h("div", {class:"ic"}, icon(nd.icon)),
+    h("div", null, h("h1", null, nd.name), h("div", {class:"tag"}, nd.tagline),
+      h("span", {class:"stbadge s-"+nd.status}, nd.statusLabel))));
+
+  var what = h("div", {class:"card sec"}, h("h2", null, "What it is"), itemList(nd.what));
+  var links = h("div", {class:"links"});
+  nd.links.forEach(function(l){ links.appendChild(h("a", {href:l.url, target:"_blank", rel:"noopener"}, l.title)); });
+  what.appendChild(links);
+  app.appendChild(what);
+
+  var mfn = MODELS[nd.model.key];
+  if (mfn){
+    var m = h("div", {class:"card model"},
+      h("h2", null, h("span", {class:"badge-ill"}, "Illustrative"), nd.model.title),
+      h("p", {class:"cap"}, nd.model.caption));
+    var inner = h("div"); m.appendChild(inner);
+    mfn(inner, nd);
+    app.appendChild(m);
+  }
+
+  var fs = h("div", {class:"card sec"}, h("h2", null, "What Ignite 2026 announced, and the detail"));
+  var any = false;
+  nd.features.forEach(function(f, idx){
+    var body = itemList(f.items);
+    if (!body) return;
+    any = true;
+    var d = h("details", {class:"feat", open: idx === 0 ? "open" : null},
+      h("summary", null, f.name, h("span", {class:"stbadge s-"+f.status}, D.statusLabel[f.status])),
+      h("div", {class:"body"}, body));
+    fs.appendChild(d);
+  });
+  if (!any) fs.appendChild(h("p", {class:"empty"}, "Nothing shown with the current layers."));
+  app.appendChild(fs);
+
+  var takeCount = nd.features.concat([{items:nd.what}]).reduce(function(n,f){ return n + f.items.filter(function(i){ return layerOf(i.s)==="take"; }).length; }, 0);
+  if (STATE.take && !takeCount){
+    app.appendChild(h("div", {class:"card sec"}, h("h2", null, "My take"), h("p", {class:"empty"}, "Nothing here yet.")));
+  }
+
+  if (nd.check && nd.check.length){
+    var ck = h("div", {class:"card sec check"}, h("h2", null, "Check before you rely on this"));
+    var ul = h("ul"); nd.check.forEach(function(c){ ul.appendChild(h("li", null, c)); });
+    ck.appendChild(ul); app.appendChild(ck);
+  }
+
+  var rel = D.edges.filter(function(e){ return e.a === id || e.b === id; });
+  if (rel.length){
+    var cs = h("div", {class:"card sec"}, h("h2", null, "How it connects"), h("div", {class:"conn"}));
+    rel.forEach(function(e){
+      var other = NODE[e.a === id ? e.b : e.a];
+      cs.lastChild.appendChild(h("button", {onclick:function(){ go("node/"+other.id); }},
+        h("span", {class:"arrow"}, e.a === id ? "to" : "from"), h("b", null, other.name), h("span", {class:"empty"}, e.label), h("span", {class:"chip l-"+layerOf(e.s)}, e.s)));
+    });
+    app.appendChild(cs);
+  }
+  window.scrollTo(0, 0);
+}
+
+/* ---------- models ---------- */
+var MODELS = {};
+function pill(label, on, fn){ return h("button", {class:"pill"+(on?" on":""), "aria-pressed":String(!!on), onclick:fn}, label); }
+
+MODELS.plans = function(box){
+  var after = false;
+  var pols = ["Admins: MFA","Admins: compliant device","Admins: block legacy auth","Staff: MFA","Staff: compliant device","Staff: block legacy auth","Staff: block high risk sign in","Guests: MFA","Guests: block legacy auth","Guests: limit to web apps","Contractors: MFA","Contractors: compliant device"];
+  var plans = [
+    {n:"Admins plan", shared:"Shared: all admin roles, all apps", rules:["MFA","Compliant device","Block legacy auth"]},
+    {n:"Staff plan", shared:"Shared: all employees, all apps", rules:["MFA","Compliant device","Block legacy auth","Block high risk sign in"]},
+    {n:"External plan", shared:"Shared: guests and contractors", rules:["MFA (both)","Block legacy auth","Limit guests to web apps","Compliant device (contractors)"]}
+  ];
+  var out = h("div"), stat = h("div", {class:"big"});
+  var btn = h("button", {class:"btn", onclick:function(){ after = !after; draw(); }}, "Show plans");
+  box.appendChild(h("div", {class:"row"}, btn, stat));
+  box.appendChild(out);
+  function draw(){
+    clear(out);
+    btn.textContent = after ? "Show separate policies" : "Show plans";
+    btn.classList.toggle("on", after);
+    if (!after){
+      stat.textContent = "12 policies";
+      var w = h("div"); pols.forEach(function(p, i){ w.appendChild(h("span", {class:"pol", style:"animation-delay:"+(i*30)+"ms"}, p)); });
+      out.appendChild(w);
+    } else {
+      stat.textContent = "3 plans, 11 rules";
+      var g = h("div", {class:"grid2"});
+      plans.forEach(function(pl, i){
+        g.appendChild(h("div", {class:"planbox", style:"animation-delay:"+(i*120)+"ms"}, h("b", null, pl.n), h("div", {class:"shared"}, pl.shared),
+          pl.rules.map(function(r){ return h("span", {class:"pol"}, r); })));
+      });
+      out.appendChild(g);
+    }
+  }
+  draw();
+};
+
+MODELS.risk = function(box){
+  var v = {rt:0, po:0, bl:0};
+  var names = {rt:"Runtime signals", po:"Posture", bl:"Blast radius"};
+  var desc = [["Quiet","Some","Active threats"],["Hardened","Gaps","Weak"],["Small","Medium","Wide reach"]];
+  var res = h("div", {class:"msg"});
+  var keys = ["rt","po","bl"];
+  keys.forEach(function(k, ki){
+    var row = h("div", {class:"row"}, h("b", {style:"width:130px"}, names[k]));
+    [0,1,2].forEach(function(n){
+      var p = h("button", {class:"pill"+(v[k]===n?" on":""), onclick:function(){ v[k]=n; refresh(); }}, desc[ki][n]);
+      p.dataset.k = k; p.dataset.n = n; row.appendChild(p);
+    });
+    box.appendChild(row);
+  });
+  box.appendChild(res);
+  function refresh(){
+    box.querySelectorAll(".pill").forEach(function(p){ p.classList.toggle("on", v[p.dataset.k] === +p.dataset.n); });
+    var score = v.rt*2 + v.po + v.bl;           // toy weighting, not Microsoft's
+    var lvl = score >= 5 ? "high" : (score >= 3 ? "med" : "low");
+    var txt = {low:"Low", med:"Medium", high:"High"}[lvl];
+    clear(res);
+    res.appendChild(document.createTextNode("Toy result: "));
+    res.appendChild(h("span", {class:"lvl "+lvl}, txt));
+    res.appendChild(document.createTextNode("  Score "+score+" of 8 in this model. Runtime counts double here only to show that inputs can carry different weight. Microsoft hasn't said how it weighs them."));
+  }
+  refresh();
+};
+
+MODELS.runtime = function(box){
+  var mode = "Block", busy = false;
+  var stage = h("div", {class:"stage"});
+  ["Agent","Inspect","Tool or shell"].forEach(function(t, i){
+    stage.appendChild(h("div", {class:"node", style:"left:"+(8+i*37)+"%"}, h("div", {class:"bx"}, i === 1 ? icon("shield") : (i===0 ? icon("terminal") : icon("window"))), t));
+  });
+  stage.querySelectorAll("svg").forEach(function(s){ s.style.width="24px"; s.style.height="24px"; s.setAttribute("stroke","currentColor"); s.style.color="var(--accent)"; });
+  var pkt = h("div", {class:"pkt bad", style:"display:none"});
+  stage.appendChild(pkt);
+  var msg = h("div", {class:"msg"}, "Pick a mode, then send a prompt that looks like prompt injection.");
+  var send = h("button", {class:"btn", onclick:run}, "Send risky prompt");
+  var row = h("div", {class:"row"}, h("span", null, "Mode:"),
+    pill("Audit", false, function(){ mode="Audit"; sync(); }), pill("Block", true, function(){ mode="Block"; sync(); }), send);
+  function sync(){ row.querySelectorAll(".pill").forEach(function(p){ p.classList.toggle("on", p.textContent === mode); }); }
+  box.appendChild(row); box.appendChild(stage); box.appendChild(msg);
+  function move(from, to, ms, cb){
+    if (reduce){ pkt.style.left = to+"%"; setTimeout(cb, 50); return; }
+    var t0 = null;
+    function f(t){ if (!t0) t0 = t; var k = Math.min(1,(t-t0)/ms); pkt.style.left = (from+(to-from)*k)+"%"; if (k<1) requestAnimationFrame(f); else cb(); }
+    requestAnimationFrame(f);
+  }
+  function run(){
+    if (busy) return; busy = true; send.disabled = true;
+    pkt.style.display = "block"; pkt.className = "pkt bad"; pkt.style.left = "6%";
+    msg.textContent = "The agent loop produces a prompt carrying an injected instruction.";
+    move(6, 44, 900, function(){
+      if (mode === "Block"){
+        msg.textContent = "Block: the action is stopped and a Suspicious AI prompt injection alert is raised. The tool never receives it.";
+        pkt.style.opacity = ".4"; done();
+      } else {
+        msg.textContent = "Audit: the prompt is allowed through and an informational alert is raised. Good for learning what would be blocked.";
+        pkt.className = "pkt ok"; move(44, 80, 800, done);
+      }
+    });
+    function done(){ setTimeout(function(){ busy=false; send.disabled=false; pkt.style.opacity="1"; }, 400); }
+  }
+};
+
+MODELS.observe = function(box){
+  var stages = [
+    {n:"Learn", d:"Observe what agents and apps do. Nothing is stopped. Build a baseline."},
+    {n:"Permissive", d:"Review what would have been blocked. Add allow entries for real work."},
+    {n:"Enforce", d:"Anything outside the baseline is blocked. Keep a break glass route."}
+  ];
+  var i = 0;
+  var steps = h("div", {class:"steps"}), msg = h("div", {class:"msg"}), mt = h("div", {class:"meter"}, h("div"));
+  var acts = [["Reads project files","ok"],["Writes to temp folder","ok"],["Runs unknown script","?"],["Opens a new network socket","?"]];
+  var list = h("ul", {class:"items"});
+  box.appendChild(h("div", {class:"row"}, pill("Back", false, function(){ i = Math.max(0, i-1); draw(); }), pill("Next", false, function(){ i = Math.min(2, i+1); draw(); })));
+  box.appendChild(steps); box.appendChild(mt); box.appendChild(msg); box.appendChild(h("h3", {style:"margin:12px 0 0;font-size:14px"}, "Four example actions in this stage")); box.appendChild(list);
+  function draw(){
+    clear(steps); stages.forEach(function(s, k){ steps.appendChild(h("div", {class:"step"+(k===i?" on":"")}, h("b", null, s.n))); });
+    mt.firstChild.style.width = ((i+1)/3*100)+"%";
+    msg.textContent = stages[i].d;
+    clear(list);
+    acts.forEach(function(a){
+      var out = a[1]==="ok" ? "Allowed" : (i===0 ? "Allowed and logged" : (i===1 ? "Allowed and flagged for review" : "Blocked"));
+      list.appendChild(h("li", null, h("span", {class:"chip l-ms"}, out), h("span", null, a[0])));
+    });
+  }
+  draw();
+};
+
+MODELS.dlp = function(box){
+  var s = {label:true, sit:true, lic:"E5"};
+  var res = h("div", {class:"msg"});
+  box.appendChild(h("div", {class:"row"}, h("b", null, "File"),
+    pill("Labelled Confidential", true, function(e){ s.label=!s.label; e.currentTarget.classList.toggle("on", s.label); draw(); }),
+    pill("Contains card numbers", true, function(e){ s.sit=!s.sit; e.currentTarget.classList.toggle("on", s.sit); draw(); })));
+  var lr = h("div", {class:"row"}, h("b", null, "Licence"));
+  ["E3","E5"].forEach(function(l){ lr.appendChild(pill("Microsoft 365 "+l, l===s.lic, function(){ s.lic=l; lr.querySelectorAll(".pill").forEach(function(p){ p.classList.toggle("on", p.textContent.indexOf(s.lic)>0); }); draw(); })); });
+  box.appendChild(lr); box.appendChild(res);
+  function draw(){
+    var hit = s.label || s.sit;
+    var txt;
+    if (!hit) txt = "No rule matches, so Copilot can use the file.";
+    else if (s.lic === "E3") txt = "A rule would match, but restricting Copilot from processing files and emails isn't included in E3. Copilot can still use it. DLP for prompts is available to all Copilot users.";
+    else txt = "A rule matches. With a DLP policy scoped to Copilot, Copilot is restricted from processing this file.";
+    res.textContent = txt;
+  }
+  draw();
+};
+
+MODELS.mcp = function(box){
+  var policy = "block", busy = false;
+  var stage = h("div", {class:"stage"});
+  ["Agent","Firewall in the network path","MCP server"].forEach(function(t,i){
+    stage.appendChild(h("div", {class:"node", style:"left:"+(6+i*38)+"%;width:96px"}, h("div", {class:"bx"}, icon(i===1?"globe":(i===0?"badge":"layers"))), t));
+  });
+  stage.querySelectorAll("svg").forEach(function(s){ s.style.width="24px"; s.style.height="24px"; s.setAttribute("stroke","currentColor"); s.style.color="var(--accent)"; });
+  var pkt = h("div", {class:"pkt", style:"display:none"}); stage.appendChild(pkt);
+  var msg = h("div", {class:"msg"}, "Pick a tool and a rule, then call it.");
+  var tool = "search_docs";
+  var tr = h("div", {class:"row"}, h("span", null, "Tool call:"),
+    pill("search_docs", true, function(){ tool="search_docs"; sync(); }), pill("delete_records", false, function(){ tool="delete_records"; sync(); }));
+  var pr = h("div", {class:"row"}, h("span", null, "Rule for delete_records:"),
+    pill("Block", true, function(){ policy="block"; sync(); }), pill("Allow", false, function(){ policy="allow"; sync(); }));
+  var go2 = h("button", {class:"btn", onclick:run}, "Call tool");
+  function sync(){
+    tr.querySelectorAll(".pill").forEach(function(p){ p.classList.toggle("on", p.textContent===tool); });
+    pr.querySelectorAll(".pill").forEach(function(p){ p.classList.toggle("on", p.textContent.toLowerCase()===policy); });
+  }
+  box.appendChild(tr); box.appendChild(pr); box.appendChild(h("div", {class:"row"}, go2)); box.appendChild(stage); box.appendChild(msg);
+  function move(a,b,ms,cb){
+    if (reduce){ pkt.style.left=b+"%"; setTimeout(cb,50); return; }
+    var t0=null; function f(t){ if(!t0)t0=t; var k=Math.min(1,(t-t0)/ms); pkt.style.left=(a+(b-a)*k)+"%"; if(k<1)requestAnimationFrame(f); else cb(); } requestAnimationFrame(f);
+  }
+  function run(){
+    if (busy) return; busy=true; go2.disabled=true; pkt.style.display="block"; pkt.className="pkt"; pkt.style.opacity="1"; pkt.style.left="8%";
+    msg.textContent = "Agent sends a call for " + tool + ".";
+    move(8, 48, 800, function(){
+      var deny = tool==="delete_records" && policy==="block";
+      if (deny){ pkt.className="pkt bad"; pkt.style.opacity=".4"; msg.textContent = "Blocked at the firewall. The MCP server never sees it."; fin(); }
+      else { pkt.className="pkt ok"; msg.textContent = "Allowed. The call continues to the MCP server."; move(48, 84, 800, fin); }
+    });
+    function fin(){ setTimeout(function(){ busy=false; go2.disabled=false; }, 400); }
+  }
+};
+
+MODELS.tiers = function(box){
+  var q = {freq:"often", keep:"short"};
+  var res = h("div", {class:"msg"});
+  var r1 = h("div", {class:"row"}, h("b", null, "Queried"), pill("Often", true, function(){ q.freq="often"; sync(); }), pill("Rarely", false, function(){ q.freq="rarely"; sync(); }));
+  var r2 = h("div", {class:"row"}, h("b", null, "Keep for"), pill("Short term", true, function(){ q.keep="short"; sync(); }), pill("Years", false, function(){ q.keep="long"; sync(); }));
+  box.appendChild(r1); box.appendChild(r2); box.appendChild(res);
+  function sync(){
+    r1.querySelectorAll(".pill").forEach(function(p){ p.classList.toggle("on", p.textContent.toLowerCase()===q.freq); });
+    r2.querySelectorAll(".pill").forEach(function(p){ p.classList.toggle("on", (p.textContent==="Years") === (q.keep==="long")); });
+    var t;
+    if (q.freq==="often") t = "Analytics tier. It's built for hunting, alerting and incidents. The data is mirrored to the lake, so you still have one copy for longer retention.";
+    else if (q.keep==="long") t = "Lake tier. Low cost retention of up to 12 years in open format. Promote data back to the analytics tier with a job when you need to hunt.";
+    else t = "Lake tier is likely enough for data you rarely query. Promote it to analytics when an investigation needs it.";
+    res.textContent = t;
+  }
+  sync();
+};
+
+MODELS.isoc = function(box){
+  var chips = [["Defender Suite",true],["Microsoft 365 E5",true],["Microsoft 365 E7",true],["Microsoft 365 E3",false],["Business Premium",false]];
+  var pick = null;
+  var res = h("div", {class:"msg"}, "Pick your licence to see eligibility.");
+  var row = h("div", {class:"row"}, h("b", null, "My licence"));
+  chips.forEach(function(c){ row.appendChild(pill(c[0], false, function(){ pick=c; row.querySelectorAll(".pill").forEach(function(p){ p.classList.toggle("on", p.textContent===c[0]); }); res.textContent = c[1] ? "Eligible per Learn: Defender Suite, Microsoft 365 E5 or E7 customers." : "Not listed as eligible on the Learn pages I read. Check the current eligibility list."; }));});
+  box.appendChild(row); box.appendChild(res);
+  box.appendChild(h("h3", {style:"margin:16px 0 4px;font-size:15px"}, "Included retention: two Microsoft sources disagree"));
+  [["Learn overview page",30],["Book of News and Partner Center",90]].forEach(function(r){
+    box.appendChild(h("div", {class:"bar"}, h("span", {class:"nm"}, r[0]), h("div", {class:"tr"}, h("div", {style:"width:"+(r[1]/180*100)+"%"})), h("b", null, r[1]+" days")));
+  });
+  box.appendChild(h("p", {class:"cap"}, "The Partner Center post of November 18, 2026 says 90 days, up from 30."));
+  if (STATE.lab){
+    var labbox = h("div", {style:"margin-top:14px;padding:12px;border:1.5px dashed var(--lab);border-radius:12px"});
+    labbox.appendChild(h("div", null, h("span", {class:"chip l-lab"}, "Labs and sessions · Slide"), " Cost estimate for non Microsoft data. Prices are from a session slide, US list, not on Learn. Check before you quote them."));
+    var gb = h("input", {type:"number", value:"500", min:"0", step:"50", "aria-label":"GB per month"});
+    var out = h("div", {class:"grid2", style:"margin-top:8px"});
+    var mo = h("input", {type:"number", value:"12", min:"1", max:"144", step:"1", "aria-label":"Months of lake storage"});
+    labbox.appendChild(h("div", {class:"row"}, h("span", null, "GB ingested per month"), gb, h("span", null, "Months in lake"), mo));
+    labbox.appendChild(out); box.appendChild(labbox);
+    var calc = function(){
+      var g = Math.max(0, +gb.value || 0), m = Math.max(1, +mo.value || 1);
+      var an = g*2.40, sen = g*4.30, lake = g*0.15, store = g*0.026*(m*(m+1)/2); // cumulative storage over m months of steady inflow
+      clear(out);
+      out.appendChild(h("div", null, h("div", {class:"big"}, "$"+an.toFixed(0)), h("small", null, "Analytics tier a month ($2.40 per GB)")));
+      out.appendChild(h("div", null, h("div", {class:"big"}, "$"+sen.toFixed(0)), h("small", null, "Sentinel for comparison ($4.30 per GB)")));
+      out.appendChild(h("div", null, h("div", {class:"big"}, "$"+lake.toFixed(0)), h("small", null, "Lake ingestion a month ($0.15 per GB)")));
+      out.appendChild(h("div", null, h("div", {class:"big"}, "$"+store.toFixed(0)), h("small", null, "Lake storage over "+m+" months of steady inflow ($0.026 per GB per month)")));
+    };
+    gb.addEventListener("input", calc); mo.addEventListener("input", calc); calc();
+  } else {
+    box.appendChild(h("p", {class:"empty"}, "Switch on 'From the labs and sessions' to see the cost calculator built on session slide prices."));
+  }
+};
+
+MODELS.perception = function(box){
+  var dots = h("div", {class:"dots", role:"img", "aria-label":"One hundred alerts. Eighty are highlighted as covered by triage."});
+  var cells = []; for (var i=0;i<100;i++){ var c = h("i"); cells.push(c); dots.appendChild(c); }
+  var order = []; for (var j=0;j<100;j++) order.push(j);
+  var seed = 7; order.sort(function(){ seed = (seed*9301+49297)%233280; return seed/233280 - .5; });
+  var btn = h("button", {class:"btn", onclick:run}, "Run triage on 100 alerts");
+  var msg = h("div", {class:"msg"}, "Microsoft says the Triage Agent covers about 80% of alerts in a typical Defender queue. Which alerts is random here.");
+  box.appendChild(h("div", {class:"row"}, btn)); box.appendChild(dots); box.appendChild(msg);
+  function run(){
+    cells.forEach(function(c){ c.classList.remove("on"); });
+    var k = 0, id = null;
+    if (reduce){ order.slice(0,80).forEach(function(n){ cells[n].classList.add("on"); }); return; }
+    id = setInterval(function(){ if (k>=80){ clearInterval(id); return; } cells[order[k]].classList.add("on"); k++; }, 25);
+  }
+  box.appendChild(h("h3", {style:"margin:18px 0 4px;font-size:15px"}, "MDASH: four stages (preview)"));
+  var st = [["Map the attack surface","Agents find what's exposed."],["Scan code","Agents read the code for flaws."],["Validate through agent debate","Agents argue whether a finding is real."],["Remove duplicates","Repeated findings are merged."]];
+  var cur = 0, steps = h("div", {class:"steps"}), note = h("div", {class:"msg"});
+  box.appendChild(h("div", {class:"row"}, pill("Back", false, function(){ cur=Math.max(0,cur-1); dr(); }), pill("Next", false, function(){ cur=Math.min(3,cur+1); dr(); })));
+  box.appendChild(steps); box.appendChild(note);
+  function dr(){ clear(steps); st.forEach(function(s,i){ steps.appendChild(h("div", {class:"step"+(i===cur?" on":"")}, h("b", null, (i+1)+". "+s[0]))); }); note.textContent = st[cur][1] + " More than 100 agents work across the four stages."; }
+  dr();
+};
+
+MODELS.scu = function(box){
+  var inp = h("input", {type:"range", min:"0", max:"30000", step:"100", value:"4000", "aria-label":"Paid user licences"});
+  var n = h("input", {type:"number", value:"4000", min:"0", step:"100", "aria-label":"Paid user licences"});
+  var big = h("div", {class:"big"}), mt = h("div", {class:"meter"}, h("div")), msg = h("div", {class:"msg"});
+  box.appendChild(h("div", {class:"row"}, h("span", null, "Paid E5 or E7 user licences"), n));
+  box.appendChild(inp); box.appendChild(h("div", {style:"margin-top:10px"}, big, h("small", null, "SCUs a month, shared across the whole tenant"))); box.appendChild(mt); box.appendChild(msg);
+  function draw(v){
+    v = Math.max(0, +v || 0);
+    var scu = Math.min(v*0.4, 10000);
+    big.textContent = Math.round(scu).toLocaleString("en-GB");
+    mt.firstChild.style.width = (scu/10000*100)+"%";
+    var over = Math.max(0, v*0.4 - 10000);
+    msg.textContent = v >= 25000 ? "At 25,000 licences you hit the 10,000 a month cap. More licences don't add SCUs." : "Formula: 400 SCUs per 1,000 licences, capped at 10,000 a month. Unused SCUs don't roll over. Beyond the allocation, pay as you go is $6 per SCU when throttling starts, with 30 days notice.";
+    if (over > 0) msg.textContent += " Your licences would give " + Math.round(over).toLocaleString("en-GB") + " more than the cap.";
+  }
+  inp.addEventListener("input", function(){ n.value = inp.value; draw(inp.value); });
+  n.addEventListener("input", function(){ inp.value = Math.min(30000, +n.value||0); draw(n.value); });
+  draw(4000);
+};
+
+MODELS.a365 = function(box){
+  var s = {who:"ms", what:"mgmt"};
+  var res = h("div", {class:"msg"});
+  var r1 = h("div", {class:"row"}, h("b", null, "Agents from"), pill("Microsoft", true, function(){ s.who="ms"; sync(); }), pill("Other vendors", false, function(){ s.who="3p"; sync(); }));
+  var r2 = h("div", {class:"row"}, h("b", null, "I want"), pill("Management insights", true, function(){ s.what="mgmt"; sync(); }),
+    pill("Enterprise management and governance", false, function(){ s.what="gov"; sync(); }), pill("Business Analytics", false, function(){ s.what="ba"; sync(); }));
+  box.appendChild(r1); box.appendChild(r2); box.appendChild(res);
+  var T = {
+    "ms/mgmt":"Management insights for Microsoft agents are GA with no Agent 365 licence. Viva Insights keeps a minimum of 50 assigned Copilot licences.",
+    "ms/gov":"Enterprise grade management, security and governance needs an Agent 365 or Microsoft 365 E7 licence.",
+    "ms/ba":"Business Analytics (Frontier program): insights for Microsoft services need at least one Microsoft 365 Copilot licence.",
+    "3p/mgmt":"The Book of News doesn't give a separate rule for basic management insights on other vendors' agents. Check the current licensing page.",
+    "3p/gov":"Enterprise grade management, security and governance needs an Agent 365 or Microsoft 365 E7 licence. Full insights for third party agents, including Purview, also need Agent 365.",
+    "3p/ba":"Business Analytics (Frontier program): insights for non Microsoft services need an Agent 365 licence."
+  };
+  function sync(){
+    r1.querySelectorAll(".pill").forEach(function(p){ p.classList.toggle("on", (p.textContent==="Microsoft") === (s.who==="ms")); });
+    var lab = {mgmt:"Management insights", gov:"Enterprise management and governance", ba:"Business Analytics"};
+    r2.querySelectorAll(".pill").forEach(function(p){ p.classList.toggle("on", p.textContent===lab[s.what]); });
+    res.textContent = T[s.who+"/"+s.what];
+  }
+  sync();
+};
+
+/* ---------- routing ---------- */
+function route(keepScroll){
+  var hash = "";
+  try { hash = (location.hash || "").replace(/^#\/?/, ""); } catch(e){}
+  var y = window.scrollY;
+  if (hash.indexOf("node/") === 0) nodePage(hash.slice(5)); else home();
+  if (keepScroll) window.scrollTo(0, y);
+}
+function go(path){
+  try { location.hash = path ? "/"+path : ""; } catch(e){}
+  // preview sandboxes may ignore the hash change, so render directly as well
+  var hash = path || "";
+  if (hash.indexOf("node/") === 0) nodePage(hash.slice(5)); else { home(); window.scrollTo(0,0); }
+}
+window.addEventListener("hashchange", function(){ route(false); });
+
+renderToggles();
+route(false);
+})();
+</script>
+</body>
+</html>
