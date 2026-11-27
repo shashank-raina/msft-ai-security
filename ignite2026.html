@@ -1749,7 +1749,7 @@ function icon(name, cls){
   return s;
 }
 
-var SHORT = {"entra-ca":"Entra and CA","agent-id":"Agent ID","defender":"Defender","windows-edge":"Windows, Edge","purview":"Purview","gsa":"Global Secure","sentinel":"Sentinel","isoc":"ISOC","perception":"Perception","copilot":"Copilot","agent-365":"Agent 365"};
+var SHORT = {"entra-ca":"Entra and CA","agent-id":"Agent ID","defender":"Defender","windows-edge":"Windows, Edge","purview":"Purview","gsa":"Global Secure","sentinel":"Sentinel","isoc":"ISOC","perception":"Perception","copilot":"Security Copilot","agent-365":"Agent 365"};
 var NODE = {}; D.nodes.forEach(function(n){ NODE[n.id] = n; });
 var LAYERC = {}; D.layersContent.forEach(function(l){ LAYERC[l.key] = l; });
 var STATE = {lab:true, heard:true, take:true};
@@ -1820,7 +1820,7 @@ function nodeLayout(){
   var pos = {};
   D.stackLayers.forEach(function(L, i){
     var list = D.nodes.filter(function(n){ return n.layer === L.id; });
-    var n = list.length, step = n === 1 ? 0 : (n === 2 ? 200 : (n === 3 ? 160 : 118));
+    var n = list.length, step = n === 1 ? 0 : (n === 2 ? 200 : (n === 3 ? 160 : 124));
     list.forEach(function(nd, k){
       pos[nd.id] = {x: ISO.cx + (k - (n-1)/2) * step, y: bandTop(i) + 36 + 27, i:i};
     });
@@ -1862,13 +1862,13 @@ function renderMap(){
   var tiles = [], byId = {};
   D.nodes.forEach(function(nd){
     var p = pos[nd.id]; if (!p) return;
-    var g = sv("g", {class:"tile pl"+p.i+" fadein", style:"animation-delay:"+(p.i*120+300)+"ms", tabindex:"0", role:"link", "aria-label":nd.name+". "+nd.statusLabel, transform:"translate("+(p.x-50)+","+(p.y-27)+")"});
+    var g = sv("g", {class:"tile pl"+p.i+" fadein", style:"animation-delay:"+(p.i*120+300)+"ms", tabindex:"0", role:"link", "aria-label":nd.name+". "+nd.statusLabel, transform:"translate("+(p.x-56)+","+(p.y-27)+")"});
     var lift = sv("g", {class:"lift"});
-    lift.appendChild(sv("rect", {width:"100", height:"54", rx:"12", class:"top"}));
-    var ic = icon(nd.icon); ic.setAttribute("x","41"); ic.setAttribute("y","6"); ic.setAttribute("width","18"); ic.setAttribute("height","18");
+    lift.appendChild(sv("rect", {width:"112", height:"54", rx:"12", class:"top"}));
+    var ic = icon(nd.icon); ic.setAttribute("x","47"); ic.setAttribute("y","6"); ic.setAttribute("width","18"); ic.setAttribute("height","18");
     ic.setAttribute("stroke","currentColor"); ic.style.color = "var(--accent)";
     lift.appendChild(ic);
-    var tx = sv("text", {x:50, y:43}); tx.textContent = SHORT[nd.id] || nd.name; lift.appendChild(tx);
+    var tx = sv("text", {x:56, y:43}); tx.textContent = SHORT[nd.id] || nd.name; lift.appendChild(tx);
     g.appendChild(lift);
     function hot(on){
       tiles.forEach(function(o){ o.el.classList.toggle("dim", on && o.id !== nd.id && !connected(nd.id, o.id)); });
