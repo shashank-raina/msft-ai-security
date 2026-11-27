@@ -157,7 +157,6 @@ input[type=number]{font:inherit;padding:5px 8px;border:1.5px solid var(--line);b
     <div class="asof" id="asof"></div>
   </div>
 </header>
-<div class="toggles"><div class="wrap" id="toggles"></div></div>
 <main><div class="wrap" id="app"></div></main>
 <footer><div class="wrap"><div id="foot"></div></div></footer>
 
@@ -815,7 +814,7 @@ input[type=number]{font:inherit;padding:5px 8px;border:1.5px solid var(--line);b
    ],
    "check": [
     "Retention: 30 days on the overview page, 90 days in the Book of News and Partner Center.",
-    "Status: the Book of News says core GA, Partner Center says public preview. Check your tenant.",
+    "Status: the Book of News headline says generally available, and the body says core GA. Partner Center says public preview. Check your tenant.",
     "Is SecurityEvent from the Azure Monitor Agent free or charged?",
     "When does one click rule migration ship?"
    ]
@@ -852,6 +851,10 @@ input[type=number]{font:inherit;padding:5px 8px;border:1.5px solid var(--line);b
     {
      "title": "Agent Registry convergence with Agent 365",
      "url": "https://learn.microsoft.com/entra/agent-id/agent-registry-convergence"
+    },
+    {
+     "title": "Third party: Entra Agent ID for discovered local agents (Harri Jaakkonen, 18 Nov 2026)",
+     "url": "https://learn.cloudpartner.fi/posts/entra-agent-id-discovered-local-agents-preview"
     }
    ],
    "features": [
@@ -890,9 +893,32 @@ input[type=number]{font:inherit;padding:5px 8px;border:1.5px solid var(--line);b
        "s": "3P"
       }
      ]
+    },
+    {
+     "name": "Discovered local agents (third party)",
+     "status": "none",
+     "items": [
+      {
+       "t": "A third party post says Agent ID for discovered local agents gives each supported agent its own identity, so its activity is separate from the user's. It builds on Defender discovery of agents and MCP servers on managed devices.",
+       "s": "3P"
+      },
+      {
+       "t": "The same post says Defender discovery is GA on managed Windows and macOS devices, and that the Local Agents admin page is public preview.",
+       "s": "3P"
+      },
+      {
+       "t": "It says Microsoft's Entra blog cites 60 local agent types, while the Agent 365 announcement names only GitHub Copilot CLI and Claude Code first. The author advises checking the support matrix first.",
+       "s": "3P"
+      },
+      {
+       "t": "Its prerequisites list Microsoft 365 E3, an eligible admin role, managed Windows devices in Intune and Frontier opt in.",
+       "s": "3P"
+      }
+     ]
     }
    ],
    "check": [
+    "Local agent discovery: GA per a third party post, preview per the Book of News. Discovery, registry inventory and Agent ID assignment are separate steps.",
     "Secretless authentication for agents was said to be announced. I couldn't find it in the Book of News text I could read, and Learn still lists federated credentials, certificates and client secrets."
    ],
    "model": null
@@ -1453,6 +1479,10 @@ input[type=number]{font:inherit;padding:5px 8px;border:1.5px solid var(--line);b
     {
      "title": "Get started with Perception",
      "url": "https://learn.microsoft.com/security/agentic-security/agentic-security-get-started"
+    },
+    {
+     "title": "Perception MCP",
+     "url": "https://learn.microsoft.com/security/agentic-security/agentic-security-mcp"
     }
    ],
    "model": {
@@ -1492,6 +1522,20 @@ input[type=number]{font:inherit;padding:5px 8px;border:1.5px solid var(--line);b
       },
       {
        "t": "Agents are designed to collaborate. Threat intelligence extracted by one agent feeds detections created by another.",
+       "s": "Learn"
+      }
+     ]
+    },
+    {
+     "name": "MCP access",
+     "status": "none",
+     "items": [
+      {
+       "t": "Perception MCP is Perception's Model Context Protocol server. Preauthorised MCP compatible AI clients can find playbooks, start investigations that run asynchronously, each tied to one incident or alert, add follow up instructions, and get summaries and Markdown reports. Sessions also show in Defender.",
+       "s": "Learn"
+      },
+      {
+       "t": "Setup guides cover GitHub Copilot CLI, Visual Studio Code, Microsoft Foundry, and ChatGPT or Claude through an MCP connector.",
        "s": "Learn"
       }
      ]
@@ -1544,6 +1588,7 @@ input[type=number]{font:inherit;padding:5px 8px;border:1.5px solid var(--line);b
     }
    ],
    "check": [
+    "The Perception MCP page doesn't say whether MCP is preview or GA, and doesn't mention licensing.",
     "Status: the Book of News says GA. The Learn Get started page I read still says Limited Public Preview, invitation only.",
     "An earlier Learn page I read said custom playbooks aren't supported. The application card describes playbooks as extensible. Check the current docs.",
     "Do Perception sessions use SCUs? Only a hallway claim so far."
@@ -1829,7 +1874,7 @@ $("asof").appendChild(h("span", null, "As of " + D.meta.asOf));
 $("asof").appendChild(h("span", null, "Review by " + D.meta.reviewBy));
 $("asof").appendChild(h("span", null, D.meta.author));
 $("foot").appendChild(h("p", null, D.meta.disclaimer));
-$("foot").appendChild(h("p", null, "Every statement is tagged with where it came from. Microsoft means the Book of News and Microsoft Learn. The other layers are my notes and can be wrong."));
+$("foot").appendChild(h("p", null, "Every statement is tagged with where it came from. Microsoft means the Book of News and Microsoft Learn. The other sources are my notes and can be wrong."));
 
 /* toggles */
 function countLayer(key){
@@ -1840,18 +1885,6 @@ function countLayer(key){
   });
   return n;
 }
-function renderToggles(){
-  var box = $("toggles"); clear(box);
-  box.appendChild(h("span", {class:"lbl"}, "Layers"));
-  D.layersContent.forEach(function(l){
-    var on = l.locked ? true : STATE[l.key];
-    var b = h("button", {class:"tg l-"+l.key, "aria-pressed":String(on), title:l.desc, disabled:l.locked ? "disabled" : null,
-      onclick:function(){ if (l.locked) return; STATE[l.key] = !STATE[l.key]; renderToggles(); route(true); }},
-      h("i"), l.label + " ", h("small", null, "(" + countLayer(l.key) + ")"));
-    box.appendChild(b);
-  });
-}
-
 /* ---------- home ---------- */
 var reduceNote = null;
 function bonCount(nd){
@@ -1901,7 +1934,8 @@ function home(){
   app.appendChild(h("h2", null, "Dates to watch"));
   app.appendChild(h("p", {class:"sub"}, "Dates come from Microsoft documents unless tagged otherwise. Phrases like 'this month' are converted to a rough date and shown that way."));
   var ul = h("ul", {class:"tl"});
-  D.timeline.forEach(function(t){
+  var today = new Date().toISOString().slice(0,10);
+  D.timeline.filter(function(t){ return t.d >= today; }).forEach(function(t){
     var L = layerOf(t.s);
     ul.appendChild(h("li", {class:"l-"+L, onclick:function(){ go("node/"+t.node); }},
       h("time", {datetime:t.d}, t.d), t.t + " ", h("span", {class:"chip l-"+L}, t.s)));
@@ -2301,7 +2335,6 @@ function go(path){
 }
 window.addEventListener("hashchange", function(){ route(false); });
 
-renderToggles();
 route(false);
 })();
 </script>
