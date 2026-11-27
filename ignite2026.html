@@ -7,16 +7,16 @@
 <meta name="description" content="Microsoft security, end to end. Independent and unofficial.">
 <style>
 :root{
-  --bg:#f6f7fb;--panel:#fff;--ink:#14171f;--mute:#5b6475;--line:#dfe3ec;--soft:#eef1f7;
+  --bg:#f7f7f5;--panel:#fff;--ink:#1d2330;--mute:#5f6673;--line:#dcdcd7;--soft:#f0f0ec;
   --ms:#2563eb;--lab:#0d9488;--heard:#d97706;--take:#db2777;
   --ga:#16a34a;--preview:#7c3aed;--none:#64748b;
-  --plate1:#e8edf8;--plate2:#d6deef;--plate3:#c4cee6;--accent:#2563eb;--shadow:0 6px 24px rgba(20,30,60,.08);
+  --accent:#0f5fa8;--shadow:none;
 }
 @media (prefers-color-scheme:dark){:root{
-  --bg:#0c0f16;--panel:#141925;--ink:#e9edf6;--mute:#9aa4b8;--line:#263044;--soft:#1a2132;
+  --bg:#111318;--panel:#181b22;--ink:#e8eaee;--mute:#9aa1ae;--line:#2b303b;--soft:#1e222b;
   --ms:#60a5fa;--lab:#2dd4bf;--heard:#fbbf24;--take:#f472b6;
   --ga:#4ade80;--preview:#a78bfa;--none:#94a3b8;
-  --plate1:#1b2438;--plate2:#222d47;--plate3:#2b3856;--accent:#60a5fa;--shadow:0 6px 24px rgba(0,0,0,.4);
+  --accent:#6ab0f3;--shadow:none;
 }}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -24,12 +24,9 @@ body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-ap
 a{color:var(--accent)}
 button{font:inherit;color:inherit;cursor:pointer}
 .wrap{max-width:1080px;margin:0 auto;padding:0 18px}
-header.top{background:linear-gradient(135deg,#0b1736,#1d3a8a 55%,#0d9488);color:#fff;padding:28px 0 22px;position:relative;overflow:hidden}
-header.top::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 85% 20%,rgba(255,255,255,.18),transparent 45%);pointer-events:none}
-.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:.04em;text-transform:uppercase;opacity:.9}
-.brand svg{width:26px;height:26px}
-header.top h1{margin:10px 0 6px;font-size:clamp(26px,5vw,40px);line-height:1.15}
-header.top p{margin:0;max-width:640px;opacity:.92}
+header.top{background:#17202e;color:#fff;padding:26px 0 20px}
+header.top h1{margin:0 0 8px;font-size:clamp(24px,4.6vw,34px);line-height:1.2;font-weight:700}
+header.top p{margin:0 0 6px;max-width:680px;opacity:.85;font-size:15px}
 .asof{margin-top:14px;font-size:13px;opacity:.85;display:flex;flex-wrap:wrap;gap:6px 16px}
 .toggles{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
 .toggles .wrap{display:flex;flex-wrap:wrap;gap:8px;padding-top:10px;padding-bottom:10px;align-items:center}
@@ -45,42 +42,35 @@ header.top p{margin:0;max-width:640px;opacity:.92}
 main{padding:22px 0 60px}
 h2{font-size:22px;margin:30px 0 10px}
 .sub{color:var(--mute);margin:0 0 14px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px}
 /* map */
 .mapbox{padding:8px;position:relative}
 #iso{display:block;width:100%;height:auto}
 .mapnote{font-size:13px;color:var(--mute);padding:4px 12px 10px}
 .phonelist{display:none}
-.plate{fill:color-mix(in srgb,var(--pc) 20%,var(--panel));stroke:color-mix(in srgb,var(--pc) 55%,transparent);stroke-width:1.5}
-.plateside{fill:color-mix(in srgb,var(--pc) 38%,var(--panel))}
-.pl0{--pc:#6366f1}.pl1{--pc:#14b8a6}.pl2{--pc:#ec4899}
-.drop{animation:drop .8s cubic-bezier(.2,.9,.3,1.2) both}
-@keyframes drop{from{opacity:0;transform:translateY(70px)}to{opacity:1;transform:none}}
-.fadein{animation:fade .6s both}
-.edges{animation:fade 1s 1.2s both}
-@keyframes fade{from{opacity:0}to{opacity:1}}
-.lift{transition:transform .22s ease,filter .22s}
-.tile:hover .lift,.tile:focus .lift,.tile.on .lift{transform:translateY(-6px);filter:drop-shadow(0 10px 8px rgba(0,0,0,.28))}
+.plate{fill:var(--pc);stroke:var(--line);stroke-width:1}
+.pl0{--pc:#ebebe6}.pl1{--pc:#e1e5ea}.pl2{--pc:#d3dbe6}
+@media (prefers-color-scheme:dark){.pl0{--pc:#1d2028}.pl1{--pc:#222833}.pl2{--pc:#283142}}
+.lift{transition:transform .15s ease}
+.tile:hover .lift,.tile:focus .lift,.tile.on .lift{transform:translateY(-2px)}
 .tile.pulse .top{animation:pulse .9s ease-out}
-@keyframes pulse{0%{stroke-width:1.6}40%{stroke-width:7;stroke:var(--pc,var(--accent))}100%{stroke-width:1.6}}
-.pktg{fill:#fff;stroke:var(--accent);stroke-width:3;filter:drop-shadow(0 0 8px var(--accent))}
+@keyframes pulse{0%{stroke-width:1}40%{stroke-width:5;stroke:var(--accent)}100%{stroke-width:1}}
+.pktg{fill:var(--accent);stroke:#fff;stroke-width:2}
 .ctl{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
 .info{margin:10px 12px 12px;padding:10px 14px;border-radius:12px;background:var(--soft);border:1px solid var(--line);min-height:62px;font-size:14.5px}
 .info b{font-size:15px}
 .info .st{color:var(--mute);font-size:12.5px;display:block;margin-bottom:2px}
-.platelabel{font-size:12.5px;font-weight:700;fill:var(--ink)}
+.platelabel{font-size:13px;font-weight:700;fill:var(--ink)}
 .platesub{font-size:10.5px;fill:var(--mute)}
 .tile{cursor:pointer;outline:none;transition:transform .2s,opacity .2s}
-.tile .top{fill:var(--panel);stroke:var(--accent);stroke-width:1.6;transition:fill .2s}
-.tile:hover .top,.tile:focus .top,.tile.on .top{fill:color-mix(in srgb,var(--accent) 18%,var(--panel))}
-.tile text{font-size:11.5px;font-weight:600;fill:var(--ink);text-anchor:middle;pointer-events:none}
-.tile.dim{opacity:.35}
+.tile .top{fill:var(--panel);stroke:var(--line);stroke-width:1;transition:stroke .15s}
+.tile .st2{font-size:10px;font-weight:400;fill:var(--mute)}
+.tile.on .top,.tile:hover .top,.tile:focus .top{stroke:var(--accent);stroke-width:1.6}
+.tile text{font-size:12px;font-weight:600;fill:var(--ink);text-anchor:middle;pointer-events:none}
+.tile.dim{opacity:.4}
 .tile:focus-visible .top{stroke-width:3}
-.edge{fill:none;stroke:var(--accent);stroke-width:1.4;stroke-dasharray:3 7;opacity:.5;animation:flow 1.6s linear infinite}
-.edge.hot{opacity:1;stroke-width:2.4}
-.edge.off{opacity:.07}
-@keyframes flow{to{stroke-dashoffset:-20}}
-.dot{fill:var(--accent)}
+.edge{fill:none;stroke:var(--accent);stroke-width:1.5;opacity:0;pointer-events:none;transition:opacity .15s}
+.edge.hot{opacity:.85}
 .stbadge{font-size:12px;border-radius:99px;padding:2px 9px;border:1px solid currentColor;display:inline-block;white-space:nowrap}
 .s-private{color:#db2777}.s-ga{color:var(--ga)}.s-mixed{color:var(--accent)}.s-preview{color:var(--preview)}.s-none{color:var(--none)}
 .layercard{padding:12px 14px;margin-bottom:10px}
@@ -91,28 +81,20 @@ h2{font-size:22px;margin:30px 0 10px}
 .nodebtn b{display:block;font-size:14.5px}
 .nodebtn span.t{display:block;font-size:12.5px;color:var(--mute)}
 
-.pyr{display:flex;flex-direction:column;align-items:center;gap:6px;perspective:800px}
-.ptier{padding:11px 7% 13px;text-align:center;position:relative;overflow:hidden;clip-path:polygon(6% 0,94% 0,100% 100%,0 100%);background:color-mix(in srgb,var(--pc) 24%,var(--panel));animation:tierin .7s cubic-bezier(.2,.9,.3,1.15) both}
-@keyframes tierin{from{opacity:0;transform:translateY(60px) scale(.9)}to{opacity:1;transform:none}}
-.ptier::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);transform:translateX(-120%);animation:sweep 6s ease-in-out infinite;animation-delay:var(--sd,0s);pointer-events:none}
-@keyframes sweep{0%,60%{transform:translateX(-120%)}85%,100%{transform:translateX(120%)}}
-.ptl{font-weight:800;font-size:14.5px;letter-spacing:.01em}
-.pts{font-size:11.5px;color:var(--mute);margin-bottom:8px}
-.pchips{display:flex;flex-wrap:wrap;gap:7px;justify-content:center}
-.pchip{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1 1 104px;max-width:170px;padding:10px 6px 9px;border-radius:14px;border:1.5px solid var(--accent);background:var(--panel);position:relative;transition:transform .2s,box-shadow .2s;animation:pop .5s cubic-bezier(.2,1.4,.4,1) both;animation-delay:var(--cd,0s);z-index:1}
-@keyframes pop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
-.pchip svg{width:22px;height:22px;stroke:var(--accent)}
-.pchip .pn{font-size:13px;font-weight:700;line-height:1.2}
-.pchip .pc{font-size:10.5px;color:var(--mute)}
-.pchip .pd{position:absolute;top:7px;right:7px;width:9px;height:9px;border-radius:50%;background:currentColor;box-shadow:0 0 0 0 currentColor;animation:ping 2.4s ease-out infinite}
-@keyframes ping{0%{box-shadow:0 0 0 0 color-mix(in srgb,currentColor 55%,transparent)}70%,100%{box-shadow:0 0 0 8px transparent}}
-.pchip:active{transform:scale(.96)}
-.pchip.on{transform:translateY(-4px) scale(1.05);box-shadow:0 10px 20px rgba(0,0,0,.28);background:color-mix(in srgb,var(--accent) 18%,var(--panel))}
+.pyr{display:flex;flex-direction:column;align-items:center;gap:6px}
+.ptier{padding:12px 10px 12px;text-align:center;border-radius:8px;background:var(--pc);border:1px solid var(--line)}
+.ptl{font-weight:700;font-size:14.5px}
+.pts{font-size:12px;color:var(--mute);margin-bottom:10px}
+.pchips{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.pchip{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:1px;padding:9px 10px;border-radius:6px;border:1px solid var(--line);background:var(--panel);position:relative}
+.pchip:last-child:nth-child(odd){grid-column:1 / -1;justify-self:center;width:calc(50% - 3px)}
+.pchip .pn{font-size:13px;font-weight:600;line-height:1.25}
+.pchip .pc{font-size:11px;color:var(--mute)}
+.pchip:active{background:var(--soft)}
+.pchip.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
 .phonelist .info{margin:12px 0 0}
-.strip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
-.stat{padding:10px 8px;text-align:center;border-radius:14px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow);animation:rise .5s both}
-.stat b{display:block;font-size:26px;line-height:1.1;color:var(--accent)}
-.stat span{font-size:12px;color:var(--mute)}
+.strip{margin:0 0 14px;color:var(--mute);font-size:14px}
+.strip b{color:var(--ink)}
 .sheetbg{position:fixed;inset:0;background:rgba(5,10,25,.55);z-index:50;opacity:0;transition:opacity .25s;display:flex;align-items:flex-end;justify-content:center}
 .sheetbg.show{opacity:1}
 .sheet{width:100%;max-width:560px;background:var(--panel);border-radius:22px 22px 0 0;padding:18px 18px 22px;transform:translateY(100%);transition:transform .35s cubic-bezier(.2,.9,.3,1);max-height:82vh;overflow:auto}
@@ -164,7 +146,7 @@ details.feat .body{padding:0 14px 10px}
 .empty{color:var(--mute);font-style:italic}
 footer{border-top:1px solid var(--line);padding:22px 0 40px;color:var(--mute);font-size:13px}
 /* models */
-.model{padding:16px 18px;margin-top:14px;border:1.5px solid color-mix(in srgb,var(--accent) 35%,var(--line));background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 6%,var(--panel)),var(--panel))}
+.model{padding:16px 18px;margin-top:14px;border:1px solid var(--line);border-left:4px solid var(--accent)}
 .model h2{margin:0 0 2px;font-size:18px}
 .model .cap{font-size:13px;color:var(--mute);margin:0 0 12px}
 .badge-ill{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--preview);border:1px solid currentColor;border-radius:6px;padding:1px 6px;margin-right:6px}
@@ -178,7 +160,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 input[type=number]{font:inherit;padding:5px 8px;border:1.5px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink);width:130px}
 .big{font-size:30px;font-weight:700;line-height:1.1}
 .meter{height:16px;background:var(--soft);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
-.meter>div{height:100%;background:linear-gradient(90deg,var(--accent),var(--lab));transition:width .45s ease}
+.meter>div{height:100%;background:var(--accent);transition:width .45s ease}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:640px){.grid2{grid-template-columns:1fr}}
 .pol{display:inline-block;margin:3px;padding:3px 8px;border-radius:8px;font-size:12px;background:var(--soft);border:1px solid var(--line);animation:rise .4s both}
@@ -217,7 +199,6 @@ input[type=number]{font:inherit;padding:5px 8px;border:1.5px solid var(--line);b
 <body><a href="index.html" style="display:block;background:#0d1526;color:#fff;text-align:center;padding:8px 12px;font:600 13px system-ui,sans-serif;text-decoration:none">Back to aiagentsecurity.guide</a>
 <header class="top">
   <div class="wrap">
-    <div class="brand"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7" stroke-linejoin="round"><path d="M12 3l9 4.5-9 4.5-9-4.5z"/><path d="M3 12l9 4.5 9-4.5"/><path d="M3 16.5l9 4.5 9-4.5"/></svg><span id="brandName"></span></div>
     <h1 id="tagline"></h1>
     <p id="disc"></p>
     <div class="asof" id="asof"></div>
@@ -330,7 +311,6 @@ input[type=number]{font:inherit;padding:5px 8px;border:1.5px solid var(--line);b
   "Windows, Edge, Intune",
   "Sentinel and ISOC",
   "Perception",
-  "Security Copilot",
   "Agent 365"
  ],
  "statusLabel": {
@@ -885,83 +865,6 @@ input[type=number]{font:inherit;padding:5px 8px;border:1.5px solid var(--line);b
     "Status: the Book of News says core GA, Partner Center says public preview. Check your tenant.",
     "Is SecurityEvent from the Azure Monitor Agent free or charged?",
     "When does one click rule migration ship?"
-   ]
-  },
-  {
-   "id": "sentinel",
-   "tier": "fund",
-   "product": "Sentinel and ISOC",
-   "icon": "layers",
-   "short": "Sentinel",
-   "name": "Microsoft Sentinel and the data lake",
-   "tagline": "The SIEM and the security data platform behind it",
-   "status": "none",
-   "statusLabel": "Not in Book of News",
-   "what": [
-    {
-     "t": "Microsoft Sentinel is a cloud native SIEM and a security platform for agentic defence. It has a data lake, a graph, and a hosted MCP server.",
-     "s": "Learn"
-    },
-    {
-     "t": "The data lake is fully managed, uses open format data and keeps a single copy. It has an analytics tier for hunting, alerting and incidents, and a lake tier for low cost retention of up to 12 years.",
-     "s": "Learn"
-    }
-   ],
-   "links": [
-    {
-     "title": "What is Microsoft Sentinel?",
-     "url": "https://learn.microsoft.com/azure/sentinel/sentinel-overview"
-    },
-    {
-     "title": "What is Sentinel data lake?",
-     "url": "https://learn.microsoft.com/azure/sentinel/datalake/sentinel-lake-overview"
-    },
-    {
-     "title": "What's new in Sentinel",
-     "url": "https://learn.microsoft.com/azure/sentinel/whats-new"
-    }
-   ],
-   "model": {
-    "key": "tiers",
-    "title": "Where should a table live?",
-    "caption": "Learn's description of the two tiers, as a simple chooser. Costs aren't shown here.",
-    "src": [
-     "Learn"
-    ]
-   },
-   "features": [
-    {
-     "name": "Data lake and tiers",
-     "status": "none",
-     "items": [
-      {
-       "t": "The data lake pulls logs from Microsoft 365, Defender, Azure, Entra, Purview, Intune and more than 350 connectors, including AWS and GCP.",
-       "s": "Learn"
-      },
-      {
-       "t": "Data in the analytics tier is mirrored to the lake tier, so there's a single copy. You can promote data from the lake to the analytics tier with jobs.",
-       "s": "Learn"
-      }
-     ]
-    },
-    {
-     "name": "Moving to the Defender portal",
-     "status": "none",
-     "items": [
-      {
-       "t": "Sentinel is generally available in the Defender portal, with or without Defender XDR or an E5 licence.",
-       "s": "Learn"
-      },
-      {
-       "t": "Learn's July 2025 what's new said Sentinel in the Azure portal would retire in July 2026. A third party briefing now says March 31, 2027.",
-       "s": "3P"
-      }
-     ]
-    }
-   ],
-   "check": [
-    "I couldn't find Sentinel data lake in the Book of News text I could read.",
-    "Azure portal retirement date: July 2026 on an older Learn page, March 31, 2027 per a third party briefing."
    ]
   },
   {
@@ -1733,165 +1636,6 @@ input[type=number]{font:inherit;padding:5px 8px;border:1.5px solid var(--line);b
     "MDASH eligibility: the Book of News says eligible organisations without naming the criteria."
    ],
    "links": []
-  },
-  {
-   "id": "security-copilot",
-   "tier": "ai4s",
-   "product": "Security Copilot",
-   "icon": "spark",
-   "short": "Security Copilot",
-   "name": "Security Copilot",
-   "tagline": "Generative AI assistant and agents for security and IT teams",
-   "status": "none",
-   "statusLabel": "Not in Book of News",
-   "what": [
-    {
-     "t": "Microsoft Security Copilot is a generative AI security product that helps security and IT professionals respond to threats, process signals and assess risk at the speed of AI.",
-     "s": "Learn"
-    },
-    {
-     "t": "It's used through a standalone portal, experiences embedded in Defender, Entra, Intune and Purview, and agents built by Microsoft and partners.",
-     "s": "Learn"
-    }
-   ],
-   "links": [
-    {
-     "title": "Security Copilot for E5 and E7 included customers",
-     "url": "https://learn.microsoft.com/copilot/security/security-copilot-inclusion"
-    },
-    {
-     "title": "Security Compute Units and capacity",
-     "url": "https://learn.microsoft.com/copilot/security/security-compute-units-capacity"
-    }
-   ],
-   "model": {
-    "key": "scu",
-    "title": "How many SCUs come with my licences?",
-    "caption": "Learn's inclusion formula: 400 SCUs a month per 1,000 paid user licences, up to 10,000 a month, for Microsoft 365 E5 and E7. Allocations reset monthly and don't roll over.",
-    "src": [
-     "Learn"
-    ]
-   },
-   "features": [
-    {
-     "name": "Licensing and capacity",
-     "status": "none",
-     "items": [
-      {
-       "t": "E5 and E7 customers get 400 SCUs a month for every 1,000 paid user licences, up to 10,000 a month, at no extra cost. It scales down for fewer than 1,000 licences.",
-       "s": "Learn"
-      },
-      {
-       "t": "The default capacity is shared across all users and experiences in the tenant. It resets monthly and doesn't roll over.",
-       "s": "Learn"
-      },
-      {
-       "t": "Beyond the included amount, usage will be throttled at a future date. Customers can then scale at $6 per SCU pay as you go, with 30 days notice.",
-       "s": "Learn"
-      }
-     ]
-    },
-    {
-     "name": "What's covered",
-     "status": "none",
-     "items": [
-      {
-       "t": "Chat, promptbooks and agent scenarios across Entra, Intune, Purview and Defender. Developer tools and partner built agents SCU costs are included until further notice.",
-       "s": "Learn"
-      },
-      {
-       "t": "Not covered: Sentinel data lake compute and storage, and Logic Apps charges.",
-       "s": "Learn"
-      }
-     ]
-    },
-    {
-     "name": "Rollout",
-     "status": "none",
-     "items": [
-      {
-       "t": "Rollout started November 18, 2025 for existing Security Copilot E5 customers, and continues for all eligible E5 and E7 customers.",
-       "s": "Learn"
-      },
-      {
-       "t": "At Ignite 2025 Microsoft announced 12 new agents across Defender, Entra, Intune and Purview.",
-       "s": "Learn"
-      }
-     ]
-    }
-   ],
-   "check": [
-    "I couldn't find Security Copilot in the Book of News text I could read. The page was partly cut off in my tools."
-   ]
-  },
-  {
-   "id": "identity-ai",
-   "tier": "ai4s",
-   "product": "Entra",
-   "icon": "badge",
-   "short": "AI for identity",
-   "name": "AI agents that help with identity",
-   "tagline": "Agents that suggest Conditional Access changes and reduce identity risk",
-   "status": "none",
-   "statusLabel": "Not in Book of News",
-   "what": [
-    {
-     "t": "The Conditional Access Optimization Agent in Security Copilot suggests new policies and changes. It needs at least Entra ID P1 and security compute units.",
-     "s": "Learn"
-    },
-    {
-     "t": "Perception's Identity Risk Reduction Agent recommends Conditional Access changes for admins to review and approve.",
-     "s": "Learn"
-    }
-   ],
-   "links": [
-    {
-     "title": "What is Conditional Access?",
-     "url": "https://learn.microsoft.com/entra/identity/conditional-access/overview"
-    }
-   ],
-   "model": null,
-   "check": [],
-   "features": []
-  },
-  {
-   "id": "sentinel-ai",
-   "tier": "ai4s",
-   "product": "Sentinel and ISOC",
-   "icon": "layers",
-   "short": "Sentinel graph and MCP",
-   "name": "Sentinel graph and MCP server",
-   "tagline": "Graph and a hosted MCP server so AI agents can work on security data",
-   "status": "preview",
-   "statusLabel": "Preview",
-   "what": [
-    {
-     "t": "Microsoft Sentinel includes a graph and a hosted MCP server alongside its data lake, built for agentic defence.",
-     "s": "Learn"
-    }
-   ],
-   "links": [
-    {
-     "title": "What's new in Sentinel",
-     "url": "https://learn.microsoft.com/azure/sentinel/whats-new"
-    }
-   ],
-   "features": [
-    {
-     "name": "Status",
-     "status": "preview",
-     "items": [
-      {
-       "t": "Sentinel graph and the hosted MCP server were preview in Learn's September 2025 what's new page. Check the current status.",
-       "s": "Learn"
-      }
-     ]
-    }
-   ],
-   "check": [
-    "Current status of Sentinel graph and the MCP server: the Learn page I read was from September 2025."
-   ],
-   "model": null
   }
  ],
  "edges": [
@@ -1917,12 +1661,6 @@ input[type=number]{font:inherit;padding:5px 8px;border:1.5px solid var(--line);b
    "a": "agent-risk",
    "b": "a365-gov",
    "label": "Risk level shows across the admin center and Defender",
-   "s": "BoN"
-  },
-  {
-   "a": "agent-risk",
-   "b": "sentinel",
-   "label": "Partner signals flow into Sentinel (planned)",
    "s": "BoN"
   },
   {
@@ -1974,27 +1712,9 @@ input[type=number]{font:inherit;padding:5px 8px;border:1.5px solid var(--line);b
    "s": "Learn"
   },
   {
-   "a": "purview-data",
-   "b": "sentinel",
-   "label": "Purview logs flow into the data lake",
-   "s": "Learn"
-  },
-  {
-   "a": "edge-business",
-   "b": "sentinel",
-   "label": "Edge for Business Sentinel connector (preview)",
-   "s": "BoN"
-  },
-  {
    "a": "defender-xdr",
    "b": "isoc",
    "label": "Native Defender data, no ingestion needed",
-   "s": "Learn"
-  },
-  {
-   "a": "sentinel",
-   "b": "isoc",
-   "label": "Existing customers can opt in to move",
    "s": "Learn"
   },
   {
@@ -2014,30 +1734,6 @@ input[type=number]{font:inherit;padding:5px 8px;border:1.5px solid var(--line);b
    "b": "mdash",
    "label": "MDASH is a codename in the Perception family",
    "s": "BoN"
-  },
-  {
-   "a": "perception",
-   "b": "identity-ai",
-   "label": "Identity Risk Reduction Agent proposes policy changes",
-   "s": "Learn"
-  },
-  {
-   "a": "identity-ai",
-   "b": "ca-plans",
-   "label": "Agents suggest Conditional Access changes",
-   "s": "Learn"
-  },
-  {
-   "a": "sentinel",
-   "b": "security-copilot",
-   "label": "Copilot agents can work on lake data",
-   "s": "Learn"
-  },
-  {
-   "a": "sentinel",
-   "b": "sentinel-ai",
-   "label": "Graph and MCP server on the lake",
-   "s": "Learn"
   }
  ],
  "timeline": [
@@ -2082,12 +1778,6 @@ input[type=number]{font:inherit;padding:5px 8px;border:1.5px solid var(--line);b
    "t": "AI Readiness Initiatives in preview ('January')",
    "s": "BoN",
    "node": "entra-hardening"
-  },
-  {
-   "d": "2027-03-31",
-   "t": "Sentinel Azure portal retirement (third party briefing)",
-   "s": "3P",
-   "node": "sentinel"
   },
   {
    "d": "2027-11-12",
@@ -2180,9 +1870,8 @@ function itemList(items, base){
 
 /* header */
 document.title = D.meta.name + " | aiagentsecurity.guide";
-$("brandName").textContent = D.meta.name;
-$("tagline").textContent = D.meta.tagline;
-$("disc").textContent = D.meta.disclaimer;
+$("tagline").textContent = D.meta.name;
+$("disc").textContent = D.meta.tagline + " " + D.meta.disclaimer;
 $("asof").appendChild(h("span", null, "As of " + D.meta.asOf));
 $("asof").appendChild(h("span", null, "Review by " + D.meta.reviewBy));
 $("asof").appendChild(h("span", null, D.meta.author));
@@ -2211,7 +1900,7 @@ function renderToggles(){
 }
 
 /* ---------- pyramid map ---------- */
-var ISO = {W:960, cx:480, wTop:540, wBase:940, chipW:112, chipH:54, rowGap:8, head:46, pad:12, perRow:[5,5,3]};
+var ISO = {W:960, cx:480, wTop:440, wBase:940, chipW:138, chipH:48, rowGap:8, head:46, pad:12, perRow:[4,4,3]};
 var EXPLODE = false, MAP = null, STORY = 0;
 function geom(){
   ISO.gap = EXPLODE ? 40 : 8;
@@ -2255,7 +1944,7 @@ function renderMap(){
   D.tiers.forEach(function(T, i){
     var R = ISO.rows[i], y0 = R.y0, y1 = y0 + R.h, w0 = halfW(y0), w1 = halfW(y1), cx = ISO.cx;
     var pts = [[cx-w0,y0],[cx+w0,y0],[cx+w1,y1],[cx-w1,y1]].map(function(q){return q.join(",");}).join(" ");
-    var g = sv("g", {class:"pl"+i+" drop", style:"animation-delay:"+(i*160)+"ms"}, sv("polygon", {points:pts, class:"plate"}));
+    var g = sv("g", {class:"pl"+i}, sv("polygon", {points:pts, class:"plate"}));
     var t1 = sv("text", {x:cx, y:y0+20, class:"platelabel", "text-anchor":"middle"}); t1.textContent = T.label;
     var t2 = sv("text", {x:cx, y:y0+34, class:"platesub", "text-anchor":"middle"}); t2.textContent = T.blurb;
     g.appendChild(t1); g.appendChild(t2); s.appendChild(g);
@@ -2272,13 +1961,11 @@ function renderMap(){
   var tiles = [], byId = {};
   D.nodes.forEach(function(nd){
     var p = pos[nd.id]; if (!p) return;
-    var g = sv("g", {class:"tile pl"+p.i+" fadein", style:"animation-delay:"+((2-p.i)*160+300)+"ms", tabindex:"0", role:"link", "aria-label":nd.name+". "+nd.statusLabel, transform:"translate("+(p.x-ISO.chipW/2)+","+(p.y-ISO.chipH/2)+")"});
+    var g = sv("g", {class:"tile pl"+p.i, tabindex:"0", role:"link", "aria-label":nd.name+". "+nd.statusLabel, transform:"translate("+(p.x-ISO.chipW/2)+","+(p.y-ISO.chipH/2)+")"});
     var lift = sv("g", {class:"lift"});
-    lift.appendChild(sv("rect", {width:String(ISO.chipW), height:String(ISO.chipH), rx:"12", class:"top"}));
-    var ic = icon(nd.icon); ic.setAttribute("x", String(ISO.chipW/2-9)); ic.setAttribute("y","6"); ic.setAttribute("width","18"); ic.setAttribute("height","18");
-    ic.setAttribute("stroke","currentColor"); ic.style.color = "var(--accent)"; lift.appendChild(ic);
-    var tx = sv("text", {x:ISO.chipW/2, y:43}); tx.textContent = nd.short || nd.name; lift.appendChild(tx);
-    var dot = sv("circle", {cx:String(ISO.chipW-10), cy:"10", r:"4.5", class:"sdot s-"+nd.status}); dot.style.fill = "currentColor"; lift.appendChild(dot);
+    lift.appendChild(sv("rect", {width:String(ISO.chipW), height:String(ISO.chipH), rx:"6", class:"top"}));
+    var tx = sv("text", {x:ISO.chipW/2, y:21}); tx.textContent = nd.short || nd.name; lift.appendChild(tx);
+    var t2 = sv("text", {x:ISO.chipW/2, y:37, class:"st2"}); t2.textContent = nd.statusLabel; lift.appendChild(t2);
     g.appendChild(lift);
     function hot(on){
       tiles.forEach(function(o){ o.el.classList.toggle("dim", on && o.id !== nd.id && !connected(nd.id, o.id)); });
@@ -2299,14 +1986,6 @@ function renderMap(){
   });
   host.appendChild(s);
   MAP = {svg:s, pos:pos, byId:byId, tiles:tiles};
-  if (!reduce){
-    edgeEls.forEach(function(p, k){
-      var c = sv("circle", {r:"3", class:"dot"});
-      var am = sv("animateMotion", {dur:(3.4+(k%4)*0.6)+"s", repeatCount:"indefinite", begin:"-"+(k*0.7).toFixed(1)+"s"});
-      am.setAttribute("path", p.getAttribute("d"));
-      c.appendChild(am); s.insertBefore(c, s.querySelector(".tile"));
-    });
-  }
   setInfo(null); applyFilter();
 }
 function applyFilter(){
@@ -2400,10 +2079,7 @@ function counter(el, to){
 }
 function renderStrip(){
   var total = D.nodes.reduce(function(n, nd){ return n + bonCount(nd); }, 0);
-  var vals = [[D.nodes.length, "announcements"],[total, "Book of News items"],[D.tiers.length, "tiers"]];
-  var s = h("div", {class:"strip"});
-  vals.forEach(function(v, i){ var b = h("b", null, "0"); s.appendChild(h("div", {class:"stat", style:"animation-delay:"+(i*120)+"ms"}, b, h("span", null, v[1]))); counter(b, v[0]); });
-  return s;
+  return h("p", {class:"strip"}, h("b", null, String(D.nodes.length)), " announcements, with ", h("b", null, String(total)), " Book of News items behind them.");
 }
 function renderPhoneList(){
   var host = $("phonehost"); clear(host);
@@ -2414,12 +2090,12 @@ function renderPhoneList(){
   for (var idx = D.tiers.length-1; idx >= 0; idx--){
     (function(idx){
       var T = D.tiers[idx];
-      var tier = h("div", {class:"ptier pl"+idx, style:"width:"+(100-(idx*5.5))+"%;animation-delay:"+((2-idx)*160)+"ms;--sd:"+(idx*0.5)+"s"},
+      var tier = h("div", {class:"ptier pl"+idx, style:"width:"+(100-idx*7)+"%"},
         h("div", {class:"ptl"}, T.label), h("div", {class:"pts"}, T.blurb));
       var row = h("div", {class:"pchips"});
       D.nodes.filter(function(nd){ return nd.tier === T.id; }).forEach(function(nd){
-        var c = h("button", {class:"pchip", "data-id":nd.id, style:"--cd:"+(0.5+(2-idx)*0.2+0.05*(n++ % 5))+"s", onclick:function(){ openSheet(nd); }},
-          icon(nd.icon), h("span", {class:"pn"}, nd.short || nd.name), h("span", {class:"pc"}, (bonCount(nd) ? bonCount(nd) + " Ignite items" : "Learn only")), h("span", {class:"pd s-"+nd.status, title:nd.statusLabel}));
+        var c = h("button", {class:"pchip", "data-id":nd.id, onclick:function(){ openSheet(nd); }},
+          h("span", {class:"pn"}, nd.short || nd.name), h("span", {class:"pc"}, nd.statusLabel));
         row.appendChild(c);
       });
       tier.appendChild(row); pyr.appendChild(tier);
@@ -2427,7 +2103,7 @@ function renderPhoneList(){
   }
   host.appendChild(pyr);
   host.appendChild(info);
-  host.appendChild(h("p", {class:"mapnote", style:"display:block;padding:6px 2px"}, "Dots show status: green GA, blue GA and preview, purple preview, pink private preview, grey not in the Book of News. The walk through is a story, not an architecture diagram."));
+  host.appendChild(h("p", {class:"mapnote", style:"display:block;padding:6px 2px"}, "The walk through is a story, not an architecture diagram."));
   applyFilter();
 }
 var PSTORY = 0;
