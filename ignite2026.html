@@ -157,7 +157,6 @@ input[type=number]{font:inherit;padding:5px 8px;border:1.5px solid var(--line);b
     <div class="asof" id="asof"></div>
   </div>
 </header>
-<div class="toggles"><div class="wrap" id="toggles"></div></div>
 <main><div class="wrap" id="app"></div></main>
 <footer><div class="wrap"><div id="foot"></div></div></footer>
 
@@ -1829,7 +1828,7 @@ $("asof").appendChild(h("span", null, "As of " + D.meta.asOf));
 $("asof").appendChild(h("span", null, "Review by " + D.meta.reviewBy));
 $("asof").appendChild(h("span", null, D.meta.author));
 $("foot").appendChild(h("p", null, D.meta.disclaimer));
-$("foot").appendChild(h("p", null, "Every statement is tagged with where it came from. Microsoft means the Book of News and Microsoft Learn. The other layers are my notes and can be wrong."));
+$("foot").appendChild(h("p", null, "Every statement is tagged with where it came from. Microsoft means the Book of News and Microsoft Learn. The other sources are my notes and can be wrong."));
 
 /* toggles */
 function countLayer(key){
@@ -1840,18 +1839,6 @@ function countLayer(key){
   });
   return n;
 }
-function renderToggles(){
-  var box = $("toggles"); clear(box);
-  box.appendChild(h("span", {class:"lbl"}, "Layers"));
-  D.layersContent.forEach(function(l){
-    var on = l.locked ? true : STATE[l.key];
-    var b = h("button", {class:"tg l-"+l.key, "aria-pressed":String(on), title:l.desc, disabled:l.locked ? "disabled" : null,
-      onclick:function(){ if (l.locked) return; STATE[l.key] = !STATE[l.key]; renderToggles(); route(true); }},
-      h("i"), l.label + " ", h("small", null, "(" + countLayer(l.key) + ")"));
-    box.appendChild(b);
-  });
-}
-
 /* ---------- home ---------- */
 var reduceNote = null;
 function bonCount(nd){
@@ -2301,7 +2288,6 @@ function go(path){
 }
 window.addEventListener("hashchange", function(){ route(false); });
 
-renderToggles();
 route(false);
 })();
 </script>
