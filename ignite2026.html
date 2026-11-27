@@ -43,67 +43,24 @@ main{padding:22px 0 60px}
 h2{font-size:22px;margin:30px 0 10px}
 .sub{color:var(--mute);margin:0 0 14px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:10px}
-/* map */
-.mapbox{padding:8px;position:relative}
-#iso{display:block;width:100%;height:auto}
-.mapnote{font-size:13px;color:var(--mute);padding:4px 12px 10px}
-.phonelist{display:none}
-.plate{fill:var(--pc);stroke:var(--line);stroke-width:1}
-.pl0{--pc:#ebebe6}.pl1{--pc:#e1e5ea}.pl2{--pc:#d3dbe6}
-@media (prefers-color-scheme:dark){.pl0{--pc:#1d2028}.pl1{--pc:#222833}.pl2{--pc:#283142}}
-.lift{transition:transform .15s ease}
-.tile:hover .lift,.tile:focus .lift,.tile.on .lift{transform:translateY(-2px)}
-.tile.pulse .top{animation:pulse .9s ease-out}
-@keyframes pulse{0%{stroke-width:1}40%{stroke-width:5;stroke:var(--accent)}100%{stroke-width:1}}
-.pktg{fill:var(--accent);stroke:#fff;stroke-width:2}
+/* home */
 .ctl{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
-.info{margin:10px 12px 12px;padding:10px 14px;border-radius:12px;background:var(--soft);border:1px solid var(--line);min-height:62px;font-size:14.5px}
-.info b{font-size:15px}
-.info .st{color:var(--mute);font-size:12.5px;display:block;margin-bottom:2px}
-.platelabel{font-size:13px;font-weight:700;fill:var(--ink)}
-.platesub{font-size:10.5px;fill:var(--mute)}
-.tile{cursor:pointer;outline:none;transition:transform .2s,opacity .2s}
-.tile .top{fill:var(--panel);stroke:var(--line);stroke-width:1;transition:stroke .15s}
-.tile .st2{font-size:10px;font-weight:400;fill:var(--mute)}
-.tile.on .top,.tile:hover .top,.tile:focus .top{stroke:var(--accent);stroke-width:1.6}
-.tile text{font-size:12px;font-weight:600;fill:var(--ink);text-anchor:middle;pointer-events:none}
-.tile.dim{opacity:.4}
-.tile:focus-visible .top{stroke-width:3}
-.edge{fill:none;stroke:var(--accent);stroke-width:1.5;opacity:0;pointer-events:none;transition:opacity .15s}
-.edge.hot{opacity:.85}
 .stbadge{font-size:12px;border-radius:99px;padding:2px 9px;border:1px solid currentColor;display:inline-block;white-space:nowrap}
 .s-private{color:#db2777}.s-ga{color:var(--ga)}.s-mixed{color:var(--accent)}.s-preview{color:var(--preview)}.s-none{color:var(--none)}
-.layercard{padding:12px 14px;margin-bottom:10px}
-.layercard h3{margin:0 0 2px;font-size:15px}
-.layercard p{margin:0 0 8px;font-size:13px;color:var(--mute)}
-.nodebtn{display:flex;width:100%;text-align:left;align-items:center;gap:10px;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:6px}
-.nodebtn svg{width:22px;height:22px;flex:none;stroke:var(--accent)}
-.nodebtn b{display:block;font-size:14.5px}
-.nodebtn span.t{display:block;font-size:12.5px;color:var(--mute)}
-
-.pyr{display:flex;flex-direction:column;align-items:center;gap:6px}
-.ptier{padding:12px 10px 12px;text-align:center;border-radius:8px;background:var(--pc);border:1px solid var(--line)}
-.ptl{font-weight:700;font-size:14.5px}
-.pts{font-size:12px;color:var(--mute);margin-bottom:10px}
-.pchips{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.pchip{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:1px;padding:9px 10px;border-radius:6px;border:1px solid var(--line);background:var(--panel);position:relative}
-.pchip:last-child:nth-child(odd){grid-column:1 / -1;justify-self:center;width:calc(50% - 3px)}
-.pchip .pn{font-size:13px;font-weight:600;line-height:1.25}
-.pchip .pc{font-size:11px;color:var(--mute)}
-.pchip:active{background:var(--soft)}
-.pchip.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
-.phonelist .info{margin:12px 0 0}
 .strip{margin:0 0 14px;color:var(--mute);font-size:14px}
 .strip b{color:var(--ink)}
-.sheetbg{position:fixed;inset:0;background:rgba(5,10,25,.55);z-index:50;opacity:0;transition:opacity .25s;display:flex;align-items:flex-end;justify-content:center}
-.sheetbg.show{opacity:1}
-.sheet{width:100%;max-width:560px;background:var(--panel);border-radius:22px 22px 0 0;padding:18px 18px 22px;transform:translateY(100%);transition:transform .35s cubic-bezier(.2,.9,.3,1);max-height:82vh;overflow:auto}
-.sheetbg.show .sheet{transform:none}
-.sheet h3{margin:6px 0 2px;font-size:20px}
-.sheet .grab{width:42px;height:4px;border-radius:4px;background:var(--line);margin:0 auto 8px}
-.sheet .row{margin-top:12px}
-.tile.fdim{opacity:.2}
-.pchip.fdim{opacity:.3}
+.tiers{display:grid;gap:26px;margin-top:8px}
+.th{display:flex;align-items:baseline;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:6px}
+.th h3{margin:0;font-size:19px}
+.tc{font-size:13px;color:var(--mute)}
+.ti{margin:8px 0 12px;color:var(--mute);font-size:14.5px}
+.agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.acard{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;padding:12px 14px;background:var(--panel);border:1px solid var(--line);border-radius:8px;transition:border-color .15s,opacity .15s}
+.acard:hover,.acard:focus-visible{border-color:var(--accent)}
+.acard .an{font-weight:650;font-size:15.5px;line-height:1.25}
+.acard .at{font-size:13.5px;color:var(--mute);line-height:1.4}
+.acard .as{font-size:12px;margin-top:auto;padding-top:4px;font-weight:600}
+.acard.fdim{opacity:.25}
 .pf{display:flex;gap:6px;overflow-x:auto;padding:2px 0 10px;margin:0 0 6px;-webkit-overflow-scrolling:touch}
 .pf .pill{white-space:nowrap;flex:none}
 .pf-lbl{font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:.06em;margin:4px 0 4px}
@@ -186,10 +143,6 @@ input[type=number]{font:inherit;padding:5px 8px;border:1.5px solid var(--line);b
 .bar .tr>div{height:100%;background:var(--accent);transition:width .5s}
 .lvl{display:inline-block;padding:3px 14px;border-radius:99px;color:#fff;font-weight:700}
 .lvl.low{background:#16a34a}.lvl.med{background:#d97706}.lvl.high{background:#dc2626}
-@media(max-width:719px){
-  .mapbox,.mapnote,.mapctl{display:none}
-  .phonelist{display:block}
-}
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   html{scroll-behavior:auto}
@@ -1899,246 +1852,51 @@ function renderToggles(){
   });
 }
 
-/* ---------- pyramid map ---------- */
-var ISO = {W:960, cx:480, wTop:440, wBase:940, chipW:138, chipH:48, rowGap:8, head:46, pad:12, perRow:[4,4,3]};
-var EXPLODE = false, MAP = null, STORY = 0;
-function geom(){
-  ISO.gap = EXPLODE ? 40 : 8;
-  ISO.rows = D.tiers.map(function(T, i){
-    var n = D.nodes.filter(function(x){ return x.tier === T.id; }).length;
-    var rows = Math.ceil(n / ISO.perRow[i]);
-    return {n:n, rows:rows, h: ISO.head + rows*(ISO.chipH+ISO.rowGap) + ISO.pad};
-  });
-  var y = 16;
-  for (var i = D.tiers.length-1; i >= 0; i--){ ISO.rows[i].y0 = y; y += ISO.rows[i].h + ISO.gap; }
-  ISO.topY = 16; ISO.total = y - ISO.gap - 16; ISO.H = ISO.total + 32;
-}
-function halfW(y){ return (ISO.wTop + (y-ISO.topY)/ISO.total*(ISO.wBase-ISO.wTop))/2; }
-function nodeLayout(){
-  var pos = {};
-  D.tiers.forEach(function(T, i){
-    var list = D.nodes.filter(function(n){ return n.tier === T.id; });
-    var R = ISO.rows[i], rows = R.rows, base = Math.floor(list.length/rows), extra = list.length % rows, k0 = 0;
-    for (var r = 0; r < rows; r++){
-      var m = base + (r < extra ? 1 : 0);
-      for (var k = 0; k < m; k++){
-        pos[list[k0+k].id] = {x: ISO.cx + (k-(m-1)/2)*(ISO.chipW+14), y: R.y0 + ISO.head + r*(ISO.chipH+ISO.rowGap) + ISO.chipH/2, i:i};
-      }
-      k0 += m;
-    }
-  });
-  return pos;
-}
-function setInfo(nd, extra){
-  var box = $("mapinfo"); if (!box) return; clear(box);
-  if (!nd){ box.appendChild(h("span", {class:"st"}, "Hover, focus or tap a tile")); box.appendChild(document.createTextNode("Or press Follow an agent request to watch a request travel up the stack.")); return; }
-  box.appendChild(h("span", {class:"st"}, nd.statusLabel));
-  box.appendChild(h("b", null, nd.name));
-  box.appendChild(document.createTextNode(": " + (extra || nd.tagline)));
-}
-function renderMap(){
-  STORY++; geom();
-  var host = $("isohost"); clear(host);
-  var s = sv("svg", {id:"iso", viewBox:"0 0 "+ISO.W+" "+ISO.H, role:"group", "aria-label":"Pyramid of Ignite 2026 security announcements in three tiers. Choose a tile to open its page."});
-  var pos = nodeLayout();
-  D.tiers.forEach(function(T, i){
-    var R = ISO.rows[i], y0 = R.y0, y1 = y0 + R.h, w0 = halfW(y0), w1 = halfW(y1), cx = ISO.cx;
-    var pts = [[cx-w0,y0],[cx+w0,y0],[cx+w1,y1],[cx-w1,y1]].map(function(q){return q.join(",");}).join(" ");
-    var g = sv("g", {class:"pl"+i}, sv("polygon", {points:pts, class:"plate"}));
-    var t1 = sv("text", {x:cx, y:y0+20, class:"platelabel", "text-anchor":"middle"}); t1.textContent = T.label;
-    var t2 = sv("text", {x:cx, y:y0+34, class:"platesub", "text-anchor":"middle"}); t2.textContent = T.blurb;
-    g.appendChild(t1); g.appendChild(t2); s.appendChild(g);
-  });
-  var eg = sv("g", {class:"edges"}), edgeEls = [];
-  D.edges.forEach(function(e){
-    var a = pos[e.a], b = pos[e.b]; if (!a || !b) return;
-    var mx = (a.x+b.x)/2, my = (a.y+b.y)/2 - (a.i === b.i ? 22 : 0);
-    var p = sv("path", {d:"M"+a.x+","+a.y+" Q"+mx+","+my+" "+b.x+","+b.y, class:"edge"});
-    var tt = sv("title"); tt.textContent = e.label + " (" + e.s + ")"; p.appendChild(tt);
-    p._e = e; eg.appendChild(p); edgeEls.push(p);
-  });
-  s.appendChild(eg);
-  var tiles = [], byId = {};
-  D.nodes.forEach(function(nd){
-    var p = pos[nd.id]; if (!p) return;
-    var g = sv("g", {class:"tile pl"+p.i, tabindex:"0", role:"link", "aria-label":nd.name+". "+nd.statusLabel, transform:"translate("+(p.x-ISO.chipW/2)+","+(p.y-ISO.chipH/2)+")"});
-    var lift = sv("g", {class:"lift"});
-    lift.appendChild(sv("rect", {width:String(ISO.chipW), height:String(ISO.chipH), rx:"6", class:"top"}));
-    var tx = sv("text", {x:ISO.chipW/2, y:21}); tx.textContent = nd.short || nd.name; lift.appendChild(tx);
-    var t2 = sv("text", {x:ISO.chipW/2, y:37, class:"st2"}); t2.textContent = nd.statusLabel; lift.appendChild(t2);
-    g.appendChild(lift);
-    function hot(on){
-      tiles.forEach(function(o){ o.el.classList.toggle("dim", on && o.id !== nd.id && !connected(nd.id, o.id)); });
-      edgeEls.forEach(function(el){
-        var rel = el._e.a === nd.id || el._e.b === nd.id;
-        el.classList.toggle("hot", on && rel); el.classList.toggle("off", on && !rel);
-      });
-      if (!STORYPLAY) setInfo(on ? nd : null);
-    }
-    g.addEventListener("mouseenter", function(){ hot(true); });
-    g.addEventListener("mouseleave", function(){ hot(false); });
-    g.addEventListener("focus", function(){ hot(true); });
-    g.addEventListener("blur", function(){ hot(false); });
-    g.addEventListener("click", function(){ go("node/"+nd.id); });
-    g.addEventListener("keydown", function(ev){ if (ev.key === "Enter" || ev.key === " "){ ev.preventDefault(); go("node/"+nd.id); } });
-    var o = {id:nd.id, el:g}; tiles.push(o); byId[nd.id] = o;
-    s.appendChild(g);
-  });
-  host.appendChild(s);
-  MAP = {svg:s, pos:pos, byId:byId, tiles:tiles};
-  setInfo(null); applyFilter();
+/* ---------- home ---------- */
+var reduceNote = null;
+function bonCount(nd){
+  return nd.what.concat(nd.features.reduce(function(a,f){ return a.concat(f.items); }, [])).filter(function(i){ return i.s === "BoN"; }).length;
 }
 function applyFilter(){
   var f = STATE.prod;
-  if (MAP) MAP.tiles.forEach(function(o){ o.el.classList.toggle("fdim", !!f && NODE[o.id].product !== f); });
-  document.querySelectorAll(".pchip").forEach(function(c){ c.classList.toggle("fdim", !!f && NODE[c.dataset.id].product !== f); });
-  document.querySelectorAll(".pf .pill").forEach(function(b){ b.classList.toggle("on", (b.dataset.p || null) === (f || "")); });
+  document.querySelectorAll(".acard").forEach(function(c){ c.classList.toggle("fdim", !!f && NODE[c.dataset.id].product !== f); });
+  document.querySelectorAll(".pf .pill").forEach(function(b){ var on = (b.dataset.p || "") === (f || ""); b.classList.toggle("on", on); b.setAttribute("aria-pressed", String(on)); });
 }
 function renderFilter(){
   var row = h("div", {class:"pf", role:"group", "aria-label":"Filter by product"});
   function mk(label, val){
-    var b = h("button", {class:"pill", "data-p":val || "", onclick:function(){ STATE.prod = (STATE.prod === val) ? null : val; applyFilter(); }}, label);
-    row.appendChild(b);
+    row.appendChild(h("button", {class:"pill", "data-p":val || "", onclick:function(){ STATE.prod = (STATE.prod === val) ? null : val; applyFilter(); }}, label));
   }
   mk("All products", null);
   D.products.forEach(function(p){ mk(p, p); });
   return row;
 }
-var STORYPLAY = false;
-var STEPS = [
-  ["agent-id", "An agent gets an identity and a named sponsor. Agent identities are special service principals made from a blueprint."],
-  ["ca-agents", "It asks for access. Conditional Access takes the signals and decides: allow, block, or ask for more."],
-  ["gsa-agents", "Its traffic to a tool or MCP server crosses the network layer, where agent traffic can be acquired and inspected."],
-  ["copilot-dlp", "Data policies decide what Copilot may use."],
-  ["runtime", "Runtime protection inspects the agent's prompts, in Audit or Block mode."],
-  ["isoc", "Alerts and signals land in the Defender portal, where SIEM and XDR sit together."],
-  ["perception", "Triage agents work the alert. People approve, reject or stop the agent's work."],
-  ["a365-gov", "Agent 365 shows the owner, the registry entry and the risk level for the agent."]
-];
-function playStory(btn){
-  if (!MAP) return;
-  var my = ++STORY; STORYPLAY = true;
-  MAP.tiles.forEach(function(o){ o.el.classList.remove("on","dim","pulse"); });
-  var old = MAP.svg.querySelector(".pktg"); if (old) old.remove();
-  var pk = sv("circle", {r:"9", class:"pktg"}); MAP.svg.appendChild(pk);
-  var first = MAP.pos[STEPS[0][0]]; pk.setAttribute("cx", first.x); pk.setAttribute("cy", first.y);
-  var i = 0, cur = {x:first.x, y:first.y};
-  function arrive(){
-    if (my !== STORY) return;
-    var id = STEPS[i][0], nd = NODE[id], o = MAP.byId[id];
-    MAP.tiles.forEach(function(q){ q.el.classList.remove("on"); });
-    o.el.classList.add("on"); o.el.classList.remove("pulse"); void o.el.getBoundingClientRect(); o.el.classList.add("pulse");
-    setInfo(nd, "Step " + (i+1) + " of " + STEPS.length + ". " + STEPS[i][1]);
-    i++;
-    if (i >= STEPS.length){ setTimeout(function(){ if (my === STORY){ STORYPLAY = false; pk.remove(); if (btn) btn.disabled = false; } }, 2600); return; }
-    setTimeout(function(){ hop(MAP.pos[STEPS[i][0]]); }, 2200);
-  }
-  function hop(to){
-    if (my !== STORY) return;
-    if (reduce){ pk.setAttribute("cx", to.x); pk.setAttribute("cy", to.y); cur = {x:to.x,y:to.y}; arrive(); return; }
-    var from = {x:cur.x, y:cur.y}, t0 = null, ms = 1100;
-    function f(ts){
-      if (my !== STORY) return;
-      if (!t0) t0 = ts; var k = Math.min(1,(ts-t0)/ms), e = k<.5 ? 2*k*k : 1-Math.pow(-2*k+2,2)/2;
-      var x = from.x + (to.x-from.x)*e, y = from.y + (to.y-from.y)*e - Math.sin(Math.PI*e)*28;
-      pk.setAttribute("cx", x); pk.setAttribute("cy", y);
-      if (k<1) requestAnimationFrame(f); else { cur = {x:to.x,y:to.y}; arrive(); }
-    }
-    requestAnimationFrame(f);
-  }
-  if (btn) btn.disabled = true;
-  arrive();
-}
-function connected(a, b){
-  return D.edges.some(function(e){ return (e.a===a&&e.b===b)||(e.a===b&&e.b===a); });
-}
-function bonCount(nd){
-  return nd.what.concat(nd.features.reduce(function(a,f){ return a.concat(f.items); }, [])).filter(function(i){ return i.s === "BoN"; }).length;
-}
-function openSheet(nd){
-  var bg = h("div", {class:"sheetbg", onclick:function(e){ if (e.target === bg) close(); }});
-  function close(){ bg.classList.remove("show"); setTimeout(function(){ bg.remove(); document.removeEventListener("keydown", esc); }, 280); }
-  function esc(e){ if (e.key === "Escape") close(); }
-  var news = nd.features.reduce(function(a,f){ return a.concat(f.items); }, []).filter(function(i){ return i.s === "BoN"; }).slice(0,2);
-  if (!news.length) news = nd.what.slice(0,1);
-  var sh = h("div", {class:"sheet", role:"dialog", "aria-label":nd.name},
-    h("div", {class:"grab"}),
-    h("span", {class:"stbadge s-"+nd.status}, nd.statusLabel),
-    h("h3", null, nd.name), h("div", {class:"sub"}, nd.tagline),
-    h("ul", {class:"items"}, news.map(function(it){ return h("li", null, chip(it), h("span", null, it.t)); })),
-    h("div", {class:"row"}, h("button", {class:"btn on", onclick:function(){ close(); setTimeout(function(){ go("node/"+nd.id); }, 120); }}, "Open the full page"), h("button", {class:"btn", onclick:close}, "Close")));
-  bg.appendChild(sh); document.body.appendChild(bg);
-  document.addEventListener("keydown", esc);
-  requestAnimationFrame(function(){ requestAnimationFrame(function(){ bg.classList.add("show"); }); });
-}
-function counter(el, to){
-  if (reduce){ el.textContent = to; return; }
-  var t0 = null;
-  function f(ts){ if (!t0) t0 = ts; var k = Math.min(1,(ts-t0)/1100); el.textContent = Math.round(to*(1-Math.pow(1-k,3))); if (k<1) requestAnimationFrame(f); }
-  requestAnimationFrame(f);
-}
-function renderStrip(){
-  var total = D.nodes.reduce(function(n, nd){ return n + bonCount(nd); }, 0);
-  return h("p", {class:"strip"}, h("b", null, String(D.nodes.length)), " announcements, with ", h("b", null, String(total)), " Book of News items behind them.");
-}
-function renderPhoneList(){
-  var host = $("phonehost"); clear(host);
-  var info = h("div", {class:"info", id:"pinfo", "aria-live":"polite"}, h("span", {class:"st"}, "Tap a card for a quick look"), "Or follow a request up through the pyramid.");
-  var btn = h("button", {class:"btn on", style:"margin-bottom:12px", onclick:function(){ phoneStory(btn, info); }}, "Follow an agent request");
-  host.appendChild(btn);
-  var pyr = h("div", {class:"pyr"}), n = 0;
-  for (var idx = D.tiers.length-1; idx >= 0; idx--){
-    (function(idx){
-      var T = D.tiers[idx];
-      var tier = h("div", {class:"ptier pl"+idx, style:"width:"+(100-idx*7)+"%"},
-        h("div", {class:"ptl"}, T.label), h("div", {class:"pts"}, T.blurb));
-      var row = h("div", {class:"pchips"});
-      D.nodes.filter(function(nd){ return nd.tier === T.id; }).forEach(function(nd){
-        var c = h("button", {class:"pchip", "data-id":nd.id, onclick:function(){ openSheet(nd); }},
-          h("span", {class:"pn"}, nd.short || nd.name), h("span", {class:"pc"}, nd.statusLabel));
-        row.appendChild(c);
-      });
-      tier.appendChild(row); pyr.appendChild(tier);
-    })(idx);
-  }
-  host.appendChild(pyr);
-  host.appendChild(info);
-  host.appendChild(h("p", {class:"mapnote", style:"display:block;padding:6px 2px"}, "The walk through is a story, not an architecture diagram."));
-  applyFilter();
-}
-var PSTORY = 0;
-function phoneStory(btn, info){
-  var my = ++PSTORY, i = 0; btn.disabled = true;
-  var chips = document.querySelectorAll(".pchip");
-  function step(){
-    if (my !== PSTORY) return;
-    chips.forEach(function(c){ c.classList.remove("on"); });
-    if (i >= STEPS.length){ btn.disabled = false; return; }
-    var id = STEPS[i][0], nd = NODE[id];
-    var c = document.querySelector('.pchip[data-id="'+id+'"]'); if (c){ c.classList.add("on"); try { c.scrollIntoView({block:"center", behavior: reduce ? "auto" : "smooth"}); } catch(e){} }
-    clear(info);
-    info.appendChild(h("span", {class:"st"}, "Step " + (i+1) + " of " + STEPS.length));
-    info.appendChild(h("b", null, nd.name)); info.appendChild(document.createTextNode(": " + STEPS[i][1]));
-    i++; setTimeout(step, 3200);
-  }
-  step();
+function renderTiers(){
+  var wrap = h("div", {class:"tiers"});
+  D.tiers.forEach(function(T){
+    var list = D.nodes.filter(function(n){ return n.tier === T.id; });
+    var grid = h("div", {class:"agrid"});
+    list.forEach(function(nd){
+      grid.appendChild(h("button", {class:"acard", "data-id":nd.id, onclick:function(){ go("node/"+nd.id); }},
+        h("span", {class:"an"}, nd.name), h("span", {class:"at"}, nd.tagline), h("span", {class:"as s-"+nd.status}, nd.statusLabel)));
+    });
+    wrap.appendChild(h("section", {class:"tier"},
+      h("div", {class:"th"}, h("h3", null, T.label), h("span", {class:"tc"}, list.length + (list.length === 1 ? " announcement" : " announcements"))),
+      h("p", {class:"ti"}, T.intro), grid));
+  });
+  return wrap;
 }
 /* ---------- views ---------- */
 function home(){
   var app = $("app"); clear(app);
   app.appendChild(h("h2", null, "What Ignite 2026 announced for security"));
-  app.appendChild(h("p", {class:"sub"}, "Three tiers. Fundamentals are the base, because agents inherit every weakness there. Security for AI protects agents and Copilots. AI for security is AI that helps defenders. Tap a tile for the detail."));
-  app.appendChild(renderStrip());
+  app.appendChild(h("p", {class:"sub"}, "Three groups. Fundamentals are the base, because agents inherit every weakness there. Security for AI protects agents and Copilots. AI for security is AI that helps defenders. Open a card for the detail."));
+  var total = D.nodes.reduce(function(n, nd){ return n + bonCount(nd); }, 0);
+  app.appendChild(h("p", {class:"strip"}, h("b", null, String(D.nodes.length)), " announcements, with ", h("b", null, String(total)), " Book of News items behind them."));
   app.appendChild(h("div", {class:"pf-lbl"}, "Filter by product"));
   app.appendChild(renderFilter());
-  var playBtn = h("button", {class:"btn", onclick:function(){ playStory(playBtn); }}, "Follow an agent request");
-  var exBtn = h("button", {class:"btn", "aria-pressed":"false", onclick:function(){ EXPLODE = !EXPLODE; exBtn.classList.toggle("on", EXPLODE); exBtn.setAttribute("aria-pressed", String(EXPLODE)); STORYPLAY = false; playBtn.disabled = false; renderMap(); }}, "Explode the stack");
-  app.appendChild(h("div", {class:"ctl mapctl"}, playBtn, exBtn));
-  var mb = h("div", {class:"card mapbox"}, h("div", {id:"isohost"}), h("div", {class:"info", id:"mapinfo", "aria-live":"polite"}));
-  app.appendChild(mb);
-  app.appendChild(h("p", {class:"mapnote"}, "Tip: hover or focus a tile to light up what it connects to. The walk through is a story, not an architecture diagram."));
-  app.appendChild(h("div", {class:"phonelist", id:"phonehost"}));
-  renderMap(); renderPhoneList();
+  app.appendChild(renderTiers());
+  applyFilter();
 
   app.appendChild(h("h2", null, "Dates to watch"));
   app.appendChild(h("p", {class:"sub"}, "Dates come from Microsoft documents unless tagged otherwise. Phrases like 'this month' are converted to a rough date and shown that way."));
