@@ -68,7 +68,7 @@ h2{font-size:22px;margin:30px 0 10px}
 .acard details.ck{margin-top:6px;font-size:13.5px;color:var(--mute)}
 .acard details.ck summary{cursor:pointer;color:var(--accent)}
 .acard details.ck ul{margin:6px 0 0;padding-left:18px}
-.acard.fdim{opacity:.25}
+.acard[hidden],.tier[hidden]{display:none}
 .pf{display:flex;gap:6px;overflow-x:auto;padding:2px 0 10px;margin:0 0 6px;-webkit-overflow-scrolling:touch}
 .pf .pill{white-space:nowrap;flex:none}
 .pf-lbl{font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:.06em;margin:4px 0 4px}
@@ -1884,7 +1884,12 @@ function bonCount(nd){
 }
 function applyFilter(){
   var f = STATE.prod;
-  document.querySelectorAll(".acard").forEach(function(c){ c.classList.toggle("fdim", !!f && NODE[c.dataset.id].product !== f); });
+  document.querySelectorAll(".acard").forEach(function(c){ c.hidden = !!f && NODE[c.dataset.id].product !== f; });
+  document.querySelectorAll(".tier").forEach(function(s){
+    var n = s.querySelectorAll(".acard:not([hidden])").length;
+    s.hidden = n === 0;
+    var tc = s.querySelector(".tc"); if (tc) tc.textContent = n + (n === 1 ? " announcement" : " announcements");
+  });
   document.querySelectorAll(".pf .pill").forEach(function(b){ var on = (b.dataset.p || "") === (f || ""); b.classList.toggle("on", on); b.setAttribute("aria-pressed", String(on)); });
 }
 function renderFilter(){
